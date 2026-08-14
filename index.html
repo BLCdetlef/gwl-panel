@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GWL-Panel – Prototyp 0.1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>GWL-PANEL</h1>
+        <p>GRUNDLAGE · WIRKUNG · LEBEN</p>
+      </div>
+      <div class="context">
+        <label>
+          Ort
+          <select id="placeSelect">
+            <option value="luebeck">Lübeck</option>
+          </select>
+        </label>
+        <label>
+          Zeit
+          <select id="dateSelect">
+            <option value="today">Heute</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <section class="panel-grid">
+      <section class="panel panel-left" aria-labelledby="grundlageTitle">
+        <div class="panel-heading">
+          <h2 id="grundlageTitle">GRUNDLAGE</h2>
+          <span class="mode-chip" id="leftModeChip">erkunden</span>
+        </div>
+        <div id="boundaryList" class="boundary-list"></div>
+      </section>
+
+      <section class="panel panel-center" aria-labelledby="wirkungTitle">
+        <div class="panel-heading">
+          <h2 id="wirkungTitle">WIRKUNG</h2>
+        </div>
+
+        <div class="state-card">
+          <div class="eyebrow" id="focusType">Aktueller Zustand</div>
+          <h3 id="focusTitle">Lübeck · Heute</h3>
+          <p id="focusSummary">
+            Wähle links eine Planetare Grenze. Danach zeigt das Panel nur die wichtigsten,
+            wissenschaftlich begründeten Verbindungen.
+          </p>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <span>Messwert</span>
+            <strong id="metricValue">–</strong>
+          </div>
+          <div class="metric">
+            <span>Referenzwert</span>
+            <strong id="referenceValue">–</strong>
+          </div>
+          <div class="metric">
+            <span>Unsicherheit</span>
+            <strong id="uncertaintyValue">–</strong>
+          </div>
+          <div class="metric">
+            <span>Quelle</span>
+            <a id="sourceLink" href="#" target="_blank" rel="noopener">–</a>
+          </div>
+        </div>
+
+        <div class="effect-box">
+          <span class="eyebrow">Wirkungspfad</span>
+          <p id="effectPath">Noch keine Auswahl.</p>
+        </div>
+
+        <button id="resetButton" class="reset-button" type="button">Zurück zur Übersicht</button>
+      </section>
+
+      <section class="panel panel-right" aria-labelledby="lebenTitle">
+        <div class="panel-heading">
+          <h2 id="lebenTitle">LEBEN</h2>
+          <span class="mode-chip muted" id="rightModeChip">Wirkung</span>
+        </div>
+
+        <div class="body-wrap" aria-label="Vereinfachte Darstellung des menschlichen Körpers">
+          <div class="body-silhouette">
+            <div class="head"></div>
+            <div class="torso"></div>
+            <div class="arm arm-left"></div>
+            <div class="arm arm-right"></div>
+            <div class="leg leg-left"></div>
+            <div class="leg leg-right"></div>
+
+            <button class="organ organ-brain" data-organ="brain" type="button" aria-label="Gehirn">Gehirn</button>
+            <button class="organ organ-heart" data-organ="heart" type="button" aria-label="Herz und Kreislauf">Herz</button>
+            <button class="organ organ-lung" data-organ="lung" type="button" aria-label="Lunge">Lunge</button>
+            <button class="organ organ-kidney" data-organ="kidney" type="button" aria-label="Nieren">Nieren</button>
+            <button class="organ organ-gut" data-organ="gut" type="button" aria-label="Darm">Darm</button>
+          </div>
+        </div>
+
+        <p class="hint" id="organHint">
+          Organe werden hervorgehoben, wenn für die gewählte Grundlage ein relevanter Wirkungspfad hinterlegt ist.
+        </p>
+      </section>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
