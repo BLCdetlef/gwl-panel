@@ -1,46 +1,41 @@
-# GWL-Panel – Prototyp 0.6
+# GWL-Panel – Prototyp 0.8
 
-GRUNDLAGE · WIRKUNG · LEBEN
+GRUNDLAGE · WIRKUNG · LEBEN · URSACHEN
 
-Änderungen in Version 0.4:
+## Neu in Version 0.8
 
-- Kopfzeile vereinfacht: unter „GWL-Panel“ steht der Dreiklang nicht mehr doppelt
-- Querformat bleibt bei 30 / 40 / 30
-- Zeitsteuerung jetzt oben im mittleren Feld
-- Region / Ort jetzt oben im rechten Feld in gleicher Höhe zur Zeitsteuerung
-- Befund, Wirkungspfad und Unsicherheit bleiben ausklappbar
-- anatomische Darstellung des Menschen verbessert
-- Skelett hellgrau und hinter den Organen, ohne dominanten Schädel
-- Gehirn, Augen, Herz, Lunge, Leber, Nieren, Darm und Fortpflanzung als eigene Organflächen
-- weiterhin ohne externe Bilddateien, alles als leichtgewichtiges Inline-SVG
-- Tindigani / Nordtansania als lokales Beispiel für Trinkwasserfluorid und Organbezug
+- Grafikordner vereinfacht: nur noch `assets/health/`
+- vierte Ebene **URSACHEN** als standardmäßig unsichtbare Ebene vorbereitet
+- URSACHEN kann an **GRUNDLAGE**, **WIRKUNG** und **LEBEN** andocken
+- pro Bereich erscheint nur dann ein kleiner Button **„Ursachen“**, wenn für die aktuelle Auswahl tatsächlich Inhalte hinterlegt sind
+- Klick auf „Ursachen“ öffnet ein kompaktes Overlay direkt im betreffenden Fenster
+- Organ-Overlay aus v0.7 bleibt erhalten
 
-Hinweis zur Organlogik:
+## Verzeichnisstruktur
 
-- weiß = gesund / kein belegter Funktionsverlust
-- schwarz = theoretisch 100 % außer Funktion
-- Schraffur = lokale Schädigung belegt, aber kein quantifizierter 0–100-%-Funktionsverlust verfügbar
+- `assets/health/bodymap_main.png`
+- `assets/health/organ_brain.png`
+- `assets/health/organ_digestive.png`
+- `assets/health/organ_skeleton.png`
+- `assets/health/organ_teeth.png`
+- `assets/health/organ_repro_female.png`
 
-Hinweis zu geschlechtsspezifischen Organen:
+## Datenlogik Ursachen
 
-- im Prototyp ist „Fortpflanzung“ bewusst als neutrales System angelegt
-- eine spätere Umschaltung auf geschlechtsspezifische Anatomie ist möglich, aber noch nicht implementiert
+Ursachen hängen an einer Messreihe bzw. – wenn sinnvoll – an einem einzelnen Messzeitpunkt.
 
+```js
+causes: {
+  ground: { title, intro, items: [{label, note, meta}] },
+  effect: { title, intro, items: [...] },
+  life: { title, intro, items: [...] }
+}
+```
 
-Zusätzliche Änderungen in Version 0.5:
+- `ground` = stärkster Bezug zur Grundlage
+- `effect` = vermittelnde Ursachen / Verstärker im Wirkungspfad
+- `life` = Ursachenbezug am Gesundheits-/Lebensbezug
 
-- menschliche Figur breiter und natürlicher proportioniert
-- weniger abstrakte Silhouette mit ruhigeren Armen, Rumpf- und Beinformen
-- Organe und Skelett neu auf die Figur abgestimmt
-- weiterhin keine externen Bilddateien, alles als leichtgewichtiges Inline-SVG
+## Hinweis
 
-
-Zusätzliche Änderungen in Version 0.6:
-
-- rechte Seite als echte Bodymap mit anklickbaren Kreisen und Organbezeichnungen
-- Graustufen-/Schraffurstatus wird direkt im Kreis angezeigt
-- Klick auf Organ/System schaltet die linke Spalte in eine Organ-Detailansicht
-- dort erscheint eine größere, eindeutig erkennbare SVG-Illustration plus organbezogener Befund
-- weibliche und männliche Geschlechtsorgane liegen direkt nebeneinander in der Bodymap
-- Rücksprung zur Grundlage über „← Grundlage“
-- weiterhin keine externen Bilddateien; sämtliche Grafiken sind kompakte Inline-SVGs
+Die vierte Ebene ist absichtlich zurückhaltend gehalten: Das System kann komplexer werden, die Oberfläche soll es nicht.

@@ -3,55 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GWL-Panel – Prototyp 0.6</title>
+  <title>GWL-Panel – Prototyp 0.8</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <h1>GWL-PANEL</h1>
-      <span class="version">Prototyp 0.6</span>
+      <span class="version">Prototyp 0.8</span>
     </header>
 
     <section class="panel-grid">
       <section class="panel panel-left" aria-labelledby="grundlageTitle">
-        <div id="boundaryView" class="left-view">
-          <div class="panel-heading">
+        <div class="panel-heading">
+          <div class="panel-heading-main">
             <h2 id="grundlageTitle">GRUNDLAGE</h2>
-            <span class="mode-chip">erkunden</span>
+            <button id="causeButtonGround" class="cause-chip" type="button" hidden>Ursachen</button>
           </div>
-          <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen. Jede Aussage bleibt an ihren räumlichen und zeitlichen Bezug gebunden.</p>
-          <div id="boundaryList" class="boundary-list"></div>
+          <span class="mode-chip">erkunden</span>
         </div>
+        <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen. Jede Aussage bleibt an ihren räumlichen und zeitlichen Bezug gebunden.</p>
+        <div id="boundaryList" class="boundary-list"></div>
 
-        <div id="organDetailView" class="left-view organ-detail-view" hidden>
-          <div class="panel-heading">
-            <h2>LEBEN · ORGAN</h2>
-            <button id="backToBoundaryButton" class="small-back" type="button">← Grundlage</button>
-          </div>
-          <div class="organ-detail-card">
-            <div class="eyebrow">Ausgewähltes Organ / System</div>
-            <h3 id="organDetailTitle">–</h3>
-            <div id="organDetailMain" class="organ-detail-main">
-              <div class="organ-detail-figure">
-                <svg id="organDetailSvg" viewBox="0 0 260 230" role="img" aria-label="Detailansicht des ausgewählten Organs"></svg>
+        <div id="causeOverlayGround" class="cause-overlay" hidden>
+          <div class="cause-overlay-card">
+            <div class="cause-overlay-head">
+              <div>
+                <span class="eyebrow">Vierte Ebene</span>
+                <h3 id="causeTitleGround">Ursachen</h3>
               </div>
-              <div class="organ-detail-finding">
-                <span class="eyebrow">Befund am Organ</span>
-                <p id="organDetailFinding">–</p>
-              </div>
+              <button class="overlay-close" type="button" data-close-cause="ground" aria-label="Ursachen schließen">×</button>
             </div>
-            <div class="organ-detail-meta">
-              <span class="eyebrow">Einordnung</span>
-              <p id="organDetailNote">–</p>
-            </div>
+            <div id="causeBodyGround" class="cause-body"></div>
           </div>
         </div>
       </section>
 
       <section class="panel panel-center" aria-labelledby="wirkungTitle">
         <div class="panel-heading">
-          <h2 id="wirkungTitle">WIRKUNG</h2>
+          <div class="panel-heading-main">
+            <h2 id="wirkungTitle">WIRKUNG</h2>
+            <button id="causeButtonEffect" class="cause-chip" type="button" hidden>Ursachen</button>
+          </div>
         </div>
 
         <section class="time-card top-card" aria-labelledby="timeTitle">
@@ -113,11 +106,27 @@
         </details>
 
         <button id="resetButton" class="reset-button" type="button">Zur globalen Übersicht</button>
+
+        <div id="causeOverlayEffect" class="cause-overlay" hidden>
+          <div class="cause-overlay-card">
+            <div class="cause-overlay-head">
+              <div>
+                <span class="eyebrow">Vierte Ebene</span>
+                <h3 id="causeTitleEffect">Ursachen</h3>
+              </div>
+              <button class="overlay-close" type="button" data-close-cause="effect" aria-label="Ursachen schließen">×</button>
+            </div>
+            <div id="causeBodyEffect" class="cause-body"></div>
+          </div>
+        </div>
       </section>
 
       <section class="panel panel-right" aria-labelledby="lebenTitle">
         <div class="panel-heading">
-          <h2 id="lebenTitle">LEBEN</h2>
+          <div class="panel-heading-main">
+            <h2 id="lebenTitle">LEBEN</h2>
+            <button id="causeButtonLife" class="cause-chip" type="button" hidden>Ursachen</button>
+          </div>
           <span class="mode-chip muted">Gesundheitsbezug</span>
         </div>
 
@@ -142,92 +151,59 @@
           <div id="regionPath" class="region-path">Global</div>
         </div>
 
-        <div class="body-wrap bodymap-wrap" aria-label="Interaktive Bodymap mit Organ- und Systemauswahl">
-          <svg id="humanSvg" class="human-svg bodymap-svg" viewBox="0 0 470 560" role="img" aria-labelledby="humanTitle humanDesc">
-            <title id="humanTitle">Interaktive Bodymap</title>
-            <desc id="humanDesc">Eine neutrale menschliche Figur mit anklickbaren Kreisen und Beschriftungen für Organe und Organsysteme.</desc>
-            <defs>
-              <pattern id="hotspotHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <rect width="7" height="7" fill="#f7f7f5"></rect>
-                <rect width="2.4" height="7" fill="#8f8f8a"></rect>
-              </pattern>
-            </defs>
+        <div class="bodymap-panel">
+          <div class="bodymap-stage">
+            <img class="bodymap-image" src="assets/health/bodymap_main.png" alt="Medizinische Körperdarstellung als Bodymap-Grundlage">
+            <div id="hotspotLayer" class="hotspot-layer" aria-label="Anklickbare Organkuller"></div>
+          </div>
 
-            <g class="bodymap-person" aria-hidden="true">
-              <ellipse cx="130" cy="45" rx="25" ry="31"></ellipse>
-              <path d="M114 76 C107 84 104 96 103 111 C87 117 75 131 70 150 C64 174 63 198 62 225 C61 246 57 273 54 291 C52 303 59 311 68 311 C78 311 85 304 88 293 L99 231 L102 287 L107 343 L107 508 C107 522 115 532 126 532 C136 532 142 524 142 512 L143 367 L145 512 C145 524 151 532 161 532 C172 532 180 522 180 508 L180 343 L185 287 L188 231 L199 293 C202 304 209 311 219 311 C228 311 235 303 233 291 C230 273 226 246 225 225 C224 198 223 174 217 150 C212 131 200 117 184 111 C183 96 180 84 173 76 Z"></path>
-              <path class="bodymap-centerline" d="M143 76 L144 515"></path>
-              <path class="bodymap-shoulder" d="M103 111 C125 122 162 122 184 111"></path>
-            </g>
+          <div class="organ-readout">
+            <span class="eyebrow">Organ-/Systembezug</span>
+            <p id="organReadout">Keine lokal belegte Organwirkung für die aktuelle Auswahl.</p>
+          </div>
 
-            <g class="bodymap-hint" aria-hidden="true">
-              <path d="M117 26 C123 19 134 18 141 23 C148 18 158 20 162 28 C168 32 168 41 163 46 C159 53 149 56 142 52 C134 56 123 53 119 46 C114 41 113 32 117 26 Z"></path>
-              <path d="M121 126 C108 130 103 145 105 167 C108 190 118 202 132 203 C137 188 138 166 136 139 C135 131 130 126 121 126 Z"></path>
-              <path d="M166 126 C179 130 184 145 182 167 C179 190 169 202 155 203 C150 188 149 166 151 139 C152 131 157 126 166 126 Z"></path>
-              <path d="M151 158 C157 146 171 151 170 163 C169 176 160 185 151 193 C143 185 135 176 134 165 C133 153 145 148 151 158 Z"></path>
-            </g>
+          <details class="accordion life-note">
+            <summary>Einordnung Gesundheit</summary>
+            <p id="lifeNote">Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.</p>
+          </details>
 
-            <g class="body-hotspot" data-organ="brain" tabindex="0" role="button" aria-label="Gehirn und Nerven">
-              <line x1="130" y1="38" x2="285" y2="38"></line><circle cx="130" cy="38" r="10"></circle><text x="300" y="43">Gehirn &amp; Nerven</text>
-            </g>
-            <g class="body-hotspot" data-organ="eyes" tabindex="0" role="button" aria-label="Augen">
-              <line x1="137" y1="61" x2="285" y2="61"></line><circle cx="137" cy="61" r="10"></circle><text x="300" y="66">Augen</text>
-            </g>
-            <g class="body-hotspot" data-organ="lungs" tabindex="0" role="button" aria-label="Lunge">
-              <line x1="122" y1="151" x2="285" y2="119"></line><circle cx="122" cy="151" r="10"></circle><text x="300" y="124">Lunge</text>
-            </g>
-            <g class="body-hotspot" data-organ="heart" tabindex="0" role="button" aria-label="Herz und Kreislauf">
-              <line x1="151" y1="169" x2="285" y2="146"></line><circle cx="151" cy="169" r="10"></circle><text x="300" y="151">Herz &amp; Kreislauf</text>
-            </g>
-            <g class="body-hotspot" data-organ="liver" tabindex="0" role="button" aria-label="Leber">
-              <line x1="165" y1="207" x2="285" y2="174"></line><circle cx="165" cy="207" r="10"></circle><text x="300" y="179">Leber</text>
-            </g>
-            <g class="body-hotspot" data-organ="kidneys" tabindex="0" role="button" aria-label="Niere">
-              <line x1="126" y1="226" x2="285" y2="202"></line><circle cx="126" cy="226" r="10"></circle><text x="300" y="207">Niere</text>
-            </g>
-            <g class="body-hotspot" data-organ="gut" tabindex="0" role="button" aria-label="Verdauung">
-              <line x1="143" y1="270" x2="285" y2="230"></line><circle cx="143" cy="270" r="10"></circle><text x="300" y="235">Verdauung</text>
-            </g>
-            <g class="body-hotspot" data-organ="teeth" tabindex="0" role="button" aria-label="Zähne">
-              <line x1="126" y1="69" x2="285" y2="90"></line><circle cx="126" cy="69" r="10"></circle><text x="300" y="95">Zähne</text>
-            </g>
-            <g class="body-hotspot" data-organ="femaleRepro" tabindex="0" role="button" aria-label="Weibliche Geschlechtsorgane">
-              <line x1="134" y1="303" x2="285" y2="265"></line><circle cx="134" cy="303" r="10"></circle><text x="300" y="270">weibl. Geschlechtsorgane</text>
-            </g>
-            <g class="body-hotspot" data-organ="maleRepro" tabindex="0" role="button" aria-label="Männliche Geschlechtsorgane">
-              <line x1="153" y1="315" x2="285" y2="292"></line><circle cx="153" cy="315" r="10"></circle><text x="300" y="297">männl. Geschlechtsorgane</text>
-            </g>
-            <g class="body-hotspot" data-organ="skin" tabindex="0" role="button" aria-label="Haut">
-              <line x1="86" y1="244" x2="285" y2="319"></line><circle cx="86" cy="244" r="10"></circle><text x="300" y="324">Haut</text>
-            </g>
-            <g class="body-hotspot" data-organ="bloodLymph" tabindex="0" role="button" aria-label="Blut und Lymphsystem">
-              <line x1="111" y1="361" x2="285" y2="346"></line><circle cx="111" cy="361" r="10"></circle><text x="300" y="351">Blut- &amp; Lymphsystem</text>
-            </g>
-            <g class="body-hotspot" data-organ="skeleton" tabindex="0" role="button" aria-label="Skelett und Bewegungsapparat">
-              <line x1="113" y1="449" x2="285" y2="373"></line><circle cx="113" cy="449" r="10"></circle><text x="300" y="378">Skelett / Bewegung</text>
-            </g>
-          </svg>
+          <div id="organOverlay" class="organ-overlay" hidden>
+            <div class="organ-overlay-card" role="dialog" aria-modal="false" aria-labelledby="organOverlayTitle">
+              <div class="organ-overlay-head">
+                <div>
+                  <span class="eyebrow">Organfenster</span>
+                  <h3 id="organOverlayTitle">–</h3>
+                </div>
+                <button id="closeOverlayButton" class="overlay-close" type="button" aria-label="Organfenster schließen">×</button>
+              </div>
+              <div id="organOverlayContent" class="organ-overlay-content side-by-side">
+                <div id="organOverlayMedia" class="organ-overlay-media"></div>
+                <div class="organ-overlay-text">
+                  <span class="eyebrow">Befund</span>
+                  <p id="organOverlayFinding">–</p>
+                  <span class="eyebrow section-gap">Einordnung</span>
+                  <p id="organOverlayNote">–</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="causeOverlayLife" class="cause-overlay" hidden>
+            <div class="cause-overlay-card">
+              <div class="cause-overlay-head">
+                <div>
+                  <span class="eyebrow">Vierte Ebene</span>
+                  <h3 id="causeTitleLife">Ursachen</h3>
+                </div>
+                <button class="overlay-close" type="button" data-close-cause="life" aria-label="Ursachen schließen">×</button>
+              </div>
+              <div id="causeBodyLife" class="cause-body"></div>
+            </div>
+          </div>
         </div>
-
-        <div class="organ-scale" aria-label="Skala der Organfunktion">
-          <div class="scale-labels"><span>0 % Funktionsverlust</span><span>100 %</span></div>
-          <div class="gray-gradient"></div>
-          <div class="scale-caption">weiß = gesund und funktionsfähig · schwarz = theoretisch vollständig außer Funktion · Schraffur = Schädigung belegt, aber nicht als 0–100-%-Funktionsverlust quantifiziert</div>
-        </div>
-
-        <div class="organ-readout">
-          <span class="eyebrow">Organ-/Systembezug</span>
-          <p id="organReadout">Keine lokal belegte Organwirkung für die aktuelle Auswahl.</p>
-        </div>
-
-        <details class="accordion life-note">
-          <summary>Einordnung Gesundheit</summary>
-          <p id="lifeNote">Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.</p>
-        </details>
       </section>
     </section>
   </main>
-
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
