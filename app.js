@@ -47,12 +47,12 @@ function getVisibleItems(boundary) {
 }
 
 function getTimePoints(item) {
-  return Array.isArray(item?.timePoints) ? [...item.timePoints].sort((a, b) => a.year - b.year) : [];
+  return item?.timePoints ? [...item.timePoints].sort((a, b) => a.year - b.year) : [];
 }
 
 function renderRegionPath() {
   const scope = data.scopes[getSelectedScope()];
-  regionPath.textContent = scope?.path || scope?.label || "–";
+  regionPath.textContent = scope?.path || scope?.label || "Global";
 }
 
 function renderBoundaries() {
@@ -98,50 +98,6 @@ function renderBoundaries() {
 
     boundaryList.appendChild(row);
   });
-}
-
-function selectBoundary(boundaryId) {
-  selectedBoundaryId = boundaryId;
-  const boundary = getBoundary(boundaryId);
-  const items = getVisibleItems(boundary);
-
-  if (items.length) {
-    selectItem(boundaryId, items[0].id);
-    return;
-  }
-
-  selectedItemId = null;
-  selectedYear = null;
-  focusType.textContent = `Grundlage · ${data.scopes[getSelectedScope()]?.label || ""}`;
-  focusTitle.textContent = boundary.label;
-  focusSummary.textContent = `Für ${data.scopes[getSelectedScope()]?.label || "diese Ebene"} ist in diesem Prototyp noch keine passende Messreihe hinterlegt. Die räumliche Ebene bleibt trotzdem Teil der späteren Struktur.`;
-  setDetails(null);
-  renderTime(null);
-  renderHealth(null);
-  renderBoundaries();
-}
-
-function selectItem(boundaryId, itemId) {
-  selectedBoundaryId = boundaryId;
-  selectedItemId = itemId;
-
-  const boundary = getBoundary(boundaryId);
-  const item = boundary.items.find(entry => entry.id === itemId);
-  if (!item) return;
-
-  const points = getTimePoints(item);
-  selectedYear = points.length ? points[points.length - 1].year : null;
-  timeWindow = "data";
-
-  focusType.textContent = `${item.type} · ${data.scopes[item.scope]?.label || item.scope}`;
-  focusTitle.textContent = `${boundary.label} · ${item.label}`;
-  focusSummary.textContent = item.summary;
-
-  const point = points.find(entry => entry.year === selectedYear) || null;
-  setDetails(item, point);
-  renderTime(item);
-  renderHealth(point?.health || item.health || null);
-  renderBoundaries();
 }
 
 function mergeItemAndPoint(item, point) {
@@ -245,8 +201,7 @@ function renderTime(item) {
       const marker = document.createElement("span");
       marker.className = "time-marker";
       marker.textContent = String(point.year);
-      const pos = ((point.year - min) / (max - min)) * 100;
-      marker.style.left = `${pos}%`;
+      marker.style.left = `${((point.year - min) / (max - min)) * 100}%`;
       timeMarkers.appendChild(marker);
     });
 
@@ -258,36 +213,6 @@ function renderTime(item) {
   } else {
     timeStatus.textContent = "Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
   }
-}
-
-function selectYear(year) {
-  const item = getCurrentItem();
-  if (!item) return;
-
-  selectedYear = year;
-  const points = getTimePoints(item);
-  const point = points.find(entry => entry.year === year) || null;
-  timeReadout.textContent = String(year);
-
-  if (point) {
-    setDetails(item, point);
-    renderHealth(point.health || item.health || null);
-    timeStatus.textContent = `${point.label || "Messpunkt"}. Dieser Zeitpunkt ist im Datensatz belegt.`;
-  } else {
-    setDetails(item, null, year);
-    renderHealth(null);
-    timeStatus.textContent = `Für ${year} ist kein Messpunkt hinterlegt. Keine Interpolation.`;
-  }
-}
-
-function setTimeWindow(nextWindow) {
-  const item = getCurrentItem();
-  if (!item) return;
-  timeWindow = nextWindow;
-  const points = getTimePoints(item);
-  if (points.length) selectedYear = points[points.length - 1].year;
-  renderTime(item);
-  selectYear(selectedYear);
 }
 
 function resetHealthShapes() {
@@ -329,6 +254,80 @@ function renderHealth(health) {
   });
 
   organReadout.textContent = texts.join(" ");
+}
+
+function selectBoundary(boundaryId) {
+  selectedBoundaryId = boundaryId;
+  const boundary = getBoundary(boundaryId);
+  const items = getVisibleItems(boundary);
+
+  if (items.length) {
+    selectItem(boundaryId, items[0].id);
+    return;
+  }
+
+  selectedItemId = null;
+  selectedYear = null;
+  focusType.textContent = `Grundlage · ${data.scopes[getSelectedScope()]?.label || ""}`;
+  focusTitle.textContent = boundary.label;
+  focusSummary.textContent = `Für ${data.scopes[getSelectedScope()]?.label || "diese Ebene"} ist in diesem Prototyp noch keine passende Messreihe hinterlegt. Die räumliche Ebene bleibt trotzdem Teil der späteren Struktur.`;
+  setDetails(null);
+  renderTime(null);
+  renderHealth(null);
+  renderBoundaries();
+}
+
+function selectItem(boundaryId, itemId) {
+  selectedBoundaryId = boundaryId;
+  selectedItemId = itemId;
+
+  const boundary = getBoundary(boundaryId);
+  const item = boundary.items.find(entry => entry.id === itemId);
+  if (!item) return;
+
+  const points = getTimePoints(item);
+  selectedYear = points.length ? points[points.length - 1].year : null;
+  timeWindow = "data";
+
+  focusType.textContent = `${item.type} · ${data.scopes[item.scope]?.label || item.scope}`;
+  focusTitle.textContent = `${boundary.label} · ${item.label}`;
+  focusSummary.textContent = item.summary;
+
+  const point = points.find(entry => entry.year === selectedYear) || null;
+  setDetails(item, point);
+  renderTime(item);
+  renderHealth(point?.health || item.health || null);
+  renderBoundaries();
+}
+
+function selectYear(year) {
+  const item = getCurrentItem();
+  if (!item) return;
+  selectedYear = year;
+
+  const points = getTimePoints(item);
+  const point = points.find(entry => entry.year === year) || null;
+  timeReadout.textContent = String(year);
+
+  if (point) {
+    setDetails(item, point);
+    renderHealth(point.health || item.health || null);
+    timeStatus.textContent = `${point.label || "Messpunkt"}. Dieser Zeitpunkt ist im Datensatz belegt.`;
+  } else {
+    setDetails(item, null, year);
+    renderHealth(null);
+    timeStatus.textContent = `Für ${year} ist kein Messpunkt hinterlegt. Keine Interpolation.`;
+  }
+}
+
+function setTimeWindow(nextWindow) {
+  const item = getCurrentItem();
+  if (!item) return;
+  timeWindow = nextWindow;
+  const points = getTimePoints(item);
+  if (points.length) selectedYear = points[points.length - 1].year;
+  renderTime(item);
+  selectYear(selectedYear);
 }
 
 function chooseFirstItemForScope() {

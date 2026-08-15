@@ -3,7 +3,7 @@
 :root {
   --bg: #f2f2ef;
   --panel: #ffffff;
-  --line: #d6d6d0;
+  --line: #d7d7d2;
   --text: #181818;
   --muted: #666662;
   --soft: #ecece8;
@@ -23,8 +23,8 @@ body { padding: 12px; }
 button, select, input { font: inherit; }
 
 .app-shell {
-  width: min(1500px, 100%);
-  min-height: min(820px, calc(100vh - 24px));
+  width: min(1540px, 100%);
+  min-height: min(860px, calc(100vh - 24px));
   margin: 0 auto;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -40,12 +40,11 @@ button, select, input { font: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 13px 18px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--line);
 }
 
-.topbar h1 { margin: 0 0 3px; font-size: 20px; letter-spacing: .04em; }
-.topbar p { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: .08em; }
+.topbar h1 { margin: 0; font-size: 21px; letter-spacing: .06em; }
 .version { color: var(--muted); font-size: 11px; }
 
 .panel-grid {
@@ -60,9 +59,9 @@ button, select, input { font: inherit; }
 .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .panel-heading h2 { margin: 0; font-size: 15px; letter-spacing: .08em; }
 .panel-intro { margin: 0 0 12px; font-size: 12px; line-height: 1.45; color: var(--muted); }
-
 .mode-chip { padding: 4px 7px; border: 1px solid #888; border-radius: 999px; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
 .mode-chip.muted { opacity: .52; }
+.top-card { min-height: 116px; }
 
 .boundary-list { display: grid; gap: 7px; }
 .boundary-row { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
@@ -70,16 +69,20 @@ button, select, input { font: inherit; }
 .boundary-button:hover, .boundary-button:focus-visible { background: var(--soft); }
 .boundary-button.active { background: #e3e3df; }
 .boundary-button.disabled { opacity: .42; cursor: default; }
-
 .submenu { display: none; padding: 0 7px 7px; gap: 5px; }
 .submenu.open { display: grid; }
 .submenu button { border: 1px solid var(--line); background: var(--soft2); border-radius: 8px; padding: 8px 9px; text-align: left; cursor: pointer; line-height: 1.25; font-size: 12px; }
 .submenu button.active { background: #d7d7d2; }
 
-.state-card, .time-card, .metric, .accordion, .organ-readout, .location-control { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.state-card, .time-card, .metric, .accordion, .organ-readout, .location-control {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
 .state-card { padding: 14px; margin-bottom: 10px; }
 .state-card h3 { margin: 4px 0 7px; font-size: 19px; }
-.state-card p, .accordion p, .organ-readout p { margin: 0; line-height: 1.44; }
+.state-card p, .accordion p, .organ-readout p { margin: 0; line-height: 1.46; }
 .eyebrow { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
 
 .time-card { padding: 12px; margin-bottom: 10px; background: var(--soft2); }
@@ -116,36 +119,39 @@ button, select, input { font: inherit; }
 .location-control select { width: 100%; padding: 8px 9px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
 .region-path { margin-top: 6px; color: var(--muted); font-size: 10px; line-height: 1.35; }
 
-.body-wrap { min-height: 410px; display: grid; place-items: center; }
-.human-svg { width: min(100%, 270px); height: auto; overflow: visible; }
-.body-outline ellipse, .body-outline path { fill: #efefec; stroke: #c9c9c3; stroke-width: 1.5; }
+.body-wrap { min-height: 412px; display: grid; place-items: center; }
+.human-svg { width: min(100%, 282px); height: auto; overflow: visible; }
+.body-outline circle, .body-outline path { fill: #f1f1ee; stroke: #c8c8c2; stroke-width: 1.55; }
+.body-outline .shoulder-line { fill: none; }
 .organ-target { pointer-events: none; }
-.organ-shape { fill: #fff; stroke: #7b7b77; stroke-width: 1.4; transition: fill .18s ease, stroke .18s ease, opacity .18s ease; }
-.gut-line { fill: none; stroke: #8a8a86; stroke-width: 2; stroke-linecap: round; }
-.skeleton-target { opacity: .34; }
-.skeleton-target .bone { stroke-width: 1; }
+.organ-shape { fill: #fff; stroke: #777772; stroke-width: 1.35; transition: fill .18s ease, stroke .18s ease, opacity .18s ease; }
+.organ-detail { fill: none; stroke: #8a8a86; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
+.gut-line { fill: none; stroke: #898985; stroke-width: 1.9; stroke-linecap: round; }
+.skeleton-target { opacity: .44; }
+.skeleton-target .organ-shape { stroke: #b8b8b3; fill: none; }
+.skeleton-target .bone-line { stroke-width: 3.2; }
+.skeleton-target .bone-ribs { stroke-width: 2.2; }
 .organ-target.is-active { opacity: 1; }
 .organ-target.is-active .organ-shape { stroke: #111; stroke-width: 1.8; }
 .organ-target.is-unquantified { opacity: 1; }
 .organ-target.is-unquantified .organ-shape { fill: url(#unquantifiedPattern); stroke: #333; stroke-width: 2; }
 .organ-target.is-quantified { opacity: 1; }
+.organ-target.is-quantified .organ-detail { stroke: #444; }
 
 .organ-scale { margin: -4px 0 9px; }
 .scale-labels { display: flex; justify-content: space-between; gap: 10px; font-size: 9px; color: var(--muted); }
 .gray-gradient { height: 8px; margin: 4px 0; border: 1px solid #aaa; border-radius: 999px; background: linear-gradient(90deg, #fff 0%, #000 100%); }
 .scale-caption { font-size: 9px; color: var(--muted); line-height: 1.35; }
-
 .organ-readout { padding: 10px; background: #fff; }
 .organ-readout p { margin-top: 5px; font-size: 11px; }
 .life-note { background: var(--soft2); }
 
-@media (max-width: 1050px) and (min-width: 821px) {
+@media (max-width: 1120px) and (min-width: 821px) {
   body { padding: 6px; }
   .app-shell { min-height: calc(100vh - 12px); border-radius: 12px; }
   .panel { padding: 12px; }
-  .panel-grid { grid-template-columns: 30fr 40fr 30fr; }
-  .body-wrap { min-height: 360px; }
-  .human-svg { width: min(100%, 235px); }
+  .body-wrap { min-height: 370px; }
+  .human-svg { width: min(100%, 245px); }
   .metrics { grid-template-columns: 1fr; }
   .metric { min-height: 0; }
 }
@@ -155,8 +161,8 @@ button, select, input { font: inherit; }
   .app-shell { min-height: 0; border-radius: 12px; }
   .panel-grid { grid-template-columns: 1fr; }
   .panel + .panel { border-left: 0; border-top: 1px solid var(--line); }
-  .body-wrap { min-height: 330px; }
-  .human-svg { width: 220px; }
+  .body-wrap { min-height: 340px; }
+  .human-svg { width: 228px; }
 }
 
 @media (max-width: 480px) {
