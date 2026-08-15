@@ -3,24 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GWL-Panel – Prototyp 0.5</title>
+  <title>GWL-Panel – Prototyp 0.6</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <h1>GWL-PANEL</h1>
-      <span class="version">Prototyp 0.5</span>
+      <span class="version">Prototyp 0.6</span>
     </header>
 
     <section class="panel-grid">
       <section class="panel panel-left" aria-labelledby="grundlageTitle">
-        <div class="panel-heading">
-          <h2 id="grundlageTitle">GRUNDLAGE</h2>
-          <span class="mode-chip">erkunden</span>
+        <div id="boundaryView" class="left-view">
+          <div class="panel-heading">
+            <h2 id="grundlageTitle">GRUNDLAGE</h2>
+            <span class="mode-chip">erkunden</span>
+          </div>
+          <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen. Jede Aussage bleibt an ihren räumlichen und zeitlichen Bezug gebunden.</p>
+          <div id="boundaryList" class="boundary-list"></div>
         </div>
-        <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen. Jede Aussage bleibt an ihren räumlichen und zeitlichen Bezug gebunden.</p>
-        <div id="boundaryList" class="boundary-list"></div>
+
+        <div id="organDetailView" class="left-view organ-detail-view" hidden>
+          <div class="panel-heading">
+            <h2>LEBEN · ORGAN</h2>
+            <button id="backToBoundaryButton" class="small-back" type="button">← Grundlage</button>
+          </div>
+          <div class="organ-detail-card">
+            <div class="eyebrow">Ausgewähltes Organ / System</div>
+            <h3 id="organDetailTitle">–</h3>
+            <div id="organDetailMain" class="organ-detail-main">
+              <div class="organ-detail-figure">
+                <svg id="organDetailSvg" viewBox="0 0 260 230" role="img" aria-label="Detailansicht des ausgewählten Organs"></svg>
+              </div>
+              <div class="organ-detail-finding">
+                <span class="eyebrow">Befund am Organ</span>
+                <p id="organDetailFinding">–</p>
+              </div>
+            </div>
+            <div class="organ-detail-meta">
+              <span class="eyebrow">Einordnung</span>
+              <p id="organDetailNote">–</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="panel panel-center" aria-labelledby="wirkungTitle">
@@ -116,98 +142,77 @@
           <div id="regionPath" class="region-path">Global</div>
         </div>
 
-        <div class="body-wrap" aria-label="Schematische Darstellung des menschlichen Körpers und ausgewählter Organe">
-          <svg id="humanSvg" class="human-svg" viewBox="0 0 280 540" role="img" aria-labelledby="humanTitle humanDesc">
-            <title id="humanTitle">Mensch mit ausgewählten Organen und Skelett</title>
-            <desc id="humanDesc">Weiße Organflächen stehen für keine belegte Funktionsminderung. Schwarz würde theoretisch vollständigen Funktionsverlust bedeuten. Nicht quantifizierbare, aber lokal belegte Schädigungen werden schraffiert dargestellt.</desc>
+        <div class="body-wrap bodymap-wrap" aria-label="Interaktive Bodymap mit Organ- und Systemauswahl">
+          <svg id="humanSvg" class="human-svg bodymap-svg" viewBox="0 0 470 560" role="img" aria-labelledby="humanTitle humanDesc">
+            <title id="humanTitle">Interaktive Bodymap</title>
+            <desc id="humanDesc">Eine neutrale menschliche Figur mit anklickbaren Kreisen und Beschriftungen für Organe und Organsysteme.</desc>
             <defs>
-              <pattern id="unquantifiedPattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <rect width="8" height="8" fill="#f8f8f6"></rect>
-                <rect width="3" height="8" fill="#bbbbbb"></rect>
+              <pattern id="hotspotHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="7" height="7" fill="#f7f7f5"></rect>
+                <rect width="2.4" height="7" fill="#8f8f8a"></rect>
               </pattern>
             </defs>
 
-            <g class="body-outline" aria-hidden="true">
-              <circle cx="140" cy="40" r="23"></circle>
-              <path d="M126 64 C122 73 120 85 119 97 C105 102 91 112 82 128 C73 144 70 162 68 184 L66 216 C65 231 63 251 59 274 C57 286 63 293 71 294 C80 295 88 289 91 278 L101 225 C103 237 104 251 106 266 L109 322 L110 494 C110 509 118 519 129 519 C139 519 145 511 145 500 L147 355 L149 500 C149 511 155 519 166 519 C177 519 185 509 185 494 L186 322 L189 266 C191 251 192 237 194 225 L204 278 C207 289 215 295 224 294 C232 293 238 286 236 274 C232 251 230 231 229 216 L227 184 C225 162 222 144 213 128 C204 112 190 102 176 97 C175 85 173 73 169 64 Z"></path>
-              <path d="M119 96 C110 103 104 115 101 129 C99 139 97 152 97 165 L98 214 C98 224 100 232 105 236 C108 239 112 240 116 239 L119 175"></path>
-              <path d="M161 175 L164 239 C168 240 172 239 175 236 C180 232 182 224 182 214 L183 165 C183 152 181 139 179 129 C176 115 170 103 161 96"></path>
-              <path class="shoulder-line" d="M102 109 C126 120 154 120 178 109"></path>
+            <g class="bodymap-person" aria-hidden="true">
+              <ellipse cx="130" cy="45" rx="25" ry="31"></ellipse>
+              <path d="M114 76 C107 84 104 96 103 111 C87 117 75 131 70 150 C64 174 63 198 62 225 C61 246 57 273 54 291 C52 303 59 311 68 311 C78 311 85 304 88 293 L99 231 L102 287 L107 343 L107 508 C107 522 115 532 126 532 C136 532 142 524 142 512 L143 367 L145 512 C145 524 151 532 161 532 C172 532 180 522 180 508 L180 343 L185 287 L188 231 L199 293 C202 304 209 311 219 311 C228 311 235 303 233 291 C230 273 226 246 225 225 C224 198 223 174 217 150 C212 131 200 117 184 111 C183 96 180 84 173 76 Z"></path>
+              <path class="bodymap-centerline" d="M143 76 L144 515"></path>
+              <path class="bodymap-shoulder" d="M103 111 C125 122 162 122 184 111"></path>
             </g>
 
-            <g id="organ-skeleton" class="organ-target skeleton-target" data-organ="skeleton" aria-label="Skelett">
-              <path class="organ-shape bone-line" d="M140 85 L140 272"></path>
-              <path class="organ-shape bone-ribs" d="M140 110 C124 112 112 124 108 141"></path>
-              <path class="organ-shape bone-ribs" d="M140 126 C122 129 111 142 108 158"></path>
-              <path class="organ-shape bone-ribs" d="M140 142 C123 146 112 159 110 174"></path>
-              <path class="organ-shape bone-ribs" d="M140 110 C156 112 168 124 172 141"></path>
-              <path class="organ-shape bone-ribs" d="M140 126 C158 129 169 142 172 158"></path>
-              <path class="organ-shape bone-ribs" d="M140 142 C157 146 168 159 170 174"></path>
-              <path class="organ-shape bone-line" d="M108 130 L93 232"></path>
-              <path class="organ-shape bone-line" d="M172 130 L187 232"></path>
-              <path class="organ-shape bone-ribs" d="M122 260 C130 252 150 252 158 260"></path>
-              <path class="organ-shape bone-ribs" d="M114 270 C128 284 152 284 166 270"></path>
-              <path class="organ-shape bone-line" d="M128 286 L122 395"></path>
-              <path class="organ-shape bone-line" d="M152 286 L158 395"></path>
-              <path class="organ-shape bone-line" d="M122 397 L120 492"></path>
-              <path class="organ-shape bone-line" d="M158 397 L160 492"></path>
+            <g class="bodymap-hint" aria-hidden="true">
+              <path d="M117 26 C123 19 134 18 141 23 C148 18 158 20 162 28 C168 32 168 41 163 46 C159 53 149 56 142 52 C134 56 123 53 119 46 C114 41 113 32 117 26 Z"></path>
+              <path d="M121 126 C108 130 103 145 105 167 C108 190 118 202 132 203 C137 188 138 166 136 139 C135 131 130 126 121 126 Z"></path>
+              <path d="M166 126 C179 130 184 145 182 167 C179 190 169 202 155 203 C150 188 149 166 151 139 C152 131 157 126 166 126 Z"></path>
+              <path d="M151 158 C157 146 171 151 170 163 C169 176 160 185 151 193 C143 185 135 176 134 165 C133 153 145 148 151 158 Z"></path>
             </g>
 
-            <g id="organ-brain" class="organ-target" data-organ="brain" aria-label="Gehirn">
-              <path class="organ-shape" d="M128 25 C123 19 128 11 136 11 C142 6 153 10 154 18 C162 18 167 27 162 33 C166 40 162 48 154 50 C149 56 141 56 136 53 C128 56 119 51 117 43 C111 37 114 28 120 23 C123 22 126 22 128 25 Z"></path>
-              <path class="organ-detail" d="M132 18 C127 24 127 33 132 38"></path>
-              <path class="organ-detail" d="M140 15 C139 24 139 34 140 43"></path>
-              <path class="organ-detail" d="M148 18 C153 24 153 33 148 38"></path>
+            <g class="body-hotspot" data-organ="brain" tabindex="0" role="button" aria-label="Gehirn und Nerven">
+              <line x1="130" y1="38" x2="285" y2="38"></line><circle cx="130" cy="38" r="10"></circle><text x="300" y="43">Gehirn &amp; Nerven</text>
             </g>
-
-            <g id="organ-eyes" class="organ-target" data-organ="eyes" aria-label="Augen">
-              <ellipse class="organ-shape" cx="131" cy="44" rx="6.8" ry="4.8"></ellipse>
-              <ellipse class="organ-shape" cx="149" cy="44" rx="6.8" ry="4.8"></ellipse>
+            <g class="body-hotspot" data-organ="eyes" tabindex="0" role="button" aria-label="Augen">
+              <line x1="137" y1="61" x2="285" y2="61"></line><circle cx="137" cy="61" r="10"></circle><text x="300" y="66">Augen</text>
             </g>
-
-            <g id="organ-teeth" class="organ-target" data-organ="teeth" aria-label="Zähne">
-              <path class="organ-shape" d="M132 53 C136 57 144 57 148 53 C148 59 144 64 140 64 C136 64 132 59 132 53 Z"></path>
+            <g class="body-hotspot" data-organ="lungs" tabindex="0" role="button" aria-label="Lunge">
+              <line x1="122" y1="151" x2="285" y2="119"></line><circle cx="122" cy="151" r="10"></circle><text x="300" y="124">Lunge</text>
             </g>
-
-            <g id="organ-lungs" class="organ-target" data-organ="lungs" aria-label="Lunge">
-              <path class="organ-shape" d="M133 116 C116 114 105 126 102 148 C99 173 109 193 129 200 C135 188 137 169 136 138 C136 128 135 120 133 116 Z"></path>
-              <path class="organ-shape" d="M147 116 C164 114 175 126 178 148 C181 173 171 193 151 200 C145 188 143 169 144 138 C144 128 145 120 147 116 Z"></path>
-              <path class="organ-detail" d="M140 106 L140 182"></path>
-              <path class="organ-detail" d="M140 120 C128 125 121 137 118 151"></path>
-              <path class="organ-detail" d="M140 120 C152 125 159 137 162 151"></path>
+            <g class="body-hotspot" data-organ="heart" tabindex="0" role="button" aria-label="Herz und Kreislauf">
+              <line x1="151" y1="169" x2="285" y2="146"></line><circle cx="151" cy="169" r="10"></circle><text x="300" y="151">Herz &amp; Kreislauf</text>
             </g>
-
-            <g id="organ-heart" class="organ-target" data-organ="heart" aria-label="Herz">
-              <path class="organ-shape" d="M148 149 C155 136 170 142 170 156 C169 169 159 181 148 191 C138 181 128 170 127 157 C126 144 141 138 148 149 Z"></path>
-              <path class="organ-detail" d="M151 146 C155 138 161 132 167 130"></path>
+            <g class="body-hotspot" data-organ="liver" tabindex="0" role="button" aria-label="Leber">
+              <line x1="165" y1="207" x2="285" y2="174"></line><circle cx="165" cy="207" r="10"></circle><text x="300" y="179">Leber</text>
             </g>
-
-            <g id="organ-liver" class="organ-target" data-organ="liver" aria-label="Leber">
-              <path class="organ-shape" d="M144 203 C161 193 181 196 189 208 C187 224 174 235 155 236 C138 237 126 233 122 221 C123 210 132 204 144 203 Z"></path>
+            <g class="body-hotspot" data-organ="kidneys" tabindex="0" role="button" aria-label="Niere">
+              <line x1="126" y1="226" x2="285" y2="202"></line><circle cx="126" cy="226" r="10"></circle><text x="300" y="207">Niere</text>
             </g>
-
-            <g id="organ-kidneys" class="organ-target" data-organ="kidneys" aria-label="Nieren">
-              <path class="organ-shape" d="M118 227 C107 225 101 235 103 247 C105 259 114 265 123 261 C129 255 129 237 118 227 Z"></path>
-              <path class="organ-shape" d="M162 227 C173 225 179 235 177 247 C175 259 166 265 157 261 C151 255 151 237 162 227 Z"></path>
-              <path class="organ-detail" d="M140 220 L140 265"></path>
+            <g class="body-hotspot" data-organ="gut" tabindex="0" role="button" aria-label="Verdauung">
+              <line x1="143" y1="270" x2="285" y2="230"></line><circle cx="143" cy="270" r="10"></circle><text x="300" y="235">Verdauung</text>
             </g>
-
-            <g id="organ-gut" class="organ-target" data-organ="gut" aria-label="Darm">
-              <path class="organ-shape" d="M120 258 C109 266 108 280 118 287 C110 296 112 308 122 315 C120 326 127 335 139 335 C146 339 160 338 165 329 C176 328 181 315 175 305 C183 296 182 282 173 275 C177 262 167 253 154 254 C146 250 130 250 120 258 Z"></path>
-              <path class="gut-line" d="M121 271 C138 262 156 270 154 281 C152 289 134 287 129 297 C124 305 138 312 153 306"></path>
-              <path class="gut-line" d="M126 323 C136 315 148 315 158 323"></path>
+            <g class="body-hotspot" data-organ="teeth" tabindex="0" role="button" aria-label="Zähne">
+              <line x1="126" y1="69" x2="285" y2="90"></line><circle cx="126" cy="69" r="10"></circle><text x="300" y="95">Zähne</text>
             </g>
-
-            <g id="organ-reproduction" class="organ-target" data-organ="reproduction" aria-label="Fortpflanzung">
-              <path class="organ-shape" d="M132 302 C126 307 126 316 132 322 C137 327 145 327 150 322 C156 316 156 307 150 302 C145 298 137 298 132 302 Z"></path>
+            <g class="body-hotspot" data-organ="femaleRepro" tabindex="0" role="button" aria-label="Weibliche Geschlechtsorgane">
+              <line x1="134" y1="303" x2="285" y2="265"></line><circle cx="134" cy="303" r="10"></circle><text x="300" y="270">weibl. Geschlechtsorgane</text>
+            </g>
+            <g class="body-hotspot" data-organ="maleRepro" tabindex="0" role="button" aria-label="Männliche Geschlechtsorgane">
+              <line x1="153" y1="315" x2="285" y2="292"></line><circle cx="153" cy="315" r="10"></circle><text x="300" y="297">männl. Geschlechtsorgane</text>
+            </g>
+            <g class="body-hotspot" data-organ="skin" tabindex="0" role="button" aria-label="Haut">
+              <line x1="86" y1="244" x2="285" y2="319"></line><circle cx="86" cy="244" r="10"></circle><text x="300" y="324">Haut</text>
+            </g>
+            <g class="body-hotspot" data-organ="bloodLymph" tabindex="0" role="button" aria-label="Blut und Lymphsystem">
+              <line x1="111" y1="361" x2="285" y2="346"></line><circle cx="111" cy="361" r="10"></circle><text x="300" y="351">Blut- &amp; Lymphsystem</text>
+            </g>
+            <g class="body-hotspot" data-organ="skeleton" tabindex="0" role="button" aria-label="Skelett und Bewegungsapparat">
+              <line x1="113" y1="449" x2="285" y2="373"></line><circle cx="113" cy="449" r="10"></circle><text x="300" y="378">Skelett / Bewegung</text>
             </g>
           </svg>
-        </div></div>
+        </div>
 
         <div class="organ-scale" aria-label="Skala der Organfunktion">
           <div class="scale-labels"><span>0 % Funktionsverlust</span><span>100 %</span></div>
           <div class="gray-gradient"></div>
-          <div class="scale-caption">weiß = gesund und funktionsfähig · schwarz = theoretisch vollständig außer Funktion · Schraffur = Schädigung lokal belegt, aber nicht als 0–100-%-Wert quantifiziert</div>
+          <div class="scale-caption">weiß = gesund und funktionsfähig · schwarz = theoretisch vollständig außer Funktion · Schraffur = Schädigung belegt, aber nicht als 0–100-%-Funktionsverlust quantifiziert</div>
         </div>
 
         <div class="organ-readout">

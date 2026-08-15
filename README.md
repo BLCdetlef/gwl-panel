@@ -1,4 +1,4 @@
-# GWL-Panel – Prototyp 0.5
+# GWL-Panel – Prototyp 0.6
 
 GRUNDLAGE · WIRKUNG · LEBEN
 
@@ -33,3 +33,14 @@ Zusätzliche Änderungen in Version 0.5:
 - weniger abstrakte Silhouette mit ruhigeren Armen, Rumpf- und Beinformen
 - Organe und Skelett neu auf die Figur abgestimmt
 - weiterhin keine externen Bilddateien, alles als leichtgewichtiges Inline-SVG
+
+
+Zusätzliche Änderungen in Version 0.6:
+
+- rechte Seite als echte Bodymap mit anklickbaren Kreisen und Organbezeichnungen
+- Graustufen-/Schraffurstatus wird direkt im Kreis angezeigt
+- Klick auf Organ/System schaltet die linke Spalte in eine Organ-Detailansicht
+- dort erscheint eine größere, eindeutig erkennbare SVG-Illustration plus organbezogener Befund
+- weibliche und männliche Geschlechtsorgane liegen direkt nebeneinander in der Bodymap
+- Rücksprung zur Grundlage über „← Grundlage“
+- weiterhin keine externen Bilddateien; sämtliche Grafiken sind kompakte Inline-SVGs
