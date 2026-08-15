@@ -119,15 +119,15 @@ button, select, input { font: inherit; }
 .location-control select { width: 100%; padding: 8px 9px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
 .region-path { margin-top: 6px; color: var(--muted); font-size: 10px; line-height: 1.35; }
 
-.body-wrap { min-height: 412px; display: grid; place-items: center; }
-.human-svg { width: min(100%, 282px); height: auto; overflow: visible; }
+.body-wrap { min-height: 430px; display: grid; place-items: center; }
+.human-svg { width: min(100%, 305px); height: auto; overflow: visible; }
 .body-outline circle, .body-outline path { fill: #f1f1ee; stroke: #c8c8c2; stroke-width: 1.55; }
 .body-outline .shoulder-line { fill: none; }
 .organ-target { pointer-events: none; }
 .organ-shape { fill: #fff; stroke: #777772; stroke-width: 1.35; transition: fill .18s ease, stroke .18s ease, opacity .18s ease; }
 .organ-detail { fill: none; stroke: #8a8a86; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
 .gut-line { fill: none; stroke: #898985; stroke-width: 1.9; stroke-linecap: round; }
-.skeleton-target { opacity: .44; }
+.skeleton-target { opacity: .34; }
 .skeleton-target .organ-shape { stroke: #b8b8b3; fill: none; }
 .skeleton-target .bone-line { stroke-width: 3.2; }
 .skeleton-target .bone-ribs { stroke-width: 2.2; }

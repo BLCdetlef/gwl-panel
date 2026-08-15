@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GWL-Panel – Prototyp 0.4</title>
+  <title>GWL-Panel – Prototyp 0.5</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <h1>GWL-PANEL</h1>
-      <span class="version">Prototyp 0.4</span>
+      <span class="version">Prototyp 0.5</span>
     </header>
 
     <section class="panel-grid">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="body-wrap" aria-label="Schematische Darstellung des menschlichen Körpers und ausgewählter Organe">
-          <svg id="humanSvg" class="human-svg" viewBox="0 0 260 520" role="img" aria-labelledby="humanTitle humanDesc">
+          <svg id="humanSvg" class="human-svg" viewBox="0 0 280 540" role="img" aria-labelledby="humanTitle humanDesc">
             <title id="humanTitle">Mensch mit ausgewählten Organen und Skelett</title>
             <desc id="humanDesc">Weiße Organflächen stehen für keine belegte Funktionsminderung. Schwarz würde theoretisch vollständigen Funktionsverlust bedeuten. Nicht quantifizierbare, aber lokal belegte Schädigungen werden schraffiert dargestellt.</desc>
             <defs>
@@ -128,80 +128,81 @@
             </defs>
 
             <g class="body-outline" aria-hidden="true">
-              <circle cx="130" cy="42" r="22"></circle>
-              <path d="M116 64 C109 76 104 86 102 102 C94 106 87 115 82 129 C74 149 70 173 69 199 C68 212 64 234 62 248 C60 259 66 266 75 266 C84 266 91 258 93 245 L102 198 L106 246 L99 308 L101 487 C101 500 108 507 116 507 C125 507 130 501 130 490 C130 501 135 507 144 507 C152 507 159 500 159 487 L161 308 L154 246 L158 198 L167 245 C169 258 176 266 185 266 C194 266 200 259 198 248 C196 234 192 212 191 199 C190 173 186 149 178 129 C173 115 166 106 158 102 C156 86 151 76 144 64 Z"></path>
-              <path class="shoulder-line" d="M102 103 C120 112 140 112 158 103"></path>
+              <circle cx="140" cy="40" r="23"></circle>
+              <path d="M126 64 C122 73 120 85 119 97 C105 102 91 112 82 128 C73 144 70 162 68 184 L66 216 C65 231 63 251 59 274 C57 286 63 293 71 294 C80 295 88 289 91 278 L101 225 C103 237 104 251 106 266 L109 322 L110 494 C110 509 118 519 129 519 C139 519 145 511 145 500 L147 355 L149 500 C149 511 155 519 166 519 C177 519 185 509 185 494 L186 322 L189 266 C191 251 192 237 194 225 L204 278 C207 289 215 295 224 294 C232 293 238 286 236 274 C232 251 230 231 229 216 L227 184 C225 162 222 144 213 128 C204 112 190 102 176 97 C175 85 173 73 169 64 Z"></path>
+              <path d="M119 96 C110 103 104 115 101 129 C99 139 97 152 97 165 L98 214 C98 224 100 232 105 236 C108 239 112 240 116 239 L119 175"></path>
+              <path d="M161 175 L164 239 C168 240 172 239 175 236 C180 232 182 224 182 214 L183 165 C183 152 181 139 179 129 C176 115 170 103 161 96"></path>
+              <path class="shoulder-line" d="M102 109 C126 120 154 120 178 109"></path>
             </g>
 
             <g id="organ-skeleton" class="organ-target skeleton-target" data-organ="skeleton" aria-label="Skelett">
-              <path class="organ-shape bone-line" d="M130 82 L130 270"></path>
-              <path class="organ-shape bone-line" d="M130 100 C120 111 114 128 114 148 C114 167 119 183 126 198"></path>
-              <path class="organ-shape bone-line" d="M130 100 C140 111 146 128 146 148 C146 167 141 183 134 198"></path>
-              <path class="organ-shape bone-line" d="M103 120 L80 196"></path>
-              <path class="organ-shape bone-line" d="M157 120 L180 196"></path>
-              <path class="organ-shape bone-line" d="M112 276 L102 402"></path>
-              <path class="organ-shape bone-line" d="M148 276 L158 402"></path>
-              <path class="organ-shape bone-line" d="M104 404 L102 488"></path>
-              <path class="organ-shape bone-line" d="M156 404 L158 488"></path>
-              <path class="organ-shape bone-line" d="M104 267 C112 257 121 252 130 252 C139 252 148 257 156 267"></path>
-              <path class="organ-shape bone-ribs" d="M118 118 C104 123 95 133 93 145"></path>
-              <path class="organ-shape bone-ribs" d="M118 132 C103 137 95 147 93 159"></path>
-              <path class="organ-shape bone-ribs" d="M118 146 C103 151 95 161 94 172"></path>
-              <path class="organ-shape bone-ribs" d="M142 118 C156 123 165 133 167 145"></path>
-              <path class="organ-shape bone-ribs" d="M142 132 C157 137 165 147 167 159"></path>
-              <path class="organ-shape bone-ribs" d="M142 146 C157 151 165 161 166 172"></path>
+              <path class="organ-shape bone-line" d="M140 85 L140 272"></path>
+              <path class="organ-shape bone-ribs" d="M140 110 C124 112 112 124 108 141"></path>
+              <path class="organ-shape bone-ribs" d="M140 126 C122 129 111 142 108 158"></path>
+              <path class="organ-shape bone-ribs" d="M140 142 C123 146 112 159 110 174"></path>
+              <path class="organ-shape bone-ribs" d="M140 110 C156 112 168 124 172 141"></path>
+              <path class="organ-shape bone-ribs" d="M140 126 C158 129 169 142 172 158"></path>
+              <path class="organ-shape bone-ribs" d="M140 142 C157 146 168 159 170 174"></path>
+              <path class="organ-shape bone-line" d="M108 130 L93 232"></path>
+              <path class="organ-shape bone-line" d="M172 130 L187 232"></path>
+              <path class="organ-shape bone-ribs" d="M122 260 C130 252 150 252 158 260"></path>
+              <path class="organ-shape bone-ribs" d="M114 270 C128 284 152 284 166 270"></path>
+              <path class="organ-shape bone-line" d="M128 286 L122 395"></path>
+              <path class="organ-shape bone-line" d="M152 286 L158 395"></path>
+              <path class="organ-shape bone-line" d="M122 397 L120 492"></path>
+              <path class="organ-shape bone-line" d="M158 397 L160 492"></path>
             </g>
 
             <g id="organ-brain" class="organ-target" data-organ="brain" aria-label="Gehirn">
-              <path class="organ-shape" d="M117 31 C113 25 119 17 127 18 C133 12 145 16 146 25 C154 25 159 34 154 40 C158 47 154 55 146 56 C142 62 133 62 128 58 C120 61 111 56 109 48 C103 41 106 33 112 29 C112 29 115 29 117 31 Z"></path>
-              <path class="organ-detail" d="M123 25 C118 31 118 39 123 44"></path>
-              <path class="organ-detail" d="M130 22 C129 31 129 40 130 48"></path>
-              <path class="organ-detail" d="M138 25 C143 31 143 39 138 44"></path>
+              <path class="organ-shape" d="M128 25 C123 19 128 11 136 11 C142 6 153 10 154 18 C162 18 167 27 162 33 C166 40 162 48 154 50 C149 56 141 56 136 53 C128 56 119 51 117 43 C111 37 114 28 120 23 C123 22 126 22 128 25 Z"></path>
+              <path class="organ-detail" d="M132 18 C127 24 127 33 132 38"></path>
+              <path class="organ-detail" d="M140 15 C139 24 139 34 140 43"></path>
+              <path class="organ-detail" d="M148 18 C153 24 153 33 148 38"></path>
             </g>
 
             <g id="organ-eyes" class="organ-target" data-organ="eyes" aria-label="Augen">
-              <ellipse class="organ-shape" cx="121" cy="49" rx="6.2" ry="4.6"></ellipse>
-              <ellipse class="organ-shape" cx="139" cy="49" rx="6.2" ry="4.6"></ellipse>
+              <ellipse class="organ-shape" cx="131" cy="44" rx="6.8" ry="4.8"></ellipse>
+              <ellipse class="organ-shape" cx="149" cy="44" rx="6.8" ry="4.8"></ellipse>
             </g>
 
             <g id="organ-teeth" class="organ-target" data-organ="teeth" aria-label="Zähne">
-              <path class="organ-shape" d="M122 58 C126 61 134 61 138 58 C138 64 134 68 130 68 C126 68 122 64 122 58 Z"></path>
+              <path class="organ-shape" d="M132 53 C136 57 144 57 148 53 C148 59 144 64 140 64 C136 64 132 59 132 53 Z"></path>
             </g>
 
             <g id="organ-lungs" class="organ-target" data-organ="lungs" aria-label="Lunge">
-              <path class="organ-shape" d="M122 116 C108 116 98 126 95 144 C92 168 100 188 118 193 C124 181 126 162 125 129 C125 123 124 119 122 116 Z"></path>
-              <path class="organ-shape" d="M138 116 C152 116 162 126 165 144 C168 168 160 188 142 193 C136 181 134 162 135 129 C135 123 136 119 138 116 Z"></path>
-              <path class="organ-detail" d="M130 108 L130 174"></path>
-              <path class="organ-detail" d="M130 122 C120 126 114 136 112 148"></path>
-              <path class="organ-detail" d="M130 122 C140 126 146 136 148 148"></path>
+              <path class="organ-shape" d="M133 116 C116 114 105 126 102 148 C99 173 109 193 129 200 C135 188 137 169 136 138 C136 128 135 120 133 116 Z"></path>
+              <path class="organ-shape" d="M147 116 C164 114 175 126 178 148 C181 173 171 193 151 200 C145 188 143 169 144 138 C144 128 145 120 147 116 Z"></path>
+              <path class="organ-detail" d="M140 106 L140 182"></path>
+              <path class="organ-detail" d="M140 120 C128 125 121 137 118 151"></path>
+              <path class="organ-detail" d="M140 120 C152 125 159 137 162 151"></path>
             </g>
 
             <g id="organ-heart" class="organ-target" data-organ="heart" aria-label="Herz">
-              <path class="organ-shape" d="M134 148 C140 136 155 141 154 154 C154 167 144 177 135 186 C126 177 117 169 116 156 C115 144 128 138 134 148 Z"></path>
-              <path class="organ-detail" d="M137 144 C141 136 146 131 151 129"></path>
+              <path class="organ-shape" d="M148 149 C155 136 170 142 170 156 C169 169 159 181 148 191 C138 181 128 170 127 157 C126 144 141 138 148 149 Z"></path>
+              <path class="organ-detail" d="M151 146 C155 138 161 132 167 130"></path>
             </g>
 
             <g id="organ-liver" class="organ-target" data-organ="liver" aria-label="Leber">
-              <path class="organ-shape" d="M132 196 C145 188 163 191 171 201 C169 216 157 227 141 228 C126 229 117 225 114 215 C115 204 122 198 132 196 Z"></path>
+              <path class="organ-shape" d="M144 203 C161 193 181 196 189 208 C187 224 174 235 155 236 C138 237 126 233 122 221 C123 210 132 204 144 203 Z"></path>
             </g>
 
             <g id="organ-kidneys" class="organ-target" data-organ="kidneys" aria-label="Nieren">
-              <path class="organ-shape" d="M111 219 C101 217 96 226 97 236 C98 247 106 253 114 249 C120 243 121 227 111 219 Z"></path>
-              <path class="organ-shape" d="M149 219 C159 217 164 226 163 236 C162 247 154 253 146 249 C140 243 139 227 149 219 Z"></path>
-              <path class="organ-detail" d="M130 214 L130 255"></path>
+              <path class="organ-shape" d="M118 227 C107 225 101 235 103 247 C105 259 114 265 123 261 C129 255 129 237 118 227 Z"></path>
+              <path class="organ-shape" d="M162 227 C173 225 179 235 177 247 C175 259 166 265 157 261 C151 255 151 237 162 227 Z"></path>
+              <path class="organ-detail" d="M140 220 L140 265"></path>
             </g>
 
             <g id="organ-gut" class="organ-target" data-organ="gut" aria-label="Darm">
-              <path class="organ-shape" d="M112 247 C103 255 103 267 111 273 C104 281 105 292 114 298 C111 307 117 316 127 316 C133 320 145 319 149 311 C159 310 163 298 158 289 C165 280 164 268 156 262 C160 251 151 243 140 244 C133 240 120 240 112 247 Z"></path>
-              <path class="gut-line" d="M114 259 C130 252 146 260 144 269 C142 276 126 274 122 283 C118 290 130 296 143 291"></path>
-              <path class="gut-line" d="M118 304 C127 297 137 297 145 304"></path>
+              <path class="organ-shape" d="M120 258 C109 266 108 280 118 287 C110 296 112 308 122 315 C120 326 127 335 139 335 C146 339 160 338 165 329 C176 328 181 315 175 305 C183 296 182 282 173 275 C177 262 167 253 154 254 C146 250 130 250 120 258 Z"></path>
+              <path class="gut-line" d="M121 271 C138 262 156 270 154 281 C152 289 134 287 129 297 C124 305 138 312 153 306"></path>
+              <path class="gut-line" d="M126 323 C136 315 148 315 158 323"></path>
             </g>
 
             <g id="organ-reproduction" class="organ-target" data-organ="reproduction" aria-label="Fortpflanzung">
-              <path class="organ-shape" d="M123 282 C118 286 118 294 123 299 C127 303 133 303 137 299 C142 294 142 286 137 282 C133 279 127 279 123 282 Z"></path>
+              <path class="organ-shape" d="M132 302 C126 307 126 316 132 322 C137 327 145 327 150 322 C156 316 156 307 150 302 C145 298 137 298 132 302 Z"></path>
             </g>
           </svg>
-        </div>
+        </div></div>
 
         <div class="organ-scale" aria-label="Skala der Organfunktion">
           <div class="scale-labels"><span>0 % Funktionsverlust</span><span>100 %</span></div>

@@ -1,4 +1,4 @@
-# GWL-Panel – Prototyp 0.4
+# GWL-Panel – Prototyp 0.5
 
 GRUNDLAGE · WIRKUNG · LEBEN
 
@@ -25,3 +25,11 @@ Hinweis zu geschlechtsspezifischen Organen:
 
 - im Prototyp ist „Fortpflanzung“ bewusst als neutrales System angelegt
 - eine spätere Umschaltung auf geschlechtsspezifische Anatomie ist möglich, aber noch nicht implementiert
+
+
+Zusätzliche Änderungen in Version 0.5:
+
+- menschliche Figur breiter und natürlicher proportioniert
+- weniger abstrakte Silhouette mit ruhigeren Armen, Rumpf- und Beinformen
+- Organe und Skelett neu auf die Figur abgestimmt
+- weiterhin keine externen Bilddateien, alles als leichtgewichtiges Inline-SVG
