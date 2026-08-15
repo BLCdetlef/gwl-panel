@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GWL-Panel – Prototyp 0.2</title>
+  <title>GWL-Panel – Prototyp 0.3</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,16 +13,7 @@
         <h1>GWL-PANEL</h1>
         <p>GRUNDLAGE · WIRKUNG · LEBEN</p>
       </div>
-      <div class="context">
-        <label>
-          Maßstab
-          <select id="scaleSelect">
-            <option value="global">Global</option>
-            <option value="sh">Schleswig-Holstein</option>
-            <option value="luebeck">Lübeck</option>
-          </select>
-        </label>
-      </div>
+      <span class="version">Prototyp 0.3</span>
     </header>
 
     <section class="panel-grid">
@@ -31,7 +22,7 @@
           <h2 id="grundlageTitle">GRUNDLAGE</h2>
           <span class="mode-chip">erkunden</span>
         </div>
-        <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen – sauber nach Maßstab getrennt.</p>
+        <p class="panel-intro">Planetare Grenzen und dazu passende Messreihen. Jede Aussage bleibt an ihren räumlichen und zeitlichen Bezug gebunden.</p>
         <div id="boundaryList" class="boundary-list"></div>
       </section>
 
@@ -45,6 +36,24 @@
           <h3 id="focusTitle">–</h3>
           <p id="focusSummary">–</p>
         </div>
+
+        <section class="time-card" aria-labelledby="timeTitle">
+          <div class="time-head">
+            <div>
+              <span class="eyebrow" id="timeTitle">Zeit</span>
+              <strong id="timeReadout">–</strong>
+            </div>
+            <div class="time-presets" aria-label="Zeitfenster">
+              <button id="dataWindowButton" class="time-preset active" type="button">Datenbereich</button>
+              <button id="blcWindowButton" class="time-preset" type="button">BLC 1700–2100</button>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <input id="timeSlider" type="range" min="0" max="1" value="0" step="1" aria-label="Jahr">
+            <div id="timeMarkers" class="time-markers" aria-hidden="true"></div>
+          </div>
+          <p id="timeStatus" class="time-status">Für diese Messreihe ist noch keine Zeitnavigation hinterlegt.</p>
+        </section>
 
         <div class="metrics">
           <div class="metric">
@@ -65,22 +74,22 @@
           </div>
         </div>
 
-        <div class="effect-box">
-          <span class="eyebrow">Befund</span>
+        <details class="accordion" open>
+          <summary>Befund</summary>
           <p id="findingText">–</p>
-        </div>
+        </details>
 
-        <div class="effect-box">
-          <span class="eyebrow">Wirkungspfad</span>
+        <details class="accordion">
+          <summary>Wirkungspfad</summary>
           <p id="effectPath">–</p>
-        </div>
+        </details>
 
-        <div class="uncertainty-box">
-          <span class="eyebrow">Unsicherheit / Einordnung</span>
+        <details class="accordion uncertainty-box">
+          <summary>Unsicherheit / Einordnung</summary>
           <p id="uncertaintyValue">–</p>
-        </div>
+        </details>
 
-        <button id="resetButton" class="reset-button" type="button">Zur Übersicht</button>
+        <button id="resetButton" class="reset-button" type="button">Zur globalen Übersicht</button>
       </section>
 
       <section class="panel panel-right" aria-labelledby="lebenTitle">
@@ -89,26 +98,107 @@
           <span class="mode-chip muted">Gesundheitsbezug</span>
         </div>
 
-        <div class="body-wrap" aria-label="Vereinfachte Darstellung des menschlichen Körpers">
-          <div class="body-silhouette" aria-hidden="true">
-            <div class="head"></div>
-            <div class="torso"></div>
-            <div class="arm arm-left"></div>
-            <div class="arm arm-right"></div>
-            <div class="leg leg-left"></div>
-            <div class="leg leg-right"></div>
-            <div class="organ organ-brain">Gehirn</div>
-            <div class="organ organ-heart">Herz</div>
-            <div class="organ organ-lung">Lunge</div>
-            <div class="organ organ-kidney">Nieren</div>
-            <div class="organ organ-gut">Darm</div>
-          </div>
+        <div class="location-control">
+          <label for="regionSelect">
+            <span class="eyebrow">Region / Ort</span>
+            <select id="regionSelect">
+              <option value="global">Global</option>
+              <optgroup label="Europa">
+                <option value="europe">Europa</option>
+                <option value="germany">Deutschland</option>
+                <option value="sh">Schleswig-Holstein</option>
+                <option value="luebeck">Lübeck</option>
+              </optgroup>
+              <optgroup label="Afrika">
+                <option value="africa">Afrika</option>
+                <option value="tanzania">Tansania</option>
+                <option value="tindigani">Tindigani · Hai District</option>
+              </optgroup>
+            </select>
+          </label>
+          <div id="regionPath" class="region-path">Global</div>
         </div>
 
-        <div class="life-note">
-          <span class="eyebrow">Einordnung</span>
-          <p id="lifeNote">Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.</p>
+        <div class="body-wrap" aria-label="Schematische Darstellung des menschlichen Körpers und ausgewählter Organe">
+          <svg id="humanSvg" class="human-svg" viewBox="0 0 260 520" role="img" aria-labelledby="humanTitle humanDesc">
+            <title id="humanTitle">Mensch mit ausgewählten Organen und Skelett</title>
+            <desc id="humanDesc">Weiße Organflächen stehen für keine belegte Funktionsminderung. Schwarz würde theoretisch vollständigen Funktionsverlust bedeuten. Nicht quantifizierbare, aber lokal belegte Schädigungen werden schraffiert dargestellt.</desc>
+            <defs>
+              <pattern id="unquantifiedPattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="8" height="8" fill="#f7f7f7"></rect>
+                <rect width="3" height="8" fill="#b6b6b6"></rect>
+              </pattern>
+            </defs>
+
+            <g class="body-outline" aria-hidden="true">
+              <ellipse cx="130" cy="48" rx="31" ry="37"></ellipse>
+              <path d="M112 82 L148 82 L153 98 C177 102 195 117 201 141 L219 236 C222 252 213 265 201 266 C189 267 181 258 179 246 L165 171 L169 267 L157 326 L166 494 C167 508 157 516 145 516 C134 516 128 507 127 495 L122 339 L117 495 C116 507 110 516 99 516 C87 516 77 508 78 494 L87 326 L91 267 L95 171 L81 246 C79 258 71 267 59 266 C47 265 38 252 41 236 L59 141 C65 117 83 102 107 98 Z"></path>
+            </g>
+
+            <g id="organ-brain" class="organ-target" data-organ="brain" aria-label="Gehirn">
+              <path class="organ-shape" d="M109 40 C108 29 119 23 128 27 C137 20 151 28 149 39 C158 43 157 56 150 60 C143 69 116 67 109 58 C102 54 102 44 109 40 Z"></path>
+            </g>
+
+            <g id="organ-teeth" class="organ-target" data-organ="teeth" aria-label="Zähne">
+              <path class="organ-shape" d="M117 66 Q130 72 143 66 Q140 78 130 79 Q120 78 117 66 Z"></path>
+            </g>
+
+            <g id="organ-lungs" class="organ-target" data-organ="lungs" aria-label="Lunge">
+              <path class="organ-shape" d="M124 123 C110 112 96 122 94 145 C92 173 101 191 119 188 C124 177 126 157 124 123 Z"></path>
+              <path class="organ-shape" d="M136 123 C150 112 164 122 166 145 C168 173 159 191 141 188 C136 177 134 157 136 123 Z"></path>
+            </g>
+
+            <g id="organ-heart" class="organ-target" data-organ="heart" aria-label="Herz">
+              <path class="organ-shape" d="M130 153 C123 142 106 149 109 163 C112 176 130 187 130 187 C130 187 148 176 151 163 C154 149 137 142 130 153 Z"></path>
+            </g>
+
+            <g id="organ-liver" class="organ-target" data-organ="liver" aria-label="Leber">
+              <path class="organ-shape" d="M132 194 C147 185 165 190 169 202 C169 218 151 227 126 221 C122 210 124 201 132 194 Z"></path>
+            </g>
+
+            <g id="organ-kidneys" class="organ-target" data-organ="kidneys" aria-label="Nieren">
+              <path class="organ-shape" d="M110 215 C98 210 92 220 95 233 C98 245 109 249 116 240 C121 230 119 220 110 215 Z"></path>
+              <path class="organ-shape" d="M150 215 C162 210 168 220 165 233 C162 245 151 249 144 240 C139 230 141 220 150 215 Z"></path>
+            </g>
+
+            <g id="organ-gut" class="organ-target" data-organ="gut" aria-label="Darm">
+              <path class="organ-shape gut-shape" d="M111 244 C99 251 101 263 112 266 C99 272 101 286 114 288 C104 298 113 309 125 302 C130 313 146 309 145 297 C159 294 160 280 148 274 C159 265 153 251 141 252 C134 241 119 238 111 244 Z"></path>
+              <path class="gut-line" d="M113 255 C134 249 149 259 137 268 C125 277 110 274 111 286 C112 297 135 293 140 284"></path>
+            </g>
+
+            <g id="organ-skeleton" class="organ-target skeleton-target" data-organ="skeleton" aria-label="Skelett">
+              <path class="organ-shape bone" d="M126 92 H134 V248 H126 Z"></path>
+              <path class="organ-shape bone" d="M96 116 C106 108 116 105 126 106 V114 C115 114 106 118 99 125 Z"></path>
+              <path class="organ-shape bone" d="M164 116 C154 108 144 105 134 106 V114 C145 114 154 118 161 125 Z"></path>
+              <path class="organ-shape bone" d="M101 136 C111 127 119 126 126 127 V135 C118 135 112 138 106 144 Z"></path>
+              <path class="organ-shape bone" d="M159 136 C149 127 141 126 134 127 V135 C142 135 148 138 154 144 Z"></path>
+              <path class="organ-shape bone" d="M102 157 C111 149 119 148 126 149 V157 C118 157 112 160 107 166 Z"></path>
+              <path class="organ-shape bone" d="M158 157 C149 149 141 148 134 149 V157 C142 157 148 160 153 166 Z"></path>
+              <path class="organ-shape bone" d="M88 283 C97 276 108 275 119 281 L113 296 C103 292 96 292 88 299 Z"></path>
+              <path class="organ-shape bone" d="M172 283 C163 276 152 275 141 281 L147 296 C157 292 164 292 172 299 Z"></path>
+              <path class="organ-shape bone" d="M101 300 L114 303 L107 402 L96 400 Z"></path>
+              <path class="organ-shape bone" d="M159 300 L146 303 L153 402 L164 400 Z"></path>
+              <path class="organ-shape bone" d="M96 405 L107 407 L104 496 L93 495 Z"></path>
+              <path class="organ-shape bone" d="M164 405 L153 407 L156 496 L167 495 Z"></path>
+            </g>
+          </svg>
         </div>
+
+        <div class="organ-scale" aria-label="Skala der Organfunktion">
+          <div class="scale-labels"><span>0 % Funktionsverlust</span><span>100 %</span></div>
+          <div class="gray-gradient"></div>
+          <div class="scale-caption">weiß = gesund und funktionsfähig · schwarz = theoretisch vollständig außer Funktion</div>
+        </div>
+
+        <div class="organ-readout">
+          <span class="eyebrow">Organ-/Systembezug</span>
+          <p id="organReadout">Keine lokal belegte Organwirkung für die aktuelle Auswahl.</p>
+        </div>
+
+        <details class="accordion life-note">
+          <summary>Einordnung Gesundheit</summary>
+          <p id="lifeNote">Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.</p>
+        </details>
       </section>
     </section>
   </main>

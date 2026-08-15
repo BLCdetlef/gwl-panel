@@ -1,27 +1,31 @@
-# GWL-Panel – Prototyp 0.2
+# GWL-Panel – Prototyp 0.3
 
-GRUNDLAGE · WIRKUNG · LEBEN
+## Was neu ist
 
-## Was sich gegenüber 0.1 ändert
+- Querformat-Layout für Tablet/großen Touchscreen: **30 / 40 / 30 %**.
+- **Region / Ort** sitzt rechts direkt über dem Menschen.
+- Räumliche Struktur enthält jetzt zusätzlich **Europa, Deutschland, Afrika, Tansania und Tindigani**. Ebenen ohne Datensatz bleiben sichtbar, erfinden aber keinen Wert.
+- **Zeitregler** im mittleren Wirkungsbereich.
+- Zeitfenster **BLC 1700–2100** als fester Preset.
+- Tatsächlich vorhandene Messzeitpunkte werden markiert; **keine Interpolation** zwischen nicht vorhandenen Jahren.
+- `Befund`, `Wirkungspfad` und `Unsicherheit / Einordnung` sind ausklappbar.
+- Mensch und Organe wurden als kleines **Inline-SVG** neu gezeichnet. Keine externe Bilddatei nötig.
+- Organlogik: **weiß = 0 % Funktionsverlust, schwarz = theoretisch 100 %**. Nur wenn ein Datensatz einen echten 0–100-%-Funktionswert liefert, wird ein entsprechender Grauwert benutzt.
+- Lokal belegte Schädigungen ohne quantifizierten Funktionsverlust werden **schraffiert**. So wird z. B. Prävalenz nicht fälschlich als Funktionsverlust interpretiert.
+- Erster lokaler Afrika-Wirkungspfad: **Tindigani, Nordtansania – Fluorid im Trinkwasser → Dental-/Skelettfluorose** mit Messpunkten 2009 und 2018.
 
-- Maßstab statt „Lübeck · Heute“: Global, Schleswig-Holstein und Lübeck werden getrennt.
-- Süßwasser beginnt fachlich mit den beiden Komponenten der planetaren Grenze: blaues Wasser (Abfluss) und grünes Wasser (Bodenfeuchte).
-- Für die globalen Kennzahlen sind reale Werte, Referenzgrenzen, Zeitraum und Primärquelle hinterlegt.
-- Regional/lokal werden zunächst echte Monitoringquellen verankert, aber noch keine unbelegten Trends behauptet.
-- Die Demo-Gewichtung einzelner Organe wurde entfernt. Gesundheitsbezüge werden erst aktiviert, wenn ein belastbarer Expositions- und Wirkungspfad belegt ist.
-- Befund, Wirkungspfad und Unsicherheit werden getrennt dargestellt.
+## Wissenschaftliche Quellen für Tindigani
 
-## Datenstand
+- Jarvis HG et al. (2013): *Prevalence and aetiology of juvenile skeletal fluorosis in the south-west of the Hai district, Tanzania – a community-based prevalence and case–control study.* Tropical Medicine & International Health 18(2), 222–229. DOI: https://doi.org/10.1111/tmi.12027
+- Foat A et al. (2023): *Prevalence of Skeletal Fluorosis in Northern Tanzania: A Follow-Up Study.* Global Health: Science and Practice 11(6):e2200342. DOI: https://doi.org/10.9745/GHSP-D-22-00342
+- WHO: Richtwert für Fluorid im Trinkwasser 1,5 mg/L; höhere Konzentrationen erhöhen das Risiko für Dentalfluorose, deutlich höhere Konzentrationen für Skelettfluorose.
 
-Globaler Süßwasser-Indikator: Porkka et al. (2024), Nature Water, DOI 10.1038/s44221-024-00208-7. Der dort als aktueller Status ausgewiesene Wert ist das 10-Jahres-Mittel 1996–2005.
+## Dateien
 
-Regionale Quellen im Prototyp:
-- Umweltportal Schleswig-Holstein: Landesmessstellen Grundwasserstand
-- Open Data Schleswig-Holstein: Abfluss Pegel Lübeck-Moisling / Trave
+- `index.html`
+- `style.css`
+- `data.js`
+- `app.js`
+- `README.md`
 
-## Nächster fachlicher Schritt
-
-1. Geeignete Grundwassermessstelle(n) im Raum Lübeck auswählen.
-2. Trave-Abflussreihe Lübeck-Moisling vollständig laden und Datenzeitraum prüfen.
-3. Referenzzeiträume transparent festlegen.
-4. Erst danach Trends und Wirkungspfade bewerten.
+Zum Aktualisieren des GitHub-Repositories die vier Webdateien ersetzen (`README.md` optional ebenfalls), dann in GitHub Desktop committen und pushen.
