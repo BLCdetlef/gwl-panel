@@ -118,3 +118,10 @@ a { color: inherit; }
 .cause-entry p { margin: 0; font-size: 12px; line-height: 1.46; }
 .cause-entry .cause-meta { margin-top: 6px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
 .cause-hint { color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+/* v0.8.1: hidden overlays must really stay hidden. Author display rules
+   otherwise override the browser's default [hidden] behavior. */
+.cause-overlay[hidden],
+.organ-overlay[hidden] {
+  display: none !important;
+}

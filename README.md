@@ -1,4 +1,4 @@
-# GWL-Panel – Prototyp 0.8
+# GWL-Panel – Prototyp 0.8.1
 
 GRUNDLAGE · WIRKUNG · LEBEN · URSACHEN
 
@@ -39,3 +39,10 @@ causes: {
 ## Hinweis
 
 Die vierte Ebene ist absichtlich zurückhaltend gehalten: Das System kann komplexer werden, die Oberfläche soll es nicht.
+
+
+## Fix 0.8.1
+
+- Overlays sind beim Start wieder wirklich unsichtbar und lassen sich schließen.
+- PNG-Grafiken wurden auf die tatsächlich benötigte Bildschirmauflösung verkleinert und verlustarm neu komprimiert.
+- Transparenz bleibt erhalten.
