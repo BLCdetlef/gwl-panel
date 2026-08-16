@@ -23,6 +23,7 @@ const timeMarkers = document.getElementById("timeMarkers");
 const dataWindowButton = document.getElementById("dataWindowButton");
 const blcWindowButton = document.getElementById("blcWindowButton");
 const hotspotLayer = document.getElementById("hotspotLayer");
+let healthLegend = null;
 const organOverlay = document.getElementById("organOverlay");
 const organOverlayTitle = document.getElementById("organOverlayTitle");
 const organOverlayMedia = document.getElementById("organOverlayMedia");
@@ -248,12 +249,47 @@ function normalizeImpactOrgan(id) {
 }
 function getImpactForOrgan(organId) { const impacts = currentHealth?.impacts || []; return impacts.find(impact => normalizeImpactOrgan(impact.organ) === organId) || null; }
 
+function ensureHealthLegend() {
+  if (healthLegend?.isConnected) return healthLegend;
+  const bodymapPanel = document.querySelector(".bodymap-panel");
+  const readout = document.getElementById("organReadout")?.closest(".organ-readout");
+  if (!bodymapPanel || !readout) return null;
+
+  healthLegend = document.createElement("div");
+  healthLegend.className = "health-legend";
+  healthLegend.setAttribute("aria-label", "Legende der Organgesundheit");
+  healthLegend.innerHTML = `
+    <div class="health-legend-title">Organgesundheit · Graustufen</div>
+    <div class="health-legend-row">
+      <span class="health-scale" aria-hidden="true">
+        <span style="--legend-shade:#f2f2f2"></span>
+        <span style="--legend-shade:#bdbdbd"></span>
+        <span style="--legend-shade:#777"></span>
+        <span style="--legend-shade:#111"></span>
+      </span>
+      <span><strong>hell</strong> = geringe/keine quantifizierte Beeinträchtigung · <strong>dunkel</strong> = stärkere quantifizierte Beeinträchtigung</span>
+    </div>
+    <div class="health-legend-row health-legend-secondary">
+      <span class="legend-hatched" aria-hidden="true"></span>
+      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare 0–100-%-Funktionsskala vorhanden.</span>
+    </div>`;
+  bodymapPanel.insertBefore(healthLegend, readout);
+  return healthLegend;
+}
+
+function updatePrototypeVersion() {
+  const version = data?.version || "0.9";
+  document.title = `GWL-Panel – Prototyp ${version}`;
+  const versionNode = document.querySelector(".version");
+  if (versionNode) versionNode.textContent = `Prototyp ${version}`;
+}
+
 function renderHotspots() {
   hotspotLayer.innerHTML = "";
   Object.entries(HOTSPOTS).forEach(([id, def]) => {
     const wrap = document.createElement("div"); wrap.className = `hotspot-group ${def.side === "left" ? "left" : "right"}`;
     wrap.style.left = `${def.x}%`; wrap.style.top = `${def.y}%`;
-    const btn = document.createElement("button"); btn.type = "button"; btn.className = "hotspot-dot"; btn.dataset.organ = id; btn.setAttribute("aria-label", def.label);
+    const btn = document.createElement("button"); btn.type = "button"; btn.className = "hotspot-dot is-neutral"; btn.dataset.organ = id; btn.setAttribute("aria-label", def.label);
     btn.addEventListener("click", () => openOrganOverlay(id));
     const label = document.createElement("span"); label.className = "hotspot-label"; label.textContent = def.label;
     wrap.appendChild(btn); wrap.appendChild(label); hotspotLayer.appendChild(wrap);
@@ -263,6 +299,7 @@ function renderHotspots() {
 function clearHotspotStates() {
   document.querySelectorAll(".hotspot-dot").forEach(dot => {
     dot.classList.remove("is-selected", "is-unquantified", "is-quantified");
+    dot.classList.add("is-neutral");
     dot.style.removeProperty("--hotspot-fill");
   });
 }
@@ -283,10 +320,10 @@ function renderHealth(health) {
     if (typeof impact.functionLoss === "number") {
       const loss = Math.max(0, Math.min(100, impact.functionLoss));
       const shade = Math.round(255 * (1 - loss / 100));
-      dot.classList.add("is-quantified"); dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
+      dot.classList.remove("is-neutral"); dot.classList.add("is-quantified"); dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
       texts.push(`${impact.label}: ${loss} % Funktionsverlust${impact.prevalence ? ` · ${impact.prevalence}` : ""}.`);
     } else {
-      dot.classList.add("is-unquantified"); texts.push(`${impact.label}: ${impact.prevalence || "Schädigung lokal belegt"}.`);
+      dot.classList.remove("is-neutral"); dot.classList.add("is-unquantified"); texts.push(`${impact.label}: ${impact.prevalence || "Schädigung lokal belegt"}.`);
     }
   });
   organReadout.textContent = texts.join(" ");
@@ -389,4 +426,6 @@ causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
 causeButtonLife.addEventListener("click", () => openCauseOverlay("life"));
 document.querySelectorAll("[data-close-cause]").forEach(button => button.addEventListener("click", () => closeCauseOverlay(button.dataset.closeCause)));
-renderHotspots(); chooseFirstItemForScope();
+renderHotspots();
+ensureHealthLegend();
+updatePrototypeVersion(); chooseFirstItemForScope();

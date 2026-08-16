@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.8.1",
+  version: "0.9",
   scopes: {
     global: { label: "Global", path: "Global" },
     europe: { label: "Europa", path: "Global → Europa" },
