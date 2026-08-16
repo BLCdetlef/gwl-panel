@@ -1,6 +1,6 @@
 # GWL-Panel – Datenmodell
 
-Stand: Prototyp 0.9
+Stand: Prototyp 0.9.2
 
 ## Leitidee
 
@@ -17,13 +17,7 @@ Daten, Darstellung und Interpretation werden getrennt. Das Panel darf keine Zwis
 
 ## Planetare Grenze
 
-Ein Eintrag in `boundaries` besitzt mindestens:
-
-- `id`
-- `label`
-- `enabled`
-- optional `summary`
-- optional `items[]`
+Ein Eintrag in `boundaries` besitzt mindestens `id`, `label`, `enabled` und optional `summary` sowie `items[]`.
 
 ## Mess-/Analyseobjekt (`items[]`)
 
@@ -43,7 +37,7 @@ Ein Item kann enthalten:
 
 ## Gesundheitsbezug
 
-`health.impacts[]` verknüpft einen konkreten Umwelt-/Expositionsbefund mit Organen oder Organsystemen. Ein Impact kann enthalten:
+`health.impacts[]` verknüpft einen konkreten Umwelt-/Expositionsbefund mit Organen oder Organsystemen. Beispiel:
 
 ```js
 {
@@ -59,8 +53,38 @@ Ein Item kann enthalten:
 
 - `functionLoss` ist eine Zahl von `0` bis `100` **nur wenn eine belastbare fachliche Grundlage genau diese Skala trägt**. Daraus darf der Kuller als Graustufe berechnet werden.
 - `functionLoss: null` bedeutet: Ein gesundheitlicher Befund kann belegt sein, aber eine einheitliche 0–100-%-Funktionsminderung ist nicht belegt. Der Kuller wird dann schraffiert.
-- `prevalence` ist **nicht** automatisch `functionLoss`. Erkrankungs-/Befundhäufigkeit darf nicht als prozentualer Funktionsverlust dargestellt werden.
+- `prevalence` ist **nicht** automatisch `functionLoss`.
 - Fehlt ein belegter Gesundheitsbezug vollständig, bleibt der Kuller neutral hell.
+
+## Bodymap-IDs und medizinische Bilder
+
+Die Bodymap arbeitet mit stabilen Organ-/System-IDs. `ORGAN_MEDIA` in `app.js` ordnet diesen IDs eine statische medizinische Bilddatei zu. Mehrere Kuller dürfen dasselbe Systembild verwenden, wenn es fachlich dieselbe Systemübersicht darstellt, z. B. `liver` und `gut` → `organ_digestive.jpg`.
+
+Aktuell:
+
+```text
+brain            -> organ_brain.jpg
+eyes             -> organ_senses.jpg
+teeth            -> interne neutrale Ersatzgrafik
+lungs            -> organ_respiratory.jpg
+heart            -> organ_circulatory.jpg
+liver            -> organ_digestive.jpg
+kidneys          -> organ_urinary.jpg
+gut              -> organ_digestive.jpg
+urinary          -> organ_urinary.jpg
+femaleRepro      -> organ_repro_female.jpg
+maleRepro        -> organ_repro_male.jpg
+skeleton         -> organ_skeleton.jpg
+musculoskeletal  -> organ_skeleton.jpg
+```
+
+Die beiden Geschlechtsorgane bleiben zwei getrennte Bodymap-Kuller und zwei getrennte Bilddateien.
+
+## Organfenster: dynamischer Inhalt
+
+Das Bild ist statisch. Der darunter angezeigte **Befund wird nicht separat im Organmodell gespeichert**, sondern direkt aus dem aktuell sichtbaren `finding` der WIRKUNG-Perspektive übernommen. Dadurch können Organfenster und WIRKUNG nicht versehentlich unterschiedliche Befundtexte zeigen.
+
+Die **Einordnung** ist nur ein eingeklappter Verweis zurück auf WIRKUNG und keine zweite Datenkopie.
 
 ## Ursachenebene
 

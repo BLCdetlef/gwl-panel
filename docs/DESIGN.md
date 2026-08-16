@@ -1,6 +1,6 @@
 # GWL-Panel – Designregeln
 
-Stand: Prototyp 0.9
+Stand: Prototyp 0.9.2
 
 ## Grundprinzip
 
@@ -20,17 +20,43 @@ Das Panel besteht aus drei sichtbaren Perspektiven: **GRUNDLAGE – WIRKUNG – 
 
 ## Organfenster
 
-- Ein Organfenster öffnet als eigenes kleines Overlay **über dem LEBEN-Feld**, nicht als separates Fenster auf einem anderen Bildschirm.
+- Ein Organfenster öffnet als eigenes Overlay **über dem LEBEN-Feld**.
 - Das Fenster darf auf großen Bildschirmen nicht zu klein sein; Zielbreite derzeit bis etwa 640 px.
-- Die medizinischen Detailgrafiken dürfen funktionale Unterteilungen zeigen. Die Verdauungssystem-Darstellung gilt dafür als Referenz.
-- Feste Beschriftungen innerhalb besonders komplexer Systemgrafiken sind künftig zulässig, wenn sie die funktionale Gliederung verständlicher machen.
+- Das Organ-/Systembild ist eine **medizinische, farbige Übersicht mit statischen anatomischen Beschriftungen direkt im Bild**.
+- Zusätzliche Listen „Funktionale Teilbereiche“ werden vorerst **nicht** unter dem Bild angezeigt. Für Laien wären sie ohne weiteren Kontext eher Zusatzlast als Hilfe.
+- Unter dem Bild steht nur **BEFUND**. Dieser Text ist identisch mit dem aktuell im Feld **WIRKUNG** angezeigten Befund.
+- Darunter steht **EINORDNUNG** standardmäßig eingeklappt. Sie verweist auf das Feld WIRKUNG; die fachliche Einordnung wird nicht doppelt ausformuliert.
+- Graustufen des Gesundheitszustands gehören ausschließlich in die Kuller der Bodymap, nicht in das Organbild.
+
+## Bildablage und Dateinamen
+
+Gesundheitsgrafiken liegen unter `assets/health/`.
+
+- Bodymap: `bodymap_main.png`
+- Organ-/Systembilder: `organ_<englischer-kurzname>.jpg`
+- Zielgröße der Organbilder: **maximal 500 kB je Datei**.
+- Medizinische Bilddateien enthalten keine dynamischen Befund-, Wirkungs- oder Zustandsangaben.
+
+### Aktuelle Zuordnung Bodymap → Bilddatei
+
+- Gehirn & Nerven → `organ_brain.jpg`
+- Augen → `organ_senses.jpg`
+- Zähne → derzeit neutrale interne Ersatzgrafik; in der aktuellen Bildserie fehlt noch ein eigenes Zahnmotiv
+- Lunge → `organ_respiratory.jpg`
+- Herz & Kreislauf → `organ_circulatory.jpg`
+- Leber → `organ_digestive.jpg`
+- Nieren → `organ_urinary.jpg`
+- Verdauung → `organ_digestive.jpg`
+- Harnwege → `organ_urinary.jpg`
+- weibliche Geschlechtsorgane → `organ_repro_female.jpg`
+- männliche Geschlechtsorgane → `organ_repro_male.jpg`
+- Skelett → `organ_skeleton.jpg`
+- Bewegungsapparat → `organ_skeleton.jpg`
+
+Weitere bereits vorhandene Systembilder (`organ_endocrine.jpg`, `organ_immune.jpg`, `organ_skin.jpg`, `organ_blood_lymph.jpg`, `organ_connective.jpg`) bleiben für spätere Kuller/Systemerweiterungen verfügbar.
 
 ## Mobil / Zoom
 
 - Auf Smartphones muss die Schrift gemeinsam mit der Oberfläche gut lesbar skalieren.
 - Kleine Bildschirmbreiten dürfen nicht automatisch zu immer kleinerer Beschriftung führen.
 - Kuller bleiben auch mobil ausreichend groß für Touch-Bedienung.
-
-## Bildablage
-
-Gesundheitsgrafiken liegen unter `assets/health/`. Dateinamen sollen beschreibend und stabil bleiben, z. B. `bodymap_main.png` oder `organ_digestive.png`.
