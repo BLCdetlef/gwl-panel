@@ -51,39 +51,31 @@ let timeWindow = "data";
 let currentHealth = null;
 let selectedOrganId = null;
 
-const HOTSPOTS = {
-  brain: { label: "Gehirn & Nerven", x: 58, y: 6.5, side: "right" },
-  eyes: { label: "Augen", x: 57, y: 12.8, side: "right" },
-  teeth: { label: "Zähne", x: 54, y: 17.2, side: "right" },
-  lungs: { label: "Lunge", x: 42, y: 27.4, side: "left" },
-  heart: { label: "Herz & Kreislauf", x: 53, y: 30.2, side: "right" },
-  liver: { label: "Leber", x: 41, y: 37.2, side: "left" },
-  kidneys: { label: "Niere", x: 42, y: 46.5, side: "left" },
-  gut: { label: "Verdauung", x: 58, y: 46.0, side: "right" },
-  urinary: { label: "Harnwege", x: 51, y: 56.2, side: "right" },
-  femaleRepro: { label: "weibliche Geschlechtsorgane", x: 51, y: 61.8, side: "right" },
-  maleRepro: { label: "männliche Geschlechtsorgane", x: 51, y: 67.0, side: "right" },
-  skeleton: { label: "Skelett", x: 75.5, y: 37.8, side: "right" },
-  musculoskeletal: { label: "Bewegungsapparat", x: 34.2, y: 80.4, side: "left" }
-};
+let HOTSPOTS = {};
+let ORGAN_MEDIA = {};
 
-const ORGAN_MEDIA = {
-  brain: { label: "Gehirn & Nerven", img: "assets/health/organ_brain.jpg", layout: "side" },
-  eyes: { label: "Augen", img: "assets/health/organ_senses.jpg", layout: "stack" },
-  // Die aktuelle 14er-Bildserie enthält kein eigenes Zahnmotiv.
-  // Deshalb bewusst kein fachlich falsches Systembild zuordnen.
-  teeth: { label: "Zähne", layout: "stack", svg: `<svg viewBox="0 0 260 180" role="img" aria-label="Zähne"><path class="detail-fill" d="M60 62 C82 38 105 32 130 32 C155 32 178 38 200 62 C190 103 166 132 130 143 C94 132 70 103 60 62 Z"/><path class="detail-line" d="M82 61 C93 86 106 105 130 122 C154 105 167 86 178 61 M106 48 L112 105 M154 48 L148 105"/></svg>` },
-  lungs: { label: "Lunge", img: "assets/health/organ_respiratory.jpg", layout: "side" },
-  heart: { label: "Herz & Kreislauf", img: "assets/health/organ_circulatory.jpg", layout: "stack" },
-  liver: { label: "Leber", img: "assets/health/organ_digestive.jpg", layout: "stack" },
-  kidneys: { label: "Nieren", img: "assets/health/organ_urinary.jpg", layout: "side" },
-  gut: { label: "Verdauung", img: "assets/health/organ_digestive.jpg", layout: "stack" },
-  urinary: { label: "Harnwege", img: "assets/health/organ_urinary.jpg", layout: "stack" },
-  femaleRepro: { label: "weibliche Geschlechtsorgane", img: "assets/health/organ_repro_female.jpg", layout: "stack" },
-  maleRepro: { label: "männliche Geschlechtsorgane", img: "assets/health/organ_repro_male.jpg", layout: "stack" },
-  skeleton: { label: "Skelett", img: "assets/health/organ_skeleton.jpg", layout: "side" },
-  musculoskeletal: { label: "Bewegungsapparat", img: "assets/health/organ_skeleton.jpg", layout: "side" }
-};
+async function loadBodymapConfig() {
+  const response = await fetch("bodymap.json", { cache: "no-store" });
+  if (!response.ok) throw new Error(`bodymap.json konnte nicht geladen werden (${response.status})`);
+  const config = await response.json();
+
+  HOTSPOTS = {};
+  ORGAN_MEDIA = {};
+  (config.organs || []).forEach(organ => {
+    HOTSPOTS[organ.id] = {
+      label: organ.label,
+      x: organ.x,
+      y: organ.y,
+      side: organ.side || "right"
+    };
+    ORGAN_MEDIA[organ.id] = {
+      label: organ.label,
+      img: organ.image,
+      layout: organ.layout || "stack"
+    };
+  });
+}
+
 
 function getSelectedScope() { return regionSelect.value; }
 function getBoundary(id) { return data.boundaries.find(boundary => boundary.id === id); }
@@ -246,6 +238,7 @@ function closeCauseOverlay(slot) {
 
 function normalizeImpactOrgan(id) {
   if (id === "reproduction") return "femaleRepro";
+  if (id === "eyes") return "eye";
   if (id === "gut") return "gut";
   return id;
 }
@@ -442,6 +435,18 @@ causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
 causeButtonLife.addEventListener("click", () => openCauseOverlay("life"));
 document.querySelectorAll("[data-close-cause]").forEach(button => button.addEventListener("click", () => closeCauseOverlay(button.dataset.closeCause)));
-renderHotspots();
-ensureHealthLegend();
-updatePrototypeVersion(); chooseFirstItemForScope();
+async function initPanel() {
+  try {
+    await loadBodymapConfig();
+  } catch (error) {
+    console.error(error);
+    organReadout.textContent = "Bodymap-Konfiguration konnte nicht geladen werden.";
+    return;
+  }
+  renderHotspots();
+  ensureHealthLegend();
+  updatePrototypeVersion();
+  chooseFirstItemForScope();
+}
+
+initPanel();

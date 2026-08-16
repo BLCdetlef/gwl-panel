@@ -1,0 +1,151 @@
+{
+  "format": "gwl-bodymap-v1",
+  "version": "0.9.3",
+  "image": "assets/health/bodymap_main.png",
+  "organs": [
+    {
+      "id": "brain",
+      "label": "Gehirn & Nerven",
+      "x": 57.0,
+      "y": 6.7,
+      "side": "right",
+      "image": "assets/health/organ_brain.jpg",
+      "layout": "side"
+    },
+    {
+      "id": "eye",
+      "label": "Auge",
+      "x": 55.0,
+      "y": 11.5,
+      "side": "right",
+      "image": "assets/health/organ_eye.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "ear",
+      "label": "Ohr",
+      "x": 45.5,
+      "y": 11.2,
+      "side": "left",
+      "image": "assets/health/organ_ear.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "nose",
+      "label": "Nase",
+      "x": 52.0,
+      "y": 14.2,
+      "side": "left",
+      "image": "assets/health/organ_nose.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "teeth",
+      "label": "Gebiss",
+      "x": 54.0,
+      "y": 17.2,
+      "side": "right",
+      "image": "assets/health/organ_teeth.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "tongue",
+      "label": "Zunge",
+      "x": 47.0,
+      "y": 19.5,
+      "side": "left",
+      "image": "assets/health/organ_tongue.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "lungs",
+      "label": "Lunge",
+      "x": 42.0,
+      "y": 28.0,
+      "side": "left",
+      "image": "assets/health/organ_respiratory.jpg",
+      "layout": "side"
+    },
+    {
+      "id": "heart",
+      "label": "Herz & Kreislauf",
+      "x": 54.0,
+      "y": 31.8,
+      "side": "right",
+      "image": "assets/health/organ_circulatory.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "liver",
+      "label": "Leber",
+      "x": 41.5,
+      "y": 38.3,
+      "side": "left",
+      "image": "assets/health/organ_digestive.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "kidneys",
+      "label": "Nieren",
+      "x": 43.0,
+      "y": 47.2,
+      "side": "left",
+      "image": "assets/health/organ_urinary.jpg",
+      "layout": "side"
+    },
+    {
+      "id": "gut",
+      "label": "Verdauung",
+      "x": 58.0,
+      "y": 47.8,
+      "side": "right",
+      "image": "assets/health/organ_digestive.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "urinary",
+      "label": "Harnwege",
+      "x": 53.0,
+      "y": 57.2,
+      "side": "right",
+      "image": "assets/health/organ_urinary.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "femaleRepro",
+      "label": "weibliche Geschlechtsorgane",
+      "x": 52.5,
+      "y": 62.7,
+      "side": "right",
+      "image": "assets/health/organ_repro_female.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "maleRepro",
+      "label": "männliche Geschlechtsorgane",
+      "x": 48.0,
+      "y": 67.8,
+      "side": "left",
+      "image": "assets/health/organ_repro_male.jpg",
+      "layout": "stack"
+    },
+    {
+      "id": "skeleton",
+      "label": "Skelett",
+      "x": 74.0,
+      "y": 38.5,
+      "side": "right",
+      "image": "assets/health/organ_skeleton.jpg",
+      "layout": "side"
+    },
+    {
+      "id": "musculoskeletal",
+      "label": "Bewegungsapparat",
+      "x": 34.0,
+      "y": 73.0,
+      "side": "left",
+      "image": "assets/health/organ_musculoskeletal.jpg",
+      "layout": "side"
+    }
+  ]
+}

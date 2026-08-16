@@ -60,3 +60,15 @@ Weitere bereits vorhandene Systembilder (`organ_endocrine.jpg`, `organ_immune.jp
 - Auf Smartphones muss die Schrift gemeinsam mit der Oberfläche gut lesbar skalieren.
 - Kleine Bildschirmbreiten dürfen nicht automatisch zu immer kleinerer Beschriftung führen.
 - Kuller bleiben auch mobil ausreichend groß für Touch-Bedienung.
+
+
+## Bodymap – Organ-Kuller (ab v0.9.3)
+
+- Position, Beschriftung und Bildzuordnung der Organ-Kuller stehen zentral in `bodymap.json`.
+- Kuller sollen anatomisch möglichst nah an der zugehörigen Struktur liegen.
+- Beschriftungen werden abwechselnd links/rechts angeordnet, um Überlagerungen und eine senkrechte Kuller-Kette zu vermeiden.
+- Sinnesorgane werden getrennt dargestellt: Auge, Ohr, Nase, Zunge.
+- `Zähne` heißt in der Benutzeroberfläche `Gebiss`; technische Organ-ID bleibt `teeth`.
+- `Skelett` und `Bewegungsapparat` sind getrennte Systeme:
+  - Skelett → `organ_skeleton.jpg`
+  - Bewegungsapparat → `organ_musculoskeletal.jpg`

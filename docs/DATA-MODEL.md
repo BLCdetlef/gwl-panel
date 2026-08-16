@@ -93,3 +93,19 @@ Die **Einordnung** ist nur ein eingeklappter Verweis zurück auf WIRKUNG und kei
 ## Weiterentwicklung
 
 Neue Felder sollen nur ergänzt werden, wenn sie eine fachliche Aussage tragen. Vor Änderungen an der Datenstruktur wird diese Datei zusammen mit dem Code aktualisiert.
+
+
+## Bodymap-Konfiguration (ab v0.9.3)
+
+`bodymap.json` ist die zentrale Zuordnung zwischen Bodymap und Organfenstern.
+
+Jeder Eintrag unter `organs` besitzt:
+- `id`: stabile technische Organ-ID
+- `label`: sichtbare Beschriftung
+- `x`, `y`: Position des Kullers in Prozent der Bodymap
+- `side`: Seite der Beschriftung (`left` oder `right`)
+- `image`: Bilddatei des Organfensters
+- `layout`: Darstellungsmodus des Organbildes
+
+Die vier Sinnesorgane verwenden die IDs `eye`, `ear`, `nose`, `tongue`.
+Die ID `teeth` bleibt aus Kompatibilitätsgründen bestehen, die sichtbare Bezeichnung lautet `Gebiss`.

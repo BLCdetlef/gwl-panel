@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.2",
+  version: "0.9.3",
   scopes: {
     global: { label: "Global", path: "Global" },
     europe: { label: "Europa", path: "Global → Europa" },
@@ -166,7 +166,7 @@ window.GWL_DATA = {
               },
               {
                 organ: "teeth",
-                label: "Zähne",
+                label: "Gebiss",
                 functionLoss: null,
                 prevalence: "Dentalfluorose 2018: 82,5 % der untersuchten Personen",
                 note: "Lokal klinisch nachgewiesene Dentalfluorose; Prävalenz ist nicht gleich Funktionsverlust."
@@ -197,7 +197,7 @@ window.GWL_DATA = {
               health: {
                 impacts: [
                   { organ: "skeleton", label: "Skelett", functionLoss: null, prevalence: "Skelettfluorose 2009: 4,4 %", note: "56 klinisch identifizierte Fälle; kein einheitlicher 0–100-%-Funktionswert." },
-                  { organ: "teeth", label: "Zähne", functionLoss: null, prevalence: "Dentalfluorose 2009: 75,5 %", note: "Prävalenz in der untersuchten Bevölkerung; nicht mit Funktionsverlust gleichzusetzen." }
+                  { organ: "teeth", label: "Gebiss", functionLoss: null, prevalence: "Dentalfluorose 2009: 75,5 %", note: "Prävalenz in der untersuchten Bevölkerung; nicht mit Funktionsverlust gleichzusetzen." }
                 ]
               }
             },
@@ -224,7 +224,7 @@ window.GWL_DATA = {
               health: {
                 impacts: [
                   { organ: "skeleton", label: "Skelett", functionLoss: null, prevalence: "Skelettfluorose 2018: 3,3 %", note: "Lokal klinisch nachgewiesen; Funktionsverlust nicht als 0–100-%-Wert quantifiziert." },
-                  { organ: "teeth", label: "Zähne", functionLoss: null, prevalence: "Dentalfluorose 2018: 82,5 %", note: "Lokal klinisch nachgewiesen; Prävalenz ist nicht gleich Funktionsverlust." }
+                  { organ: "teeth", label: "Gebiss", functionLoss: null, prevalence: "Dentalfluorose 2018: 82,5 %", note: "Lokal klinisch nachgewiesen; Prävalenz ist nicht gleich Funktionsverlust." }
                 ]
               }
             }
