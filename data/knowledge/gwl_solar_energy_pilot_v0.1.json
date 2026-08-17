@@ -1,0 +1,368 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Solarenergie / globale Solarstrom- und Kapazitätsströme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "Solar"
+  },
+  "corePrinciples": [
+    "Solarenergie besitzt keinen Brennstoffdurchsatz; zentrale system_flow-Größen sind installierte Kapazität, jährlicher Zubau und tatsächliche Stromerzeugung.",
+    "GW, GW/Jahr und TWh/Jahr sind unterschiedliche Messrollen und dürfen nicht vermischt werden.",
+    "Solarstrom wird nicht als negative Emission modelliert. Klimawirkung entsteht systemisch durch emissionsarme Stromerzeugung und mögliche Verdrängung fossiler Erzeugung.",
+    "Material-, Flächen- und Lieferkettenwirkungen werden als eigene Wirkungspfade geführt und nicht gegen den Klimanutzen verrechnet.",
+    "PV und solarthermische Stromerzeugung dürfen später getrennt werden; dieser Pilot fokussiert Solar PV."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_energy",
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "id": "component_solar",
+      "type": "domain_component",
+      "label": "Solar"
+    },
+    {
+      "id": "component_solar_pv",
+      "type": "domain_component",
+      "label": "Solar PV"
+    },
+    {
+      "id": "flow_solar_capacity",
+      "type": "system_flow",
+      "label": "Installierte Solarleistung"
+    },
+    {
+      "id": "flow_solar_additions",
+      "type": "system_flow",
+      "label": "Jährlicher Solarzubau"
+    },
+    {
+      "id": "flow_solar_generation",
+      "type": "system_flow",
+      "label": "Stromerzeugung aus Solar PV"
+    },
+    {
+      "id": "activity_solar_deployment",
+      "type": "human_activity",
+      "label": "Herstellung, Installation und Betrieb von PV-Anlagen"
+    },
+    {
+      "id": "flow_solar_materials",
+      "type": "system_flow",
+      "label": "Materialströme für PV-Anlagen und Netzinfrastruktur"
+    },
+    {
+      "id": "pressure_land_solar",
+      "type": "pressure",
+      "label": "Flächen- und Infrastrukturbeanspruchung"
+    },
+    {
+      "id": "pressure_material_solar",
+      "type": "pressure",
+      "label": "Material- und Rohstoffnachfrage"
+    },
+    {
+      "id": "effect_low_carbon_solar",
+      "type": "mechanism",
+      "label": "Stromerzeugung ohne Brennstoffverbrennung im Betrieb"
+    },
+    {
+      "id": "effect_fossil_displacement_solar",
+      "type": "mechanism",
+      "label": "Mögliche Verdrängung fossiler Stromerzeugung"
+    },
+    {
+      "id": "pb_climate",
+      "type": "planetary_boundary",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "pb_land",
+      "type": "planetary_boundary",
+      "label": "Landnutzungsänderung"
+    },
+    {
+      "id": "pb_novel",
+      "type": "planetary_boundary",
+      "label": "Neue Substanzen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_energy",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_energy",
+      "to": "component_solar",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_solar",
+      "to": "component_solar_pv",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_solar_pv",
+      "to": "flow_solar_capacity",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_solar_pv",
+      "to": "flow_solar_additions",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_solar_pv",
+      "to": "flow_solar_generation",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_solar_additions",
+      "to": "activity_solar_deployment",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_solar_deployment",
+      "to": "flow_solar_capacity",
+      "relationType": "increases",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_solar_capacity",
+      "to": "flow_solar_generation",
+      "relationType": "enables",
+      "evidenceStatus": "strong",
+      "note": "Tatsächliche Erzeugung hängt zusätzlich von Einstrahlung, Standort, Technologie, Verfügbarkeit und Abregelung ab."
+    },
+    {
+      "from": "flow_solar_generation",
+      "to": "effect_low_carbon_solar",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_low_carbon_solar",
+      "to": "effect_fossil_displacement_solar",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate",
+      "note": "Die tatsächlich verdrängte Erzeugung hängt vom Stromsystem und Zeitpunkt ab."
+    },
+    {
+      "from": "effect_fossil_displacement_solar",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "reduces_pressure_on_boundary",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_solar_deployment",
+      "to": "pressure_land_solar",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "pressure_land_solar",
+      "to": "pb_land",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Dach-PV und Freiflächen-PV unterscheiden sich grundlegend hinsichtlich Flächenwirkung."
+    },
+    {
+      "from": "activity_solar_deployment",
+      "to": "flow_solar_materials",
+      "relationType": "requires",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_solar_materials",
+      "to": "pressure_material_solar",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_material_solar",
+      "to": "pb_novel",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "open",
+      "note": "Der konkrete Bezug hängt von Materialklassen, Produktion, Freisetzung, Recycling und Entsorgung ab; kein pauschaler Novel-Entities-Wirkungswert."
+    }
+  ],
+  "measurements": [
+    {
+      "id": "world_solar_capacity_2024_irena",
+      "node": "flow_solar_capacity",
+      "geography": "Global",
+      "period": "Ende 2024",
+      "metric": "Installierte Solarleistung",
+      "value": 1866,
+      "unit": "GW",
+      "display": "1.866 GW",
+      "interpretation": "Bestandsgröße der installierten Solarleistung; kein Energieverbrauch und kein Grenzwert.",
+      "sourceRefs": [
+        "src_irena_renewable_highlights_2025"
+      ]
+    },
+    {
+      "id": "world_solar_additions_2024_irena",
+      "node": "flow_solar_additions",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Netto-Zubau Solarleistung",
+      "value": 453,
+      "unit": "GW_per_year",
+      "display": "453 GW im Jahr 2024",
+      "interpretation": "Ausbaugröße; nicht mit installierter Gesamtleistung oder Stromerzeugung verwechseln.",
+      "sourceRefs": [
+        "src_irena_renewable_highlights_2025"
+      ]
+    },
+    {
+      "id": "world_solar_generation_2024_iea",
+      "node": "flow_solar_generation",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Stromerzeugung aus Solar PV",
+      "value": 2000,
+      "unit": "TWh_per_year",
+      "display": "rund 2.000 TWh/Jahr",
+      "shareOfGlobalElectricity": 7,
+      "interpretation": "Tatsächliche Stromerzeugung; rund 7 % der globalen Stromerzeugung 2024 laut IEA.",
+      "sourceRefs": [
+        "src_iea_electricity_2025"
+      ]
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "solar_to_climate",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Klimawandel"
+      ],
+      "direction": "reduces_pressure_on_boundary",
+      "mechanism": "Solar PV erzeugt Strom ohne Brennstoffverbrennung im Betrieb. Wenn Solarstrom emissionsintensivere Erzeugung verdrängt, kann er den CO₂-Druck auf die planetare Grenze Klimawandel reduzieren.",
+      "evidenceStatus": "strong",
+      "caution": "Kein pauschaler Wert für vermiedene Emissionen; Wirkung hängt vom Stromsystem und Zeitpunkt ab."
+    },
+    {
+      "id": "solar_to_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Landnutzungsänderung"
+      ],
+      "direction": "driver_to_boundary",
+      "mechanism": "Freiflächenanlagen beanspruchen Fläche, während Dach-PV bestehende Flächen nutzen kann. Die Wirkung hängt deshalb stark von Anlagentyp und Standort ab.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "solar_to_novel",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Neue Substanzen"
+      ],
+      "direction": "driver_to_boundary",
+      "mechanism": "PV-Systeme benötigen verschiedene Materialien und Chemikalien. Produktion, Recycling und Entsorgung können Stoffströme erzeugen; ein globaler Novel-Entities-Wirkungswert wird im Pilot nicht behauptet.",
+      "evidenceStatus": "open"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "id": "gap_solar_primary_flow",
+      "question": "Soll Solar im GWL primär über TWh/Jahr oder über installierte GW dargestellt werden?",
+      "priority": "very_high",
+      "workingDecision": "TWh/Jahr ist der eigentliche Energiefluss; GW bleibt zentrale Bestands-/Infrastrukturgröße."
+    },
+    {
+      "id": "gap_rooftop_ground",
+      "question": "Ab wann müssen Dach-PV und Freiflächen-PV getrennte Unterknoten erhalten?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_avoided_emissions",
+      "question": "Wie werden vermiedene fossile Emissionen dargestellt, ohne Solar pauschal negative Emissionen zuzuschreiben?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_materials_recycling",
+      "question": "Wie koppeln wir Kapazitätszubau belastbar an Materialbedarf, Lebensdauer und Recyclingströme?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_land_metric",
+      "question": "Welche Flächenmetrik ist für Solar sinnvoll, ohne Dach-PV und Freiflächen-PV zu vermischen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_demand",
+        "label": "Individuelle Nachfrage / Eigenerzeugung",
+        "level": "mittel",
+        "rationale": "Haushalte und Betriebe können über Verbrauch, Dach-PV oder Beschaffung direkt stärker mitwirken als bei vielen fossilen Großsystemen; Netze, Regulierung und Finanzierung bleiben strukturell entscheidend."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering_bis_mittel",
+        "rationale": "Einzelne Anlagen sind möglich, der globale Ausbau hängt jedoch wesentlich von Netzen, Marktregeln, Lieferketten und Flächenplanung ab."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Netzausbau, Speicher, Marktregeln, Genehmigungen, Gebäudestandards, Recycling und Lieferketten bestimmen den systemischen Ausbau."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll Solar im GWL primär über TWh/Jahr statt GW geführt werden?",
+    "Brauchen Dach-PV und Freiflächen-PV frühe getrennte Unterpfade?",
+    "Wie wird der klimatisch positive Systemeffekt dargestellt, ohne negative Emissionen zu suggerieren?",
+    "Welche Material- und Recyclingpfade sind für Neue Substanzen wirklich relevant?",
+    "Wie vergleichen wir Wind und Solar bei Fläche und Material fair?"
+  ],
+  "sources": [
+    {
+      "id": "src_irena_renewable_highlights_2025",
+      "title": "Renewable Energy Highlights, July 2025",
+      "publisher": "International Renewable Energy Agency",
+      "type": "official_statistics",
+      "year": 2025,
+      "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2025/Jul/IRENA_DAT_Renewable_energy_highlights_2025.pdf"
+    },
+    {
+      "id": "src_iea_electricity_2025",
+      "title": "Electricity 2025 – Executive summary",
+      "publisher": "International Energy Agency",
+      "type": "official_energy_analysis",
+      "year": 2025,
+      "url": "https://www.iea.org/reports/electricity-2025/executive-summary"
+    }
+  ]
+}

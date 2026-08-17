@@ -758,6 +758,77 @@ function renderCoalEnergyMainView() {
     </div>`;
 }
 
+
+function renderWindEnergyMainView() {
+  const network = knowledgeNetworks.windEnergy;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Wind-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const labels = {
+    world_wind_capacity_2024_irena: "Installierte Windleistung",
+    world_wind_additions_2024_irena: "Wind-Zubau 2024",
+    world_wind_generation_2024_ember: "Stromerzeugung aus Wind",
+    world_wind_generation_growth_2024_iea: "Zuwachs der Windstromerzeugung"
+  };
+
+  const cards = (network.measurements || []).map(m => `
+    <article class="measurement-card oil-measurement-card">
+      <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
+      <div class="measurement-card-value">${m.display || "–"}</div>
+      <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
+      <p>${m.interpretation || ""}</p>
+    </article>`).join("");
+
+  const linkCards = (network.boundaryInteractions || []).map(x => `
+    <div class="oil-boundary-link">
+      <strong>${x.direction === "reduces_pressure_on_boundary" ? "↘" : "↗"} ${x.boundaries.slice(1).join(" / ")}</strong>
+      <p>${x.mechanism}</p>
+      <span>Evidenz: ${x.evidenceStatus || "–"}</span>
+      ${x.caution ? `<p><em>${x.caution}</em></p>` : ""}
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.reason ? `<br><span>${g.reason}</span>` : ""}${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <h2>Energie → Wind</h2>
+      <p class="oil-lead">
+        Wind besitzt keinen Brennstoffdurchsatz. Deshalb stehen hier installierte Leistung,
+        Ausbau und tatsächliche Stromerzeugung als getrennte <strong>system_flow</strong>-Größen.
+      </p>
+
+      <div class="oil-path">
+        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Wind</span>
+      </div>
+
+      <h3>MESSWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+
+      <h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3>
+      <div class="oil-boundary-links">${linkCards}</div>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -809,16 +880,20 @@ function renderKnowledgePanel() {
       if (focusTitle) focusTitle.textContent = "Energie · Kohle";
       if (focusSummary) focusSummary.textContent = "Globaler Kohlefluss mit Verbindungen zu Klimawandel, Aerosolen, Süßwasser und Landnutzungsänderung.";
       panel.innerHTML = renderCoalEnergyMainView();
+    } else if (state.componentId === "wind") {
+      if (focusTitle) focusTitle.textContent = "Energie · Wind";
+      if (focusSummary) focusSummary.textContent = "Windstrom ohne Brennstoffdurchsatz: Kapazität, Ausbau, Erzeugung sowie Klima-, Flächen- und Biodiversitätspfade.";
+      panel.innerHTML = renderWindEnergyMainView();
     } else {
       if (focusTitle) focusTitle.textContent = "Energie";
-      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl oder Kohle.";
+      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl, Kohle oder Wind.";
       panel.innerHTML = `
         <div class="extension-intro">
           <div class="eyebrow">STOFF- UND ENERGIESTRÖME</div>
           <h2>Energie</h2>
           <p>Energie ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
           <div class="extension-note">
-            Reale Piloten sind bereits für <strong>Erdöl</strong> und <strong>Kohle</strong> hinterlegt.
+            Reale Piloten sind bereits für <strong>Erdöl</strong>, <strong>Kohle</strong> und <strong>Wind</strong> hinterlegt.
           </div>
         </div>`;
     }
