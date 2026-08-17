@@ -183,39 +183,6 @@
   ],
   "studyEvidence": [
     {
-      "id": "loomba_2021_vaccine_misinformation",
-      "sourceRefs": [
-        "src_loomba_2021"
-      ],
-      "design": "randomized controlled online experiment",
-      "geography": [
-        "United Kingdom",
-        "United States"
-      ],
-      "context": {
-        "lifeStage": [
-          "adulthood"
-        ]
-      },
-      "exposure": "recent online misinformation about COVID-19 vaccines",
-      "comparison": "factual information",
-      "outcome": "intention to accept a COVID-19 vaccine among participants initially saying they would definitely accept one",
-      "effectEstimates": [
-        {
-          "geography": "United Kingdom",
-          "estimate": "-6.2 percentage points",
-          "interval": "95th percentile interval: -8.5 to -3.9 percentage points"
-        },
-        {
-          "geography": "United States",
-          "estimate": "-6.4 percentage points",
-          "interval": "95th percentile interval: -8.8 to -4.0 percentage points"
-        }
-      ],
-      "interpretation": "Experimentelle Evidenz dafür, dass konkrete Impf-Misinformation kurzfristig Impfintention verändern kann. Der Endpunkt ist Intention, nicht tatsächliche Impfung.",
-      "evidenceStatus": "strong_for_intention"
-    },
-    {
       "id": "roozenbeek_2020_global_susceptibility",
       "sourceRefs": [
         "src_roozenbeek_2020"
@@ -300,33 +267,17 @@
   ],
   "measurements": [
     {
-      "id": "loomba_uk_vaccine_intent_change",
-      "node": "behavior_vaccine_intent",
-      "geography": "United Kingdom",
-      "period": "Experiment 2020; publiziert 2021",
-      "metric": "Änderung der Impfintention nach Exposition gegenüber Impf-Misinformation",
-      "value": -6.2,
-      "unit": "percentage_points",
-      "display": "−6,2 Prozentpunkte Impfintention",
-      "uncertainty": "95th percentile interval: 3,9 bis 8,5 Prozentpunkte Rückgang",
-      "interpretation": "Experimenteller Effekt auf Intention in einer spezifischen COVID-19-Situation; kein allgemeiner Desinformations-Grenzwert.",
+      "id": "roozenbeek_multicountry_scope",
+      "node": "effect_false_belief",
+      "geography": "UK, Irland, USA, Spanien, Mexiko",
+      "period": "Publiziert 2020",
+      "metric": "Studienumfang internationale Misinformation-Befragung",
+      "value": 5000,
+      "unit": "participants",
+      "display": "5.000 Teilnehmende · 5 Länder",
+      "interpretation": "Studienumfang, kein Effektwert. Die Studie fand Assoziationen zwischen höherer Misinformation-Anfälligkeit, Impfzögerlichkeit und geringerer selbstberichteter Befolgung von Gesundheitsmaßnahmen.",
       "sourceRefs": [
-        "src_loomba_2021"
-      ]
-    },
-    {
-      "id": "loomba_us_vaccine_intent_change",
-      "node": "behavior_vaccine_intent",
-      "geography": "United States",
-      "period": "Experiment 2020; publiziert 2021",
-      "metric": "Änderung der Impfintention nach Exposition gegenüber Impf-Misinformation",
-      "value": -6.4,
-      "unit": "percentage_points",
-      "display": "−6,4 Prozentpunkte Impfintention",
-      "uncertainty": "95th percentile interval: 4,0 bis 8,8 Prozentpunkte Rückgang",
-      "interpretation": "Experimenteller Effekt auf Intention in einer spezifischen COVID-19-Situation; kein allgemeiner Desinformations-Grenzwert.",
-      "sourceRefs": [
-        "src_loomba_2021"
+        "src_roozenbeek_2020"
       ]
     },
     {
@@ -490,16 +441,6 @@
   ],
   "sources": [
     {
-      "id": "src_loomba_2021",
-      "title": "Measuring the impact of COVID-19 vaccine misinformation on vaccination intent in the UK and USA",
-      "authors": "Loomba S, de Figueiredo A, Piatek SJ, de Graaf K, Larson HJ",
-      "journal": "Nature Human Behaviour",
-      "year": 2021,
-      "type": "peer_reviewed_randomized_experiment",
-      "doi": "10.1038/s41562-021-01056-1",
-      "url": "https://www.nature.com/articles/s41562-021-01056-1"
-    },
-    {
       "id": "src_roozenbeek_2020",
       "title": "Susceptibility to misinformation about COVID-19 around the world",
       "authors": "Roozenbeek J et al.",
@@ -507,7 +448,9 @@
       "year": 2020,
       "type": "peer_reviewed_multicountry_survey",
       "doi": "10.1098/rsos.201199",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7657933/"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7657933/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     },
     {
       "id": "src_pennycook_rand_2022",
@@ -517,7 +460,9 @@
       "year": 2022,
       "type": "peer_reviewed_internal_meta_analysis_of_randomized_experiments",
       "doi": "10.1038/s41467-022-30073-5",
-      "url": "https://www.nature.com/articles/s41467-022-30073-5"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9051116/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     },
     {
       "id": "src_roozenbeek_2022_inoculation",
@@ -527,7 +472,17 @@
       "year": 2022,
       "type": "peer_reviewed_randomized_experiments",
       "doi": "10.1126/sciadv.abo6254",
-      "url": "https://www.science.org/doi/10.1126/sciadv.abo6254"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9401631/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     }
-  ]
+  ],
+  "sourcePolicy": {
+    "rule": "Kein Studienwert ohne direkt sichtbare, öffentlich zugängliche Volltextquelle.",
+    "paywalledStudyValuesAllowed": false,
+    "removedInThisRevision": [
+      "Loomba et al. 2021: zwei Impfintention-Messkarten entfernt, da der Nature-Volltext hinter einer Bezahlschranke liegt."
+    ],
+    "uiRule": "Jede Studienwert-Karte zeigt mindestens einen direkten Quellenlink."
+  }
 }

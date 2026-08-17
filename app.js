@@ -669,6 +669,11 @@ function renderOilEnergyMainView() {
       <div class="oil-boundary-links">${linkCards}</div>
 
       <details>
+        <summary>Quellen · frei zugänglich</summary>
+        ${allOpenSourcesHtml(network)}
+      </details>
+
+      <details>
         <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
         ${gaps}
       </details>
@@ -903,6 +908,41 @@ function renderSolarEnergyMainView() {
 }
 
 
+
+function sourceMap(network) {
+  return Object.fromEntries((network?.sources || []).map(source => [source.id, source]));
+}
+
+function sourceLinksHtml(network, sourceRefs = []) {
+  const sources = sourceMap(network);
+  const links = sourceRefs
+    .map(id => sources[id])
+    .filter(Boolean)
+    .filter(source => source.access === "open_full_text" && source.url)
+    .map(source => {
+      const author = source.authors
+        ? source.authors.split(",")[0].replace(" et al.", "")
+        : source.publisher || "Quelle";
+      const venue = source.journal || source.publisher || "";
+      const label = `${author}${source.year ? ` et al. (${source.year})` : ""}${venue ? ` · ${venue}` : ""}`;
+      return `<a class="study-source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">↗ ${label} · freier Volltext</a>`;
+    });
+
+  return links.length
+    ? `<div class="study-source-links">${links.join("")}</div>`
+    : `<div class="study-source-missing">Keine öffentlich zugängliche Volltextquelle hinterlegt – dieser Studienwert darf nicht angezeigt werden.</div>`;
+}
+
+function allOpenSourcesHtml(network) {
+  return (network?.sources || [])
+    .filter(source => source.access === "open_full_text" && source.url)
+    .map(source => {
+      const title = source.title || source.id;
+      const meta = [source.authors || source.publisher, source.journal, source.year].filter(Boolean).join(" · ");
+      return `<p class="source-list-item"><a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ ${title}</a><br><span>${meta}</span></p>`;
+    }).join("");
+}
+
 function renderDigitalSleepMainView() {
   const network = knowledgeNetworks.digitalSleep;
   if (!network) {
@@ -925,6 +965,7 @@ function renderDigitalSleepMainView() {
         <div class="measurement-card-meta">${m.period || ""}${age ? ` · ${age}` : ""}</div>
         <p>${m.interpretation || ""}</p>
         ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+        ${sourceLinksHtml(network, m.sourceRefs)}
       </article>`;
   }).join("");
 
@@ -1013,8 +1054,7 @@ function renderDisinformationMainView() {
   }
 
   const labels = {
-    loomba_uk_vaccine_intent_change: "Impf-Misinformation → Impfintention · Vereinigtes Königreich",
-    loomba_us_vaccine_intent_change: "Impf-Misinformation → Impfintention · USA",
+    roozenbeek_multicountry_scope: "Internationale Misinformation-Studie · Umfang",
     accuracy_prompt_false_sharing: "Accuracy Prompt → Teilen falscher Inhalte"
   };
 
@@ -1025,6 +1065,7 @@ function renderDisinformationMainView() {
       <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
       <p>${m.interpretation || ""}</p>
       ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+      ${sourceLinksHtml(network, m.sourceRefs)}
     </article>`).join("");
 
   const pathways = (network.pathways || []).map(p => `
@@ -1069,6 +1110,12 @@ function renderDisinformationMainView() {
       <div class="oil-boundary-links">${pathways}</div>
 
       <div class="extension-note">
+        <strong>Quellenregel:</strong>
+        Im GWL werden Studienwerte nur angezeigt, wenn ein direkt verlinkter,
+        öffentlich zugänglicher Volltext vorliegt. Paywall-Studienwerte werden nicht dargestellt.
+      </div>
+
+      <div class="extension-note">
         <strong>Begriffsregel:</strong>
         Ohne belegte Täuschungsabsicht wird im Datenmodell
         <em>Misinformation / falsche oder irreführende Information</em> verwendet.
@@ -1079,6 +1126,11 @@ function renderDisinformationMainView() {
         Der Pilot belegt primär Veränderungen von Überzeugungen, Intentionen und
         gesundheitsrelevanten Entscheidungen. Deshalb wird kein einzelner Organmarker aktiviert.
       </div>
+
+      <details>
+        <summary>Quellen · frei zugänglich</summary>
+        ${allOpenSourcesHtml(network)}
+      </details>
 
       <details>
         <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>

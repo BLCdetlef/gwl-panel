@@ -364,7 +364,9 @@
       "year": 2024,
       "type": "peer_reviewed_original_study",
       "doi": "10.1001/jamapediatrics.2024.2914",
-      "url": "https://jamanetwork.com/journals/jamapediatrics/fullarticle/2822859"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11372655/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     },
     {
       "id": "src_nagata_jah_2024",
@@ -374,7 +376,9 @@
       "year": 2024,
       "type": "peer_reviewed_original_study",
       "doi": "10.1016/j.jadohealth.2024.06.006",
-      "url": "https://www.jahonline.org/article/S1054-139X(24)00289-1/fulltext"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11610308/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     },
     {
       "id": "src_burnell_2024",
@@ -384,7 +388,9 @@
       "year": 2024,
       "type": "peer_reviewed_original_study",
       "doi": "10.1002/jad.12326",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/38698757/"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11303118/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
     },
     {
       "id": "src_who_europe_2025",
@@ -392,7 +398,14 @@
       "publisher": "WHO Regional Office for Europe",
       "year": 2025,
       "type": "official_policy_evidence_review",
-      "url": "https://www.who.int/europe/publications/i/item/WHO-EURO-2025-12187-51959-79685"
+      "url": "https://www.who.int/europe/publications/i/item/WHO-EURO-2025-12187-51959-79685",
+      "access": "open_full_text",
+      "accessLabel": "Öffentlich zugänglich · WHO"
     }
-  ]
+  ],
+  "sourcePolicy": {
+    "rule": "Kein Studienwert ohne direkt sichtbare, öffentlich zugängliche Volltextquelle.",
+    "paywalledStudyValuesAllowed": false,
+    "uiRule": "Jede Studienwert-Karte zeigt mindestens einen direkten Quellenlink."
+  }
 }
