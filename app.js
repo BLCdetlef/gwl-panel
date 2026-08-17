@@ -99,17 +99,13 @@ function ensureKnowledgePanel() {
 
   knowledgePanel = document.createElement("section");
   knowledgePanel.id = "knowledgePanel";
-  knowledgePanel.className = "knowledge-panel knowledge-panel-prominent";
+  knowledgePanel.className = "knowledge-panel connections-panel";
   knowledgePanel.hidden = true;
 
-  // Robust und sofort sichtbar:
-  // Der Einstieg sitzt direkt NACH der Zustandsbeschreibung (focusSummary-Karte)
-  // und damit VOR Messwert/Referenz/Befund.
-  const focusCard = focusSummary?.parentElement;
-  if (focusCard?.parentNode) {
-    focusCard.insertAdjacentElement("afterend", knowledgePanel);
-  } else if (resetButton?.parentNode) {
-    // Fallback: vor "Zur globalen Übersicht".
+  // v0.9.6: Erst kommt der vollständige Zustand der ausgewählten
+  // Planetaren Grenze (Messwert, Referenz, Befund, Wirkungspfad).
+  // Danach folgen klar getrennt die verbundenen Wissenspfade.
+  if (resetButton?.parentNode) {
     resetButton.insertAdjacentElement("beforebegin", knowledgePanel);
   }
 
@@ -133,173 +129,223 @@ function actionDots(score, maxScore = 3) {
   ).join("");
 }
 
+function measurementValue(item) {
+  if (!item) return "";
+  if (item.result) return item.result;
+  const parts = [item.start, item.end].filter(Boolean);
+  return parts.length ? parts.join(" → ") : "";
+}
+
+function renderEvidenceSummary(network) {
+  const edges = network?.edges || [];
+  const strong = edges.filter(edge => edge.evidenceStatus === "strong").length;
+  const moderate = edges.filter(edge => edge.evidenceStatus === "moderate").length;
+  return `
+    <span class="evidence-chip strong">${strong} × ${evidenceLabel("strong")}</span>
+    ${moderate ? `<span class="evidence-chip moderate">${moderate} × ${evidenceLabel("moderate")}</span>` : ""}
+  `;
+}
+
+function renderActionScope(network) {
+  const action = network?.actionScope || {};
+  const dimensions = action.dimensions || [];
+  const levers = action.primaryLevers || [];
+
+  if (!dimensions.length && !levers.length) return "";
+
+  return `
+    <details class="knowledge-details action-scope">
+      <summary>Handlungsspielraum</summary>
+      <p class="action-method">${action.methodNote || ""}</p>
+      <div class="action-dimensions">
+        ${dimensions.map(dimension => `
+          <div class="action-row">
+            <div class="action-title">
+              <strong>${dimension.label}</strong>
+              <span>${dimension.level || ""}</span>
+            </div>
+            ${typeof dimension.score === "number" ? `
+              <div class="action-dots" aria-label="${dimension.score} von ${dimension.maxScore || 3}">
+                ${actionDots(dimension.score, dimension.maxScore || 3)}
+              </div>` : ""}
+            <p>${dimension.rationale || ""}</p>
+          </div>
+        `).join("")}
+      </div>
+      ${levers.length ? `
+        <div class="lever-box">
+          <strong>Wo liegen die größeren Hebel?</strong>
+          <div class="lever-list">
+            ${levers.map(lever => `<span><b>${lever.actor}</b> · ${lever.role}</span>`).join("")}
+          </div>
+        </div>` : ""}
+      ${action.warning ? `<p class="action-warning">${action.warning}</p>` : ""}
+    </details>
+  `;
+}
+
+function renderKnowledgeCard(config) {
+  const {
+    key, network, eyebrow, title, intro, chain,
+    previewMeasurements = [], interactionField = "interactions"
+  } = config;
+
+  if (!network) {
+    return `
+      <article class="connection-card connection-error">
+        <div class="connection-card-head">
+          <div>
+            <div class="eyebrow">${eyebrow}</div>
+            <h3>${title}</h3>
+            <p>Datensatz konnte nicht geladen werden.</p>
+          </div>
+          <span class="knowledge-status knowledge-error">Prüfen</span>
+        </div>
+        <code>${data.knowledgeSources?.[key] || "Pfad fehlt"}</code>
+      </article>`;
+  }
+
+  const measurements = network.measurements || [];
+  const gaps = network.knowledgeGaps || [];
+  const interactions = network[interactionField] || network.boundaryInteractions || [];
+  const previews = previewMeasurements
+    .map(id => measurements.find(item => item.id === id))
+    .filter(Boolean);
+
+  return `
+    <article class="connection-card">
+      <details class="connection-details">
+        <summary class="connection-card-head">
+          <div class="connection-copy">
+            <div class="eyebrow">${eyebrow}</div>
+            <h3>${title}</h3>
+            <p>${intro}</p>
+
+            <div class="connection-preview">
+              ${previews.map(item => `
+                <span>
+                  <b>${item.node || item.metric || item.id}</b>
+                  ${measurementValue(item)}
+                  <small>${item.geography || ""}${item.period ? ` · ${item.period}` : ""}</small>
+                </span>`).join("")}
+            </div>
+          </div>
+          <span class="knowledge-open-label">Öffnen</span>
+        </summary>
+
+        <div class="connection-expanded">
+          <div class="knowledge-chain" aria-label="vereinfachter Zusammenhang">
+            ${chain.map((step, index) =>
+              `<span class="knowledge-node">${step}</span>${index < chain.length - 1 ? '<span class="knowledge-arrow">→</span>' : ''}`
+            ).join("")}
+          </div>
+
+          <details class="knowledge-details" open>
+            <summary>Konkrete Daten</summary>
+            <div class="knowledge-measurements">
+              ${measurements.map(item => `
+                <div class="knowledge-measurement">
+                  <strong>${item.node || item.metric || item.id}</strong>
+                  <span>${item.geography || ""}${item.period ? ` · ${item.period}` : ""}</span>
+                  <p>${measurementValue(item) || "–"}</p>
+                  ${item.interpretation ? `<small>${item.interpretation}</small>` : ""}
+                  ${item.historicalContext ? `<small>${item.historicalContext}</small>` : ""}
+                </div>`).join("")}
+            </div>
+          </details>
+
+          <details class="knowledge-details">
+            <summary>Evidenz & Wechselwirkungen</summary>
+            <div class="knowledge-grid">
+              <div class="knowledge-box">
+                <strong>Evidenz der Verbindungen</strong>
+                <p>${renderEvidenceSummary(network)}</p>
+                <small>Bewertet werden einzelne Verbindungen, nicht pauschal der gesamte Pfad.</small>
+              </div>
+              <div class="knowledge-box">
+                <strong>Verbindungen zu Planetaren Grenzen</strong>
+                <ul>
+                  ${interactions.slice(0, 5).map(item => `
+                    <li>${(item.boundaries || []).join(" ↔ ")}
+                      <br><span>${item.mechanism || ""}</span>
+                    </li>`).join("") || "<li>Noch keine Wechselwirkung hinterlegt.</li>"}
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="knowledge-details">
+            <summary>Wissenslücken (${gaps.length})</summary>
+            <div class="knowledge-gap-list">
+              ${gaps.map(gap => `
+                <div class="knowledge-gap">
+                  <span class="gap-priority">${String(gap.priority || "open").replaceAll("_", " ")}</span>
+                  <p>${gap.question || ""}</p>
+                </div>`).join("")}
+            </div>
+          </details>
+
+          ${renderActionScope(network)}
+        </div>
+      </details>
+    </article>
+  `;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
 
-  // Nur im Kontext Süßwasser einblenden.
+  // In v0.9.6 testen wir die Querverbindungen im Süßwasser-Kontext.
+  // Sie sind ausdrücklich NICHT Teil des oben dargestellten PG-Messwertes.
   if (selectedBoundaryId !== "freshwater") {
     panel.hidden = true;
     return;
   }
 
-  const network = knowledgeNetworks.nitrate;
-
-  // Falls die Datei aus irgendeinem Grund fehlt, ist das ab v0.9.5 sichtbar
-  // statt still zu verschwinden.
-  if (!network) {
-    panel.innerHTML = `
-      <div class="knowledge-entry">
-        <div>
-          <div class="eyebrow">WISSENSNETZ</div>
-          <h3>Nitrat · Datensatz nicht geladen</h3>
-          <p>Erwartet: <code>${data.knowledgeSources?.nitrate || "data/knowledge/gwl_nitrat_pilot_v0.2.json"}</code></p>
-        </div>
-        <span class="knowledge-status knowledge-error">Prüfen</span>
-      </div>`;
-    panel.hidden = false;
-    return;
-  }
-
-  const presentation = network.panelPresentation || {};
-  const primary = network.planetaryBoundaryContext?.primaryBoundary || "–";
-  const affected = network.planetaryBoundaryContext?.affectedBoundaries || [];
-  const strongEdges = (network.edges || []).filter(edge => edge.evidenceStatus === "strong").length;
-  const moderateEdges = (network.edges || []).filter(edge => edge.evidenceStatus === "moderate").length;
-  const gaps = network.knowledgeGaps || [];
-  const interactions = network.interactions || [];
-  const action = network.actionScope || {};
-  const dimensions = action.dimensions || [];
-  const levers = action.primaryLevers || [];
-  const measurements = network.measurements || [];
-
-  const dePressure = measurements.find(item => item.id === "de_n_surplus");
-  const deGroundwater = measurements.find(item => item.id === "de_groundwater_2024");
-
-  const coreChain = [
-    "Landwirtschaft",
-    "Stickstoffüberschuss",
-    "Nitrat",
-    "Grundwasser",
-    "Trinkwasser",
-    "biologische Wirkung",
-    "LEBEN"
-  ];
+  const nitrate = knowledgeNetworks.nitrate;
+  const phosphorus = knowledgeNetworks.phosphorus;
 
   panel.innerHTML = `
-    <details class="knowledge-main-details">
-      <summary class="knowledge-entry">
-        <div class="knowledge-entry-copy">
-          <div class="eyebrow">WISSENSNETZ · KONKRETE DATEN</div>
-          <h3>Nitrat: Nährstoffkreisläufe ↔ Süßwasser ↔ LEBEN</h3>
-          <p>${presentation.scopeNote || "Reale Messdaten und belegte Wirkungspfade werden als Querverbindung zur aktuellen Süßwasseransicht gezeigt."}</p>
-
-          <div class="knowledge-preview-data">
-            ${dePressure ? `
-              <span>
-                <b>Stickstoffüberschuss DE</b>
-                ${dePressure.start || "117 kg N/(ha·a)"} → ${dePressure.end || "70 kg N/(ha·a)"}
-                <small>${dePressure.period || "1994–2023"}</small>
-              </span>` : ""}
-            ${deGroundwater ? `
-              <span>
-                <b>Nitrat Grundwasser DE</b>
-                ${deGroundwater.result || "15,7 % > 50 mg/l"}
-                <small>${deGroundwater.period || "2024"} · ${deGroundwater.sampleSize || "1.147"} Messstellen</small>
-              </span>` : ""}
-          </div>
-        </div>
-        <span class="knowledge-open-label">Öffnen</span>
-      </summary>
-
-      <div class="knowledge-expanded">
-        <div class="knowledge-boundaries">
-          <span><strong>Ursprung:</strong> ${primary}</span>
-          <span><strong>berührt:</strong> ${affected.join(" · ")}</span>
-        </div>
-
-        <div class="knowledge-chain" aria-label="vereinfachter Wirkungspfad">
-          ${coreChain.map((step, index) =>
-            `<span class="knowledge-node">${step}</span>${index < coreChain.length - 1 ? '<span class="knowledge-arrow">→</span>' : ''}`
-          ).join("")}
-        </div>
-
-        <details class="knowledge-details" open>
-          <summary>Konkrete Daten</summary>
-          <div class="knowledge-measurements">
-            ${measurements.map(item => `
-              <div class="knowledge-measurement">
-                <strong>${item.node || item.id}</strong>
-                <span>${item.geography || ""} · ${item.period || ""}</span>
-                <p>${item.result || [item.start, item.end].filter(Boolean).join(" → ") || ""}</p>
-                ${item.interpretation ? `<small>${item.interpretation}</small>` : ""}
-              </div>
-            `).join("")}
-          </div>
-        </details>
-
-        <details class="knowledge-details">
-          <summary>Netzwerk, Evidenz & Wechselwirkungen</summary>
-          <div class="knowledge-grid">
-            <div class="knowledge-box">
-              <strong>Evidenz der Verbindungen</strong>
-              <p>
-                <span class="evidence-chip strong">${strongEdges} × ${evidenceLabel("strong")}</span>
-                ${moderateEdges ? `<span class="evidence-chip moderate">${moderateEdges} × ${evidenceLabel("moderate")}</span>` : ""}
-              </p>
-              <small>Bewertet werden einzelne Pfeile – nicht pauschal die gesamte Kette.</small>
-            </div>
-            <div class="knowledge-box">
-              <strong>Wechselwirkungen</strong>
-              <ul>
-                ${interactions.slice(0, 4).map(item =>
-                  `<li>${(item.boundaries || []).join(" ↔ ")}<br><span>${item.mechanism || ""}</span></li>`
-                ).join("")}
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details class="knowledge-details">
-          <summary>Wissenslücken (${gaps.length})</summary>
-          <div class="knowledge-gap-list">
-            ${gaps.map(gap => `
-              <div class="knowledge-gap">
-                <span class="gap-priority">${String(gap.priority || "open").replaceAll("_", " ")}</span>
-                <p>${gap.question || ""}</p>
-              </div>`).join("")}
-          </div>
-        </details>
-
-        <details class="knowledge-details action-scope">
-          <summary>Handlungsspielraum</summary>
-          <p class="action-method">${action.methodNote || ""}</p>
-
-          <div class="action-dimensions">
-            ${dimensions.map(dimension => `
-              <div class="action-row">
-                <div class="action-title">
-                  <strong>${dimension.label}</strong>
-                  <span>${dimension.level || ""}</span>
-                </div>
-                <div class="action-dots" aria-label="${dimension.score || 0} von ${dimension.maxScore || 3}">
-                  ${actionDots(dimension.score, dimension.maxScore)}
-                </div>
-                <p>${dimension.rationale || ""}</p>
-              </div>
-            `).join("")}
-          </div>
-
-          <div class="lever-box">
-            <strong>Wo liegen die größeren Hebel?</strong>
-            <div class="lever-list">
-              ${levers.map(lever => `<span><b>${lever.actor}</b> · ${lever.role}</span>`).join("")}
-            </div>
-          </div>
-
-          <p class="action-warning">${action.warning || ""}</p>
-        </details>
+    <div class="connections-head">
+      <div>
+        <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
+        <h2>Was mit Süßwasser zusammenhängt</h2>
+        <p>
+          Die Karten unten sind <strong>eigenständige Wissenspfade</strong>.
+          Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten
+          Zustandswert der Planetaren Grenze Süßwasser.
+        </p>
       </div>
-    </details>
+    </div>
+
+    <div class="connections-boundary-note">
+      <span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span>
+      <span>↘ Verbindung zu Süßwasser</span>
+    </div>
+
+    <div class="connection-list">
+      ${renderKnowledgeCard({
+        key: "nitrate",
+        network: nitrate,
+        eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
+        title: "Stickstoff → Nitrat im Grundwasser",
+        intro: "Ein Stickstoffpfad, der über Auswaschung das Grundwasser erreicht und dort eine Verbindung zur Planetaren Grenze Süßwasser bildet.",
+        chain: ["Stickstoff", "Landwirtschaft", "Stickstoffüberschuss", "Auswaschung", "Nitrat im Grundwasser", "Grundwasser", "Trinkwasser", "LEBEN"],
+        previewMeasurements: ["de_n_surplus", "de_groundwater_2024"],
+        interactionField: "interactions"
+      })}
+
+      ${renderKnowledgeCard({
+        key: "phosphorus",
+        network: phosphorus,
+        eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
+        title: "Phosphor → Oberflächenwasser → Eutrophierung",
+        intro: "Ein Phosphorpfad, der über Abschwemmung, Erosion und Abwasser in Oberflächengewässer gelangt und Süßwasser sowie Biosphäre verbindet.",
+        chain: ["Phosphor", "Eintrag", "Abschwemmung / Abwasser", "Oberflächenwasser", "Eutrophierung", "Cyanobakterien", "Exposition", "LEBEN"],
+        previewMeasurements: ["de_river_p_exceedance", "de_river_p_orientation_values"],
+        interactionField: "boundaryInteractions"
+      })}
+    </div>
   `;
 
   panel.hidden = false;

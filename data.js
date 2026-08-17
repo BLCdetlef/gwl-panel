@@ -1,7 +1,8 @@
 window.GWL_DATA = {
-  version: "0.9.5",
+  version: "0.9.6",
   knowledgeSources: {
-    nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json"
+    nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
+    phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
