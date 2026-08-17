@@ -1,0 +1,449 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Windenergie / globale Windstrom- und Kapazitätsströme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "Wind"
+  },
+  "corePrinciples": [
+    "Wind besitzt keinen Brennstoffdurchsatz wie Erdöl oder Kohle; der zentrale system_flow ist daher Stromerzeugung bzw. installierte Erzeugungskapazität.",
+    "Installierte Leistung (GW) und tatsächliche Stromerzeugung (TWh/Jahr) sind unterschiedliche Messrollen.",
+    "Kapazitätszubau (GW/Jahr) ist eine Ausbaugröße und kein Produktions- oder Verbrauchswert.",
+    "Windenergie wird nicht als 'negative Emission' modelliert. Klimawirkung entsteht systemisch durch emissionsarme Stromerzeugung und mögliche Verdrängung fossiler Erzeugung.",
+    "Materialbedarf, Flächennutzung und Biodiversitätswirkungen werden als eigene Wirkungspfade geführt und nicht gegen den Klimanutzen verrechnet.",
+    "Onshore- und Offshore-Wind können später getrennte Unterpfade erhalten, wenn Material-, Netz-, Flächen- oder Biodiversitätsfragen dies erfordern."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_energy",
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "id": "component_wind",
+      "type": "domain_component",
+      "label": "Wind"
+    },
+    {
+      "id": "flow_wind_installed_capacity",
+      "type": "system_flow",
+      "label": "Installierte Windleistung"
+    },
+    {
+      "id": "flow_wind_capacity_additions",
+      "type": "system_flow",
+      "label": "Jährlicher Windkapazitätszubau"
+    },
+    {
+      "id": "flow_wind_generation",
+      "type": "system_flow",
+      "label": "Stromerzeugung aus Wind"
+    },
+    {
+      "id": "activity_wind_deployment",
+      "type": "human_activity",
+      "label": "Errichtung und Betrieb von Windenergieanlagen"
+    },
+    {
+      "id": "activity_grid_integration",
+      "type": "human_activity",
+      "label": "Netzintegration und Systembetrieb"
+    },
+    {
+      "id": "flow_wind_materials",
+      "type": "system_flow",
+      "label": "Materialströme für Windenergieanlagen"
+    },
+    {
+      "id": "pressure_land_wind",
+      "type": "pressure",
+      "label": "Flächen- und Infrastrukturbeanspruchung"
+    },
+    {
+      "id": "pressure_biodiversity_wind",
+      "type": "pressure",
+      "label": "Standortabhängige Auswirkungen auf Vögel, Fledermäuse und Habitate"
+    },
+    {
+      "id": "pressure_mineral_demand_wind",
+      "type": "pressure",
+      "label": "Nachfrage nach Kupfer und ausgewählten kritischen Mineralien"
+    },
+    {
+      "id": "effect_low_carbon_power",
+      "type": "mechanism",
+      "label": "Stromerzeugung ohne Brennstoffverbrennung im Betrieb"
+    },
+    {
+      "id": "effect_fossil_displacement",
+      "type": "mechanism",
+      "label": "Mögliche Verdrängung fossiler Stromerzeugung im Stromsystem"
+    },
+    {
+      "id": "pb_climate",
+      "type": "planetary_boundary",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "pb_land",
+      "type": "planetary_boundary",
+      "label": "Landnutzungsänderung"
+    },
+    {
+      "id": "pb_biosphere",
+      "type": "planetary_boundary",
+      "label": "Biosphärenintegrität"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_energy",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_energy",
+      "to": "component_wind",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_wind",
+      "to": "flow_wind_installed_capacity",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_wind",
+      "to": "flow_wind_capacity_additions",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_wind",
+      "to": "flow_wind_generation",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_wind_capacity_additions",
+      "to": "activity_wind_deployment",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_wind_deployment",
+      "to": "flow_wind_installed_capacity",
+      "relationType": "increases",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_wind_installed_capacity",
+      "to": "flow_wind_generation",
+      "relationType": "enables",
+      "evidenceStatus": "strong",
+      "note": "Die tatsächliche Erzeugung hängt zusätzlich von Windangebot, Verfügbarkeit, Standort und Abregelung ab."
+    },
+    {
+      "from": "flow_wind_generation",
+      "to": "effect_low_carbon_power",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_low_carbon_power",
+      "to": "effect_fossil_displacement",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate",
+      "note": "Die tatsächlich verdrängte Erzeugung hängt vom jeweiligen Stromsystem und Zeitpunkt ab."
+    },
+    {
+      "from": "effect_fossil_displacement",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "reduces_pressure_on_boundary",
+      "evidenceStatus": "strong",
+      "note": "Kein pauschaler Wert für 'vermiedene Emissionen' im Pilot; Systemeffekt ist kontextabhängig."
+    },
+    {
+      "from": "activity_wind_deployment",
+      "to": "pressure_land_wind",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "pressure_land_wind",
+      "to": "pb_land",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Flächenwirkung ist standortabhängig; direkte Anlagenfläche, Abstände, Wege und parallele Landnutzung müssen getrennt betrachtet werden."
+    },
+    {
+      "from": "activity_wind_deployment",
+      "to": "pressure_biodiversity_wind",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "pressure_biodiversity_wind",
+      "to": "pb_biosphere",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Risiken sind stark standort-, art- und technologiespezifisch; im Pilot kein globaler Biodiversitätswirkungswert."
+    },
+    {
+      "from": "activity_wind_deployment",
+      "to": "flow_wind_materials",
+      "relationType": "requires",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_wind_materials",
+      "to": "pressure_mineral_demand_wind",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong",
+      "note": "Kupfer und bei bestimmten Turbinendesigns seltene Erden sind relevant; Offshore-Wind ist besonders materialintensiv."
+    }
+  ],
+  "measurements": [
+    {
+      "id": "world_wind_capacity_2024_irena",
+      "node": "flow_wind_installed_capacity",
+      "geography": "Global",
+      "period": "Ende 2024",
+      "metric": "Installierte Windleistung",
+      "value": 1133,
+      "unit": "GW",
+      "display": "1.133 GW",
+      "interpretation": "Bestandsgröße der installierten Erzeugungskapazität. Kein Energieverbrauch und kein Grenzwert.",
+      "sourceRefs": [
+        "src_irena_capacity_highlights_2025"
+      ]
+    },
+    {
+      "id": "world_wind_additions_2024_irena",
+      "node": "flow_wind_capacity_additions",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Netto-Zubau Windleistung",
+      "value": 113.2,
+      "unit": "GW_per_year",
+      "display": "113,2 GW im Jahr 2024",
+      "change": "+11,1 % gegenüber dem installierten Bestand des Vorjahres laut IRENA-Darstellung",
+      "interpretation": "Ausbaugröße. Nicht mit installierter Gesamtleistung oder tatsächlicher Stromerzeugung verwechseln.",
+      "sourceRefs": [
+        "src_irena_capacity_highlights_2025"
+      ]
+    },
+    {
+      "id": "world_wind_generation_2024_ember",
+      "node": "flow_wind_generation",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Stromerzeugung aus Wind",
+      "value": 2494,
+      "unit": "TWh_per_year",
+      "display": "2.494 TWh/Jahr",
+      "shareOfGlobalElectricity": 8.1,
+      "change": "+182 TWh bzw. +7,9 % gegenüber 2023",
+      "interpretation": "Tatsächliche Stromerzeugung aus Onshore- und Offshore-Wind; deutlich andere Messrolle als installierte Leistung.",
+      "sourceRefs": [
+        "src_ember_global_electricity_review_2025"
+      ]
+    },
+    {
+      "id": "world_wind_generation_growth_2024_iea",
+      "node": "flow_wind_generation",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Jährlicher Zuwachs der Windstromerzeugung",
+      "value": 180,
+      "unit": "TWh_per_year_change",
+      "display": "rund +180 TWh",
+      "interpretation": "IEA-Zuwachsgröße als unabhängiger Plausibilitätsanker; kein eigener Bestand.",
+      "sourceRefs": [
+        "src_iea_global_energy_review_2025"
+      ]
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "wind_to_climate",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Klimawandel"
+      ],
+      "direction": "reduces_pressure_on_boundary",
+      "mechanism": "Wind erzeugt Strom ohne Brennstoffverbrennung im Betrieb. Wenn Windstrom emissionsintensivere Erzeugung im Stromsystem verdrängt, kann er den CO₂-Druck auf die planetare Grenze Klimawandel reduzieren.",
+      "evidenceStatus": "strong",
+      "caution": "Der Pilot speichert keinen pauschalen Wert für vermiedene Emissionen, weil dieser vom jeweiligen Strommix und Zeitpunkt abhängt."
+    },
+    {
+      "id": "wind_to_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Landnutzungsänderung"
+      ],
+      "direction": "driver_to_boundary",
+      "mechanism": "Windparks benötigen Anlagenstandorte, Fundamente, Wege, Netzanschlüsse und Abstände. Die tatsächliche Landnutzungswirkung hängt stark von Standort, Onshore/Offshore und paralleler Flächennutzung ab.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "wind_to_biosphere",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Biosphärenintegrität"
+      ],
+      "direction": "driver_to_boundary",
+      "mechanism": "Windenergieanlagen können standortabhängig Vögel, Fledermäuse und Habitate beeinflussen. Diese Wirkungen sind lokal und artspezifisch und werden nicht als einheitlicher globaler Effektwert dargestellt.",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "materialContext": {
+    "role": "upstream_system_flow",
+    "summary": "Windenergie besitzt keinen Brennstoffstrom, benötigt aber erhebliche materielle Infrastruktur.",
+    "examples": [
+      "Kupfer für Generatoren, Verkabelung und Netzanbindung",
+      "Stahl, Beton und weitere Massenmaterialien",
+      "Seltene Erden bei Turbinendesigns mit Permanentmagneten"
+    ],
+    "sourceRefs": [
+      "src_iea_critical_minerals_wind"
+    ]
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_capacity_vs_generation",
+      "question": "Welche Messgröße soll im GWL bei Wind als primärer system_flow erscheinen: installierte Leistung oder tatsächliche Stromerzeugung?",
+      "priority": "very_high",
+      "workingDecision": "Stromerzeugung ist der eigentliche Energiefluss; installierte Leistung bleibt eine zentrale Bestands-/Infrastrukturgröße."
+    },
+    {
+      "id": "gap_onshore_offshore",
+      "question": "Ab wann müssen Onshore- und Offshore-Wind getrennte Unterknoten erhalten?",
+      "priority": "very_high",
+      "reason": "Materialbedarf, Netzanbindung, Flächen- und Biodiversitätswirkungen unterscheiden sich deutlich."
+    },
+    {
+      "id": "gap_avoided_emissions",
+      "question": "Wie werden vermiedene fossile Emissionen dargestellt, ohne Wind pauschal 'negative Emissionen' zuzuschreiben?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_land_metric",
+      "question": "Welche Landnutzungskennzahl eignet sich für Wind, wenn direkte Anlagenfläche, Projektfläche und parallele Nutzung unterschiedliche Bedeutungen haben?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_biodiversity",
+      "question": "Welche Biodiversitätswirkungen lassen sich sinnvoll aggregieren und welche müssen zwingend standort- und artspezifisch bleiben?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_materials",
+      "question": "Wie koppeln wir Windkapazitätszubau später quantitativ an Stahl-, Kupfer- und gegebenenfalls Seltene-Erden-Ströme?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_demand",
+        "label": "Individuelle Nachfrage",
+        "level": "gering_bis_mittel",
+        "rationale": "Stromnachfrage und Tarif-/Investitionsentscheidungen können indirekt wirken; Ausbaupfade werden überwiegend durch Infrastruktur, Regulierung und Investitionen bestimmt."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering",
+        "rationale": "Netze, Genehmigungen, Flächenplanung und Großanlagen sind individuell kaum direkt steuerbar."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Netzausbau, Genehmigung, Flächenplanung, Ausschreibungen, Marktregeln, Speicher und Naturschutzplanung bestimmen den systemischen Ausbau wesentlich."
+      }
+    ],
+    "primaryLevers": [
+      {
+        "actor": "Staaten & Regionen",
+        "role": "Flächen-, Genehmigungs-, Energie- und Naturschutzpolitik"
+      },
+      {
+        "actor": "Netzbetreiber",
+        "role": "Netzausbau, Anschluss und Systemintegration"
+      },
+      {
+        "actor": "Projektentwickler & Industrie",
+        "role": "Standortwahl, Turbinendesign, Materialwahl und Betriebsführung"
+      },
+      {
+        "actor": "Kommunen & lokale Akteure",
+        "role": "Flächenplanung, Beteiligung und lokale Konfliktlösung"
+      },
+      {
+        "actor": "Stromsystem",
+        "role": "Speicher, Flexibilität und Zusammenspiel mit anderen Erzeugern"
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll Wind im GWL primär über TWh/Jahr statt GW dargestellt werden?",
+    "Brauchen Onshore und Offshore schon auf Ebene des Energieträgers getrennte Unterknoten?",
+    "Wie wird ein klimatisch positiver Systemeffekt grafisch dargestellt, ohne ihn als negative Emission des Windrads auszugeben?",
+    "Welche Flächenmetrik ist für Wind wissenschaftlich am wenigsten missverständlich?",
+    "Welche Biodiversitätswirkungen dürfen global zusammengefasst werden?",
+    "Wie koppeln wir künftig Kapazitätszubau und Materialströme belastbar?"
+  ],
+  "sources": [
+    {
+      "id": "src_irena_capacity_highlights_2025",
+      "title": "Renewable Capacity Highlights 2025",
+      "publisher": "International Renewable Energy Agency",
+      "type": "official_statistics",
+      "year": 2025,
+      "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2025/Mar/IRENA_DAT_RE_Capacity_Highlights_2025.pdf"
+    },
+    {
+      "id": "src_iea_global_energy_review_2025",
+      "title": "Electricity – Global Energy Review 2025",
+      "publisher": "International Energy Agency",
+      "type": "official_energy_analysis",
+      "year": 2025,
+      "url": "https://www.iea.org/reports/global-energy-review-2025/electricity"
+    },
+    {
+      "id": "src_ember_global_electricity_review_2025",
+      "title": "Global Electricity Review 2025",
+      "publisher": "Ember",
+      "type": "global_electricity_dataset_and_analysis",
+      "year": 2025,
+      "url": "https://ember-energy.org/latest-insights/global-electricity-review-2025/"
+    },
+    {
+      "id": "src_iea_critical_minerals_wind",
+      "title": "Mineral requirements for clean energy transitions",
+      "publisher": "International Energy Agency",
+      "type": "official_energy_analysis",
+      "year": 2021,
+      "url": "https://www.iea.org/reports/the-role-of-critical-minerals-in-clean-energy-transitions/mineral-requirements-for-clean-energy-transitions"
+    }
+  ]
+}
