@@ -1,0 +1,298 @@
+{
+  "format": "gwl-energy-structure-spec-v1",
+  "status": "stable_v1",
+  "title": "EAH-Mirror / GWL – Energie-Spezifikation v1",
+  "derivedFromPilots": [
+    "Erdöl",
+    "Kohle",
+    "Wind",
+    "Solar"
+  ],
+  "scope": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domain": "Energie",
+    "purpose": "Einheitliche Modellierung unterschiedlicher Energieträger und Energieformen, ohne fossile und erneuerbare Systeme in dieselben physischen Prozesse zu zwingen."
+  },
+  "stableHierarchy": [
+    {
+      "level": 1,
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme"
+    },
+    {
+      "level": 2,
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "level": 3,
+      "type": "domain_component",
+      "label": "Energieträger / Energieform",
+      "examples": [
+        "Erdöl",
+        "Kohle",
+        "Wind",
+        "Solar"
+      ]
+    }
+  ],
+  "stableNodeRoles": {
+    "carrier": {
+      "type": "domain_component",
+      "required": true,
+      "rule": "Jeder Energieträger bzw. jede Energieform existiert genau einmal als fachlicher Ursprungsknoten."
+    },
+    "system_flow": {
+      "type": "system_flow",
+      "required": true,
+      "rule": "Messbare physische oder energetische Ströme werden als system_flow modelliert.",
+      "examples": [
+        "globale Ölproduktion",
+        "globale Kohleproduktion",
+        "Windstromerzeugung",
+        "Solarstromerzeugung"
+      ]
+    },
+    "human_activity": {
+      "type": "human_activity",
+      "required": false,
+      "rule": "Nur verwenden, wenn ein realer menschlicher Prozess relevant ist, z. B. Förderung, Bergbau, Installation, Raffination."
+    },
+    "mechanism": {
+      "type": "mechanism",
+      "required": false,
+      "rule": "Vermittelnde Prozesse wie Verbrennung, fossile Verdrängung oder Stromerzeugung ohne Brennstoffverbrennung."
+    },
+    "pressure": {
+      "type": "pressure",
+      "required": false,
+      "rule": "Nachgelagerte Umweltbelastungen wie CO2, Flächenbeanspruchung, Luftschadstoffe oder Materialnachfrage."
+    }
+  },
+  "measurementRoles": [
+    {
+      "role": "production_or_supply",
+      "required": false,
+      "description": "Physischer Produktions- oder Bereitstellungsstrom.",
+      "typicalFor": [
+        "Erdöl",
+        "Kohle"
+      ],
+      "examples": [
+        "barrel/day",
+        "tonnes/year"
+      ]
+    },
+    {
+      "role": "installed_capacity",
+      "required": false,
+      "description": "Bestandsgröße installierter Erzeugungsinfrastruktur.",
+      "typicalFor": [
+        "Wind",
+        "Solar"
+      ],
+      "examples": [
+        "GW"
+      ]
+    },
+    {
+      "role": "capacity_additions",
+      "required": false,
+      "description": "Jährlicher Ausbau einer installierten Kapazität.",
+      "typicalFor": [
+        "Wind",
+        "Solar"
+      ],
+      "examples": [
+        "GW/year"
+      ]
+    },
+    {
+      "role": "demand_or_consumption",
+      "required": false,
+      "description": "Nachfrage oder Verbrauch; nie mit Produktion gleichsetzen.",
+      "typicalFor": [
+        "Erdöl",
+        "Kohle"
+      ],
+      "examples": [
+        "EJ/year",
+        "tonnes/year"
+      ]
+    },
+    {
+      "role": "energy_generation",
+      "required": false,
+      "description": "Tatsächlich erzeugte Energie; für Stromerzeuger bevorzugte gemeinsame Vergleichsgröße.",
+      "typicalFor": [
+        "Kohle",
+        "Wind",
+        "Solar"
+      ],
+      "examples": [
+        "TWh/year"
+      ]
+    },
+    {
+      "role": "conversion_or_use",
+      "required": false,
+      "description": "Technologiespezifische Nutzungs- oder Umwandlungsgröße.",
+      "examples": [
+        "Raffinerie-/Kraftstoffproduktion",
+        "Kohleverstromung"
+      ]
+    },
+    {
+      "role": "emission_or_pressure",
+      "required": false,
+      "description": "Nachgelagerte Emission oder Druckgröße; keine Produktionsmessung.",
+      "examples": [
+        "Gt CO2/year",
+        "Anteil an fossilen CO2-Emissionen"
+      ]
+    },
+    {
+      "role": "change_metric",
+      "required": false,
+      "description": "Änderungsgröße gegenüber einem Vorjahr oder Referenzzeitpunkt.",
+      "rule": "Soll bevorzugt als Zusatzinformation an einem Bestands- oder Flusswert hängen und nur dann eine eigene Karte bekommen, wenn die Veränderung selbst fachlich zentral ist."
+    }
+  ],
+  "primaryFlowDecision": {
+    "rule": "Es gibt keinen universellen physischen Primärfluss für alle Energieträger.",
+    "fossil": "Bei Brennstoffen kann Produktion/Bereitstellung ein zentraler system_flow sein.",
+    "electricityGeneratingTechnologies": "Bei Wind und Solar ist tatsächliche Stromerzeugung in TWh/Jahr der eigentliche Energiefluss; installierte GW sind Bestands-/Infrastrukturgröße.",
+    "comparisonRule": "Direkte Vergleiche verschiedener Energieträger benötigen eine gemeinsame Bezugsgröße und explizite Umrechnung."
+  },
+  "unitPolicy": {
+    "principle": "Semantische Rollen werden harmonisiert, Einheiten nicht.",
+    "allowedExamples": [
+      "barrel/day",
+      "tonnes/year",
+      "GW",
+      "GW/year",
+      "TWh/year",
+      "EJ/year",
+      "Gt CO2/year"
+    ],
+    "forbidden": [
+      "stillschweigende Umrechnung",
+      "direkter Größenvergleich inkompatibler Einheiten",
+      "Produktion als Ersatz für Emission",
+      "installierte Leistung als Ersatz für Stromerzeugung"
+    ],
+    "preferredComparisonUnits": {
+      "electricityGeneration": "TWh/year",
+      "energyContent": "EJ/year",
+      "climateIntensity": "g CO2e/kWh oder andere dokumentierte Lebenszyklus-/Betriebsintensität, sofern Quelle und Systemgrenze klar sind"
+    }
+  },
+  "planetaryBoundaryLinks": {
+    "principle": "Planetare Grenzen sind Zielknoten von Wirkungspfaden und keine Elternknoten des Energieträgers.",
+    "oneTargetOneEdge": true,
+    "oneTargetOneCard": true,
+    "directions": [
+      "driver_to_boundary",
+      "reduces_pressure_on_boundary"
+    ],
+    "rules": [
+      "Ein Energieträger kann mehrere Planetare Grenzen beeinflussen.",
+      "Positive Systemwirkungen werden als Druckminderung modelliert, nicht als negative Emission.",
+      "Jeder PG-Link benötigt einen fachlich nachvollziehbaren Mechanismus.",
+      "Lokale oder regionale Umweltwirkungen dürfen nicht ohne Beleg als globale PG-Wirkungsgröße dargestellt werden."
+    ]
+  },
+  "healthRule": {
+    "principle": "Energieträger werden nicht direkt mit Organen oder Krankheit verknüpft.",
+    "requiredPath": "Energieträger → Prozess/Druck → Umweltmedium/Exposition → biologische/psychische Wirkung → LEBEN",
+    "bodymapRule": "Marker nur bei belastbarer gesundheitsbezogener Evidenz; Energiefluss allein erzeugt keinen Organmarker."
+  },
+  "actionScopeRule": {
+    "required": true,
+    "status": "qualitative_orientation",
+    "dimensions": [
+      "individuelle Nachfrage / Eigenerzeugung",
+      "direkte Systemveränderung",
+      "kollektiver Hebel"
+    ],
+    "rule": "Handlungsspielraum bleibt von naturwissenschaftlichen Messwerten getrennt."
+  },
+  "knowledgeGapRule": {
+    "required": true,
+    "principle": "Offene Definitionen, Vergleichsprobleme und nicht quantifizierbare Wirkungspfade werden explizit gespeichert statt durch Annahmen geschlossen."
+  },
+  "uiOrder": [
+    "Titel / Einordnung",
+    "Pfad Stoff- und Energieströme → Energie → Energieträger",
+    "Messwerte",
+    "Verbindungen zu Planetaren Grenzen",
+    "Wissenslücken",
+    "Handlungsspielraum"
+  ],
+  "validationRules": [
+    "Energieträger nur einmal im Graphen anlegen.",
+    "Produktion, Nachfrage, installierte Leistung, Erzeugung und Emissionen semantisch getrennt halten.",
+    "TWh/Jahr, GW, Tonnen/Jahr, Barrel/Tag und EJ/Jahr nicht ohne dokumentierte Umrechnung vergleichen.",
+    "Abgeleitete Werte ausdrücklich als derivedApproximation kennzeichnen.",
+    "Eine Planetare Grenze = eine eigene Kante = eine eigene Verbindungskarte.",
+    "Keine pauschale negative Emission für Wind oder Solar.",
+    "Keinen fossilen Prozess wie Förderung oder Verbrennung für Wind/Solar erzwingen.",
+    "Keine erneuerbaren Messrollen wie installierte Kapazität für Brennstoffe erzwingen, wenn sie fachlich nicht passen.",
+    "Gesundheitswirkung nur über vollständigen Expositionspfad.",
+    "Wissenslücken nicht durch scheinpräzise Werte ersetzen.",
+    "Handlungsspielraum nicht als naturwissenschaftlichen Messwert darstellen."
+  ],
+  "pilotAssessment": {
+    "oil": {
+      "fit": "PASS",
+      "distinctiveFeatures": [
+        "Förderung",
+        "Raffination",
+        "Verbrennung",
+        "Petrochemie"
+      ],
+      "commonStructureUsed": true
+    },
+    "coal": {
+      "fit": "PASS",
+      "distinctiveFeatures": [
+        "Bergbau",
+        "Kohleverstromung",
+        "Aerosole",
+        "metallurgische Nutzung"
+      ],
+      "commonStructureUsed": true
+    },
+    "wind": {
+      "fit": "PASS",
+      "distinctiveFeatures": [
+        "kein Brennstoff",
+        "installierte Kapazität",
+        "Stromerzeugung",
+        "Biodiversität"
+      ],
+      "commonStructureUsed": true
+    },
+    "solar": {
+      "fit": "PASS",
+      "distinctiveFeatures": [
+        "kein Brennstoff",
+        "installierte Kapazität",
+        "Dach-/Freiflächenfrage",
+        "Material-/Recyclingpfade"
+      ],
+      "commonStructureUsed": true
+    }
+  },
+  "stabilityDecision": {
+    "status": "STABLE_V1",
+    "meaning": "Die Energie-Grundarchitektur wird nicht mehr für jeden neuen Energieträger verändert. Neue Energieträger müssen zuerst in diese Struktur eingepasst werden. Eine Schemaänderung ist nur zulässig, wenn ein realer neuer Fall mit den bestehenden Rollen nicht korrekt modellierbar ist.",
+    "nextReviewTrigger": [
+      "Wasserkraft passt nicht ohne neuen Knotentyp",
+      "Kernenergie passt nicht ohne neuen Knotentyp",
+      "Biomasse passt nicht ohne neuen Knotentyp",
+      "Speicher oder Stromnetze erfordern eine eigene Infrastruktur-/Systemrolle",
+      "direkte Energieträgervergleiche zeigen unlösbare Einheiten-/Systemgrenzenprobleme"
+    ]
+  }
+}

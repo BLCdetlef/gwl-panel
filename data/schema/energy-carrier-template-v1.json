@@ -1,51 +1,37 @@
 {
   "format": "gwl-energy-carrier-template-v1",
-  "status": "draft",
-  "purpose": "Verbindliche Schablone für neue Energieträger innerhalb Stoff- und Energieströme.",
-  "hierarchy": {
-    "systemBoundary": {
-      "id": "eah_material_energy_flows",
-      "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme"
-    },
-    "domain": {
-      "id": "component_energy",
-      "type": "domain_component",
-      "label": "Energie"
-    },
-    "carrier": {
-      "id": "<carrier_id>",
-      "type": "domain_component",
-      "label": "<Energieträger>"
-    }
+  "status": "stable_v1",
+  "specRef": "energy-structure-spec-v1.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "<Energieträger / Energieform>"
   },
-  "requiredNodeRoles": [
-    {
-      "role": "production_flow",
-      "type": "system_flow",
-      "required": true,
-      "description": "Primärer physischer oder energetischer Produktions-/Bereitstellungsstrom."
-    },
-    {
-      "role": "demand_or_consumption_flow",
-      "type": "system_flow",
-      "required": false,
-      "description": "Nachfrage- oder Verbrauchsgröße, getrennt von Produktion."
-    },
-    {
-      "role": "conversion_or_use_flow",
-      "type": "system_flow",
-      "required": false,
-      "description": "Nutzungs-/Umwandlungsgröße, z. B. Stromerzeugung, Raffineriedurchsatz oder Wärme."
-    },
-    {
-      "role": "emission_or_pressure_flow",
-      "type": "system_flow|pressure",
-      "required": false,
-      "description": "Nachgelagerte Emission oder Druckgröße; nie mit Produktion gleichsetzen."
-    }
+  "requiredSections": [
+    "corePrinciples",
+    "nodes",
+    "edges",
+    "measurements",
+    "boundaryInteractions",
+    "knowledgeGaps",
+    "actionScope",
+    "sources"
   ],
-  "requiredMeasurementFields": [
+  "carrierNode": {
+    "type": "domain_component",
+    "required": true
+  },
+  "measurementRoleOptions": [
+    "production_or_supply",
+    "installed_capacity",
+    "capacity_additions",
+    "demand_or_consumption",
+    "energy_generation",
+    "conversion_or_use",
+    "emission_or_pressure",
+    "change_metric"
+  ],
+  "measurementRequiredFields": [
     "id",
     "node",
     "geography",
@@ -57,38 +43,34 @@
     "interpretation",
     "sourceRefs"
   ],
-  "optionalMeasurementFields": [
+  "measurementOptionalFields": [
     "definition",
     "change",
     "uncertainty",
-    "derivedApproximation"
+    "derivedApproximation",
+    "shareOfGlobalElectricity"
   ],
-  "requiredSections": [
-    "corePrinciples",
-    "nodes",
-    "edges",
-    "measurements",
-    "boundaryInteractions",
-    "knowledgeGaps",
-    "actionScope",
-    "sources"
+  "boundaryInteractionRequiredFields": [
+    "id",
+    "boundaries",
+    "mechanism",
+    "evidenceStatus"
+  ],
+  "boundaryInteractionOptionalFields": [
+    "direction",
+    "caution"
   ],
   "validationRules": [
-    "Der Energieträger wird nur einmal im Graphen angelegt.",
-    "Produktion, Nachfrage/Verbrauch, Nutzung und Emissionen sind unterschiedliche Messrollen.",
-    "Einheiten werden nicht stillschweigend umgerechnet oder harmonisiert.",
-    "Abgeleitete Werte müssen explizit als derivedApproximation markiert sein.",
-    "Jede Verbindung zu einer Planetaren Grenze ist eine eigene boundaryInteraction.",
-    "Ein Energieträger darf nicht direkt als Planetare Grenze oder Gesundheitswirkung modelliert werden.",
-    "Gesundheitswirkungen benötigen einen vollständigen Expositionspfad.",
-    "Lokale Bergbau-/Förderwirkungen dürfen nicht ohne Beleg als globaler Wirkungswert dargestellt werden.",
-    "Vergleiche zwischen Energieträgern benötigen eine gemeinsame Bezugsgröße und eine dokumentierte Umrechnung."
-  ],
-  "uiRules": [
-    "Navigation: Stoff- und Energieströme → Energie → Energieträger.",
-    "Zuerst Messwerte, dann Verbindungen zu Planetaren Grenzen, danach Wissenslücken und Handlungsspielraum.",
-    "Jede PG-Verbindung erhält eine eigene Karte.",
-    "Durchsatzwert und Grenzwert müssen visuell klar unterschieden werden.",
-    "Technische Einheiten dürfen unterschiedlich bleiben."
+    "Energieträger nur einmal im Graphen anlegen.",
+    "Produktion, Nachfrage, installierte Leistung, Erzeugung und Emissionen semantisch getrennt halten.",
+    "TWh/Jahr, GW, Tonnen/Jahr, Barrel/Tag und EJ/Jahr nicht ohne dokumentierte Umrechnung vergleichen.",
+    "Abgeleitete Werte ausdrücklich als derivedApproximation kennzeichnen.",
+    "Eine Planetare Grenze = eine eigene Kante = eine eigene Verbindungskarte.",
+    "Keine pauschale negative Emission für Wind oder Solar.",
+    "Keinen fossilen Prozess wie Förderung oder Verbrennung für Wind/Solar erzwingen.",
+    "Keine erneuerbaren Messrollen wie installierte Kapazität für Brennstoffe erzwingen, wenn sie fachlich nicht passen.",
+    "Gesundheitswirkung nur über vollständigen Expositionspfad.",
+    "Wissenslücken nicht durch scheinpräzise Werte ersetzen.",
+    "Handlungsspielraum nicht als naturwissenschaftlichen Messwert darstellen."
   ]
 }
