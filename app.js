@@ -487,27 +487,37 @@ function syncBoundaryModeClass() {
   document.body.classList.toggle("nutrient-mode", isNutrientBoundaryActive());
 }
 
+
+function setStandardEffectBlocksVisible(visible) {
+  const targets = [
+    timeSlider?.closest(".time-card"),
+    metricValue?.closest(".metrics"),
+    findingText?.closest(".accordion"),
+    effectPath?.closest(".accordion"),
+    uncertaintyValue?.closest(".accordion")
+  ].filter(Boolean);
+
+  targets.forEach(element => {
+    element.style.display = visible ? "" : "none";
+  });
+}
+
 function renderNutrientShell() {
   const state = getActiveViewState();
-
-  // Standard-PG-Elemente werden bei Nährstoffkreisläufe bewusst nicht benutzt.
   if (!isNutrientBoundaryActive()) return;
 
-  if (timeStatus) timeStatus.textContent = "";
-  if (focusEyebrow) focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
-
+  if (focusType) focusType.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
   if (focusTitle) {
     focusTitle.textContent =
       state.componentId === "nitrogen" ? "Stickstoff" :
       state.componentId === "phosphorus" ? "Phosphor" :
       "Nährstoffkreisläufe";
   }
-
   if (focusSummary) {
     focusSummary.textContent =
       state.componentId
-        ? "Die Messwerte und Wirkungspfade dieses Teilbereichs werden direkt darunter aus dem Wissensnetz gezeigt."
-        : "Wähle Stickstoff oder Phosphor, um den passenden Ausschnitt des Wissensnetzes zu öffnen.";
+        ? "Messwerte, Wirkungspfade und Querverbindungen dieses Teilbereichs."
+        : "Wähle Stickstoff oder Phosphor.";
   }
 }
 
@@ -516,6 +526,7 @@ function renderKnowledgePanel() {
   const state = getActiveViewState();
 
   syncBoundaryModeClass();
+  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients");
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
@@ -648,7 +659,7 @@ function setLink(label, url) { sourceLink.textContent = label || "–"; if (url)
 
 
 function setNutrientPlaceholderState() {
-  focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
+  focusType.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
   focusTitle.textContent = selectedDomainComponent
     ? (selectedDomainComponent === "nitrogen" ? "Stickstoff" : "Phosphor")
     : "Nährstoffkreisläufe";
