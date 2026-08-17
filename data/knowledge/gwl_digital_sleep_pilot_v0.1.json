@@ -1,0 +1,398 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Digitalisierung / abendliche Bildschirmnutzung / Schlaf",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Technologische & soziale Umwelt",
+    "domainComponent": "Digitalisierung",
+    "subComponent": "Abendliche und nächtliche Bildschirmnutzung"
+  },
+  "corePrinciples": [
+    "Digitalisierung wird nicht pauschal als gesundheitsschädlich modelliert.",
+    "Allgemeine Bildschirmzeit, Nutzung am Abend und Nutzung im Bett sind unterschiedliche Expositionsknoten.",
+    "Nutzungstyp, Tageszeit, Interaktivität und sozialer Kontext können die Wirkung verändern.",
+    "Alter/Lebensphase ist Kontext der Evidenz und keine eigene Graph-Ebene.",
+    "Beobachtete Assoziationen werden nicht automatisch als Kausalität gespeichert.",
+    "Es gibt keinen wissenschaftlich etablierten globalen Bildschirmzeit-Grenzwert.",
+    "Schlafdauer, Einschlafzeit, Schlafqualität und Schlafstörung sind unterschiedliche Endpunkte."
+  ],
+  "nodes": [
+    {
+      "id": "eah_tech_social_environment",
+      "type": "eah_system_boundary",
+      "label": "Technologische & soziale Umwelt",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_digitalisation",
+      "type": "domain_component",
+      "label": "Digitalisierung"
+    },
+    {
+      "id": "state_connected_devices",
+      "type": "socio_technical_state",
+      "label": "Allgegenwärtige internetfähige Bildschirmgeräte"
+    },
+    {
+      "id": "exposure_evening_screen",
+      "type": "exposure",
+      "label": "Bildschirmnutzung am Abend"
+    },
+    {
+      "id": "exposure_screen_in_bed",
+      "type": "exposure",
+      "label": "Bildschirmnutzung im Bett"
+    },
+    {
+      "id": "exposure_interactive_screen_in_bed",
+      "type": "exposure",
+      "label": "Interaktive Bildschirmnutzung im Bett"
+    },
+    {
+      "id": "behavior_delayed_bedtime",
+      "type": "behavioral_mediator",
+      "label": "Spätere Schlafenszeit / verzögertes Zubettgehen"
+    },
+    {
+      "id": "effect_delayed_sleep_onset",
+      "type": "biological_effect",
+      "label": "Verzögerter Schlafbeginn"
+    },
+    {
+      "id": "effect_shorter_sleep",
+      "type": "biological_effect",
+      "label": "Kürzere Schlafdauer"
+    },
+    {
+      "id": "effect_sleep_disturbance",
+      "type": "biological_effect",
+      "label": "Schlafstörung / geringere Schlafqualität"
+    },
+    {
+      "id": "life_daytime_function",
+      "type": "life_outcome",
+      "label": "Tagesfunktion und Wohlbefinden"
+    },
+    {
+      "id": "life_health",
+      "type": "life_outcome",
+      "label": "Psychische und körperliche Gesundheit"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_tech_social_environment",
+      "to": "component_digitalisation",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_digitalisation",
+      "to": "state_connected_devices",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_connected_devices",
+      "to": "exposure_evening_screen",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_evening_screen",
+      "to": "exposure_screen_in_bed",
+      "relationType": "can_progress_to",
+      "evidenceStatus": "open",
+      "note": "Nicht jede abendliche Bildschirmnutzung findet im Bett statt."
+    },
+    {
+      "from": "exposure_screen_in_bed",
+      "to": "behavior_delayed_bedtime",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "exposure_interactive_screen_in_bed",
+      "to": "effect_delayed_sleep_onset",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "exposure_screen_in_bed",
+      "to": "effect_shorter_sleep",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_delayed_sleep_onset",
+      "to": "life_daytime_function",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_shorter_sleep",
+      "to": "life_daytime_function",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_sleep_disturbance",
+      "to": "life_health",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "brosnan_2024_bed_screen",
+      "sourceRefs": [
+        "src_brosnan_jama_2024"
+      ],
+      "design": "prospective repeated-measures observational study",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "ageRange": {
+          "min": 11,
+          "max": 14.9,
+          "unit": "years"
+        }
+      },
+      "effectEstimates": [
+        {
+          "exposure": "zusätzliche 10 Minuten Bildschirmzeit im Bett",
+          "outcome": "Gesamtschlafdauer",
+          "estimate": "-3 Minuten Schlaf",
+          "confidenceInterval": "-6 bis -1 Minute",
+          "relationType": "associated_with"
+        },
+        {
+          "exposure": "zusätzliche 10 Minuten interaktive Bildschirmzeit im Bett",
+          "outcome": "Schlafbeginn",
+          "estimate": "+10 Minuten späterer Schlafbeginn",
+          "confidenceInterval": "+4 bis +16 Minuten",
+          "relationType": "associated_with"
+        }
+      ],
+      "interpretation": "Nicht jede Bildschirmnutzung vor dem Schlaf war gleichermaßen mit schlechterem Schlaf verbunden; besonders Nutzung im Bett und interaktive Nutzung zeigten relevante Zusammenhänge.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "nagata_2024_bedtime_behaviors",
+      "sourceRefs": [
+        "src_nagata_jah_2024"
+      ],
+      "design": "prospective cohort study, 1-year follow-up",
+      "populationSize": 9398,
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "ageRange": {
+          "min": 11,
+          "max": 12,
+          "unit": "years"
+        }
+      },
+      "finding": "Mehrere Bildschirmverhaltensweisen zur Schlafenszeit waren mit kürzerer Schlafdauer und mehr Schlafstörungen ein Jahr später verbunden.",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "burnell_2024_objective_smartphone",
+      "sourceRefs": [
+        "src_burnell_2024"
+      ],
+      "design": "14-day intensive longitudinal observational study",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "meanAge": 16.49,
+        "ageSD": 0.63
+      },
+      "finding": "Nächtliche, nicht aber allgemeine tagsüber erfasste Smartphonenutzung war mit Schlafoutcomes verbunden.",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "brosnan_10min_inbed_sleep_duration",
+      "node": "effect_shorter_sleep",
+      "geography": "Neuseeland",
+      "period": "Studie publiziert 2024",
+      "metric": "Zusammenhang: zusätzliche Bildschirmzeit im Bett",
+      "value": -3,
+      "unit": "minutes_total_sleep_per_10_minutes_screen",
+      "display": "10 Min mehr im Bett → im Mittel 3 Min weniger Schlaf",
+      "uncertainty": "95%-KI: 1 bis 6 Minuten weniger Schlaf",
+      "interpretation": "Studienbezogener Effektparameter, kein Grenzwert und keine universelle Dosis-Wirkungs-Regel.",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "ageRange": {
+          "min": 11,
+          "max": 14.9,
+          "unit": "years"
+        }
+      },
+      "sourceRefs": [
+        "src_brosnan_jama_2024"
+      ]
+    },
+    {
+      "id": "brosnan_interactive_sleep_onset",
+      "node": "effect_delayed_sleep_onset",
+      "geography": "Neuseeland",
+      "period": "Studie publiziert 2024",
+      "metric": "Zusammenhang: interaktive Bildschirmnutzung im Bett",
+      "value": 10,
+      "unit": "minutes_later_sleep_onset_per_10_minutes_interactive_screen",
+      "display": "10 Min mehr interaktive Nutzung → im Mittel 10 Min späterer Schlafbeginn",
+      "uncertainty": "95%-KI: 4 bis 16 Minuten später",
+      "interpretation": "Studienbezogener Zusammenhang; nicht auf alle Altersgruppen und Nutzungstypen übertragbar.",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "ageRange": {
+          "min": 11,
+          "max": 14.9,
+          "unit": "years"
+        }
+      },
+      "sourceRefs": [
+        "src_brosnan_jama_2024"
+      ]
+    }
+  ],
+  "systemContext": {
+    "whoEurope2025": {
+      "finding": "WHO/Europe beschreibt die Evidenz zu digitalen Technologien und Wohlbefinden junger Menschen als gemischt; positive und negative Wirkungen können gleichzeitig auftreten, Zusammenhänge können bidirektional sein und hängen von individuellen sowie Umweltfaktoren ab.",
+      "modelRule": "Digitalisierung erhält keinen pauschalen Risikostatus. Wirkung wird auf konkreten Nutzungspfaden bewertet.",
+      "sourceRefs": [
+        "src_who_europe_2025"
+      ]
+    }
+  },
+  "healthContext": {
+    "bodymapStatus": "system_level_only",
+    "systemImpacts": [
+      {
+        "system": "sleep",
+        "label": "Schlaf / zirkadiane und neurobehaviorale Funktion",
+        "evidenceStatus": "moderate",
+        "note": "Kein einzelner Organmarker. Schlaf ist ein systemischer Funktionszustand."
+      }
+    ],
+    "bodymapRule": "Keinen Organmarker allein aufgrund von Bildschirmnutzung aktivieren."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_screen_time_definition",
+      "question": "Welche digitale Expositionsgröße ist am aussagekräftigsten: gesamte Bildschirmzeit, Nutzung am Abend, Nutzung im Bett oder interaktive Nutzung?",
+      "priority": "very_high",
+      "workingDecision": "Zeitpunkt und Nutzungskontext sollen Vorrang vor einer pauschalen Gesamtscreenzeit haben."
+    },
+    {
+      "id": "gap_causality",
+      "question": "Wie stark sind die beobachteten Zusammenhänge kausal?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_bidirectionality",
+      "question": "Wie modellieren wir, dass schlechter Schlaf auch zu mehr nächtlicher Gerätenutzung führen kann?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_content_type",
+      "question": "Wie stark unterscheiden sich soziale Medien, Gaming, Video, Lernen, Kommunikation und passive Nutzung hinsichtlich Schlafwirkung?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_age",
+      "question": "Welche Effekte unterscheiden sich zwischen Kindheit, früher Jugend, später Jugend und Erwachsenenalter?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_threshold",
+      "question": "Gibt es belastbare Schwellenwerte oder ist das Risiko kontinuierlich und kontextabhängig?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_exposure",
+        "label": "Eigene Exposition / eigenes Verhalten",
+        "level": "mittel_bis_hoch",
+        "rationale": "Gerätenutzung im Bett, Benachrichtigungen, Schlafenszeit und Nutzungsform sind teilweise individuell bzw. familiär beeinflussbar."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Veränderung der digitalen Umwelt",
+        "level": "gering",
+        "rationale": "Plattformdesign, Geschäftsmodelle und Geräteökosysteme sind individuell nur begrenzt veränderbar."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Plattformdesign, Jugendschutz, Bildung und Produktstandards können Nutzungskontexte strukturell beeinflussen."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll der Pilot primär 'Bildschirmnutzung im Bett' statt allgemeiner 'Screen Time' als Expositionsknoten verwenden?",
+    "Wie modellieren wir bidirektionale Beziehungen zwischen Schlaf und Gerätenutzung?",
+    "Ab wann rechtfertigt ein Schlafpfad die Kennzeichnung 'besonders relevant für Jugendliche'?",
+    "Welche Nutzungstypen sollten eigenständige Unterknoten werden?"
+  ],
+  "sources": [
+    {
+      "id": "src_brosnan_jama_2024",
+      "title": "Screen Use at Bedtime and Sleep Duration and Quality Among Youths",
+      "authors": "Brosnan B et al.",
+      "journal": "JAMA Pediatrics",
+      "year": 2024,
+      "type": "peer_reviewed_original_study",
+      "doi": "10.1001/jamapediatrics.2024.2914",
+      "url": "https://jamanetwork.com/journals/jamapediatrics/fullarticle/2822859"
+    },
+    {
+      "id": "src_nagata_jah_2024",
+      "title": "Bedtime Screen Use Behaviors and Sleep Outcomes in Early Adolescents: A Prospective Cohort Study",
+      "authors": "Nagata JM et al.",
+      "journal": "Journal of Adolescent Health",
+      "year": 2024,
+      "type": "peer_reviewed_original_study",
+      "doi": "10.1016/j.jadohealth.2024.06.006",
+      "url": "https://www.jahonline.org/article/S1054-139X(24)00289-1/fulltext"
+    },
+    {
+      "id": "src_burnell_2024",
+      "title": "Daily links between objective smartphone use and sleep among adolescents",
+      "authors": "Burnell K et al.",
+      "journal": "Journal of Adolescence",
+      "year": 2024,
+      "type": "peer_reviewed_original_study",
+      "doi": "10.1002/jad.12326",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38698757/"
+    },
+    {
+      "id": "src_who_europe_2025",
+      "title": "Addressing the digital determinants of youth mental health and well-being: policy brief",
+      "publisher": "WHO Regional Office for Europe",
+      "year": 2025,
+      "type": "official_policy_evidence_review",
+      "url": "https://www.who.int/europe/publications/i/item/WHO-EURO-2025-12187-51959-79685"
+    }
+  ]
+}
