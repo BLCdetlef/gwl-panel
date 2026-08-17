@@ -1,0 +1,72 @@
+{
+  "format": "gwl-energy-pilot-comparison-v1",
+  "status": "draft",
+  "basis": [
+    "gwl_oil_energy_pilot_v0.1b.json",
+    "gwl_coal_energy_pilot_v0.1.json"
+  ],
+  "commonStructure": {
+    "hierarchy": [
+      "eah_system_boundary: Stoff- und Energieströme",
+      "domain_component: Energie",
+      "domain_component: Energieträger",
+      "system_flow: messbarer globaler Durchsatz"
+    ],
+    "measurementRoles": [
+      "production",
+      "demand_or_consumption",
+      "use_or_conversion",
+      "emissions_or_downstream_pressure"
+    ],
+    "downstreamBlocks": [
+      "boundaryInteractions",
+      "knowledgeGaps",
+      "actionScope",
+      "sources"
+    ]
+  },
+  "oilSpecific": {
+    "carrier": "Erdöl",
+    "primaryPhysicalUnit": "barrel/day",
+    "distinctProcesses": [
+      "Förderung",
+      "Raffination",
+      "Verbrennung",
+      "petrochemische Nutzung"
+    ],
+    "planetaryLinks": [
+      "Klimawandel",
+      "Neue Substanzen",
+      "Süßwasser",
+      "Landnutzungsänderung"
+    ]
+  },
+  "coalSpecific": {
+    "carrier": "Kohle",
+    "primaryPhysicalUnit": "tonnes/year",
+    "distinctProcesses": [
+      "Bergbau",
+      "Verbrennung",
+      "Kohleverstromung",
+      "metallurgische Nutzung"
+    ],
+    "planetaryLinks": [
+      "Klimawandel",
+      "Atmosphärische Aerosole",
+      "Süßwasser",
+      "Landnutzungsänderung"
+    ]
+  },
+  "sharedLessons": [
+    "Energieträger bleiben eigenständige domain_component-Knoten.",
+    "Physische Durchsatzwerte werden als system_flow-Messungen gespeichert.",
+    "Produktion und Nachfrage/Verbrauch dürfen nicht zusammengelegt werden.",
+    "Nutzungs- oder Umwandlungsgrößen dürfen zusätzlich vorkommen, müssen aber semantisch getrennt bleiben.",
+    "CO2-Emissionen sind nachgelagerte Klimatreiber und keine Produktionsmessungen.",
+    "Planetare Grenzen sind Zielknoten, nicht Elternknoten der Energieträger.",
+    "Ein Energieträger kann mehrere Planetare Grenzen gleichzeitig beeinflussen.",
+    "Jede Planetare Grenze erhält eine eigene Kante und eine eigene Verbindungskarte.",
+    "Einheiten dürfen je Energieträger unterschiedlich sein; die Architektur darf keine Einheits-Harmonisierung erzwingen.",
+    "Vergleiche zwischen Energieträgern benötigen eine explizite Normierung, z. B. Energieinhalt, Stromerzeugung oder Emissionen pro Energieeinheit."
+  ]
+}

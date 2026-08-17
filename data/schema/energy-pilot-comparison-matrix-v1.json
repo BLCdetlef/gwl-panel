@@ -1,0 +1,74 @@
+[
+  {
+    "feature": "Hierarchie",
+    "oil": "Stoff- und Energieströme → Energie → Erdöl",
+    "coal": "Stoff- und Energieströme → Energie → Kohle",
+    "decision": "IDENTISCH / verbindlich"
+  },
+  {
+    "feature": "Primärer Durchsatz",
+    "oil": "Mio. Barrel/Tag",
+    "coal": "Mrd. t/Jahr",
+    "decision": "GLEICHE ROLLE, unterschiedliche Einheit"
+  },
+  {
+    "feature": "Produktion",
+    "oil": "vorhanden",
+    "coal": "vorhanden",
+    "decision": "PFLICHT für Pilot"
+  },
+  {
+    "feature": "Nachfrage/Verbrauch",
+    "oil": "vorhanden",
+    "coal": "vorhanden",
+    "decision": "EMPFOHLEN, aber getrennt"
+  },
+  {
+    "feature": "Nutzungs-/Umwandlungsgröße",
+    "oil": "flüssige Kraftstoffproduktion",
+    "coal": "Kohleverstromung",
+    "decision": "OPTIONAL, energieträgerspezifisch"
+  },
+  {
+    "feature": "CO2-Kontext",
+    "oil": "32 % fossile CO2-Emissionen",
+    "coal": "41 % fossile CO2-Emissionen",
+    "decision": "GLEICHE ROLLE, getrennte Messung"
+  },
+  {
+    "feature": "PG Klimawandel",
+    "oil": "ja",
+    "coal": "ja",
+    "decision": "typischer gemeinsamer Link"
+  },
+  {
+    "feature": "PG Süßwasser",
+    "oil": "ja",
+    "coal": "ja",
+    "decision": "optional, standort-/prozessabhängig"
+  },
+  {
+    "feature": "PG Landnutzungsänderung",
+    "oil": "ja",
+    "coal": "ja",
+    "decision": "optional, standort-/prozessabhängig"
+  },
+  {
+    "feature": "weitere PG",
+    "oil": "Neue Substanzen",
+    "coal": "Atmosphärische Aerosole",
+    "decision": "ENERGIETRÄGERSPEZIFISCH"
+  },
+  {
+    "feature": "Wissenslücken",
+    "oil": "5",
+    "coal": "5",
+    "decision": "PFLICHTBLOCK"
+  },
+  {
+    "feature": "Handlungsspielraum",
+    "oil": "vorhanden",
+    "coal": "vorhanden",
+    "decision": "PFLICHTBLOCK, qualitative Orientierung"
+  }
+]
