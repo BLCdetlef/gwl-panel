@@ -681,6 +681,83 @@ function renderOilEnergyMainView() {
     </div>`;
 }
 
+
+function renderCoalEnergyMainView() {
+  const network = knowledgeNetworks.coalEnergy;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Kohle-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const labels = {
+    world_coal_production_2024_iea: "Globale Kohleproduktion",
+    world_coal_demand_2024_iea: "Globale Kohlenachfrage / Verbrauch",
+    world_coal_power_2024_iea: "Stromerzeugung aus Kohle",
+    coal_co2_share_2024_gcb: "Kohle als fossiler CO₂-Treiber"
+  };
+
+  const cards = (network.measurements || []).map(m => {
+    const derived = m.derivedApproximation
+      ? `<div class="oil-derived"><strong>Abgeleitet:</strong> ${m.derivedApproximation.display}<br><span>${m.derivedApproximation.warning}</span></div>`
+      : "";
+    return `
+      <article class="measurement-card oil-measurement-card">
+        <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
+        <div class="measurement-card-value">${m.display || "–"}</div>
+        <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
+        <p>${m.interpretation || ""}</p>
+        ${derived}
+      </article>`;
+  }).join("");
+
+  const linkCards = (network.boundaryInteractions || []).map(x => `
+    <div class="oil-boundary-link">
+      <strong>↗ ${x.boundaries.slice(1).join(" / ")}</strong>
+      <p>${x.mechanism}</p>
+      <span>Evidenz: ${x.evidenceStatus || "–"}</span>
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.reason ? `<br><span>${g.reason}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <h2>Energie → Kohle</h2>
+      <p class="oil-lead">
+        Der Kohle-Pilot nutzt dieselbe <strong>system_flow</strong>-Logik wie Erdöl.
+        Produktion, Nachfrage, Stromerzeugung und CO₂-Emissionen bleiben getrennte Größen.
+        <strong>Tonnen pro Jahr sind kein planetarer Grenzwert.</strong>
+      </p>
+
+      <div class="oil-path">
+        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Kohle</span>
+      </div>
+
+      <h3>MESSWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+
+      <h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3>
+      <div class="oil-boundary-links">${linkCards}</div>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -728,17 +805,20 @@ function renderKnowledgePanel() {
       if (focusTitle) focusTitle.textContent = "Energie · Erdöl";
       if (focusSummary) focusSummary.textContent = "Messbarer globaler Stoff- und Energiestrom mit Verbindungen zu mehreren Planetaren Grenzen.";
       panel.innerHTML = renderOilEnergyMainView();
+    } else if (state.componentId === "coal") {
+      if (focusTitle) focusTitle.textContent = "Energie · Kohle";
+      if (focusSummary) focusSummary.textContent = "Globaler Kohlefluss mit Verbindungen zu Klimawandel, Aerosolen, Süßwasser und Landnutzungsänderung.";
+      panel.innerHTML = renderCoalEnergyMainView();
     } else {
       if (focusTitle) focusTitle.textContent = "Energie";
-      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl für den ersten Pilotdatensatz.";
+      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl oder Kohle.";
       panel.innerHTML = `
         <div class="extension-intro">
           <div class="eyebrow">STOFF- UND ENERGIESTRÖME</div>
           <h2>Energie</h2>
           <p>Energie ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
           <div class="extension-note">
-            Der erste reale Pilot liegt unter <strong>Erdöl</strong>. Weitere Energieträger
-            und Energieformen können später auf derselben Ebene ergänzt werden.
+            Reale Piloten sind bereits für <strong>Erdöl</strong> und <strong>Kohle</strong> hinterlegt.
           </div>
         </div>`;
     }

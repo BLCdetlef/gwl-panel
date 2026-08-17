@@ -1,0 +1,407 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Kohle / globale Kohle- und Energieströme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "Kohle"
+  },
+  "corePrinciples": [
+    "Kohleproduktion und Kohlenachfrage sind menschliche Stoff- und Energieströme, keine Planetaren Grenzen.",
+    "Tonnen pro Jahr sind Durchsatzmessungen und keine Grenzwerte.",
+    "Produktion, Nachfrage/Verbrauch, Stromerzeugung und CO2-Emissionen bleiben getrennte Messgrößen.",
+    "Kohle wird nur einmal als Knoten gespeichert; Verbindungen zu Klimawandel, Landnutzung, Süßwasser und Aerosolen erfolgen über belegte Wirkungspfade.",
+    "Thermalkohle und metallurgische Kohle dürfen in späteren Ausbaustufen getrennt werden, wenn die Fragestellung es erfordert."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_energy",
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "id": "component_coal",
+      "type": "domain_component",
+      "label": "Kohle"
+    },
+    {
+      "id": "flow_global_coal_production",
+      "type": "system_flow",
+      "label": "Globale Kohleproduktion"
+    },
+    {
+      "id": "flow_global_coal_demand",
+      "type": "system_flow",
+      "label": "Globale Kohlenachfrage / Kohleverbrauch"
+    },
+    {
+      "id": "flow_coal_power_generation",
+      "type": "system_flow",
+      "label": "Stromerzeugung aus Kohle"
+    },
+    {
+      "id": "flow_coal_co2",
+      "type": "system_flow",
+      "label": "CO₂-Emissionen aus Kohlenutzung"
+    },
+    {
+      "id": "activity_coal_mining",
+      "type": "human_activity",
+      "label": "Kohlebergbau"
+    },
+    {
+      "id": "activity_coal_combustion",
+      "type": "mechanism",
+      "label": "Verbrennung von Kohle"
+    },
+    {
+      "id": "activity_metallurgical_use",
+      "type": "human_activity",
+      "label": "Metallurgische Kohlenutzung"
+    },
+    {
+      "id": "pressure_co2_coal",
+      "type": "pressure",
+      "label": "CO₂-Emissionen aus Kohleverbrennung"
+    },
+    {
+      "id": "pressure_air_pollution_coal",
+      "type": "pressure",
+      "label": "Luftschadstoffe aus Kohleverbrennung"
+    },
+    {
+      "id": "pressure_land_coal",
+      "type": "pressure",
+      "label": "Flächenbeanspruchung durch Bergbau"
+    },
+    {
+      "id": "pressure_water_coal",
+      "type": "pressure",
+      "label": "Wasserbeanspruchung und lokale Gewässerbelastung"
+    },
+    {
+      "id": "pb_climate",
+      "type": "planetary_boundary",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "pb_aerosols",
+      "type": "planetary_boundary",
+      "label": "Atmosphärische Aerosole"
+    },
+    {
+      "id": "pb_freshwater",
+      "type": "planetary_boundary",
+      "label": "Süßwasser"
+    },
+    {
+      "id": "pb_land",
+      "type": "planetary_boundary",
+      "label": "Landnutzungsänderung"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_energy",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_energy",
+      "to": "component_coal",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_coal",
+      "to": "flow_global_coal_production",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_coal",
+      "to": "flow_global_coal_demand",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_global_coal_production",
+      "to": "activity_coal_mining",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_coal_mining",
+      "to": "pressure_land_coal",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_coal_mining",
+      "to": "pressure_water_coal",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "flow_global_coal_demand",
+      "to": "activity_coal_combustion",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_coal_combustion",
+      "to": "pressure_co2_coal",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_co2_coal",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_coal_combustion",
+      "to": "pressure_air_pollution_coal",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_air_pollution_coal",
+      "to": "pb_aerosols",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Die planetare Aerosolgrenze ist regional komplex; der Pilot behauptet keinen globalen Kohle-zu-Aerosol-Grenzwert."
+    },
+    {
+      "from": "pressure_water_coal",
+      "to": "pb_freshwater",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Wirkung ist stark standort- und fördermethodenabhängig."
+    },
+    {
+      "from": "pressure_land_coal",
+      "to": "pb_land",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "world_coal_production_2024_iea",
+      "node": "flow_global_coal_production",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Globale Kohleproduktion",
+      "value": 9.15,
+      "unit": "billion_tonnes_per_year",
+      "display": "9,15 Mrd. t/Jahr",
+      "interpretation": "Durchsatzmessung. Kein planetarer oder gesundheitlicher Grenzwert.",
+      "sourceRefs": [
+        "src_iea_coal_midyear_2025"
+      ]
+    },
+    {
+      "id": "world_coal_demand_2024_iea",
+      "node": "flow_global_coal_demand",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Globale Kohlenachfrage / Kohleverbrauch",
+      "value": 8.79,
+      "unit": "billion_tonnes_per_year",
+      "display": "8,79 Mrd. t/Jahr",
+      "change": "+1,5 % gegenüber 2023",
+      "interpretation": "Verbrauchs-/Nachfragegröße; nicht mit Produktion gleichsetzen.",
+      "sourceRefs": [
+        "src_iea_coal_midyear_2025"
+      ]
+    },
+    {
+      "id": "world_coal_power_2024_iea",
+      "node": "flow_coal_power_generation",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Stromerzeugung aus Kohle",
+      "value": 10766,
+      "unit": "TWh_per_year",
+      "display": "10.766 TWh/Jahr",
+      "interpretation": "Nutzungsgröße des Stromsektors; kein Maß für die gesamte Kohlenutzung.",
+      "sourceRefs": [
+        "src_iea_coal_midyear_2025"
+      ]
+    },
+    {
+      "id": "coal_co2_share_2024_gcb",
+      "node": "flow_coal_co2",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Anteil Kohle an fossilen CO₂-Emissionen",
+      "value": 41,
+      "unit": "percent_of_fossil_CO2",
+      "display": "41 % der fossilen CO₂-Emissionen",
+      "sourceValueFossilEmissions": "37,4 Gt CO₂ fossile Emissionen 2024",
+      "derivedApproximation": {
+        "value": 15.33,
+        "unit": "GtCO2_per_year",
+        "display": "ca. 15.33 Gt CO₂/Jahr",
+        "method": "37,4 Gt CO₂ × 41 %",
+        "warning": "Abgeleiteter Näherungswert aus dem publizierten Kohleanteil; kein separater Originalmesswert."
+      },
+      "interpretation": "Klimatreiber. Keine Aussage über sämtliche Umwelt- und Gesundheitswirkungen von Kohle.",
+      "sourceRefs": [
+        "src_gcb_2024"
+      ]
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "coal_to_climate",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Klimawandel"
+      ],
+      "mechanism": "Die Verbrennung von Kohle setzt große Mengen CO₂ frei und trägt dadurch stark zum anthropogenen Klimawandel bei.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "coal_to_aerosols",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Atmosphärische Aerosole"
+      ],
+      "mechanism": "Kohleverbrennung emittiert Schwefelverbindungen, Partikel und weitere Luftschadstoffe. Die planetare Aerosolwirkung ist jedoch regional und atmosphärisch komplex.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "coal_to_freshwater",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Süßwasser"
+      ],
+      "mechanism": "Bergbau, Aufbereitung und Kraftwerksbetrieb können lokal Wasser entnehmen und Gewässer belasten; ein einheitlicher globaler Wirkungswert wird nicht behauptet.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "coal_to_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Landnutzungsänderung"
+      ],
+      "mechanism": "Tagebau, Mineninfrastruktur und Abraum beanspruchen und verändern Flächen; Stärke und Dauer unterscheiden sich regional erheblich.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "id": "gap_coal_grades",
+      "question": "Wann müssen Thermalkohle und metallurgische Kohle als getrennte system_flow-Knoten geführt werden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_mass_energy_normalisation",
+      "question": "Wie vergleichen wir Kohle in Tonnen sinnvoll mit Erdöl in Barrel oder Energiegrößen in EJ, ohne physische Stoffströme und Energieinhalt zu vermischen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_coal_air_health",
+      "question": "Welche global belastbare Kette eignet sich für Kohleverbrennung → Luftschadstoffe → Exposition → Gesundheit, ohne regionale Unterschiede zu verwischen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_mining_water",
+      "question": "Welche Wasserkennzahlen des Kohlebergbaus sind global vergleichbar und welche müssen regional bleiben?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_land_rehabilitation",
+      "question": "Wie werden Flächenbeanspruchung und spätere Rekultivierung zeitlich im Graphen getrennt?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_demand",
+        "label": "Individuelle Nachfrage",
+        "level": "gering_bis_mittel",
+        "rationale": "Strom- und Konsumentscheidungen beeinflussen Nachfrage indirekt; Strommix und industrielle Kohlenutzung sind überwiegend strukturell geprägt."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering",
+        "rationale": "Kraftwerkspark, Bergbau, Stromnetze und Stahlproduktion sind nicht individuell direkt steuerbar."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Strommarkt, Netze, Erneuerbare, Speicher, Industrieprozesse, Effizienz und Klimapolitik können Kohlenutzung strukturell verändern."
+      }
+    ],
+    "primaryLevers": [
+      {
+        "actor": "Stromsektor",
+        "role": "Erneuerbare, Netze, Speicher, Effizienz, Ausstieg aus Kohleverstromung"
+      },
+      {
+        "actor": "Stahlindustrie",
+        "role": "Reduktion bzw. Substitution metallurgischer Kohle"
+      },
+      {
+        "actor": "Staaten & Regionen",
+        "role": "Energie-, Klima-, Bergbau- und Strukturpolitik"
+      },
+      {
+        "actor": "Kommunen & Regionen",
+        "role": "Strukturwandel und Nachnutzung ehemaliger Bergbauregionen"
+      },
+      {
+        "actor": "Haushalte",
+        "role": "Strom- und Nachfrageentscheidungen innerhalb des vorhandenen Energiesystems"
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll der primäre Kohle-Flow in Tonnen oder zusätzlich energienormiert in EJ gespeichert werden?",
+    "Ab wann sollten Thermalkohle und metallurgische Kohle getrennte Pfade bilden?",
+    "Wie modellieren wir Kohle → Aerosole, ohne die stark regionale planetare Aerosolgrenze zu vereinfachen?",
+    "Welche Wasser- und Flächenwirkungen des Bergbaus sind global aggregierbar?",
+    "Wie kann Rekultivierung als zeitlich nachgelagerter Gegenpfad dargestellt werden?"
+  ],
+  "sources": [
+    {
+      "id": "src_iea_coal_midyear_2025",
+      "title": "Coal Mid-Year Update 2025 – Overview",
+      "publisher": "International Energy Agency",
+      "type": "official_energy_analysis",
+      "year": 2025,
+      "url": "https://www.iea.org/reports/coal-mid-year-update-2025/overview"
+    },
+    {
+      "id": "src_gcb_2024",
+      "title": "Global Carbon Budget 2024",
+      "publisher": "Global Carbon Project",
+      "type": "peer_reviewed_global_dataset",
+      "year": 2024,
+      "url": "https://globalcarbonbudget.org/fossil-fuel-co2-emissions-increase-again-in-2024/"
+    }
+  ]
+}
