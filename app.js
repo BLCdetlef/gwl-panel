@@ -294,26 +294,6 @@ function renderKnowledgeCard(config) {
 }
 
 
-function getBoundarySubnav(boundaryId) {
-  const configured = window.GWL_BOUNDARY_SUBNAV || {};
-  return boundaryId === "nutrients" ? (configured.biogeochemical || []) : [];
-}
-function renderBoundarySubnav(boundaryId) {
-  const items = getBoundarySubnav(boundaryId);
-  if (!items.length) return "";
-  return `<div class="boundary-subnav" aria-label="Unterbereiche">${items.map(item => `
-    <button type="button" class="boundary-subnav-button ${selectedDomainComponent === item.id ? "active" : ""}"
-      data-domain-component="${item.id}">${item.label}</button>`).join("")}</div>`;
-}
-function bindBoundarySubnav(container) {
-  container?.querySelectorAll("[data-domain-component]").forEach(button => {
-    button.addEventListener("click", () => {
-      selectedDomainComponent = button.dataset.domainComponent;
-      selectedItemId = null;
-      renderKnowledgePanel();
-    });
-  });
-}
 function renderSharedEutrophicationNote() {
   return `<div class="shared-node-note">
     <div class="eyebrow">GEMEINSAMER KNOTEN</div>
@@ -507,17 +487,21 @@ function renderNutrientShell() {
   if (!isNutrientBoundaryActive()) return;
 
   if (focusType) focusType.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
+
   if (focusTitle) {
     focusTitle.textContent =
       state.componentId === "nitrogen" ? "Stickstoff" :
       state.componentId === "phosphorus" ? "Phosphor" :
       "Nährstoffkreisläufe";
   }
+
   if (focusSummary) {
     focusSummary.textContent =
-      state.componentId
-        ? "Messwerte, Wirkungspfade und Querverbindungen dieses Teilbereichs."
-        : "Wähle Stickstoff oder Phosphor.";
+      state.componentId === "nitrogen"
+        ? "Messwerte und Wirkungspfade des Stickstoffkreislaufs."
+        : state.componentId === "phosphorus"
+          ? "Messwerte und Wirkungspfade des Phosphorkreislaufs."
+          : "Wähle links Stickstoff oder Phosphor.";
   }
 }
 
@@ -534,31 +518,15 @@ function renderKnowledgePanel() {
   if (state.boundaryId === "nutrients") {
     renderNutrientShell();
 
-    panel.innerHTML = `
-      <div class="connections-head">
-        <div>
-          <div class="eyebrow">NÄHRSTOFFKREISLÄUFE</div>
-          <h2>Stickstoff und Phosphor</h2>
-          <p>
-            Wähle einen Teilbereich. Die Mitte zeigt dann ausschließlich
-            dessen Messwerte, Wirkungspfade und Querverbindungen.
-          </p>
-        </div>
-      </div>
-
-      ${renderBoundarySubnav("nutrients")}
-
-      ${state.componentId
-        ? renderNutrientMainView(state.componentId)
-        : `
-          <div class="nutrient-choice-note">
-            <strong>Wähle Stickstoff oder Phosphor.</strong>
-            <p>Erst danach werden die zugehörigen Daten und Wirkungspfade eingeblendet.</p>
-          </div>`}
-    `;
+    panel.innerHTML = state.componentId
+      ? renderNutrientMainView(state.componentId)
+      : `
+        <div class="nutrient-choice-note">
+          <strong>Wähle links Stickstoff oder Phosphor.</strong>
+          <p>Die Unterbereiche stehen direkt unter der Planetaren Grenze Nährstoffkreisläufe.</p>
+        </div>`;
 
     panel.hidden = false;
-    bindBoundarySubnav(panel);
     return;
   }
 
@@ -616,7 +584,12 @@ function renderKnowledgePanel() {
 function getSelectedScope() { return regionSelect.value; }
 function getBoundary(id) { return data.boundaries.find(boundary => boundary.id === id); }
 function getCurrentItem() { const boundary = getBoundary(selectedBoundaryId); return boundary?.items?.find(item => item.id === selectedItemId) || null; }
-function getVisibleItems(boundary) { return boundary?.items ? boundary.items.filter(item => item.scope === getSelectedScope()) : []; }
+function getVisibleItems(boundary) {
+  if (!boundary?.items) return [];
+  return boundary.items.filter(item =>
+    item.scope === "all" || item.scope === getSelectedScope()
+  );
+}
 function getTimePoints(item) { return item?.timePoints ? [...item.timePoints].sort((a,b)=>a.year-b.year) : []; }
 function renderRegionPath() { const scope = data.scopes[getSelectedScope()]; regionPath.textContent = scope?.path || scope?.label || "Global"; }
 
@@ -952,15 +925,41 @@ const boundary = getBoundary(boundaryId);
 function selectItem(boundaryId, itemId) {
   closeOrganOverlay();
   closeAllCauseOverlays();
-  selectedBoundaryId = boundaryId; selectedItemId = itemId;
+
+  selectedBoundaryId = boundaryId;
+  selectedItemId = itemId;
+
   const boundary = getBoundary(boundaryId);
-  const item = boundary.items.find(entry => entry.id === itemId); if (!item) return;
-  const points = getTimePoints(item); selectedYear = points.length ? points[points.length - 1].year : null; timeWindow = "data";
+  const item = boundary?.items?.find(entry => entry.id === itemId);
+  if (!item) return;
+
+  // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
+  // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
+  if (boundaryId === "nutrients") {
+    selectedDomainComponent = itemId;
+    selectedYear = null;
+    renderHealth(null);
+    renderBoundaries();
+    renderKnowledgePanel();
+    return;
+  }
+
+  selectedDomainComponent = null;
+  const points = getTimePoints(item);
+  selectedYear = points.length ? points[points.length - 1].year : null;
+  timeWindow = "data";
+
   focusType.textContent = `${item.type} · ${data.scopes[item.scope]?.label || item.scope}`;
   focusTitle.textContent = `${boundary.label} · ${item.label}`;
   focusSummary.textContent = item.summary;
+
   const point = points.find(entry => entry.year === selectedYear) || null;
-  setDetails(item, point); renderTime(item); renderHealth(point?.health || item.health || null); updateCauseButtons(item, point); renderBoundaries(); renderKnowledgePanel();
+  setDetails(item, point);
+  renderTime(item);
+  renderHealth(point?.health || item.health || null);
+  updateCauseButtons(item, point);
+  renderBoundaries();
+  renderKnowledgePanel();
 }
 
 function selectYear(year) {

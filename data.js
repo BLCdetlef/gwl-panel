@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.9a",
+  version: "0.9.10",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
@@ -236,7 +236,28 @@ window.GWL_DATA = {
         }
       ]
     },
-    { id: "nutrients", label: "Nährstoffkreisläufe", enabled: true },
+    {
+      id: "nutrients",
+      label: "Nährstoffkreisläufe",
+      enabled: true,
+      summary: "Stickstoff und Phosphor sind die beiden Teilbereiche der planetaren Grenze Nährstoffkreisläufe.",
+      items: [
+        {
+          id: "nitrogen",
+          scope: "all",
+          label: "Stickstoff",
+          type: "Teilbereich",
+          summary: "Menschlich veränderte Stickstoffflüsse wirken über mehrere Pfade auf Wasser, Klima, Ökosysteme und LEBEN."
+        },
+        {
+          id: "phosphorus",
+          scope: "all",
+          label: "Phosphor",
+          type: "Teilbereich",
+          summary: "Menschlich veränderte Phosphorflüsse wirken besonders über Gewässereinträge, Eutrophierung und Ökosysteme."
+        }
+      ]
+    },
     { id: "ocean", label: "Ozeanversauerung", enabled: false },
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
@@ -244,10 +265,3 @@ window.GWL_DATA = {
   ]
 };
 
-// v0.9.7 – Unterhierarchie, getrennt vom Wissensgraphen.
-window.GWL_BOUNDARY_SUBNAV = {
-  biogeochemical: [
-    { id: "nitrogen", label: "Stickstoff" },
-    { id: "phosphorus", label: "Phosphor" }
-  ]
-};
