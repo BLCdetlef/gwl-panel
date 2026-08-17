@@ -156,7 +156,7 @@ function renderActionScope(network) {
 
   return `
     <details class="knowledge-details action-scope">
-      <summary>Handlungsspielraum</summary>
+      <summary>${action.summaryLabel || "Handlungsspielraum"}</summary>
       <p class="action-method">${action.methodNote || ""}</p>
       <div class="action-dimensions">
         ${dimensions.map(dimension => `
@@ -315,7 +315,12 @@ function humanMeasurementLabel(item) {
     sh_network_2026: "EUA-/Nitratmessnetz Schleswig-Holstein",
     de_river_p_exceedance: "Gesamtphosphor in Flüssen",
     de_river_p_orientation_values: "Ökologischer Orientierungswert",
-    eu_freshwater_p_trend: "Phosphortrend in Europas Süßgewässern"
+    eu_freshwater_p_trend: "Phosphortrend in Europas Süßgewässern",
+    de_drinkingwater_pfas20_limit: "Trinkwasser-Grenzwert · PFAS-20",
+    de_drinkingwater_pfas4_limit: "Trinkwasser-Grenzwert · PFAS-4",
+    de_drinkingwater_screening: "Trinkwasser-Stichprobe Deutschland",
+    de_groundwater_monitoring_gap: "PFAS-Monitoring im Grundwasser",
+    efsa_twi_pfas4: "Gesundheitsbezogene Aufnahme · PFAS-4"
   };
   return labels[item?.id] || item?.node || item?.metric || item?.id || "Messwert";
 }
@@ -864,6 +869,25 @@ function closeCauseOverlay(slot) {
   if (slot === "life") causeOverlayLife.hidden = true;
 }
 
+
+function getPfasHealthView() {
+  const network = knowledgeNetworks.pfas;
+  if (!network) return null;
+
+  const critical = network.healthContext?.efsaCriticalEffect || "immunologische Wirkung";
+  return {
+    impacts: [],
+    systemImpacts: [
+      {
+        system: "immune",
+        label: "Immunsystem",
+        evidence: `EFSA: ${critical}.`,
+        note: "Kein belastbarer 0–100-%-Funktionswert und in der aktuellen Bodymap kein eigener Immunsystem-Kuller."
+      }
+    ]
+  };
+}
+
 function normalizeImpactOrgan(id) {
   if (id === "reproduction") return "femaleRepro";
   if (id === "eyes") return "eye";
@@ -931,7 +955,14 @@ function renderHealth(health) {
   currentHealth = health; clearHotspotStates();
   const impacts = health?.impacts || [];
   if (!impacts.length) {
-    organReadout.textContent = "Keine lokal belegte Organwirkung für die aktuelle Auswahl.";
+    const systemImpacts = health?.systemImpacts || [];
+    if (systemImpacts.length) {
+      organReadout.textContent = systemImpacts.map(impact =>
+        `${impact.label}: ${impact.evidence || "gesundheitsrelevanter Systembezug"} ${impact.note || ""}`
+      ).join(" ");
+    } else {
+      organReadout.textContent = "Keine lokal belegte Organwirkung für die aktuelle Auswahl.";
+    }
     if (selectedOrganId) openOrganOverlay(selectedOrganId, true);
     return;
   }
@@ -1038,7 +1069,7 @@ function selectItem(boundaryId, itemId) {
   if (boundaryId === "nutrients" || boundaryId === "novel") {
     selectedDomainComponent = itemId;
     selectedYear = null;
-    renderHealth(null);
+    renderHealth(boundaryId === "novel" && itemId === "pfas" ? getPfasHealthView() : null);
     renderBoundaries();
     renderKnowledgePanel();
     return;
