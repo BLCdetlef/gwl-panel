@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.7",
+  version: "0.9.7a",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
@@ -236,7 +236,7 @@ window.GWL_DATA = {
         }
       ]
     },
-    { id: "nutrients", label: "Nährstoffkreisläufe", enabled: false },
+    { id: "nutrients", label: "Nährstoffkreisläufe", enabled: true },
     { id: "ocean", label: "Ozeanversauerung", enabled: false },
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
