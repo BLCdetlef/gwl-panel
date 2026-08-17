@@ -593,3 +593,165 @@ a { color: inherit; }
 .shared-node-note{margin-top:9px;padding:9px 10px;border:1px dashed #bfc9c4;border-radius:10px;background:#f8faf9}
 .shared-node-note strong{display:block;margin:2px 0 3px;font-size:11px}
 .shared-node-note p{margin:0;color:var(--muted);font-size:9px;line-height:1.45}
+
+
+/* v0.9.8 – Nährstoffkreisläufe werden selbst zur WIRKUNG-Ansicht */
+.nutrient-main {
+  margin-top: 8px;
+  display: grid;
+  gap: 10px;
+}
+.nutrient-main-head {
+  padding: 10px 11px;
+  border: 1px solid #d5ddd9;
+  border-radius: 11px;
+  background: #fff;
+}
+.nutrient-main-head h2 {
+  margin: 2px 0 4px;
+  font-size: 17px;
+}
+.nutrient-main-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+.nutrient-measurement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+.nutrient-measurement-tile {
+  padding: 9px 10px;
+  border: 1px solid #d5ddd9;
+  border-radius: 10px;
+  background: #fff;
+}
+.nutrient-measurement-tile > span,
+.nutrient-measurement-tile > small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+}
+.nutrient-measurement-tile > strong {
+  display: block;
+  margin: 4px 0;
+  font-size: 13px;
+}
+.nutrient-measurement-tile > p {
+  margin: 4px 0 0;
+  font-size: 9px;
+  line-height: 1.4;
+}
+.nutrient-paths {
+  display: grid;
+  gap: 7px;
+}
+.nutrient-path-card {
+  padding: 9px 10px;
+  border: 1px solid #d5ddd9;
+  border-radius: 10px;
+  background: #fff;
+}
+.nutrient-path-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+.nutrient-path-head strong {
+  font-size: 11px;
+}
+.nutrient-path-head span {
+  color: var(--muted);
+  font-size: 9px;
+}
+.nutrient-path-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.path-node {
+  padding: 4px 6px;
+  border-radius: 7px;
+  background: #eef3f0;
+  font-size: 9px;
+  font-weight: 650;
+}
+.path-arrow {
+  color: #748078;
+  font-size: 10px;
+}
+.path-crosslinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+.path-crosslinks span {
+  padding: 3px 6px;
+  border: 1px solid #d2dad6;
+  border-radius: 999px;
+  background: #f8faf9;
+  font-size: 8px;
+}
+.nutrient-choice-note {
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px dashed #bdc8c2;
+  border-radius: 10px;
+  background: #fff;
+}
+.nutrient-choice-note strong {
+  font-size: 11px;
+}
+.nutrient-choice-note p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+/* Alte leere Standard-Messkarten bei Nährstoffkreisläufen ausblenden.
+   Der Kontextkopf bleibt sichtbar; die echten Daten folgen darunter. */
+body.nutrient-mode #metricValue,
+body.nutrient-mode #referenceValue,
+body.nutrient-mode #periodValue,
+body.nutrient-mode #sourceLink {
+  color: transparent;
+}
+body.nutrient-mode .detail-grid {
+  display: none;
+}
+body.nutrient-mode #findingText,
+body.nutrient-mode #effectPath,
+body.nutrient-mode #uncertaintyValue {
+  display: none;
+}
+body.nutrient-mode #findingText.closest,
+body.nutrient-mode #effectPath.closest {
+  display: none;
+}
+
+/* robustere Variante für die drei Standard-Details in der bestehenden Struktur */
+body.nutrient-mode .detail-grid + details,
+body.nutrient-mode .detail-grid + details + details,
+body.nutrient-mode .detail-grid + details + details + details {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .nutrient-measurement-grid { grid-template-columns: 1fr; }
+  .nutrient-main-head h2 { font-size: .95rem; }
+  .nutrient-main-head p,
+  .nutrient-measurement-tile > span,
+  .nutrient-measurement-tile > small,
+  .nutrient-measurement-tile > p,
+  .nutrient-path-head span,
+  .path-node {
+    font-size: .66rem;
+  }
+}

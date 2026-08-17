@@ -309,6 +309,7 @@ function bindBoundarySubnav(container) {
   container?.querySelectorAll("[data-domain-component]").forEach(button => {
     button.addEventListener("click", () => {
       selectedDomainComponent = button.dataset.domainComponent;
+      if (selectedBoundaryId === "nutrients") setNutrientPlaceholderState();
       renderKnowledgePanel();
     });
   });
@@ -321,72 +322,231 @@ function renderSharedEutrophicationNote() {
   </div>`;
 }
 
+
+function getMeasurement(network, id) {
+  return (network?.measurements || []).find(item => item.id === id) || null;
+}
+
+function humanMeasurementLabel(item) {
+  const labels = {
+    de_n_surplus: "Stickstoffüberschuss Landwirtschaft",
+    de_groundwater_2024: "Nitrat im Grundwasser",
+    sh_surface_near: "Nitrat im oberflächennahen Grundwasser",
+    sh_network_2026: "EUA-/Nitratmessnetz Schleswig-Holstein",
+    de_river_p_exceedance: "Gesamtphosphor in Flüssen",
+    de_river_p_orientation_values: "Ökologischer Orientierungswert",
+    eu_freshwater_p_trend: "Phosphortrend in Europas Süßgewässern"
+  };
+  return labels[item?.id] || item?.node || item?.metric || item?.id || "Messwert";
+}
+
+function renderMeasurementTile(item) {
+  if (!item) return "";
+  return `
+    <div class="nutrient-measurement-tile">
+      <span>${humanMeasurementLabel(item)}</span>
+      <strong>${measurementValue(item) || "–"}</strong>
+      <small>${item.geography || ""}${item.period ? ` · ${item.period}` : ""}</small>
+      ${item.interpretation ? `<p>${item.interpretation}</p>` : ""}
+    </div>`;
+}
+
+function renderPathCard(title, subtitle, steps, crosslinks = []) {
+  return `
+    <div class="nutrient-path-card">
+      <div class="nutrient-path-head">
+        <strong>${title}</strong>
+        ${subtitle ? `<span>${subtitle}</span>` : ""}
+      </div>
+      <div class="nutrient-path-flow">
+        ${steps.map((step, index) => `
+          <span class="path-node">${step}</span>
+          ${index < steps.length - 1 ? '<span class="path-arrow">→</span>' : ""}
+        `).join("")}
+      </div>
+      ${crosslinks.length ? `
+        <div class="path-crosslinks">
+          ${crosslinks.map(link => `<span>↗ ${link}</span>`).join("")}
+        </div>` : ""}
+    </div>`;
+}
+
+function renderNutrientMainView(componentId) {
+  const nitrate = knowledgeNetworks.nitrate;
+  const phosphorus = knowledgeNetworks.phosphorus;
+
+  if (componentId === "nitrogen") {
+    const m1 = getMeasurement(nitrate, "de_n_surplus");
+    const m2 = getMeasurement(nitrate, "de_groundwater_2024");
+
+    return `
+      <div class="nutrient-main">
+        <div class="nutrient-main-head">
+          <div class="eyebrow">PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE</div>
+          <h2>Stickstoff</h2>
+          <p>
+            Menschlich erzeugte Stickstoffüberschüsse verändern den Stickstoffkreislauf.
+            Daraus entstehen mehrere Wirkungspfade in Wasser, Atmosphäre, Ökosysteme und LEBEN.
+          </p>
+        </div>
+
+        <div class="nutrient-measurement-grid">
+          ${renderMeasurementTile(m1)}
+          ${renderMeasurementTile(m2)}
+        </div>
+
+        <div class="nutrient-paths">
+          ${renderPathCard(
+            "Grundwasser & Trinkwasser",
+            "ein Pfad über Nitrat",
+            ["Stickstoffüberschuss", "Nitrat", "Auswaschung", "Grundwasser", "Trinkwasser", "LEBEN"],
+            ["Süßwasser"]
+          )}
+          ${renderPathCard(
+            "Eutrophierung",
+            "gemeinsamer Pfad mit Phosphor",
+            ["Stickstoffeintrag", "Nährstoffanreicherung", "Eutrophierung", "aquatische Ökosysteme"],
+            ["Süßwasser", "Biosphärenintegrität"]
+          )}
+          ${renderPathCard(
+            "Klimawirkung",
+            "über Lachgas",
+            ["reaktiver Stickstoff", "mikrobielle Umsetzung", "N₂O", "Klimawandel"],
+            ["Klimawandel"]
+          )}
+        </div>
+
+        ${renderActionScope(nitrate)}
+      </div>`;
+  }
+
+  if (componentId === "phosphorus") {
+    const m1 = getMeasurement(phosphorus, "de_river_p_exceedance");
+    const m2 = getMeasurement(phosphorus, "de_river_p_orientation_values");
+
+    return `
+      <div class="nutrient-main">
+        <div class="nutrient-main-head">
+          <div class="eyebrow">PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE</div>
+          <h2>Phosphor</h2>
+          <p>
+            Phosphoreinträge aus Landwirtschaft, Erosion und Abwasser verändern vor allem
+            Oberflächengewässer und können Eutrophierung verstärken.
+          </p>
+        </div>
+
+        <div class="nutrient-measurement-grid">
+          ${renderMeasurementTile(m1)}
+          ${renderMeasurementTile(m2)}
+        </div>
+
+        <div class="nutrient-paths">
+          ${renderPathCard(
+            "Oberflächenwasser & Eutrophierung",
+            "zentraler Phosphorpfad",
+            ["Phosphoreintrag", "Oberflächenwasser", "Eutrophierung", "Algen / Cyanobakterien", "Ökosysteme"],
+            ["Süßwasser", "Biosphärenintegrität"]
+          )}
+          ${renderPathCard(
+            "Gesundheitsrelevanter Folgepfad",
+            "nur bei belastbarer Cyanotoxin-Exposition",
+            ["Eutrophierung", "Cyanobakterien", "Cyanotoxine", "Trink-/Badegewässer", "Exposition", "LEBEN"],
+            ["Gesundheitsbezug"]
+          )}
+        </div>
+
+        ${renderActionScope(phosphorus)}
+      </div>`;
+  }
+
+  return `
+    <div class="nutrient-choice-note">
+      <strong>Wähle Stickstoff oder Phosphor.</strong>
+      <p>Danach zeigt WIRKUNG nur den passenden Ausschnitt des Wissensnetzes.</p>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
+
   const isFreshwater = selectedBoundaryId === "freshwater";
   const isNutrients = selectedBoundaryId === "nutrients";
-  if (!isFreshwater && !isNutrients) { panel.hidden = true; return; }
+
+  if (!isFreshwater && !isNutrients) {
+    document.body.classList.remove("nutrient-mode");
+    panel.hidden = true;
+    return;
+  }
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
 
+  document.body.classList.toggle("nutrient-mode", isNutrients);
+
   if (isNutrients) {
-    const selected = selectedDomainComponent;
-    let content = `
-      <div class="connections-head"><div>
-        <div class="eyebrow">NÄHRSTOFFKREISLÄUFE</div>
-        <h2>Stickstoff und Phosphor</h2>
-        <p>Beide sind eigenständige Teilbereiche dieser Planetaren Grenze. Wähle einen Stoff, um nur den relevanten Ausschnitt des Wissensnetzes zu sehen.</p>
-      </div></div>
-      ${renderBoundarySubnav("nutrients")}`;
-
-    if (!selected) content += renderSharedEutrophicationNote();
-
-    if (selected === "nitrogen") content += `
-      <div class="connection-list">${renderKnowledgeCard({
-        key:"nitrate", network:nitrate, eyebrow:"NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
-        title:"Stickstoff: mehrere Wirkungspfade",
-        intro:"Stickstoff verzweigt unter anderem zu Nitrat im Grundwasser, Eutrophierung und klimawirksamem N₂O.",
-        chain:["Stickstoff","Stickstoffüberschuss","Auswaschung / Gewässereintrag","Nitrat / Nährstoffanreicherung","Grundwasser / Eutrophierung","Süßwasser / Biosphäre","LEBEN"],
-        previewMeasurements:["de_n_surplus","de_groundwater_2024"], interactionField:"interactions"
-      })}</div>${renderSharedEutrophicationNote()}`;
-
-    if (selected === "phosphorus") content += `
-      <div class="connection-list">${renderKnowledgeCard({
-        key:"phosphorus", network:phosphorus, eyebrow:"NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
-        title:"Phosphor: Gewässereintrag und Eutrophierung",
-        intro:"Phosphor gelangt über Landwirtschaft, Erosion, Abschwemmung und Abwasser in Gewässer und kann dort Eutrophierung verstärken.",
-        chain:["Phosphor","Eintrag","Abschwemmung / Abwasser","Oberflächenwasser","Eutrophierung","Biosphäre / Exposition","LEBEN"],
-        previewMeasurements:["de_river_p_exceedance","de_river_p_orientation_values"], interactionField:"boundaryInteractions"
-      })}</div>${renderSharedEutrophicationNote()}`;
-
-    panel.innerHTML=content; panel.hidden=false; bindBoundarySubnav(panel); return;
+    panel.innerHTML = `
+      <div class="connections-head">
+        <div>
+          <div class="eyebrow">NÄHRSTOFFKREISLÄUFE</div>
+          <h2>Stickstoff und Phosphor</h2>
+          <p>
+            Wähle einen Teilbereich. Die Darstellung zeigt dann nur die zugehörigen
+            Messwerte und Wirkungspfade.
+          </p>
+        </div>
+      </div>
+      ${renderBoundarySubnav("nutrients")}
+      ${renderNutrientMainView(selectedDomainComponent)}
+    `;
+    panel.hidden = false;
+    bindBoundarySubnav(panel);
+    return;
   }
 
   panel.innerHTML = `
-    <div class="connections-head"><div>
-      <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
-      <h2>Was mit Süßwasser zusammenhängt</h2>
-      <p>Diese Karten stammen fachlich aus <strong>Nährstoffkreisläufe</strong>. Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten Zustandswert der Planetaren Grenze Süßwasser.</p>
-    </div></div>
-    <div class="connections-boundary-note"><span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span><span>↘ Verbindung zu Süßwasser</span></div>
+    <div class="connections-head">
+      <div>
+        <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
+        <h2>Was mit Süßwasser zusammenhängt</h2>
+        <p>
+          Diese Karten stammen fachlich aus <strong>Nährstoffkreisläufe</strong>.
+          Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten
+          Zustandswert der Planetaren Grenze Süßwasser.
+        </p>
+      </div>
+    </div>
+
+    <div class="connections-boundary-note">
+      <span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span>
+      <span>↘ Verbindung zu Süßwasser</span>
+    </div>
+
     <div class="connection-list">
       ${renderKnowledgeCard({
-        key:"nitrate", network:nitrate, eyebrow:"NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
-        title:"Stickstoff → Nitrat im Grundwasser",
-        intro:"Ein Stickstoffpfad erreicht über Auswaschung das Grundwasser. Stickstoff besitzt daneben weitere Pfade, unter anderem zur Eutrophierung.",
-        chain:["Stickstoff","Stickstoffüberschuss","Auswaschung","Nitrat im Grundwasser","Grundwasser","Trinkwasser","LEBEN"],
-        previewMeasurements:["de_n_surplus","de_groundwater_2024"], interactionField:"interactions"
+        key: "nitrate",
+        network: nitrate,
+        eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
+        title: "Stickstoff → Nitrat im Grundwasser",
+        intro: "Ein Stickstoffpfad erreicht über Auswaschung das Grundwasser. Stickstoff trägt daneben auch zur Eutrophierung und über N₂O zum Klimawandel bei.",
+        chain: ["Stickstoff", "Stickstoffüberschuss", "Auswaschung", "Nitrat im Grundwasser", "Grundwasser", "Trinkwasser", "LEBEN"],
+        previewMeasurements: ["de_n_surplus", "de_groundwater_2024"],
+        interactionField: "interactions"
       })}
+
       ${renderKnowledgeCard({
-        key:"phosphorus", network:phosphorus, eyebrow:"NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
-        title:"Phosphor → Oberflächenwasser → Eutrophierung",
-        intro:"Phosphor gelangt über Abschwemmung, Erosion und Abwasser in Oberflächengewässer und verbindet Nährstoffkreisläufe mit Süßwasser und Biosphäre.",
-        chain:["Phosphor","Eintrag","Oberflächenwasser","Eutrophierung","Cyanobakterien","Exposition","LEBEN"],
-        previewMeasurements:["de_river_p_exceedance","de_river_p_orientation_values"], interactionField:"boundaryInteractions"
+        key: "phosphorus",
+        network: phosphorus,
+        eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
+        title: "Phosphor → Oberflächenwasser → Eutrophierung",
+        intro: "Phosphor gelangt über Abschwemmung, Erosion und Abwasser in Oberflächengewässer. Eutrophierung ist dabei ein gemeinsamer Folgeprozess von Stickstoff und Phosphor.",
+        chain: ["Phosphor", "Eintrag", "Oberflächenwasser", "Eutrophierung", "Cyanobakterien", "Exposition", "LEBEN"],
+        previewMeasurements: ["de_river_p_exceedance", "de_river_p_orientation_values"],
+        interactionField: "boundaryInteractions"
       })}
-    </div>${renderSharedEutrophicationNote()}`;
-  panel.hidden=false;
+    </div>
+  `;
+
+  panel.hidden = false;
 }
 
 function getSelectedScope() { return regionSelect.value; }
@@ -433,6 +593,25 @@ function renderBoundaries() {
 function mergeItemAndPoint(item, point) { return point ? { ...item, ...point, health: point.health || item.health } : item; }
 function setLink(label, url) { sourceLink.textContent = label || "–"; if (url) { sourceLink.href = url; sourceLink.target = "_blank"; } else { sourceLink.removeAttribute("href"); sourceLink.removeAttribute("target"); } }
 
+
+function setNutrientPlaceholderState() {
+  focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
+  focusTitle.textContent = selectedDomainComponent
+    ? (selectedDomainComponent === "nitrogen" ? "Stickstoff" : "Phosphor")
+    : "Nährstoffkreisläufe";
+  focusSummary.textContent = selectedDomainComponent
+    ? "Die konkreten Messwerte und Wirkungspfade werden direkt darunter aus dem Wissensnetz gezeigt."
+    : "Wähle Stickstoff oder Phosphor, um die zugehörigen Messwerte und Wirkungspfade zu öffnen.";
+
+  metricValue.textContent = "–";
+  referenceValue.textContent = "–";
+  periodValue.textContent = "–";
+  uncertaintyValue.textContent = "–";
+  findingText.textContent = "–";
+  effectPath.textContent = "–";
+  lifeNote.textContent = "–";
+  setLink("–", null);
+}
 function setDetails(item, point = null, noMeasurementYear = null) {
   if (!item) {
     metricValue.textContent = referenceValue.textContent = periodValue.textContent = uncertaintyValue.textContent = "–";
@@ -691,6 +870,7 @@ function closeOrganOverlay() {
 
 function selectBoundary(boundaryId) {
   selectedBoundaryId = boundaryId;
+  selectedDomainComponent = null;
   const boundary = getBoundary(boundaryId);
   const items = getVisibleItems(boundary);
   closeOrganOverlay();
