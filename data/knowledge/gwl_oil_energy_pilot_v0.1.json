@@ -1,6 +1,6 @@
 {
   "format": "gwl-knowledge-network-v1.3",
-  "version": "0.1-pilot",
+  "version": "0.1b-pilot",
   "topic": "Erdöl / globale Öl- und Energieströme",
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
@@ -294,13 +294,21 @@
       "evidenceStatus": "moderate"
     },
     {
-      "id": "oil_to_water_land",
+      "id": "oil_to_freshwater",
       "boundaries": [
         "Stoff- und Energieströme",
-        "Süßwasser",
+        "Süßwasser"
+      ],
+      "mechanism": "Förderung und Verarbeitung können lokal Wasserressourcen beanspruchen oder belasten; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "oil_to_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
         "Landnutzungsänderung"
       ],
-      "mechanism": "Förderung und Verarbeitung können lokal Flächen und Wasserressourcen beanspruchen oder belasten; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",
+      "mechanism": "Förderung, Infrastruktur und Verarbeitung können lokal Flächen beanspruchen und Landnutzung verändern; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",
       "evidenceStatus": "moderate"
     }
   ],
