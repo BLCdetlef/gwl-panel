@@ -826,3 +826,59 @@ body.nutrient-mode .connections-panel {
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+
+
+/* v0.9.15 – Stoff- und Energieströme / Erdöl */
+.oil-pilot h3 {
+  margin: 15px 0 7px;
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+.oil-lead { line-height: 1.5; }
+.oil-path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  margin: 10px 0 13px;
+  font-size: 9px;
+}
+.oil-path span {
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+}
+.measurement-grid {
+  display: grid;
+  gap: 8px;
+}
+.oil-measurement-card {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.measurement-card-label { font-size: 9px; font-weight: 700; }
+.measurement-card-value { margin-top: 3px; font-size: 16px; font-weight: 700; }
+.measurement-card-meta,
+.measurement-definition,
+.oil-derived span,
+.oil-boundary-link span { color: var(--muted); font-size: 9px; }
+.oil-measurement-card p,
+.oil-boundary-link p,
+.oil-pilot details p { font-size: 9px; line-height: 1.45; }
+.oil-derived {
+  margin-top: 7px;
+  padding: 7px;
+  border: 1px dashed var(--line);
+  border-radius: 7px;
+  font-size: 9px;
+}
+.oil-boundary-links { display: grid; gap: 7px; }
+.oil-boundary-link {
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+}

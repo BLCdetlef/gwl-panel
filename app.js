@@ -602,12 +602,91 @@ function renderNutrientShell() {
   }
 }
 
+
+function renderOilEnergyMainView() {
+  const network = knowledgeNetworks.oilEnergy;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Öl-/Energie-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const measurementLabels = {
+    world_oil_production_2023_eia: "Globale Ölproduktion",
+    world_oil_demand_2024_iea: "Globale Ölnachfrage / Verbrauch",
+    world_liquid_fuels_production_2024_eia: "Globale flüssige Kraftstoffproduktion",
+    oil_co2_share_2024_gcb: "Öl als fossiler CO₂-Treiber"
+  };
+
+  const cards = (network.measurements || []).map(m => {
+    const derived = m.derivedApproximation
+      ? `<div class="oil-derived"><strong>Abgeleitet:</strong> ${m.derivedApproximation.display}<br><span>${m.derivedApproximation.warning}</span></div>`
+      : "";
+    return `
+      <article class="measurement-card oil-measurement-card">
+        <div class="measurement-card-label">${measurementLabels[m.id] || m.metric || m.id}</div>
+        <div class="measurement-card-value">${m.display || "–"}</div>
+        <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
+        <p>${m.interpretation || ""}</p>
+        ${m.definition ? `<p class="measurement-definition">${m.definition}</p>` : ""}
+        ${derived}
+      </article>`;
+  }).join("");
+
+  const interactions = network.boundaryInteractions || [];
+  const linkCards = interactions.map(x => `
+    <div class="oil-boundary-link">
+      <strong>↗ ${x.boundaries.slice(1).join(" / ")}</strong>
+      <p>${x.mechanism}</p>
+      <span>Evidenz: ${x.evidenceStatus || "–"}</span>
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.reason ? `<br><span>${g.reason}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${d.level}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <h2>Energie → Erdöl</h2>
+      <p class="oil-lead">
+        Dieser Pilot misst menschlichen Stoff- und Energiedurchsatz. Produktion,
+        Nachfrage/Verbrauch und CO₂-Emissionen bleiben getrennte Größen.
+        <strong>Barrel pro Tag ist kein planetarer Grenzwert.</strong>
+      </p>
+
+      <div class="oil-path">
+        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Erdöl</span>
+      </div>
+
+      <h3>MESSWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+
+      <h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3>
+      <div class="oil-boundary-links">${linkCards}</div>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
 
   syncBoundaryModeClass();
-  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel");
+  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy");
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
@@ -637,6 +716,16 @@ function renderKnowledgePanel() {
           <strong>Wähle links PFAS.</strong>
         </div>`;
 
+    panel.hidden = false;
+    return;
+  }
+
+  if (state.boundaryId === "materials-energy") {
+    if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME";
+    if (focusTitle) focusTitle.textContent = "Energie · Erdöl";
+    if (focusSummary) focusSummary.textContent = "Messbarer globaler Stoff- und Energiestrom mit Verbindungen zu mehreren Planetaren Grenzen.";
+    renderHealth(null);
+    panel.innerHTML = renderOilEnergyMainView();
     panel.hidden = false;
     return;
   }
@@ -1126,8 +1215,8 @@ function selectItem(boundaryId, itemId) {
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
-  if (boundaryId === "nutrients" || boundaryId === "novel") {
-    selectedDomainComponent = itemId;
+  if (boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy") {
+    selectedDomainComponent = boundaryId === "materials-energy" ? "oil" : itemId;
     selectedYear = null;
     renderHealth(boundaryId === "novel" && itemId === "pfas" ? getPfasHealthView() : null);
     renderBoundaries();

@@ -1,9 +1,10 @@
 window.GWL_DATA = {
-  version: "0.9.14",
+  version: "0.9.15",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
-    pfas: "data/knowledge/gwl_pfas_pilot_v0.1.json"
+    pfas: "data/knowledge/gwl_pfas_pilot_v0.1.json",
+    oilEnergy: "data/knowledge/gwl_oil_energy_pilot_v0.1.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
@@ -284,7 +285,10 @@ window.GWL_DATA = {
       framework: "eah_extension",
       frameworkLabel: "Ergänzende Systemgrenze",
       summary: "Rohstoffentnahme, Materialdurchsatz und Energieverbrauch wirken häufig indirekt über Umweltveränderungen, Infrastruktur und Versorgungssysteme auf LEBEN.",
-      items: []
+      items: [
+        { id: "energy", label: "Energie", enabled: true },
+        { id: "oil", label: "↳ Erdöl", enabled: true }
+      ]
     },
     {
       id: "mental-load",
