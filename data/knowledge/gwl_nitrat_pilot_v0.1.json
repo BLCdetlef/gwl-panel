@@ -1,0 +1,305 @@
+{
+  "format": "gwl-knowledge-network-v1",
+  "version": "0.1-pilot",
+  "topic": "Nitrat im Grundwasser",
+  "corePrinciples": [
+    "Nitrat im Grundwasser ist kein direkter Kontrollparameter der Planetaren Grenze Süßwasser.",
+    "Ein Knoten darf mehreren Planetaren Grenzen zugeordnet sein.",
+    "Evidenz wird an einzelnen Verbindungen bewertet.",
+    "Gesundheitszustände werden nicht aus Umweltgrenzwerten abgeleitet."
+  ],
+  "planetaryBoundaryContext": {
+    "primaryBoundary": "Biogeochemische Flüsse / Nährstoffkreisläufe",
+    "affectedBoundaries": [
+      "Süßwasser",
+      "Biosphärenintegrität",
+      "Klimawandel"
+    ]
+  },
+  "measurements": [
+    {
+      "id": "de_n_surplus",
+      "node": "Stickstoffüberschuss Landwirtschaft",
+      "geography": "Deutschland",
+      "period": "1994–2023",
+      "metric": "Stickstoff-Gesamtbilanz, gleitendes 5-Jahresmittel",
+      "start": "117 kg N/(ha·a)",
+      "end": "70 kg N/(ha·a)",
+      "interpretation": "Anthropogener Pressure deutlich gesunken."
+    },
+    {
+      "id": "de_groundwater_2024",
+      "node": "Nitrat im Grundwasser",
+      "geography": "Deutschland",
+      "period": "2024",
+      "network": "EUA-Messnetz",
+      "sampleSize": 1147,
+      "result": "15,7 % der Messstellen > 50 mg/l",
+      "classes": [
+        {
+          "range": "0–10 mg/l",
+          "sharePercent": 47.0
+        },
+        {
+          "range": ">10–50 mg/l",
+          "sharePercent": 37.4
+        },
+        {
+          "range": ">50 mg/l",
+          "sharePercent": 15.7
+        }
+      ]
+    },
+    {
+      "id": "sh_surface_near",
+      "node": "Nitrat im oberflächennahen Grundwasser",
+      "geography": "Schleswig-Holstein",
+      "period": "Nährstoffbericht 2020",
+      "result": "ca. 28 % der oberflächennahen Messstellen > 50 mg/l"
+    },
+    {
+      "id": "sh_network_2026",
+      "node": "EUA-/Nitratmessnetz",
+      "geography": "Schleswig-Holstein",
+      "period": "Stand Juni 2026",
+      "result": "53 Messstellen; 40 repräsentieren landwirtschaftliche Nutzung und bilden zugleich das EU-Nitratmessnetz"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "activity_agriculture",
+      "type": "humanActivity",
+      "label": "Landwirtschaftliche Produktion"
+    },
+    {
+      "id": "pressure_n_surplus",
+      "type": "pressure",
+      "label": "Stickstoffüberschuss"
+    },
+    {
+      "id": "process_nitrate",
+      "type": "mechanism",
+      "label": "Nitratbildung im Boden"
+    },
+    {
+      "id": "process_leaching",
+      "type": "mechanism",
+      "label": "Auswaschung mit Sickerwasser"
+    },
+    {
+      "id": "state_groundwater_nitrate",
+      "type": "environmentState",
+      "label": "Nitrat im Grundwasser",
+      "boundary": "Süßwasser"
+    },
+    {
+      "id": "exposure_drinking_water",
+      "type": "exposure",
+      "label": "Aufnahme über Trinkwasser"
+    },
+    {
+      "id": "effect_methemoglobin",
+      "type": "biologicalEffect",
+      "label": "Methämoglobinbildung"
+    },
+    {
+      "id": "life_infants",
+      "type": "life",
+      "label": "Säuglingsgesundheit"
+    },
+    {
+      "id": "effect_eutrophication",
+      "type": "ecosystemEffect",
+      "label": "Eutrophierung",
+      "boundary": "Biosphärenintegrität"
+    },
+    {
+      "id": "effect_n2o",
+      "type": "earthSystemEffect",
+      "label": "Lachgasbildung",
+      "boundary": "Klimawandel"
+    },
+    {
+      "id": "interaction_drought",
+      "type": "interaction",
+      "label": "Dürre / Wiedervernässung ↔ Nitrattransport"
+    }
+  ],
+  "edges": [
+    {
+      "from": "activity_agriculture",
+      "to": "pressure_n_surplus",
+      "mechanism": "Düngung und Nährstoffströme erzeugen bei unvollständiger Nutzung Überschüsse.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_n_surplus",
+      "to": "process_nitrate",
+      "mechanism": "Reaktiver Stickstoff wird im Boden mikrobiell umgesetzt.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "process_nitrate",
+      "to": "process_leaching",
+      "mechanism": "Nitrat ist mobil und wird mit Sickerwasser verlagert.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "process_leaching",
+      "to": "state_groundwater_nitrate",
+      "mechanism": "Nitrat gelangt in Grundwasserleiter.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_groundwater_nitrate",
+      "to": "exposure_drinking_water",
+      "mechanism": "Grundwasser kann Rohwasser für Trinkwasser sein; Exposition hängt von Gewinnung und Aufbereitung ab.",
+      "evidenceStatus": "strong",
+      "caution": "Grundwasser-Messwert ist nicht identisch mit Trinkwasser-Exposition."
+    },
+    {
+      "from": "exposure_drinking_water",
+      "to": "effect_methemoglobin",
+      "mechanism": "Nitrat/Nitrit kann die Sauerstofftransportkapazität des Blutes beeinträchtigen.",
+      "evidenceStatus": "strong",
+      "sensitiveGroup": "Säuglinge"
+    },
+    {
+      "from": "effect_methemoglobin",
+      "to": "life_infants",
+      "mechanism": "Ausgeprägte Methämoglobinämie beeinträchtigt die Sauerstoffversorgung.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_n_surplus",
+      "to": "effect_eutrophication",
+      "mechanism": "Zusätzlicher reaktiver Stickstoff verändert Nährstoffverfügbarkeit und Artenzusammensetzung.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_n_surplus",
+      "to": "effect_n2o",
+      "mechanism": "Mikrobielle Stickstoffumsetzungen können N2O freisetzen.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "interaction_drought",
+      "to": "state_groundwater_nitrate",
+      "mechanism": "Trockenheit und Wiedervernässung verändern Retention, Mobilisierung, Fracht und Konzentration.",
+      "evidenceStatus": "moderate",
+      "direction": "context_dependent",
+      "caution": "Nicht als allgemeine Regel 'weniger Wasser = höhere Nitratkonzentration' darstellen."
+    }
+  ],
+  "interactions": [
+    {
+      "boundaries": [
+        "Nährstoffkreisläufe",
+        "Süßwasser"
+      ],
+      "type": "transfer",
+      "mechanism": "Stickstoffüberschuss wird als Nitrat in Grundwasser und Gewässer transportiert.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "boundaries": [
+        "Nährstoffkreisläufe",
+        "Biosphärenintegrität"
+      ],
+      "type": "amplification",
+      "mechanism": "Eutrophierung verändert Lebensräume und Artenzusammensetzung.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "boundaries": [
+        "Nährstoffkreisläufe",
+        "Klimawandel"
+      ],
+      "type": "amplification",
+      "mechanism": "Stickstoffüberschüsse begünstigen N2O-Emissionen.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "boundaries": [
+        "Klimawandel",
+        "Süßwasser",
+        "Nährstoffkreisläufe"
+      ],
+      "type": "contextDependent",
+      "mechanism": "Dürre, Wiedervernässung und veränderte Grundwasserneubildung beeinflussen Nitrattransport.",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "question": "Welche langjährige, konsistente Nitrat-Zeitreihe aus Schleswig-Holstein eignet sich für das Panel?",
+      "priority": "very_high"
+    },
+    {
+      "question": "Gibt es geeignete Messstellen oder Rohwasserdaten im Raum Lübeck mit langer Nitrat-Zeitreihe?",
+      "priority": "very_high"
+    },
+    {
+      "question": "Welche Verzögerungszeiten zwischen sinkendem Stickstoffüberschuss und Grundwasserreaktion gelten in norddeutschen Grundwasserleitern?",
+      "priority": "high"
+    },
+    {
+      "question": "Wie groß ist das Denitrifikationspotenzial der relevanten Grundwasserleiter?",
+      "priority": "high"
+    },
+    {
+      "question": "Wie verändern Dürre und Wiedervernässung Nitratfracht und -konzentration in Schleswig-Holstein?",
+      "priority": "high"
+    },
+    {
+      "question": "Welche gesundheitlichen Effekte unterhalb 50 mg/l sind kausal und quantitativ belastbar genug für das Panel?",
+      "priority": "medium",
+      "rule": "Bis zur Klärung keine Organ-Graustufe ableiten."
+    }
+  ],
+  "reviewQuestionsForExperts": [
+    "An welcher Stelle ist diese Kette zu linear oder fachlich zu grob?",
+    "Welche Messreihe würden Sie für Schleswig-Holstein verwenden?",
+    "Wie groß ist die zeitliche Verzögerung zwischen geändertem Stickstoffüberschuss und Grundwasserreaktion?",
+    "Wo macht Denitrifikation die Nitratkonzentration als alleinigen Belastungsindikator irreführend?",
+    "Welche Wechselwirkung mit Dürre oder Grundwasserneubildung ist quantitativ gut genug belegt?"
+  ],
+  "sources": [
+    {
+      "title": "Earth beyond six of nine planetary boundaries",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adh2458"
+    },
+    {
+      "title": "Stickstoffeintrag aus der Landwirtschaft",
+      "url": "https://www.umweltbundesamt.de/daten/umweltzustand-trends/land-forstwirtschaft/stickstoffeintrag-aus-der-landwirtschaft"
+    },
+    {
+      "title": "Grundwasserbeschaffenheit",
+      "url": "https://www.umweltbundesamt.de/daten/umweltzustand-trends/wasser/grundwasserbeschaffenheit"
+    },
+    {
+      "title": "FAQs zu Nitrat im Grund- und Trinkwasser",
+      "url": "https://www.umweltbundesamt.de/themen/wasser/grundwasser/nutzung-belastungen/faqs-zu-nitrat-im-grund-trinkwasser"
+    },
+    {
+      "title": "2. Nährstoffbericht Schleswig-Holstein",
+      "url": "https://www.schleswig-holstein.de/DE/fachinhalte/G/grundwasser/Downloads/naehrstoffbericht_2020.pdf?__blob=publicationFile&v=1"
+    },
+    {
+      "title": "EUA-, Nitratmessnetz Schleswig-Holstein",
+      "url": "https://umweltportal.schleswig-holstein.de/trefferanzeige?docuuid=b0932af6-ad47-4ca1-a3f7-2915149136f7"
+    },
+    {
+      "title": "WHO: Nitrate and Nitrite in Drinking-water",
+      "url": "https://www.who.int/docs/default-source/wash-documents/wash-chemicals/nitrate-nitrite-background-document.pdf"
+    },
+    {
+      "title": "Post-drought increase in regional-scale groundwater nitrate in southwest Germany",
+      "url": "https://freidok.uni-freiburg.de/files/219087/iQ8mHekJXdDsnACA/hyp.14307.pdf"
+    },
+    {
+      "title": "Droughts can reduce the nitrogen retention capacity of catchments",
+      "url": "https://hess.copernicus.org/articles/27/303/2023/hess-27-303-2023.pdf"
+    }
+  ]
+}
