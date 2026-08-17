@@ -1,0 +1,533 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Informationsumwelt / Desinformation / gesundheitsrelevante Entscheidungen",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Technologische & soziale Umwelt",
+    "domainComponent": "Informationsumwelt",
+    "subComponent": "Desinformation / irreführende Information"
+  },
+  "terminology": {
+    "misinformation": "Falsche oder irreführende Information unabhängig davon, ob Täuschungsabsicht nachgewiesen ist.",
+    "disinformation": "Falsche oder irreführende Information, die absichtlich zur Täuschung verbreitet wird.",
+    "modelRule": "Wenn eine Studie nur falsche Inhalte untersucht, ohne Täuschungsabsicht nachzuweisen, wird der Knoten als misinformation / irreführende Information codiert. 'Desinformation' wird nur verwendet, wenn Intentionalität belegt oder Teil des Untersuchungsdesigns ist."
+  },
+  "corePrinciples": [
+    "Informationsumwelt wird nicht pauschal als gesundheitsschädlich modelliert.",
+    "Exposition gegenüber falscher Information, Glaube an falsche Information und Weiterverbreitung sind unterschiedliche Knoten.",
+    "Desinformation wird nur dann als solche bezeichnet, wenn Täuschungsabsicht belegt ist; sonst bleibt der Oberbegriff Misinformation / irreführende Information.",
+    "Gesundheitsentscheidungen werden als behavioral_mediator oder life_outcome modelliert, nicht als direkte biologische Wirkung.",
+    "Eine experimentell veränderte Impfintention ist kein direkter Nachweis veränderten Impfverhaltens.",
+    "Assoziationen zwischen Fehlglauben und Gesundheitsverhalten werden nicht automatisch als Kausalität gespeichert.",
+    "Korrektur-, Accuracy-Prompt- und Prebunking-Interventionen werden als druckmindernde Gegenpfade modelliert.",
+    "Alter, Bildung, Vertrauen, politische Orientierung und Mediennutzung sind Kontextmerkmale, keine eigenen Hierarchieebenen."
+  ],
+  "nodes": [
+    {
+      "id": "eah_tech_social_environment",
+      "type": "eah_system_boundary",
+      "label": "Technologische & soziale Umwelt",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_information_environment",
+      "type": "domain_component",
+      "label": "Informationsumwelt"
+    },
+    {
+      "id": "state_high_information_density",
+      "type": "socio_technical_state",
+      "label": "Hohe Informationsdichte und schnelle digitale Verbreitung"
+    },
+    {
+      "id": "state_algorithmic_distribution",
+      "type": "socio_technical_state",
+      "label": "Plattformbasierte / algorithmische Verbreitung"
+    },
+    {
+      "id": "exposure_misinformation",
+      "type": "exposure",
+      "label": "Exposition gegenüber falscher oder irreführender Information"
+    },
+    {
+      "id": "exposure_disinformation",
+      "type": "exposure",
+      "label": "Exposition gegenüber absichtlich täuschender Desinformation"
+    },
+    {
+      "id": "effect_false_belief",
+      "type": "biological_effect",
+      "label": "Fehlüberzeugung / verzerrte Risikowahrnehmung"
+    },
+    {
+      "id": "behavior_share_false_info",
+      "type": "behavioral_mediator",
+      "label": "Weiterverbreitung falscher Inhalte"
+    },
+    {
+      "id": "behavior_vaccine_intent",
+      "type": "behavioral_mediator",
+      "label": "Impfintention / gesundheitsbezogene Entscheidungsabsicht"
+    },
+    {
+      "id": "behavior_public_health_compliance",
+      "type": "behavioral_mediator",
+      "label": "Befolgung gesundheitsbezogener Empfehlungen"
+    },
+    {
+      "id": "life_health_decision_quality",
+      "type": "life_outcome",
+      "label": "Qualität gesundheitsrelevanter Entscheidungen"
+    },
+    {
+      "id": "intervention_accuracy_prompt",
+      "type": "mechanism",
+      "label": "Accuracy Prompt / Aufmerksamkeit auf Richtigkeit"
+    },
+    {
+      "id": "intervention_prebunking",
+      "type": "mechanism",
+      "label": "Prebunking / psychologische Inokulation"
+    },
+    {
+      "id": "intervention_correction",
+      "type": "mechanism",
+      "label": "Korrektur / Fact-Check"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_tech_social_environment",
+      "to": "component_information_environment",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_information_environment",
+      "to": "state_high_information_density",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_high_information_density",
+      "to": "exposure_misinformation",
+      "relationType": "enables",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "state_algorithmic_distribution",
+      "to": "exposure_misinformation",
+      "relationType": "enables",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "exposure_misinformation",
+      "to": "effect_false_belief",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate",
+      "note": "Nicht jede Exposition führt zu Glauben; Wiederholung, Vorwissen, Motivation und Quellenvertrauen verändern den Effekt."
+    },
+    {
+      "from": "effect_false_belief",
+      "to": "behavior_vaccine_intent",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong",
+      "note": "Für bestimmte Impf-Misinformation existiert auch experimentelle Evidenz für veränderte Intention."
+    },
+    {
+      "from": "effect_false_belief",
+      "to": "behavior_public_health_compliance",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "behavior_vaccine_intent",
+      "to": "life_health_decision_quality",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate",
+      "note": "Intention ist nicht identisch mit tatsächlichem Verhalten."
+    },
+    {
+      "from": "exposure_misinformation",
+      "to": "behavior_share_false_info",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "behavior_share_false_info",
+      "to": "exposure_misinformation",
+      "relationType": "amplifies",
+      "evidenceStatus": "strong",
+      "note": "Rückkopplung: Teilen erhöht die potenzielle Exposition anderer."
+    },
+    {
+      "from": "intervention_accuracy_prompt",
+      "to": "behavior_share_false_info",
+      "relationType": "reduces",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "intervention_prebunking",
+      "to": "effect_false_belief",
+      "relationType": "reduces",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "intervention_correction",
+      "to": "effect_false_belief",
+      "relationType": "reduces",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "loomba_2021_vaccine_misinformation",
+      "sourceRefs": [
+        "src_loomba_2021"
+      ],
+      "design": "randomized controlled online experiment",
+      "geography": [
+        "United Kingdom",
+        "United States"
+      ],
+      "context": {
+        "lifeStage": [
+          "adulthood"
+        ]
+      },
+      "exposure": "recent online misinformation about COVID-19 vaccines",
+      "comparison": "factual information",
+      "outcome": "intention to accept a COVID-19 vaccine among participants initially saying they would definitely accept one",
+      "effectEstimates": [
+        {
+          "geography": "United Kingdom",
+          "estimate": "-6.2 percentage points",
+          "interval": "95th percentile interval: -8.5 to -3.9 percentage points"
+        },
+        {
+          "geography": "United States",
+          "estimate": "-6.4 percentage points",
+          "interval": "95th percentile interval: -8.8 to -4.0 percentage points"
+        }
+      ],
+      "interpretation": "Experimentelle Evidenz dafür, dass konkrete Impf-Misinformation kurzfristig Impfintention verändern kann. Der Endpunkt ist Intention, nicht tatsächliche Impfung.",
+      "evidenceStatus": "strong_for_intention"
+    },
+    {
+      "id": "roozenbeek_2020_global_susceptibility",
+      "sourceRefs": [
+        "src_roozenbeek_2020"
+      ],
+      "design": "cross-sectional multi-country survey",
+      "samples": [
+        {
+          "geography": "United Kingdom",
+          "n": 1050
+        },
+        {
+          "geography": "United Kingdom replication",
+          "n": 1150
+        },
+        {
+          "geography": "Ireland",
+          "n": 700
+        },
+        {
+          "geography": "United States",
+          "n": 700
+        },
+        {
+          "geography": "Spain",
+          "n": 700
+        },
+        {
+          "geography": "Mexico",
+          "n": 700
+        }
+      ],
+      "outcomes": [
+        "belief in COVID-19 misinformation",
+        "vaccine hesitancy",
+        "self-reported compliance with public-health guidance"
+      ],
+      "finding": "Höhere Anfälligkeit für COVID-19-Misinformation war mit höherer Impfzögerlichkeit und geringerer selbstberichteter Befolgung gesundheitsbezogener Empfehlungen verbunden.",
+      "relationType": "associated_with",
+      "interpretation": "Breiter internationaler Zusammenhang, aber keine experimentelle Kausalitätsaussage.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "pennycook_rand_2022_accuracy_prompts",
+      "sourceRefs": [
+        "src_pennycook_rand_2022"
+      ],
+      "design": "internal meta-analysis of randomized experiments",
+      "experiments": 20,
+      "participants": 26863,
+      "geography": "United States samples",
+      "intervention": "accuracy prompts before news-sharing decisions",
+      "outcome": "sharing intentions for false and true headlines",
+      "effectEstimates": [
+        {
+          "outcome": "false-news sharing intentions",
+          "estimate": "10% relative reduction compared with control"
+        },
+        {
+          "outcome": "sharing discernment",
+          "estimate": "71.7% increase relative to baseline sharing discernment in control"
+        }
+      ],
+      "interpretation": "Aufmerksamkeit auf Richtigkeit kann die Bereitschaft zum Teilen falscher Inhalte reduzieren, ohne im Mittel das Teilen wahrer Inhalte signifikant zu senken.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "roozenbeek_2022_inoculation",
+      "sourceRefs": [
+        "src_roozenbeek_2022_inoculation"
+      ],
+      "design": "randomized experiments plus social-media deployment",
+      "intervention": "short prebunking videos explaining common manipulation techniques",
+      "outcomes": [
+        "recognition of manipulation techniques",
+        "discernment",
+        "sharing decisions"
+      ],
+      "finding": "Kurze psychologische Inokulations-/Prebunking-Videos verbesserten die Widerstandsfähigkeit gegenüber manipulativen Inhalten in experimentellen Tests und zeigten Skalierbarkeit auf sozialen Plattformen.",
+      "interpretation": "Gegenpfad im Informationssystem; keine Garantie gegen jede Form von Misinformation.",
+      "evidenceStatus": "moderate_to_strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "loomba_uk_vaccine_intent_change",
+      "node": "behavior_vaccine_intent",
+      "geography": "United Kingdom",
+      "period": "Experiment 2020; publiziert 2021",
+      "metric": "Änderung der Impfintention nach Exposition gegenüber Impf-Misinformation",
+      "value": -6.2,
+      "unit": "percentage_points",
+      "display": "−6,2 Prozentpunkte Impfintention",
+      "uncertainty": "95th percentile interval: 3,9 bis 8,5 Prozentpunkte Rückgang",
+      "interpretation": "Experimenteller Effekt auf Intention in einer spezifischen COVID-19-Situation; kein allgemeiner Desinformations-Grenzwert.",
+      "sourceRefs": [
+        "src_loomba_2021"
+      ]
+    },
+    {
+      "id": "loomba_us_vaccine_intent_change",
+      "node": "behavior_vaccine_intent",
+      "geography": "United States",
+      "period": "Experiment 2020; publiziert 2021",
+      "metric": "Änderung der Impfintention nach Exposition gegenüber Impf-Misinformation",
+      "value": -6.4,
+      "unit": "percentage_points",
+      "display": "−6,4 Prozentpunkte Impfintention",
+      "uncertainty": "95th percentile interval: 4,0 bis 8,8 Prozentpunkte Rückgang",
+      "interpretation": "Experimenteller Effekt auf Intention in einer spezifischen COVID-19-Situation; kein allgemeiner Desinformations-Grenzwert.",
+      "sourceRefs": [
+        "src_loomba_2021"
+      ]
+    },
+    {
+      "id": "accuracy_prompt_false_sharing",
+      "node": "behavior_share_false_info",
+      "geography": "United States samples",
+      "period": "20 Experimente, 2017–2020; Meta-Analyse publiziert 2022",
+      "metric": "Änderung der Absicht, falsche Nachrichten zu teilen",
+      "value": -10,
+      "unit": "percent_relative_to_control",
+      "display": "10 % weniger Bereitschaft, falsche Inhalte zu teilen",
+      "interpretation": "Interventionseffekt von Accuracy Prompts; kein Maß für die gesamte reale Verbreitung von Desinformation.",
+      "sourceRefs": [
+        "src_pennycook_rand_2022"
+      ]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "health_decision_path",
+      "label": "Gesundheitsentscheidungen",
+      "chain": [
+        "Informationsumwelt",
+        "Exposition gegenüber falscher / irreführender Information",
+        "Fehlüberzeugung / verzerrte Risikowahrnehmung",
+        "Impf- oder Gesundheitsentscheidung",
+        "LEBEN"
+      ],
+      "evidenceStatus": "moderate_to_strong",
+      "caution": "Stärke und Richtung unterscheiden sich stark nach Thema, Vorwissen, Vertrauen und Entscheidung."
+    },
+    {
+      "id": "amplification_path",
+      "label": "Verstärkungsschleife",
+      "chain": [
+        "Falscher Inhalt",
+        "Teilen / Weiterverbreitung",
+        "mehr potenzielle Exposition",
+        "weitere Weiterverbreitung"
+      ],
+      "evidenceStatus": "strong_as_system_logic",
+      "caution": "Reale Reichweite hängt von Plattform, Netzwerkstruktur und algorithmischer Distribution ab."
+    },
+    {
+      "id": "counter_path",
+      "label": "Gegenpfad",
+      "chain": [
+        "Accuracy Prompt / Prebunking / Korrektur",
+        "höhere Wahrheitsunterscheidung",
+        "weniger Teilen falscher Inhalte / geringere Fehlüberzeugung"
+      ],
+      "evidenceStatus": "moderate_to_strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "no_direct_organ_marker",
+    "systemImpacts": [
+      {
+        "system": "decision_and_information_processing",
+        "label": "Informationsverarbeitung und gesundheitsrelevante Entscheidungen",
+        "evidenceStatus": "moderate",
+        "note": "Der Pilot belegt primär Veränderungen von Überzeugungen, Intentionen und Verhalten – keinen quantifizierten Organfunktionsverlust."
+      }
+    ],
+    "bodymapRule": "Keinen Organmarker allein aufgrund von Misinformation oder Desinformation aktivieren."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_intent",
+      "question": "Wie oft lässt sich bei realen Online-Inhalten tatsächlich nachweisen, dass falsche Inhalte absichtlich täuschend verbreitet wurden?",
+      "priority": "very_high",
+      "workingDecision": "Ohne belegte Intentionalität als Misinformation / irreführende Information codieren."
+    },
+    {
+      "id": "gap_exposure_measure",
+      "question": "Wie messen wir reale Desinformationsexposition belastbar: Reichweite, Impressionen, Wiederholungen, Verweildauer oder geglaubte Inhalte?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_belief_behavior",
+      "question": "Wann führt veränderter Glaube tatsächlich zu verändertem Gesundheitsverhalten?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_algorithm",
+      "question": "Wie groß ist der eigenständige Beitrag algorithmischer Empfehlung gegenüber Nutzerwahl und sozialer Weitergabe?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_bidirectionality",
+      "question": "Wie modellieren wir Selbstselektion: Menschen wählen häufiger Inhalte, die zu bestehenden Überzeugungen passen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_intervention_duration",
+      "question": "Wie lange halten Effekte von Accuracy Prompts, Prebunking und Korrekturen außerhalb experimenteller Situationen an?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_health_generalisation",
+      "question": "Welche Befunde aus COVID-19- und Impf-Misinformation lassen sich auf andere Gesundheitsbereiche übertragen?",
+      "priority": "very_high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_exposure",
+        "label": "Eigene Informationsnutzung",
+        "level": "mittel",
+        "rationale": "Quellenwahl, Teilen, Prüfen und Aufmerksamkeit für Richtigkeit sind individuell teilweise beeinflussbar; das Informationsangebot selbst nur begrenzt."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Veränderung der Informationsumwelt",
+        "level": "gering",
+        "rationale": "Plattformarchitektur, algorithmische Verteilung, Monetarisierung und koordinierte Kampagnen können Einzelne kaum direkt verändern."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Plattformdesign, Medienkompetenz, Transparenz, Fact-Checking, Prebunking, öffentliche Kommunikation und Regulierung können systemisch wirken."
+      }
+    ],
+    "primaryLevers": [
+      {
+        "actor": "Individuen",
+        "role": "Richtigkeit prüfen, nicht impulsiv weiterteilen, Quellen vergleichen"
+      },
+      {
+        "actor": "Plattformen",
+        "role": "Accuracy Prompts, Friktion, Empfehlungsdesign, Transparenz und Durchsetzung gegen koordinierte Manipulation"
+      },
+      {
+        "actor": "Medien & Fact-Checking",
+        "role": "Korrekturen, Quellenkontext und nachvollziehbare Evidenz"
+      },
+      {
+        "actor": "Bildung",
+        "role": "Medien-, Informations- und Statistikkompetenz"
+      },
+      {
+        "actor": "Gesundheitsinstitutionen",
+        "role": "frühe, klare und vertrauenswürdige Risikokommunikation"
+      },
+      {
+        "actor": "Politik & Regulierung",
+        "role": "Transparenz- und Plattformregeln unter Wahrung legitimer Meinungsfreiheit"
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll der GWL-Hauptknoten 'Desinformation' oder neutraler 'Falsche / irreführende Information' heißen?",
+    "Wie speichern wir Intentionalität, wenn sie nur vermutet, aber nicht belegt ist?",
+    "Welche Ebene ist bei Gesundheitsfolgen am robustesten: Fehlglaube, Intention oder tatsächliches Verhalten?",
+    "Wie vermeiden wir, dass politische oder normative Meinungsverschiedenheiten fälschlich als Desinformation codiert werden?",
+    "Wie modellieren wir Rückkopplungen zwischen Nutzerwahl, Plattformverteilung und Weiterverbreitung?"
+  ],
+  "sources": [
+    {
+      "id": "src_loomba_2021",
+      "title": "Measuring the impact of COVID-19 vaccine misinformation on vaccination intent in the UK and USA",
+      "authors": "Loomba S, de Figueiredo A, Piatek SJ, de Graaf K, Larson HJ",
+      "journal": "Nature Human Behaviour",
+      "year": 2021,
+      "type": "peer_reviewed_randomized_experiment",
+      "doi": "10.1038/s41562-021-01056-1",
+      "url": "https://www.nature.com/articles/s41562-021-01056-1"
+    },
+    {
+      "id": "src_roozenbeek_2020",
+      "title": "Susceptibility to misinformation about COVID-19 around the world",
+      "authors": "Roozenbeek J et al.",
+      "journal": "Royal Society Open Science",
+      "year": 2020,
+      "type": "peer_reviewed_multicountry_survey",
+      "doi": "10.1098/rsos.201199",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7657933/"
+    },
+    {
+      "id": "src_pennycook_rand_2022",
+      "title": "Accuracy prompts are a replicable and generalizable approach for reducing the spread of misinformation",
+      "authors": "Pennycook G, Rand DG",
+      "journal": "Nature Communications",
+      "year": 2022,
+      "type": "peer_reviewed_internal_meta_analysis_of_randomized_experiments",
+      "doi": "10.1038/s41467-022-30073-5",
+      "url": "https://www.nature.com/articles/s41467-022-30073-5"
+    },
+    {
+      "id": "src_roozenbeek_2022_inoculation",
+      "title": "Psychological inoculation improves resilience against misinformation on social media",
+      "authors": "Roozenbeek J et al.",
+      "journal": "Science Advances",
+      "year": 2022,
+      "type": "peer_reviewed_randomized_experiments",
+      "doi": "10.1126/sciadv.abo6254",
+      "url": "https://www.science.org/doi/10.1126/sciadv.abo6254"
+    }
+  ]
+}
