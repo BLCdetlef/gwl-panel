@@ -1047,6 +1047,95 @@ function renderDigitalSleepMainView() {
 }
 
 
+
+function renderGamingMainView() {
+  const network = knowledgeNetworks.gaming;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Gaming-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const evidenceCards = (network.measurements || []).filter(m => m.displayType === "study_evidence");
+  const valueCards = (network.measurements || []).filter(m => m.displayType === "study_value");
+
+  const cardHtml = m => `
+    <article class="measurement-card oil-measurement-card">
+      <div class="measurement-card-label">${m.metric || m.id}</div>
+      <div class="measurement-card-value">${m.display || "–"}</div>
+      <div class="measurement-card-meta">${m.period || ""}${m.geography ? ` · ${m.geography}` : ""}</div>
+      <p>${m.interpretation || ""}</p>
+      ${sourceLinksHtml(network, m.sourceRefs)}
+    </article>`;
+
+  const pathways = (network.pathways || []).map(p => `
+    <div class="oil-boundary-link">
+      <strong>${p.label}</strong>
+      <p>${(p.chain || []).join(" → ")}</p>
+      <span>Evidenz: ${p.evidenceStatus || "–"}</span>
+      ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <h2>Digitale Freizeit / Gaming</h2>
+      <p class="oil-lead">
+        Gaming wird nicht pauschal bewertet. Der Pilot trennt
+        <strong>sitzendes Gaming</strong>, <strong>problematisches Gaming</strong>
+        und <strong>aktive Videospiele / Exergames</strong>.
+      </p>
+
+      <div class="oil-path">
+        <span>Technologische & soziale Umwelt</span><b>→</b><span>Digitale Freizeit / Gaming</span>
+      </div>
+
+      <h3>STUDIENBELEGE</h3>
+      <div class="measurement-grid">${evidenceCards.map(cardHtml).join("")}</div>
+
+      <h3>STUDIENWERTE</h3>
+      <div class="measurement-grid">${valueCards.map(cardHtml).join("")}</div>
+
+      <h3>WIRKUNGSPFADE</h3>
+      <div class="oil-boundary-links">${pathways}</div>
+
+      <div class="extension-note">
+        <strong>Wichtige Trennung:</strong>
+        Hohe Spielzeit ist nicht automatisch problematisches Gaming.
+        Funktionsbeeinträchtigung und validierte Symptome werden getrennt von bloßer Nutzungsdauer geführt.
+      </div>
+
+      <div class="extension-note">
+        <strong>Gesundheitsbezug:</strong>
+        Schlaf und Bewegung werden zunächst als Systembezüge geführt.
+        Gaming allein aktiviert keinen Organmarker.
+      </div>
+
+      <details>
+        <summary>Quellen · frei zugänglich</summary>
+        ${allOpenSourcesHtml(network)}
+      </details>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderDisinformationMainView() {
   const network = knowledgeNetworks.disinformation;
   if (!network) {
@@ -1243,6 +1332,15 @@ function renderKnowledgePanel() {
       const systemHealth = knowledgeNetworks.disinformation?.healthContext?.systemImpacts?.[0];
       if (systemHealth && organReadout) {
         organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
+      }
+    } else if (state.componentId === "gaming") {
+      if (focusTitle) focusTitle.textContent = "Digitale Freizeit / Gaming";
+      if (focusSummary) focusSummary.textContent = "Sitzendes Gaming, problematisches Gaming und aktive Videospiele werden als unterschiedliche Nutzungspfade modelliert.";
+      panel.innerHTML = renderGamingMainView();
+
+      const impacts = knowledgeNetworks.gaming?.healthContext?.systemImpacts || [];
+      if (impacts.length && organReadout) {
+        organReadout.textContent = impacts.map(x => x.label).join(" · ") + ": systemischer Gesundheitsbezug; kein Organmarker allein aufgrund von Gaming.";
       }
     } else if (state.componentId === "information-environment") {
       if (focusTitle) focusTitle.textContent = "Informationsumwelt";

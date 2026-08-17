@@ -1,0 +1,84 @@
+{
+  "format": "gwl-tech-social-environment-structure",
+  "status": "draft",
+  "systemBoundary": {
+    "id": "eah_tech_social_environment",
+    "type": "eah_system_boundary",
+    "label": "Technologische & soziale Umwelt",
+    "framework": "eah_extension"
+  },
+  "navigation": [
+    {
+      "id": "digital_environment",
+      "label": "Digitale Umwelt",
+      "type": "domain_component",
+      "children": [
+        {
+          "id": "screen_device_use",
+          "label": "Bildschirm- & Gerätenutzung",
+          "type": "exposure_family",
+          "knowledge": "gwl_digital_sleep_pilot_v0.1.json",
+          "displayNote": "Schlaf ist Wirkungspfad, nicht Navigationskategorie."
+        },
+        {
+          "id": "gaming",
+          "label": "Gaming",
+          "type": "exposure_family",
+          "knowledge": "gwl_gaming_pilot_v0.1.json",
+          "branches": [
+            "sitzendes Gaming",
+            "problematisches Gaming",
+            "aktive Videospiele / Exergames"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "information_environment",
+      "label": "Informationsumwelt",
+      "type": "domain_component",
+      "children": [
+        {
+          "id": "disinformation",
+          "label": "Desinformation",
+          "type": "exposure_family",
+          "knowledge": "gwl_disinformation_pilot_v0.1.json"
+        }
+      ]
+    }
+  ],
+  "causalProcesses": [
+    {
+      "id": "digitalisation",
+      "label": "Digitalisierung",
+      "type": "socio_technical_change_process",
+      "navigation": false,
+      "role": "Übergeordneter menschengemachter Veränderungsprozess, der digitale Lebens- und Expositionsräume hervorbringt bzw. verändert.",
+      "affects": [
+        "digital_environment",
+        "information_environment"
+      ]
+    }
+  ],
+  "architectureRules": [
+    "Navigation beschreibt Umwelt-/Expositionsbereiche, nicht gesundheitliche Wirkungen.",
+    "Digitalisierung ist Veränderungsprozess/Ursache und keine Navigationskategorie.",
+    "Schlaf, Bewegung, Wohlbefinden und andere Gesundheitszustände bleiben Wirkungsknoten.",
+    "Dasselbe digitale Medium darf mehrere und auch gegensätzliche Wirkungspfade besitzen.",
+    "Informationsumwelt bleibt von der allgemeinen Digitalen Umwelt unterscheidbar, kann aber technisch mit ihr verknüpft sein.",
+    "Planetare Grenzen werden durch diese ergänzende Systemgrenze nicht umdefiniert.",
+    "Quantitative Studienwerte benötigen direkt sichtbare, öffentlich zugängliche wissenschaftliche Original-Volltextquellen."
+  ],
+  "migration": {
+    "old": [
+      "Digitalisierung → Schlaf",
+      "Digitale Freizeit / Gaming → Bewegung",
+      "Informationsumwelt → Desinformation"
+    ],
+    "new": [
+      "Digitale Umwelt → Bildschirm- & Gerätenutzung → [Wirkungspfad Schlaf]",
+      "Digitale Umwelt → Gaming → [Wirkungspfade Schlaf / Bewegung / Wohlbefinden]",
+      "Informationsumwelt → Desinformation → [Wirkungspfade Überzeugungen / Entscheidungen / LEBEN]"
+    ]
+  }
+}

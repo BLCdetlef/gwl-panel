@@ -1,0 +1,39 @@
+{
+  "format": "gwl-knowledge-index",
+  "status": "draft",
+  "systemBoundaries": [
+    {
+      "id": "eah_tech_social_environment",
+      "label": "Technologische & soziale Umwelt",
+      "groups": [
+        {
+          "id": "digital_environment",
+          "label": "Digitale Umwelt",
+          "items": [
+            {
+              "id": "screen_device_use",
+              "label": "Bildschirm- & Gerätenutzung",
+              "source": "data/knowledge/gwl_digital_sleep_pilot_v0.1.json"
+            },
+            {
+              "id": "gaming",
+              "label": "Gaming",
+              "source": "data/knowledge/gwl_gaming_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "information_environment",
+          "label": "Informationsumwelt",
+          "items": [
+            {
+              "id": "disinformation",
+              "label": "Desinformation",
+              "source": "data/knowledge/gwl_disinformation_pilot_v0.1.json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

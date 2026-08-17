@@ -9,7 +9,8 @@ window.GWL_DATA = {
     windEnergy: "data/knowledge/gwl_wind_energy_pilot_v0.1.json",
     solarEnergy: "data/knowledge/gwl_solar_energy_pilot_v0.1.json",
     digitalSleep: "data/knowledge/gwl_digital_sleep_pilot_v0.1.json",
-    disinformation: "data/knowledge/gwl_disinformation_pilot_v0.1.json"
+    disinformation: "data/knowledge/gwl_disinformation_pilot_v0.1.json",
+    gaming: "data/knowledge/gwl_gaming_pilot_v0.1.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
@@ -309,7 +310,8 @@ window.GWL_DATA = {
         { id: "digitalisation", scope: "all", label: "Digitalisierung", enabled: true },
         { id: "sleep", scope: "all", label: "↳ Schlaf", enabled: true },
         { id: "information-environment", scope: "all", label: "Informationsumwelt", enabled: true },
-        { id: "disinformation", scope: "all", label: "↳ Desinformation", enabled: true }
+        { id: "disinformation", scope: "all", label: "↳ Desinformation", enabled: true },
+        { id: "gaming", scope: "all", label: "Digitale Freizeit / Gaming", enabled: true }
       ]
     }
   ]
