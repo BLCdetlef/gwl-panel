@@ -1,5 +1,8 @@
 window.GWL_DATA = {
-  version: "0.9.3",
+  version: "0.9.4",
+  knowledgeSources: {
+    nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json"
+  },
   scopes: {
     global: { label: "Global", path: "Global" },
     europe: { label: "Europa", path: "Global → Europa" },

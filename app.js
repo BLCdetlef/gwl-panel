@@ -50,6 +50,8 @@ let selectedYear = null;
 let timeWindow = "data";
 let currentHealth = null;
 let selectedOrganId = null;
+let knowledgeNetworks = {};
+let knowledgePanel = null;
 
 let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
@@ -74,6 +76,168 @@ async function loadBodymapConfig() {
       layout: organ.layout || "stack"
     };
   });
+}
+
+
+async function loadKnowledgeNetworks() {
+  knowledgeNetworks = {};
+  const sources = data.knowledgeSources || {};
+  const entries = Object.entries(sources);
+  for (const [key, url] of entries) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) throw new Error(`${url}: ${response.status}`);
+      knowledgeNetworks[key] = await response.json();
+    } catch (error) {
+      console.warn("Wissensnetz konnte nicht geladen werden:", error);
+    }
+  }
+}
+
+function ensureKnowledgePanel() {
+  if (knowledgePanel) return knowledgePanel;
+  knowledgePanel = document.createElement("section");
+  knowledgePanel.id = "knowledgePanel";
+  knowledgePanel.className = "knowledge-panel";
+  knowledgePanel.hidden = true;
+
+  // Das Wissensnetz sitzt bewusst nach dem LEBEN-Hinweis im Feld WIRKUNG.
+  if (lifeNote?.parentNode) lifeNote.insertAdjacentElement("afterend", knowledgePanel);
+  return knowledgePanel;
+}
+
+function evidenceLabel(status) {
+  const labels = {
+    strong: "stark belegt",
+    moderate: "teilweise / kontextabhängig",
+    weak: "schwach belegt",
+    open: "offen"
+  };
+  return labels[status] || status || "nicht bewertet";
+}
+
+function actionDots(score, maxScore = 3) {
+  const safeScore = Math.max(0, Math.min(maxScore, Number(score) || 0));
+  return Array.from({ length: maxScore }, (_, index) =>
+    `<span class="action-dot ${index < safeScore ? "filled" : ""}"></span>`
+  ).join("");
+}
+
+function renderKnowledgePanel() {
+  const panel = ensureKnowledgePanel();
+  const network = knowledgeNetworks.nitrate;
+
+  // Nitrat ist bewusst als Querverbindung an Süßwasser sichtbar,
+  // obwohl die primäre planetare Grenze die Nährstoffkreisläufe sind.
+  if (selectedBoundaryId !== "freshwater" || !network) {
+    panel.hidden = true;
+    return;
+  }
+
+  const presentation = network.panelPresentation || {};
+  const primary = network.planetaryBoundaryContext?.primaryBoundary || "–";
+  const affected = network.planetaryBoundaryContext?.affectedBoundaries || [];
+  const strongEdges = (network.edges || []).filter(edge => edge.evidenceStatus === "strong").length;
+  const moderateEdges = (network.edges || []).filter(edge => edge.evidenceStatus === "moderate").length;
+  const gaps = network.knowledgeGaps || [];
+  const interactions = network.interactions || [];
+  const action = network.actionScope || {};
+  const dimensions = action.dimensions || [];
+  const levers = action.primaryLevers || [];
+
+  const coreChain = [
+    "Landwirtschaft",
+    "Stickstoffüberschuss",
+    "Nitratbildung",
+    "Auswaschung",
+    "Grundwasser",
+    "Trinkwasser",
+    "biologische Wirkung",
+    "LEBEN"
+  ];
+
+  panel.innerHTML = `
+    <div class="knowledge-head">
+      <div>
+        <div class="eyebrow">WISSENSNETZ · PILOT</div>
+        <h3>${presentation.title || "Nitrat im Grundwasser"}</h3>
+        <p>${presentation.subtitle || ""}</p>
+      </div>
+      <span class="knowledge-status">v${network.version || "Pilot"}</span>
+    </div>
+
+    <p class="knowledge-scope-note">${presentation.scopeNote || ""}</p>
+
+    <div class="knowledge-boundaries">
+      <span><strong>Ursprung:</strong> ${primary}</span>
+      <span><strong>berührt:</strong> ${affected.join(" · ")}</span>
+    </div>
+
+    <div class="knowledge-chain" aria-label="vereinfachter Wirkungspfad">
+      ${coreChain.map((step, index) =>
+        `<span class="knowledge-node">${step}</span>${index < coreChain.length - 1 ? '<span class="knowledge-arrow">→</span>' : ''}`
+      ).join("")}
+    </div>
+
+    <details class="knowledge-details">
+      <summary>Netzwerk, Evidenz & Wechselwirkungen</summary>
+      <div class="knowledge-grid">
+        <div class="knowledge-box">
+          <strong>Evidenz der Verbindungen</strong>
+          <p><span class="evidence-chip strong">${strongEdges} × ${evidenceLabel("strong")}</span>
+          ${moderateEdges ? `<span class="evidence-chip moderate">${moderateEdges} × ${evidenceLabel("moderate")}</span>` : ""}</p>
+          <small>Bewertet werden einzelne Pfeile im Netzwerk – nicht pauschal die ganze Kette.</small>
+        </div>
+        <div class="knowledge-box">
+          <strong>Wechselwirkungen</strong>
+          <ul>
+            ${interactions.slice(0, 4).map(item =>
+              `<li>${(item.boundaries || []).join(" ↔ ")}<br><span>${item.mechanism || ""}</span></li>`
+            ).join("")}
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="knowledge-details">
+      <summary>Wissenslücken (${gaps.length})</summary>
+      <div class="knowledge-gap-list">
+        ${gaps.map(gap =>
+          `<div class="knowledge-gap">
+            <span class="gap-priority">${String(gap.priority || "open").replaceAll("_", " ")}</span>
+            <p>${gap.question || ""}</p>
+          </div>`
+        ).join("")}
+      </div>
+    </details>
+
+    <details class="knowledge-details action-scope">
+      <summary>Handlungsspielraum</summary>
+      <p class="action-method">${action.methodNote || ""}</p>
+      <div class="action-dimensions">
+        ${dimensions.map(dimension => `
+          <div class="action-row">
+            <div class="action-title">
+              <strong>${dimension.label}</strong>
+              <span>${dimension.level || ""}</span>
+            </div>
+            <div class="action-dots" aria-label="${dimension.score || 0} von ${dimension.maxScore || 3}">
+              ${actionDots(dimension.score, dimension.maxScore)}
+            </div>
+            <p>${dimension.rationale || ""}</p>
+          </div>
+        `).join("")}
+      </div>
+      <div class="lever-box">
+        <strong>Wo liegen die größeren Hebel?</strong>
+        <div class="lever-list">
+          ${levers.map(lever => `<span><b>${lever.actor}</b> · ${lever.role}</span>`).join("")}
+        </div>
+      </div>
+      <p class="action-warning">${action.warning || ""}</p>
+    </details>
+  `;
+  panel.hidden = false;
 }
 
 
@@ -388,7 +552,7 @@ function selectBoundary(boundaryId) {
   focusType.textContent = `Grundlage · ${data.scopes[getSelectedScope()]?.label || ""}`;
   focusTitle.textContent = boundary.label;
   focusSummary.textContent = `Für ${data.scopes[getSelectedScope()]?.label || "diese Ebene"} ist in diesem Prototyp noch keine passende Messreihe hinterlegt. Die räumliche Ebene bleibt trotzdem Teil der späteren Struktur.`;
-  setDetails(null); renderTime(null); renderHealth(null); renderBoundaries();
+  setDetails(null); renderTime(null); renderHealth(null); renderBoundaries(); renderKnowledgePanel();
 }
 
 function selectItem(boundaryId, itemId) {
@@ -402,14 +566,14 @@ function selectItem(boundaryId, itemId) {
   focusTitle.textContent = `${boundary.label} · ${item.label}`;
   focusSummary.textContent = item.summary;
   const point = points.find(entry => entry.year === selectedYear) || null;
-  setDetails(item, point); renderTime(item); renderHealth(point?.health || item.health || null); updateCauseButtons(item, point); renderBoundaries();
+  setDetails(item, point); renderTime(item); renderHealth(point?.health || item.health || null); updateCauseButtons(item, point); renderBoundaries(); renderKnowledgePanel();
 }
 
 function selectYear(year) {
   const item = getCurrentItem(); if (!item) return; selectedYear = year;
   const points = getTimePoints(item); const point = points.find(entry => entry.year === year) || null; timeReadout.textContent = String(year);
-  if (point) { setDetails(item, point); renderHealth(point.health || item.health || null); updateCauseButtons(item, point); timeStatus.textContent = `${point.label || "Messpunkt"}. Dieser Zeitpunkt ist im Datensatz belegt.`; }
-  else { setDetails(item, null, year); renderHealth(null); updateCauseButtons(item, null); timeStatus.textContent = `Für ${year} ist kein Messpunkt hinterlegt. Keine Interpolation.`; }
+  if (point) { setDetails(item, point); renderHealth(point.health || item.health || null); updateCauseButtons(item, point); timeStatus.textContent = `${point.label || "Messpunkt"}. Dieser Zeitpunkt ist im Datensatz belegt.`; renderKnowledgePanel(); }
+  else { setDetails(item, null, year); renderHealth(null); updateCauseButtons(item, null); timeStatus.textContent = `Für ${year} ist kein Messpunkt hinterlegt. Keine Interpolation.`; renderKnowledgePanel(); }
 }
 
 function setTimeWindow(nextWindow) {
@@ -438,6 +602,7 @@ document.querySelectorAll("[data-close-cause]").forEach(button => button.addEven
 async function initPanel() {
   try {
     await loadBodymapConfig();
+    await loadKnowledgeNetworks();
   } catch (error) {
     console.error(error);
     organReadout.textContent = "Bodymap-Konfiguration konnte nicht geladen werden.";
