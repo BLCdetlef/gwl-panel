@@ -1005,6 +1005,94 @@ function renderDigitalSleepMainView() {
     </div>`;
 }
 
+
+function renderDisinformationMainView() {
+  const network = knowledgeNetworks.disinformation;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Desinformation-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const labels = {
+    loomba_uk_vaccine_intent_change: "Impf-Misinformation → Impfintention · Vereinigtes Königreich",
+    loomba_us_vaccine_intent_change: "Impf-Misinformation → Impfintention · USA",
+    accuracy_prompt_false_sharing: "Accuracy Prompt → Teilen falscher Inhalte"
+  };
+
+  const cards = (network.measurements || []).map(m => `
+    <article class="measurement-card oil-measurement-card">
+      <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
+      <div class="measurement-card-value">${m.display || "–"}</div>
+      <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
+      <p>${m.interpretation || ""}</p>
+      ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+    </article>`).join("");
+
+  const pathways = (network.pathways || []).map(p => `
+    <div class="oil-boundary-link">
+      <strong>${p.label}</strong>
+      <p>${(p.chain || []).join(" → ")}</p>
+      <span>Evidenz: ${p.evidenceStatus || "–"}</span>
+      ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <h2>Informationsumwelt → Desinformation</h2>
+
+      <p class="oil-lead">
+        Der Pilot trennt <strong>falsche oder irreführende Information</strong> von
+        <strong>Desinformation</strong>. Desinformation wird nur dort so genannt, wo
+        Täuschungsabsicht belegt ist. Exposition, Fehlüberzeugung, Intention und
+        tatsächliches Verhalten bleiben getrennte Knoten.
+      </p>
+
+      <div class="oil-path">
+        <span>Technologische & soziale Umwelt</span><b>→</b>
+        <span>Informationsumwelt</span><b>→</b>
+        <span>Desinformation</span>
+      </div>
+
+      <h3>STUDIENWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+
+      <h3>WIRKUNGS- UND GEGENPFADE</h3>
+      <div class="oil-boundary-links">${pathways}</div>
+
+      <div class="extension-note">
+        <strong>Begriffsregel:</strong>
+        Ohne belegte Täuschungsabsicht wird im Datenmodell
+        <em>Misinformation / falsche oder irreführende Information</em> verwendet.
+      </div>
+
+      <div class="extension-note">
+        <strong>Gesundheitsbezug:</strong>
+        Der Pilot belegt primär Veränderungen von Überzeugungen, Intentionen und
+        gesundheitsrelevanten Entscheidungen. Deshalb wird kein einzelner Organmarker aktiviert.
+      </div>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -1095,6 +1183,27 @@ function renderKnowledgePanel() {
       if (systemHealth && organReadout) {
         organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
       }
+    } else if (state.componentId === "disinformation") {
+      if (focusTitle) focusTitle.textContent = "Informationsumwelt · Desinformation";
+      if (focusSummary) focusSummary.textContent = "Falsche und irreführende Informationen, Fehlüberzeugungen, gesundheitsrelevante Entscheidungen sowie systemische Gegenmaßnahmen.";
+      panel.innerHTML = renderDisinformationMainView();
+
+      const systemHealth = knowledgeNetworks.disinformation?.healthContext?.systemImpacts?.[0];
+      if (systemHealth && organReadout) {
+        organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
+      }
+    } else if (state.componentId === "information-environment") {
+      if (focusTitle) focusTitle.textContent = "Informationsumwelt";
+      if (focusSummary) focusSummary.textContent = "Informationsqualität, Verbreitungsmechanismen und menschliche Entscheidungen werden als getrennte Knoten modelliert.";
+      panel.innerHTML = `
+        <div class="extension-intro">
+          <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
+          <h2>Informationsumwelt</h2>
+          <p>Informationsumwelt beschreibt Bedingungen der Produktion, Verbreitung und Aufnahme von Information.</p>
+          <div class="extension-note">
+            Der erste reale Pilot liegt unter <strong>Desinformation</strong>.
+          </div>
+        </div>`;
     } else {
       if (focusTitle) focusTitle.textContent = "Digitalisierung";
       if (focusSummary) focusSummary.textContent = "Digitale Technologien werden über konkrete Nutzungskontexte und Wirkungspfade bewertet – nicht pauschal als Risiko.";
@@ -1102,10 +1211,10 @@ function renderKnowledgePanel() {
         <div class="extension-intro">
           <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
           <h2>Digitalisierung</h2>
-          <p>Digitalisierung ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
+          <p>Digitalisierung ist ein Teilbereich dieser ergänzenden Systemgrenze.</p>
           <div class="extension-note">
-            Der erste reale Pilot liegt unter <strong>Schlaf</strong>. Weitere Pfade wie
-            Bewegung, Gaming und Informationsumwelt können später auf derselben Ebene ergänzt werden.
+            Reale Piloten liegen bereits unter <strong>Schlaf</strong> und in der
+            <strong>Informationsumwelt → Desinformation</strong>.
           </div>
         </div>`;
     }
