@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.13",
+  version: "0.9.14",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
@@ -259,24 +259,6 @@ window.GWL_DATA = {
         }
       ]
     },
-    {
-      id: "materials-energy",
-      label: "Stoff- und Energieströme",
-      enabled: true,
-      framework: "eah_extension",
-      frameworkLabel: "Ergänzende Systemgrenze",
-      summary: "Rohstoffentnahme, Materialdurchsatz und Energieverbrauch wirken häufig indirekt über Umweltveränderungen, Infrastruktur und Versorgungssysteme auf LEBEN.",
-      items: []
-    },
-    {
-      id: "mental-load",
-      label: "Psychische Belastungsgrenzen",
-      enabled: true,
-      framework: "eah_extension",
-      frameworkLabel: "Ergänzende Systemgrenze",
-      summary: "Psychische Belastungen durch technische, soziale und räumliche Umweltbedingungen werden als ergänzende Systemebene erfasst. Referenzgrößen sind noch nicht abschließend definiert.",
-      items: []
-    },
     { id: "ocean", label: "Ozeanversauerung", enabled: false },
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
@@ -294,6 +276,24 @@ window.GWL_DATA = {
           summary: "Persistente fluorierte Stoffe mit vielfältigen Anwendungen, Umweltpfaden und Expositionswegen."
         }
       ]
+    },
+    {
+      id: "materials-energy",
+      label: "Stoff- und Energieströme",
+      enabled: true,
+      framework: "eah_extension",
+      frameworkLabel: "Ergänzende Systemgrenze",
+      summary: "Rohstoffentnahme, Materialdurchsatz und Energieverbrauch wirken häufig indirekt über Umweltveränderungen, Infrastruktur und Versorgungssysteme auf LEBEN.",
+      items: []
+    },
+    {
+      id: "mental-load",
+      label: "Technologische & soziale Umwelt",
+      enabled: true,
+      framework: "eah_extension",
+      frameworkLabel: "Ergänzende Systemgrenze",
+      summary: "Technologische und soziale Veränderungen prägen Informationsumwelt, Kommunikation, Arbeit, Freizeit und Verhalten. Gesundheitswirkungen werden erst in den nachgelagerten Wirkungspfaden und unter LEBEN eingeordnet.",
+      items: []
     }
   ]
 };

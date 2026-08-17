@@ -738,7 +738,15 @@ function renderExtensionView(boundary) {
 
 function renderBoundaries() {
   boundaryList.innerHTML = "";
+  let extensionSectionInserted = false;
   data.boundaries.forEach(boundary => {
+    if (isEahExtension(boundary) && !extensionSectionInserted) {
+      const divider = document.createElement("div");
+      divider.className = "boundary-section-divider";
+      divider.textContent = "Ergänzende Systemgrenzen";
+      boundaryList.appendChild(divider);
+      extensionSectionInserted = true;
+    }
     const row = document.createElement("div");
     row.className = "boundary-row";
     const button = document.createElement("button");
@@ -746,7 +754,7 @@ function renderBoundaries() {
     button.className = "boundary-button";
     if (isEahExtension(boundary)) {
       button.classList.add("extension-boundary");
-      button.title = "Ergänzende Systemgrenze des EAH-Mirror";
+      button.title = "Ergänzende Systemgrenze";
     }
     if (!boundary.enabled) button.classList.add("disabled");
     if (boundary.id === selectedBoundaryId) button.classList.add("active");
@@ -1141,7 +1149,9 @@ function selectItem(boundaryId, itemId) {
   renderTime(item);
   renderHealth(point?.health || item.health || null);
   updateCauseButtons(item, point);
-  renderBoundaries();
+  const foundationText = Array.from(document.querySelectorAll(".panel p, .column p, p")).find(p => p.textContent.includes("Planetare Grenzen und dazu passende Messreihen"));
+if (foundationText) foundationText.textContent = "Neun Planetare Grenzen bilden den wissenschaftlichen Ausgangspunkt. Ergänzende Systemgrenzen erweitern den Blick auf Lebensgrundlagen und menschliche Gesundheit.";
+renderBoundaries();
   renderKnowledgePanel();
 }
 

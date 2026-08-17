@@ -787,19 +787,7 @@ body.nutrient-mode .connections-panel {
 .boundary-button.extension-boundary {
   position: relative;
 }
-.boundary-button.extension-boundary::after {
-  content: "EAH";
-  margin-left: auto;
-  margin-right: 4px;
-  padding: 2px 5px;
-  border: 1px solid #b9c1bd;
-  border-radius: 999px;
-  color: var(--muted);
-  background: #f7f9f8;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: .06em;
-}
+
 .extension-intro {
   padding: 12px;
   border: 1px solid #cfd7d3;
@@ -825,4 +813,16 @@ body.nutrient-mode .connections-panel {
   border: 1px solid #dbe1de;
   font-size: 9px;
   line-height: 1.45;
+}
+
+/* v0.9.14 – ergänzende Systemgrenzen */
+.boundary-section-divider {
+  margin: 14px 2px 7px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
