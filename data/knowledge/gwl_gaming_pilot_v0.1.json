@@ -6,8 +6,8 @@
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
     "systemBoundary": "Technologische & soziale Umwelt",
-    "domainComponent": "Digitale Freizeit / Gaming",
-    "subComponent": "Gaming-Nutzungsformen"
+    "domainComponent": "Digitale Umwelt",
+    "subComponent": "Gaming"
   },
   "corePrinciples": [
     "Gaming wird nicht pauschal als gesundheitsschädlich oder gesundheitsfördernd modelliert.",

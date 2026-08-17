@@ -943,278 +943,170 @@ function allOpenSourcesHtml(network) {
     }).join("");
 }
 
-function renderDigitalSleepMainView() {
-  const network = knowledgeNetworks.digitalSleep;
-  if (!network) {
-    return `<div class="nutrient-choice-note"><strong>Digitalisierung-/Schlaf-Pilotdatensatz nicht geladen.</strong></div>`;
+
+function getTechSocialIndex() {
+  const index = knowledgeNetworks.knowledgeIndex;
+  return index?.systemBoundaries?.find(item => item.id === "eah_tech_social_environment") || null;
+}
+
+function syncTechSocialNavigationFromIndex() {
+  const boundary = data.boundaries.find(item => item.id === "mental-load");
+  const indexBoundary = getTechSocialIndex();
+  if (!boundary || !indexBoundary?.groups?.length) return;
+
+  boundary.items = indexBoundary.groups.flatMap(group => [
+    {
+      id: group.id.replaceAll("_", "-"),
+      scope: "all",
+      label: group.label,
+      enabled: true,
+      groupOnly: true
+    },
+    ...(group.items || []).map(item => ({
+      id: item.id.replaceAll("_", "-"),
+      scope: "all",
+      label: `↳ ${item.label}`,
+      enabled: true,
+      knowledgeSource: item.source,
+      knowledgeItemId: item.id,
+      knowledgeGroupId: group.id
+    }))
+  ]);
+}
+
+function getTechSocialIndexEntry(componentId) {
+  const normalized = String(componentId || "").replaceAll("-", "_");
+  for (const group of getTechSocialIndex()?.groups || []) {
+    if (group.id === normalized) return { type: "group", group };
+    for (const item of group.items || []) {
+      if (item.id === normalized) return { type: "item", group, item };
+    }
   }
+  return null;
+}
 
-  const labels = {
-    brosnan_10min_inbed_sleep_duration: "Bildschirmzeit im Bett → Schlafdauer",
-    brosnan_interactive_sleep_onset: "Interaktive Nutzung im Bett → Schlafbeginn"
-  };
+function getKnowledgeNetworkBySource(source) {
+  if (!source) return null;
+  const key = Object.keys(data.knowledgeSources || {}).find(
+    name => data.knowledgeSources[name] === source
+  );
+  return key ? knowledgeNetworks[key] : null;
+}
 
-  const cards = (network.measurements || []).map(m => {
-    const age = m.context?.ageRange
-      ? `${m.context.ageRange.min}–${m.context.ageRange.max} Jahre`
-      : "";
-    return `
+function genericStudyCard(network, m) {
+  const displayType = m.displayType ||
+    (m.unit === "participants" ? "study_evidence" : "study_value");
+  const age = m.context?.ageRange
+    ? `${m.context.ageRange.min}–${m.context.ageRange.max} Jahre`
+    : "";
+  return {
+    displayType,
+    html: `
       <article class="measurement-card oil-measurement-card">
-        <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
+        <div class="measurement-card-label">${m.metric || m.id}</div>
         <div class="measurement-card-value">${m.display || "–"}</div>
-        <div class="measurement-card-meta">${m.period || ""}${age ? ` · ${age}` : ""}</div>
-        <p>${m.interpretation || ""}</p>
+        <div class="measurement-card-meta">${[m.period, m.geography, age].filter(Boolean).join(" · ")}</div>
+        ${m.interpretation ? `<p>${m.interpretation}</p>` : ""}
         ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
         ${sourceLinksHtml(network, m.sourceRefs)}
-      </article>`;
-  }).join("");
-
-  const paths = [
-    {
-      title: "Schlafdauer",
-      chain: ["Bildschirmnutzung im Bett", "spätere Schlafenszeit", "kürzere Schlafdauer", "Tagesfunktion / Wohlbefinden"],
-      evidence: "moderate"
-    },
-    {
-      title: "Schlafbeginn",
-      chain: ["interaktive Nutzung im Bett", "verzögerter Schlafbeginn", "Tagesfunktion / Wohlbefinden"],
-      evidence: "moderate"
-    },
-    {
-      title: "Systembezug",
-      chain: ["digitale Nutzung", "Schlaf / zirkadiane und neurobehaviorale Funktion", "LEBEN"],
-      evidence: "moderate"
-    }
-  ];
-
-  const pathCards = paths.map(p => `
-    <div class="oil-boundary-link">
-      <strong>${p.title}</strong>
-      <p>${p.chain.join(" → ")}</p>
-      <span>Evidenz: ${p.evidence}</span>
-    </div>`).join("");
-
-  const gaps = (network.knowledgeGaps || []).map(g =>
-    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
-  ).join("");
-
-  const action = network.actionScope || {};
-  const actionRows = (action.dimensions || []).map(d =>
-    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
-  ).join("");
-
-  return `
-    <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
-      <h2>Digitalisierung → Schlaf</h2>
-      <p class="oil-lead">
-        Digitalisierung erhält keinen pauschalen Risikostatus. Entscheidend sind konkrete
-        Nutzungskontexte wie <strong>Nutzung im Bett</strong>, Zeitpunkt und Interaktivität.
-        Die gezeigten Werte sind Studienzusammenhänge, keine universellen Grenzwerte.
-      </p>
-
-      <div class="oil-path">
-        <span>Technologische & soziale Umwelt</span><b>→</b><span>Digitalisierung</span><b>→</b><span>Schlaf</span>
-      </div>
-
-      <h3>STUDIENWERTE</h3>
-      <div class="measurement-grid">${cards}</div>
-
-      <h3>WIRKUNGSPFADE</h3>
-      <div class="oil-boundary-links">${pathCards}</div>
-
-      <div class="extension-note">
-        <strong>Alterskontext:</strong> Die quantitativen Pilotwerte stammen aus Studien mit Jugendlichen.
-        Alter bleibt Kontext der Evidenz und keine eigene Graph-Ebene.
-      </div>
-
-      <div class="extension-note">
-        <strong>Systembezug:</strong> Schlaf wird als systemischer Funktionszustand geführt.
-        Kein einzelner Organmarker wird allein aufgrund von Bildschirmnutzung aktiviert.
-      </div>
-
-      <details>
-        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
-        ${gaps}
-      </details>
-
-      <details>
-        <summary>Handlungsspielraum</summary>
-        <p>${action.methodNote || ""}</p>
-        ${actionRows}
-      </details>
-    </div>`;
-}
-
-
-
-function renderGamingMainView() {
-  const network = knowledgeNetworks.gaming;
-  if (!network) {
-    return `<div class="nutrient-choice-note"><strong>Gaming-Pilotdatensatz nicht geladen.</strong></div>`;
-  }
-
-  const evidenceCards = (network.measurements || []).filter(m => m.displayType === "study_evidence");
-  const valueCards = (network.measurements || []).filter(m => m.displayType === "study_value");
-
-  const cardHtml = m => `
-    <article class="measurement-card oil-measurement-card">
-      <div class="measurement-card-label">${m.metric || m.id}</div>
-      <div class="measurement-card-value">${m.display || "–"}</div>
-      <div class="measurement-card-meta">${m.period || ""}${m.geography ? ` · ${m.geography}` : ""}</div>
-      <p>${m.interpretation || ""}</p>
-      ${sourceLinksHtml(network, m.sourceRefs)}
-    </article>`;
-
-  const pathways = (network.pathways || []).map(p => `
-    <div class="oil-boundary-link">
-      <strong>${p.label}</strong>
-      <p>${(p.chain || []).join(" → ")}</p>
-      <span>Evidenz: ${p.evidenceStatus || "–"}</span>
-      ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
-    </div>`).join("");
-
-  const gaps = (network.knowledgeGaps || []).map(g =>
-    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
-  ).join("");
-
-  const action = network.actionScope || {};
-  const actionRows = (action.dimensions || []).map(d =>
-    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
-  ).join("");
-
-  return `
-    <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
-      <h2>Digitale Freizeit / Gaming</h2>
-      <p class="oil-lead">
-        Gaming wird nicht pauschal bewertet. Der Pilot trennt
-        <strong>sitzendes Gaming</strong>, <strong>problematisches Gaming</strong>
-        und <strong>aktive Videospiele / Exergames</strong>.
-      </p>
-
-      <div class="oil-path">
-        <span>Technologische & soziale Umwelt</span><b>→</b><span>Digitale Freizeit / Gaming</span>
-      </div>
-
-      <h3>STUDIENBELEGE</h3>
-      <div class="measurement-grid">${evidenceCards.map(cardHtml).join("")}</div>
-
-      <h3>STUDIENWERTE</h3>
-      <div class="measurement-grid">${valueCards.map(cardHtml).join("")}</div>
-
-      <h3>WIRKUNGSPFADE</h3>
-      <div class="oil-boundary-links">${pathways}</div>
-
-      <div class="extension-note">
-        <strong>Wichtige Trennung:</strong>
-        Hohe Spielzeit ist nicht automatisch problematisches Gaming.
-        Funktionsbeeinträchtigung und validierte Symptome werden getrennt von bloßer Nutzungsdauer geführt.
-      </div>
-
-      <div class="extension-note">
-        <strong>Gesundheitsbezug:</strong>
-        Schlaf und Bewegung werden zunächst als Systembezüge geführt.
-        Gaming allein aktiviert keinen Organmarker.
-      </div>
-
-      <details>
-        <summary>Quellen · frei zugänglich</summary>
-        ${allOpenSourcesHtml(network)}
-      </details>
-
-      <details>
-        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
-        ${gaps}
-      </details>
-
-      <details>
-        <summary>Handlungsspielraum</summary>
-        <p>${action.methodNote || ""}</p>
-        ${actionRows}
-      </details>
-    </div>`;
-}
-
-function renderDisinformationMainView() {
-  const network = knowledgeNetworks.disinformation;
-  if (!network) {
-    return `<div class="nutrient-choice-note"><strong>Desinformation-Pilotdatensatz nicht geladen.</strong></div>`;
-  }
-
-  const labels = {
-    roozenbeek_multicountry_scope: "Internationale Misinformation-Studie · Umfang",
-    accuracy_prompt_false_sharing: "Accuracy Prompt → Teilen falscher Inhalte"
+      </article>`
   };
+}
 
-  const cards = (network.measurements || []).map(m => `
-    <article class="measurement-card oil-measurement-card">
-      <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
-      <div class="measurement-card-value">${m.display || "–"}</div>
-      <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
-      <p>${m.interpretation || ""}</p>
-      ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
-      ${sourceLinksHtml(network, m.sourceRefs)}
-    </article>`).join("");
+function deriveGenericPathways(network) {
+  if (Array.isArray(network.pathways) && network.pathways.length) return network.pathways;
 
-  const pathways = (network.pathways || []).map(p => `
+  const labels = Object.fromEntries((network.nodes || []).map(n => [n.id, n.label]));
+  const outgoing = new Map();
+  for (const edge of network.edges || []) {
+    if (!outgoing.has(edge.from)) outgoing.set(edge.from, []);
+    outgoing.get(edge.from).push(edge);
+  }
+
+  const paths = [];
+  for (const start of (network.nodes || []).filter(n => n.type === "exposure").slice(0, 3)) {
+    const chain = [start.id];
+    const seen = new Set(chain);
+    let current = start.id;
+
+    for (let depth = 0; depth < 5; depth++) {
+      const next = (outgoing.get(current) || []).find(edge => !seen.has(edge.to));
+      if (!next) break;
+      chain.push(next.to);
+      seen.add(next.to);
+      current = next.to;
+    }
+
+    if (chain.length >= 3) {
+      paths.push({
+        label: labels[start.id] || "Wirkungspfad",
+        chain: chain.map(id => labels[id] || id),
+        evidenceStatus: "aus Graphstruktur abgeleitet"
+      });
+    }
+  }
+  return paths;
+}
+
+function genericHealthReadout(network) {
+  const impacts = network?.healthContext?.systemImpacts || [];
+  if (!impacts.length) {
+    return "Kein direkter Organmarker. Gesundheitsbezüge werden erst über konkrete Wirkungspfade dargestellt.";
+  }
+  return `${impacts.map(x => x.label || x.system).join(" · ")}: systemischer Gesundheitsbezug; kein Organmarker allein aufgrund des Oberthemas.`;
+}
+
+function renderGenericKnowledgeView(network, indexEntry) {
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Knowledge-Datensatz nicht geladen.</strong></div>`;
+  }
+
+  const cards = (network.measurements || []).map(m => genericStudyCard(network, m));
+  const evidence = cards.filter(c => c.displayType === "study_evidence");
+  const values = cards.filter(c => c.displayType !== "study_evidence");
+
+  const pathways = deriveGenericPathways(network).map(p => `
     <div class="oil-boundary-link">
-      <strong>${p.label}</strong>
-      <p>${(p.chain || []).join(" → ")}</p>
-      <span>Evidenz: ${p.evidenceStatus || "–"}</span>
+      <strong>${p.label || "Wirkungspfad"}</strong>
+      <p>${(p.chain || p.path || []).map(x => typeof x === "string" ? x : x.label).filter(Boolean).join(" → ")}</p>
+      ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
       ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
     </div>`).join("");
 
-  const gaps = (network.knowledgeGaps || []).map(g =>
-    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
-  ).join("");
+  const gaps = (network.knowledgeGaps || []).map(g => `
+    <p><strong>${g.question}</strong>
+      ${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}
+      ${g.reason ? `<br><span>${g.reason}</span>` : ""}
+    </p>`).join("");
 
   const action = network.actionScope || {};
   const actionRows = (action.dimensions || []).map(d =>
-    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_", " ")}</strong><br>${d.rationale}</p>`
   ).join("");
 
-  return `
-    <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
-      <h2>Informationsumwelt → Desinformation</h2>
+  const groupLabel = indexEntry?.group?.label || network.entry?.domainComponent || "Knowledge";
+  const itemLabel = indexEntry?.item?.label || network.entry?.subComponent || network.topic || "Thema";
 
-      <p class="oil-lead">
-        Der Pilot trennt <strong>falsche oder irreführende Information</strong> von
-        <strong>Desinformation</strong>. Desinformation wird nur dort so genannt, wo
-        Täuschungsabsicht belegt ist. Exposition, Fehlüberzeugung, Intention und
-        tatsächliches Verhalten bleiben getrennte Knoten.
-      </p>
+  return `
+    <div class="oil-pilot generic-knowledge-view">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <h2>${groupLabel} → ${itemLabel}</h2>
+      <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
 
       <div class="oil-path">
         <span>Technologische & soziale Umwelt</span><b>→</b>
-        <span>Informationsumwelt</span><b>→</b>
-        <span>Desinformation</span>
+        <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
       </div>
 
-      <h3>STUDIENWERTE</h3>
-      <div class="measurement-grid">${cards}</div>
+      ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
+      ${values.length ? `<h3>STUDIENWERTE</h3><div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
-      <h3>WIRKUNGS- UND GEGENPFADE</h3>
-      <div class="oil-boundary-links">${pathways}</div>
+      <h3>WIRKUNGSPFADE</h3>
+      <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
 
-      <div class="extension-note">
-        <strong>Quellenregel:</strong>
-        Im GWL werden Studienwerte nur angezeigt, wenn ein direkt verlinkter,
-        öffentlich zugänglicher Volltext vorliegt. Paywall-Studienwerte werden nicht dargestellt.
-      </div>
+      ${network.sourcePolicy?.rule ? `<div class="extension-note"><strong>Quellenregel:</strong> ${network.sourcePolicy.rule}</div>` : ""}
 
-      <div class="extension-note">
-        <strong>Begriffsregel:</strong>
-        Ohne belegte Täuschungsabsicht wird im Datenmodell
-        <em>Misinformation / falsche oder irreführende Information</em> verwendet.
-      </div>
-
-      <div class="extension-note">
-        <strong>Gesundheitsbezug:</strong>
-        Der Pilot belegt primär Veränderungen von Überzeugungen, Intentionen und
-        gesundheitsrelevanten Entscheidungen. Deshalb wird kein einzelner Organmarker aktiviert.
-      </div>
+      <div class="extension-note"><strong>Gesundheitsbezug:</strong> ${genericHealthReadout(network)}</div>
 
       <details>
         <summary>Quellen · frei zugänglich</summary>
@@ -1231,6 +1123,19 @@ function renderDisinformationMainView() {
         <p>${action.methodNote || ""}</p>
         ${actionRows}
       </details>
+    </div>`;
+}
+
+function renderTechSocialGroupIntro(group) {
+  return `
+    <div class="extension-intro">
+      <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <h2>${group?.label || "Bereich"}</h2>
+      <p>Dieser Bereich wird über konkrete Expositionen und Wirkungspfade erschlossen.</p>
+      <div class="extension-note">
+        <strong>Bereits hinterlegte Knowledge:</strong>
+        ${(group?.items || []).map(item => `<p>${item.label}</p>`).join("")}
+      </div>
     </div>`;
 }
 
@@ -1315,57 +1220,31 @@ function renderKnowledgePanel() {
     if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT";
     renderHealth(null);
 
-    if (state.componentId === "sleep") {
-      if (focusTitle) focusTitle.textContent = "Digitalisierung · Schlaf";
-      if (focusSummary) focusSummary.textContent = "Konkreter Pilot zu abendlicher und nächtlicher Bildschirmnutzung, Schlafdauer und Schlafbeginn.";
-      panel.innerHTML = renderDigitalSleepMainView();
+    const indexEntry = getTechSocialIndexEntry(state.componentId);
 
-      const systemHealth = knowledgeNetworks.digitalSleep?.healthContext?.systemImpacts?.[0];
-      if (systemHealth && organReadout) {
-        organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
-      }
-    } else if (state.componentId === "disinformation") {
-      if (focusTitle) focusTitle.textContent = "Informationsumwelt · Desinformation";
-      if (focusSummary) focusSummary.textContent = "Falsche und irreführende Informationen, Fehlüberzeugungen, gesundheitsrelevante Entscheidungen sowie systemische Gegenmaßnahmen.";
-      panel.innerHTML = renderDisinformationMainView();
-
-      const systemHealth = knowledgeNetworks.disinformation?.healthContext?.systemImpacts?.[0];
-      if (systemHealth && organReadout) {
-        organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
-      }
-    } else if (state.componentId === "gaming") {
-      if (focusTitle) focusTitle.textContent = "Digitale Freizeit / Gaming";
-      if (focusSummary) focusSummary.textContent = "Sitzendes Gaming, problematisches Gaming und aktive Videospiele werden als unterschiedliche Nutzungspfade modelliert.";
-      panel.innerHTML = renderGamingMainView();
-
-      const impacts = knowledgeNetworks.gaming?.healthContext?.systemImpacts || [];
-      if (impacts.length && organReadout) {
-        organReadout.textContent = impacts.map(x => x.label).join(" · ") + ": systemischer Gesundheitsbezug; kein Organmarker allein aufgrund von Gaming.";
-      }
-    } else if (state.componentId === "information-environment") {
-      if (focusTitle) focusTitle.textContent = "Informationsumwelt";
-      if (focusSummary) focusSummary.textContent = "Informationsqualität, Verbreitungsmechanismen und menschliche Entscheidungen werden als getrennte Knoten modelliert.";
-      panel.innerHTML = `
-        <div class="extension-intro">
-          <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
-          <h2>Informationsumwelt</h2>
-          <p>Informationsumwelt beschreibt Bedingungen der Produktion, Verbreitung und Aufnahme von Information.</p>
-          <div class="extension-note">
-            Der erste reale Pilot liegt unter <strong>Desinformation</strong>.
-          </div>
-        </div>`;
+    if (indexEntry?.type === "item") {
+      const network = getKnowledgeNetworkBySource(indexEntry.item.source);
+      if (focusTitle) focusTitle.textContent = `${indexEntry.group.label} · ${indexEntry.item.label}`;
+      if (focusSummary) focusSummary.textContent = network?.topic || "Konkreter menschengemachter Umwelt- und Wirkungspfad.";
+      panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
+      if (organReadout) organReadout.textContent = genericHealthReadout(network);
+    } else if (indexEntry?.type === "group") {
+      if (focusTitle) focusTitle.textContent = indexEntry.group.label;
+      if (focusSummary) focusSummary.textContent = "Umwelt- und Expositionsbereich innerhalb der ergänzenden Systemgrenze.";
+      panel.innerHTML = renderTechSocialGroupIntro(indexEntry.group);
     } else {
-      if (focusTitle) focusTitle.textContent = "Digitalisierung";
-      if (focusSummary) focusSummary.textContent = "Digitale Technologien werden über konkrete Nutzungskontexte und Wirkungspfade bewertet – nicht pauschal als Risiko.";
+      const groups = (getTechSocialIndex()?.groups || []).map(group =>
+        `<p><strong>${group.label}</strong><br>${(group.items || []).map(item => item.label).join(" · ")}</p>`
+      ).join("");
+
+      if (focusTitle) focusTitle.textContent = "Technologische & soziale Umwelt";
+      if (focusSummary) focusSummary.textContent = "Menschengemachte technische, digitale, informationelle und soziale Veränderungen werden über konkrete Umwelt- und Wirkungspfade erschlossen.";
       panel.innerHTML = `
         <div class="extension-intro">
-          <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
-          <h2>Digitalisierung</h2>
-          <p>Digitalisierung ist ein Teilbereich dieser ergänzenden Systemgrenze.</p>
-          <div class="extension-note">
-            Reale Piloten liegen bereits unter <strong>Schlaf</strong> und in der
-            <strong>Informationsumwelt → Desinformation</strong>.
-          </div>
+          <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE</div>
+          <h2>Technologische & soziale Umwelt</h2>
+          <p>Die Navigation trennt Umweltbereiche von ihren gesundheitlichen Wirkungen.</p>
+          <div class="extension-note">${groups}</div>
         </div>`;
     }
 
@@ -1921,6 +1800,7 @@ async function initPanel() {
   try {
     await loadBodymapConfig();
     await loadKnowledgeNetworks();
+    syncTechSocialNavigationFromIndex();
   } catch (error) {
     console.error(error);
     organReadout.textContent = "Bodymap-Konfiguration konnte nicht geladen werden.";

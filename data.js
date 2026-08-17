@@ -10,7 +10,8 @@ window.GWL_DATA = {
     solarEnergy: "data/knowledge/gwl_solar_energy_pilot_v0.1.json",
     digitalSleep: "data/knowledge/gwl_digital_sleep_pilot_v0.1.json",
     disinformation: "data/knowledge/gwl_disinformation_pilot_v0.1.json",
-    gaming: "data/knowledge/gwl_gaming_pilot_v0.1.json"
+    gaming: "data/knowledge/gwl_gaming_pilot_v0.1.json",
+    knowledgeIndex: "data/knowledge/knowledge-index.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
@@ -307,11 +308,11 @@ window.GWL_DATA = {
       frameworkLabel: "Ergänzende Systemgrenze",
       summary: "Technologische und soziale Veränderungen prägen Informationsumwelt, Kommunikation, Arbeit, Freizeit und Verhalten. Gesundheitswirkungen werden erst in den nachgelagerten Wirkungspfaden und unter LEBEN eingeordnet.",
       items: [
-        { id: "digitalisation", scope: "all", label: "Digitalisierung", enabled: true },
-        { id: "sleep", scope: "all", label: "↳ Schlaf", enabled: true },
-        { id: "information-environment", scope: "all", label: "Informationsumwelt", enabled: true },
-        { id: "disinformation", scope: "all", label: "↳ Desinformation", enabled: true },
-        { id: "gaming", scope: "all", label: "Digitale Freizeit / Gaming", enabled: true }
+        { id: "digital-environment", scope: "all", label: "Digitale Umwelt", enabled: true, groupOnly: true },
+        { id: "screen-device-use", scope: "all", label: "↳ Bildschirm- & Gerätenutzung", enabled: true },
+        { id: "gaming", scope: "all", label: "↳ Gaming", enabled: true },
+        { id: "information-environment", scope: "all", label: "Informationsumwelt", enabled: true, groupOnly: true },
+        { id: "disinformation", scope: "all", label: "↳ Desinformation", enabled: true }
       ]
     }
   ]
