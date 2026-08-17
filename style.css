@@ -755,3 +755,19 @@ body.nutrient-mode .detail-grid + details + details + details {
     font-size: .66rem;
   }
 }
+
+
+/* v0.9.8a HOTFIX
+   Bei Nährstoffkreisläufe werden die leeren Standard-PG-Blöcke vollständig
+   ausgeblendet. Der Kontextkopf und die echte Stickstoff/Phosphor-Ansicht bleiben. */
+body.nutrient-mode .nutrient-standard-hidden {
+  display: none !important;
+}
+
+/* Alte, zu unspezifische nutrient-mode-Regeln neutralisieren. */
+body.nutrient-mode #metricValue,
+body.nutrient-mode #referenceValue,
+body.nutrient-mode #periodValue,
+body.nutrient-mode #sourceLink {
+  color: inherit;
+}

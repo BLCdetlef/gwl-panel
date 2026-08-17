@@ -309,7 +309,10 @@ function bindBoundarySubnav(container) {
   container?.querySelectorAll("[data-domain-component]").forEach(button => {
     button.addEventListener("click", () => {
       selectedDomainComponent = button.dataset.domainComponent;
-      if (selectedBoundaryId === "nutrients") setNutrientPlaceholderState();
+      if (selectedBoundaryId === "nutrients") {
+        setNutrientPlaceholderState();
+        applyNutrientModeVisibility();
+      }
       renderKnowledgePanel();
     });
   });
@@ -468,6 +471,7 @@ function renderNutrientMainView(componentId) {
 
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
+  applyNutrientModeVisibility();
 
   const isFreshwater = selectedBoundaryId === "freshwater";
   const isNutrients = selectedBoundaryId === "nutrients";
@@ -593,6 +597,27 @@ function renderBoundaries() {
 function mergeItemAndPoint(item, point) { return point ? { ...item, ...point, health: point.health || item.health } : item; }
 function setLink(label, url) { sourceLink.textContent = label || "–"; if (url) { sourceLink.href = url; sourceLink.target = "_blank"; } else { sourceLink.removeAttribute("href"); sourceLink.removeAttribute("target"); } }
 
+
+
+function applyNutrientModeVisibility() {
+  const isNutrients = selectedBoundaryId === "nutrients";
+  document.body.classList.toggle("nutrient-mode", isNutrients);
+
+  const hideTargets = [
+    timeSlider?.closest(".card"),
+    metricValue?.closest(".detail-grid"),
+    findingText?.closest("details"),
+    effectPath?.closest("details"),
+    uncertaintyValue?.closest("details")
+  ].filter(Boolean);
+
+  hideTargets.forEach(element => {
+    element.classList.toggle("nutrient-standard-hidden", isNutrients);
+  });
+
+  // Der Kontextkopf bleibt sichtbar; dort steht nur, welcher Stoff aktiv ist.
+  if (isNutrients) setNutrientPlaceholderState();
+}
 
 function setNutrientPlaceholderState() {
   focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
@@ -871,6 +896,7 @@ function closeOrganOverlay() {
 function selectBoundary(boundaryId) {
   selectedBoundaryId = boundaryId;
   selectedDomainComponent = null;
+  document.body.classList.toggle("nutrient-mode", boundaryId === "nutrients");
   const boundary = getBoundary(boundaryId);
   const items = getVisibleItems(boundary);
   closeOrganOverlay();
