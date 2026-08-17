@@ -1,0 +1,75 @@
+{
+  "format": "gwl-node-level-spec-v1",
+  "status": "draft",
+  "levels": [
+    {
+      "level": 1,
+      "type": "planetary_boundary",
+      "label": "Planetare Grenze"
+    },
+    {
+      "level": 2,
+      "type": "domain_component",
+      "label": "Teilbereich / Stoff / Kontrollgröße"
+    },
+    {
+      "level": 3,
+      "type": "human_activity",
+      "label": "Menschliche Aktivität / Treiber"
+    },
+    {
+      "level": 4,
+      "type": "pressure",
+      "label": "Druck / Eintrag / Entnahme"
+    },
+    {
+      "level": 5,
+      "type": "mechanism",
+      "label": "Prozess / Mechanismus"
+    },
+    {
+      "level": 6,
+      "type": "environmental_state",
+      "label": "Umweltzustand / Messbarer Zustand"
+    },
+    {
+      "level": 7,
+      "type": "environmental_medium",
+      "label": "Betroffenes System / Medium"
+    },
+    {
+      "level": 8,
+      "type": "exposure",
+      "label": "Exposition / Kontakt"
+    },
+    {
+      "level": 9,
+      "type": "biological_effect",
+      "label": "Biologische / psychische Wirkung"
+    },
+    {
+      "level": 10,
+      "type": "life_outcome",
+      "label": "LEBEN / Ergebnis"
+    },
+    {
+      "level": 11,
+      "type": "action_scope",
+      "label": "Handlungsspielraum",
+      "scientificLayer": false
+    }
+  ],
+  "evidenceStatus": [
+    "strong",
+    "moderate",
+    "weak",
+    "open",
+    "conflicting"
+  ],
+  "displayRules": {
+    "maxImmediateChildren": 5,
+    "showFullGraph": false,
+    "revealSecondaryPathsOnInteraction": true,
+    "planetaryBoundariesAreTopHierarchy": true
+  }
+}
