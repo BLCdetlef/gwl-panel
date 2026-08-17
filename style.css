@@ -757,17 +757,27 @@ body.nutrient-mode .detail-grid + details + details + details {
 }
 
 
-/* v0.9.8a HOTFIX
-   Bei Nährstoffkreisläufe werden die leeren Standard-PG-Blöcke vollständig
-   ausgeblendet. Der Kontextkopf und die echte Stickstoff/Phosphor-Ansicht bleiben. */
-body.nutrient-mode .nutrient-standard-hidden {
+/* v0.9.9 – konsistenter Boundary-State */
+body.nutrient-mode .time-card,
+body.nutrient-mode .detail-grid,
+body.nutrient-mode .detail-accordion,
+body.nutrient-mode .details-block {
   display: none !important;
 }
 
-/* Alte, zu unspezifische nutrient-mode-Regeln neutralisieren. */
+/* Falls die bestehende Struktur keine obigen Klassen hat:
+   Die direkte Standard-Datengruppe nach dem Fokus-Kopf wird ausgeblendet. */
 body.nutrient-mode #metricValue,
 body.nutrient-mode #referenceValue,
 body.nutrient-mode #periodValue,
-body.nutrient-mode #sourceLink {
-  color: inherit;
+body.nutrient-mode #sourceLink,
+body.nutrient-mode #findingText,
+body.nutrient-mode #effectPath,
+body.nutrient-mode #uncertaintyValue {
+  display: none !important;
+}
+
+/* Der Wissensnetz-Bereich wird bei Nährstoffkreisläufe zum Hauptinhalt. */
+body.nutrient-mode .connections-panel {
+  margin-top: 10px;
 }

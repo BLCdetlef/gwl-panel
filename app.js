@@ -309,10 +309,7 @@ function bindBoundarySubnav(container) {
   container?.querySelectorAll("[data-domain-component]").forEach(button => {
     button.addEventListener("click", () => {
       selectedDomainComponent = button.dataset.domainComponent;
-      if (selectedBoundaryId === "nutrients") {
-        setNutrientPlaceholderState();
-        applyNutrientModeVisibility();
-      }
+      selectedItemId = null;
       renderKnowledgePanel();
     });
   });
@@ -469,88 +466,140 @@ function renderNutrientMainView(componentId) {
     </div>`;
 }
 
+
+function getActiveViewState() {
+  return {
+    boundaryId: selectedBoundaryId || null,
+    itemId: selectedItemId || null,
+    componentId: selectedDomainComponent || null
+  };
+}
+
+function isNutrientBoundaryActive() {
+  return getActiveViewState().boundaryId === "nutrients";
+}
+
+function isFreshwaterBoundaryActive() {
+  return getActiveViewState().boundaryId === "freshwater";
+}
+
+function syncBoundaryModeClass() {
+  document.body.classList.toggle("nutrient-mode", isNutrientBoundaryActive());
+}
+
+function renderNutrientShell() {
+  const state = getActiveViewState();
+
+  // Standard-PG-Elemente werden bei Nährstoffkreisläufe bewusst nicht benutzt.
+  if (!isNutrientBoundaryActive()) return;
+
+  if (timeStatus) timeStatus.textContent = "";
+  if (focusEyebrow) focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
+
+  if (focusTitle) {
+    focusTitle.textContent =
+      state.componentId === "nitrogen" ? "Stickstoff" :
+      state.componentId === "phosphorus" ? "Phosphor" :
+      "Nährstoffkreisläufe";
+  }
+
+  if (focusSummary) {
+    focusSummary.textContent =
+      state.componentId
+        ? "Die Messwerte und Wirkungspfade dieses Teilbereichs werden direkt darunter aus dem Wissensnetz gezeigt."
+        : "Wähle Stickstoff oder Phosphor, um den passenden Ausschnitt des Wissensnetzes zu öffnen.";
+  }
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
-  applyNutrientModeVisibility();
+  const state = getActiveViewState();
 
-  const isFreshwater = selectedBoundaryId === "freshwater";
-  const isNutrients = selectedBoundaryId === "nutrients";
-
-  if (!isFreshwater && !isNutrients) {
-    document.body.classList.remove("nutrient-mode");
-    panel.hidden = true;
-    return;
-  }
+  syncBoundaryModeClass();
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
 
-  document.body.classList.toggle("nutrient-mode", isNutrients);
+  if (state.boundaryId === "nutrients") {
+    renderNutrientShell();
 
-  if (isNutrients) {
     panel.innerHTML = `
       <div class="connections-head">
         <div>
           <div class="eyebrow">NÄHRSTOFFKREISLÄUFE</div>
           <h2>Stickstoff und Phosphor</h2>
           <p>
-            Wähle einen Teilbereich. Die Darstellung zeigt dann nur die zugehörigen
-            Messwerte und Wirkungspfade.
+            Wähle einen Teilbereich. Die Mitte zeigt dann ausschließlich
+            dessen Messwerte, Wirkungspfade und Querverbindungen.
           </p>
         </div>
       </div>
+
       ${renderBoundarySubnav("nutrients")}
-      ${renderNutrientMainView(selectedDomainComponent)}
+
+      ${state.componentId
+        ? renderNutrientMainView(state.componentId)
+        : `
+          <div class="nutrient-choice-note">
+            <strong>Wähle Stickstoff oder Phosphor.</strong>
+            <p>Erst danach werden die zugehörigen Daten und Wirkungspfade eingeblendet.</p>
+          </div>`}
     `;
+
     panel.hidden = false;
     bindBoundarySubnav(panel);
     return;
   }
 
-  panel.innerHTML = `
-    <div class="connections-head">
-      <div>
-        <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
-        <h2>Was mit Süßwasser zusammenhängt</h2>
-        <p>
-          Diese Karten stammen fachlich aus <strong>Nährstoffkreisläufe</strong>.
-          Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten
-          Zustandswert der Planetaren Grenze Süßwasser.
-        </p>
+  if (state.boundaryId === "freshwater") {
+    panel.innerHTML = `
+      <div class="connections-head">
+        <div>
+          <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
+          <h2>Was mit Süßwasser zusammenhängt</h2>
+          <p>
+            Diese Karten stammen fachlich aus <strong>Nährstoffkreisläufe</strong>.
+            Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten
+            Zustandswert der Planetaren Grenze Süßwasser.
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="connections-boundary-note">
-      <span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span>
-      <span>↘ Verbindung zu Süßwasser</span>
-    </div>
+      <div class="connections-boundary-note">
+        <span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span>
+        <span>↘ Verbindung zu Süßwasser</span>
+      </div>
 
-    <div class="connection-list">
-      ${renderKnowledgeCard({
-        key: "nitrate",
-        network: nitrate,
-        eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
-        title: "Stickstoff → Nitrat im Grundwasser",
-        intro: "Ein Stickstoffpfad erreicht über Auswaschung das Grundwasser. Stickstoff trägt daneben auch zur Eutrophierung und über N₂O zum Klimawandel bei.",
-        chain: ["Stickstoff", "Stickstoffüberschuss", "Auswaschung", "Nitrat im Grundwasser", "Grundwasser", "Trinkwasser", "LEBEN"],
-        previewMeasurements: ["de_n_surplus", "de_groundwater_2024"],
-        interactionField: "interactions"
-      })}
+      <div class="connection-list">
+        ${renderKnowledgeCard({
+          key: "nitrate",
+          network: nitrate,
+          eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
+          title: "Stickstoff → Nitrat im Grundwasser",
+          intro: "Ein Stickstoffpfad erreicht über Auswaschung das Grundwasser. Stickstoff trägt daneben auch zur Eutrophierung und über N₂O zum Klimawandel bei.",
+          chain: ["Stickstoff","Stickstoffüberschuss","Auswaschung","Nitrat im Grundwasser","Grundwasser","Trinkwasser","LEBEN"],
+          previewMeasurements: ["de_n_surplus","de_groundwater_2024"],
+          interactionField: "interactions"
+        })}
 
-      ${renderKnowledgeCard({
-        key: "phosphorus",
-        network: phosphorus,
-        eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
-        title: "Phosphor → Oberflächenwasser → Eutrophierung",
-        intro: "Phosphor gelangt über Abschwemmung, Erosion und Abwasser in Oberflächengewässer. Eutrophierung ist dabei ein gemeinsamer Folgeprozess von Stickstoff und Phosphor.",
-        chain: ["Phosphor", "Eintrag", "Oberflächenwasser", "Eutrophierung", "Cyanobakterien", "Exposition", "LEBEN"],
-        previewMeasurements: ["de_river_p_exceedance", "de_river_p_orientation_values"],
-        interactionField: "boundaryInteractions"
-      })}
-    </div>
-  `;
+        ${renderKnowledgeCard({
+          key: "phosphorus",
+          network: phosphorus,
+          eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
+          title: "Phosphor → Oberflächenwasser → Eutrophierung",
+          intro: "Phosphor gelangt über Abschwemmung, Erosion und Abwasser in Oberflächengewässer. Eutrophierung ist ein gemeinsamer Folgeprozess von Stickstoff und Phosphor.",
+          chain: ["Phosphor","Eintrag","Oberflächenwasser","Eutrophierung","Cyanobakterien","Exposition","LEBEN"],
+          previewMeasurements: ["de_river_p_exceedance","de_river_p_orientation_values"],
+          interactionField: "boundaryInteractions"
+        })}
+      </div>
+    `;
 
-  panel.hidden = false;
+    panel.hidden = false;
+    return;
+  }
+
+  panel.hidden = true;
 }
 
 function getSelectedScope() { return regionSelect.value; }
@@ -597,27 +646,6 @@ function renderBoundaries() {
 function mergeItemAndPoint(item, point) { return point ? { ...item, ...point, health: point.health || item.health } : item; }
 function setLink(label, url) { sourceLink.textContent = label || "–"; if (url) { sourceLink.href = url; sourceLink.target = "_blank"; } else { sourceLink.removeAttribute("href"); sourceLink.removeAttribute("target"); } }
 
-
-
-function applyNutrientModeVisibility() {
-  const isNutrients = selectedBoundaryId === "nutrients";
-  document.body.classList.toggle("nutrient-mode", isNutrients);
-
-  const hideTargets = [
-    timeSlider?.closest(".card"),
-    metricValue?.closest(".detail-grid"),
-    findingText?.closest("details"),
-    effectPath?.closest("details"),
-    uncertaintyValue?.closest("details")
-  ].filter(Boolean);
-
-  hideTargets.forEach(element => {
-    element.classList.toggle("nutrient-standard-hidden", isNutrients);
-  });
-
-  // Der Kontextkopf bleibt sichtbar; dort steht nur, welcher Stoff aktiv ist.
-  if (isNutrients) setNutrientPlaceholderState();
-}
 
 function setNutrientPlaceholderState() {
   focusEyebrow.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
@@ -895,9 +923,10 @@ function closeOrganOverlay() {
 
 function selectBoundary(boundaryId) {
   selectedBoundaryId = boundaryId;
+  selectedItemId = null;
   selectedDomainComponent = null;
-  document.body.classList.toggle("nutrient-mode", boundaryId === "nutrients");
-  const boundary = getBoundary(boundaryId);
+  syncBoundaryModeClass();
+const boundary = getBoundary(boundaryId);
   const items = getVisibleItems(boundary);
   closeOrganOverlay();
   closeAllCauseOverlays();
