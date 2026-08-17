@@ -902,12 +902,115 @@ function renderSolarEnergyMainView() {
     </div>`;
 }
 
+
+function renderDigitalSleepMainView() {
+  const network = knowledgeNetworks.digitalSleep;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Digitalisierung-/Schlaf-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const labels = {
+    brosnan_10min_inbed_sleep_duration: "Bildschirmzeit im Bett → Schlafdauer",
+    brosnan_interactive_sleep_onset: "Interaktive Nutzung im Bett → Schlafbeginn"
+  };
+
+  const cards = (network.measurements || []).map(m => {
+    const age = m.context?.ageRange
+      ? `${m.context.ageRange.min}–${m.context.ageRange.max} Jahre`
+      : "";
+    return `
+      <article class="measurement-card oil-measurement-card">
+        <div class="measurement-card-label">${labels[m.id] || m.metric || m.id}</div>
+        <div class="measurement-card-value">${m.display || "–"}</div>
+        <div class="measurement-card-meta">${m.period || ""}${age ? ` · ${age}` : ""}</div>
+        <p>${m.interpretation || ""}</p>
+        ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+      </article>`;
+  }).join("");
+
+  const paths = [
+    {
+      title: "Schlafdauer",
+      chain: ["Bildschirmnutzung im Bett", "spätere Schlafenszeit", "kürzere Schlafdauer", "Tagesfunktion / Wohlbefinden"],
+      evidence: "moderate"
+    },
+    {
+      title: "Schlafbeginn",
+      chain: ["interaktive Nutzung im Bett", "verzögerter Schlafbeginn", "Tagesfunktion / Wohlbefinden"],
+      evidence: "moderate"
+    },
+    {
+      title: "Systembezug",
+      chain: ["digitale Nutzung", "Schlaf / zirkadiane und neurobehaviorale Funktion", "LEBEN"],
+      evidence: "moderate"
+    }
+  ];
+
+  const pathCards = paths.map(p => `
+    <div class="oil-boundary-link">
+      <strong>${p.title}</strong>
+      <p>${p.chain.join(" → ")}</p>
+      <span>Evidenz: ${p.evidence}</span>
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.workingDecision ? `<br><span>Arbeitsstand: ${g.workingDecision}</span>` : ""}</p>`
+  ).join("");
+
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_"," ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <h2>Digitalisierung → Schlaf</h2>
+      <p class="oil-lead">
+        Digitalisierung erhält keinen pauschalen Risikostatus. Entscheidend sind konkrete
+        Nutzungskontexte wie <strong>Nutzung im Bett</strong>, Zeitpunkt und Interaktivität.
+        Die gezeigten Werte sind Studienzusammenhänge, keine universellen Grenzwerte.
+      </p>
+
+      <div class="oil-path">
+        <span>Technologische & soziale Umwelt</span><b>→</b><span>Digitalisierung</span><b>→</b><span>Schlaf</span>
+      </div>
+
+      <h3>STUDIENWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+
+      <h3>WIRKUNGSPFADE</h3>
+      <div class="oil-boundary-links">${pathCards}</div>
+
+      <div class="extension-note">
+        <strong>Alterskontext:</strong> Die quantitativen Pilotwerte stammen aus Studien mit Jugendlichen.
+        Alter bleibt Kontext der Evidenz und keine eigene Graph-Ebene.
+      </div>
+
+      <div class="extension-note">
+        <strong>Systembezug:</strong> Schlaf wird als systemischer Funktionszustand geführt.
+        Kein einzelner Organmarker wird allein aufgrund von Bildschirmnutzung aktiviert.
+      </div>
+
+      <details>
+        <summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>
+        ${gaps}
+      </details>
+
+      <details>
+        <summary>Handlungsspielraum</summary>
+        <p>${action.methodNote || ""}</p>
+        ${actionRows}
+      </details>
+    </div>`;
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
 
   syncBoundaryModeClass();
-  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy");
+  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy" && state.boundaryId !== "mental-load");
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
@@ -971,6 +1074,38 @@ function renderKnowledgePanel() {
           <p>Energie ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
           <div class="extension-note">
             Reale Piloten sind bereits für <strong>Erdöl</strong>, <strong>Kohle</strong>, <strong>Wind</strong> und <strong>Solar</strong> hinterlegt.
+          </div>
+        </div>`;
+    }
+
+    panel.hidden = false;
+    return;
+  }
+
+  if (state.boundaryId === "mental-load") {
+    if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT";
+    renderHealth(null);
+
+    if (state.componentId === "sleep") {
+      if (focusTitle) focusTitle.textContent = "Digitalisierung · Schlaf";
+      if (focusSummary) focusSummary.textContent = "Konkreter Pilot zu abendlicher und nächtlicher Bildschirmnutzung, Schlafdauer und Schlafbeginn.";
+      panel.innerHTML = renderDigitalSleepMainView();
+
+      const systemHealth = knowledgeNetworks.digitalSleep?.healthContext?.systemImpacts?.[0];
+      if (systemHealth && organReadout) {
+        organReadout.textContent = `${systemHealth.label}: ${systemHealth.note || ""}`;
+      }
+    } else {
+      if (focusTitle) focusTitle.textContent = "Digitalisierung";
+      if (focusSummary) focusSummary.textContent = "Digitale Technologien werden über konkrete Nutzungskontexte und Wirkungspfade bewertet – nicht pauschal als Risiko.";
+      panel.innerHTML = `
+        <div class="extension-intro">
+          <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
+          <h2>Digitalisierung</h2>
+          <p>Digitalisierung ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
+          <div class="extension-note">
+            Der erste reale Pilot liegt unter <strong>Schlaf</strong>. Weitere Pfade wie
+            Bewegung, Gaming und Informationsumwelt können später auf derselben Ebene ergänzt werden.
           </div>
         </div>`;
     }
@@ -1464,7 +1599,7 @@ function selectItem(boundaryId, itemId) {
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
-  if (boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy") {
+  if (boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy" || boundaryId === "mental-load") {
     selectedDomainComponent = itemId;
     selectedYear = null;
     renderHealth(boundaryId === "novel" && itemId === "pfas" ? getPfasHealthView() : null);
