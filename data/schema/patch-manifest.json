@@ -1,0 +1,18 @@
+{
+  "version": "0.9.7",
+  "baseVersion": "0.9.6",
+  "mode": "patch",
+  "replace": [
+    "app.js",
+    "data.js",
+    "style.css",
+    "bodymap.json"
+  ],
+  "add": [],
+  "delete": [],
+  "important": "Nur die unter replace genannten Dateien ersetzen. Keine Ordner löschen oder vollständig ersetzen.",
+  "unchangedKnowledgeFiles": [
+    "data/knowledge/gwl_nitrat_pilot_v0.2.json",
+    "data/knowledge/gwl_phosphor_pilot_v0.1.json"
+  ]
+}

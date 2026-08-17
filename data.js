@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.6",
+  version: "0.9.7",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
@@ -241,5 +241,13 @@ window.GWL_DATA = {
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
     { id: "novel", label: "Neue Substanzen", enabled: false }
+  ]
+};
+
+// v0.9.7 – Unterhierarchie, getrennt vom Wissensgraphen.
+window.GWL_BOUNDARY_SUBNAV = {
+  biogeochemical: [
+    { id: "nitrogen", label: "Stickstoff" },
+    { id: "phosphorus", label: "Phosphor" }
   ]
 };

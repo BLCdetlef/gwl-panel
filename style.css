@@ -585,3 +585,11 @@ a { color: inherit; }
     font-size: .83rem;
   }
 }
+
+/* v0.9.7 – Unterhierarchie Nährstoffkreisläufe */
+.boundary-subnav{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.boundary-subnav-button{appearance:none;border:1px solid #cbd3cf;border-radius:999px;background:#fff;padding:6px 10px;font:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.boundary-subnav-button.active{border-color:#7e8f87;background:#e9efec}
+.shared-node-note{margin-top:9px;padding:9px 10px;border:1px dashed #bfc9c4;border-radius:10px;background:#f8faf9}
+.shared-node-note strong{display:block;margin:2px 0 3px;font-size:11px}
+.shared-node-note p{margin:0;color:var(--muted);font-size:9px;line-height:1.45}
