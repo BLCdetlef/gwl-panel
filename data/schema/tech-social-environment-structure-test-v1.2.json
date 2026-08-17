@@ -1,0 +1,160 @@
+{
+  "format": "gwl-structure-test-v1.2",
+  "status": "draft",
+  "systemBoundary": {
+    "id": "eah_tech_social_environment",
+    "type": "eah_system_boundary",
+    "label": "Technologische & soziale Umwelt",
+    "framework": "eah_extension"
+  },
+  "cases": [
+    {
+      "id": "digital_sleep",
+      "label": "Digitalisierung → Schlaf",
+      "entryComponent": "Digitalisierung / digitale Medien",
+      "path": [
+        {
+          "type": "socio_technical_state",
+          "label": "allgegenwärtige internetfähige Geräte"
+        },
+        {
+          "type": "exposure",
+          "label": "Bildschirm-/Gerätenutzung am Abend"
+        },
+        {
+          "type": "behavioral_mediator",
+          "label": "Gerätenutzung im Bett / spätere Schlafenszeit"
+        },
+        {
+          "type": "biological_effect",
+          "label": "verkürzte oder gestörte Schlafdauer/-qualität"
+        },
+        {
+          "type": "life_outcome",
+          "label": "Tagesfunktion / psychische und körperliche Gesundheit"
+        }
+      ],
+      "evidenceNote": "Longitudinale Beobachtungsdaten stützen Zusammenhänge zwischen bestimmten Bildschirmverhaltensweisen und späteren Schlafparametern; Nutzungstyp und Zeitpunkt sind relevant.",
+      "architectureResult": "PASS_WITH_NEW_TYPES",
+      "ageContext": {
+        "lifeStage": [
+          "adolescence"
+        ],
+        "ageRange": {
+          "min": 11,
+          "max": 15,
+          "unit": "years"
+        },
+        "note": "Beispielhaft aus jugendbezogenen longitudinalen Studien; tatsächliche Altersbereiche werden je Quelle gespeichert."
+      }
+    },
+    {
+      "id": "gaming_movement",
+      "label": "Digitale Freizeit / Gaming → Bewegung",
+      "entryComponent": "Digitale Freizeit / Computerspiele",
+      "branches": [
+        {
+          "label": "sitzender Pfad",
+          "path": [
+            {
+              "type": "exposure",
+              "label": "längere sitzende Spielzeit"
+            },
+            {
+              "type": "behavioral_mediator",
+              "label": "sitzende Freizeit / mögliche Verdrängung von Bewegung"
+            },
+            {
+              "type": "biological_effect",
+              "label": "geringere körperliche Aktivität oder Fitness – kontextabhängig"
+            },
+            {
+              "type": "life_outcome",
+              "label": "körperliche Gesundheit"
+            }
+          ]
+        },
+        {
+          "label": "aktiver Pfad",
+          "path": [
+            {
+              "type": "exposure",
+              "label": "aktive Videospiele / Exergames"
+            },
+            {
+              "type": "behavioral_mediator",
+              "label": "körperlich aktives Spielen"
+            },
+            {
+              "type": "biological_effect",
+              "label": "zusätzliche körperliche Aktivität"
+            },
+            {
+              "type": "life_outcome",
+              "label": "Fitness / motorische Funktion"
+            }
+          ]
+        }
+      ],
+      "architectureResult": "PASS",
+      "lesson": "Dasselbe technische Medium kann gegensätzliche Wirkungspfade besitzen. Der Graph darf Wertungen nicht am Oberknoten festschreiben.",
+      "ageContext": {
+        "lifeStage": [
+          "adolescence",
+          "adulthood"
+        ],
+        "note": "Der Alterskontext unterscheidet sich je Studie und Nutzungsform; keine pauschale Alterszuordnung."
+      }
+    },
+    {
+      "id": "information_environment",
+      "label": "Informationsumwelt → Belastung / Verhalten",
+      "entryComponent": "Informationsumwelt",
+      "path": [
+        {
+          "type": "socio_technical_state",
+          "label": "hohe Informationsdichte / algorithmische Verbreitung"
+        },
+        {
+          "type": "exposure",
+          "label": "wiederholte Exposition gegenüber belastenden oder falschen Inhalten"
+        },
+        {
+          "type": "behavioral_mediator",
+          "label": "wiederholtes Prüfen / Doomscrolling / Weiterverbreitung"
+        },
+        {
+          "type": "biological_effect",
+          "label": "Stress / Unsicherheit / emotionale Belastung"
+        },
+        {
+          "type": "life_outcome",
+          "label": "psychisches Wohlbefinden und gesundheitsrelevante Entscheidungen"
+        }
+      ],
+      "architectureResult": "PASS_WITH_CAUSALITY_CAUTION",
+      "lesson": "Der Informationsinhalt, die Wiederholung und das Nutzerverhalten müssen getrennte Knoten bleiben; viele Befunde sind assoziativ.",
+      "ageContext": {
+        "lifeStage": [
+          "adolescence",
+          "adulthood"
+        ],
+        "note": "Alterskontext wird nur an der jeweiligen Evidenz gespeichert; nicht am Oberknoten Informationsumwelt."
+      }
+    }
+  ],
+  "overallResult": {
+    "status": "PASS_WITH_EXTENSION",
+    "existingTypesSufficientFor": "Exposition, biologische/psychische Wirkung, LEBEN, Handlungsspielraum",
+    "newTypesNeeded": [
+      "eah_system_boundary",
+      "socio_technical_state",
+      "behavioral_mediator"
+    ],
+    "importantChange": "Die v1.1-Struktur war stark physisch-ökologisch geprägt. v1.2 macht sie zu einem allgemeineren Earth–Human-Wissensgraphen, ohne die Planetaren Grenzen umzudefinieren.",
+    "ageHandling": {
+      "status": "PASS_AS_CONTEXT",
+      "decision": "Alter/Lebensphase wird als Kontextmerkmal modelliert und nicht als eigene Graph-Ebene."
+    }
+  }
+}

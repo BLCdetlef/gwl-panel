@@ -1,0 +1,151 @@
+{
+  "format": "gwl-structure-test-v1.3",
+  "status": "draft",
+  "systemBoundary": {
+    "id": "eah_material_energy_flows",
+    "type": "eah_system_boundary",
+    "label": "Stoff- und Energieströme",
+    "framework": "eah_extension"
+  },
+  "pilot": {
+    "id": "oil_flow_pilot",
+    "label": "Erdöl – globaler Stoff- und Energiestrom",
+    "nodes": [
+      {
+        "id": "energy",
+        "type": "domain_component",
+        "label": "Energie"
+      },
+      {
+        "id": "oil",
+        "type": "domain_component",
+        "label": "Erdöl"
+      },
+      {
+        "id": "global_oil_production",
+        "type": "system_flow",
+        "label": "Globale Ölproduktion",
+        "measurementTemplate": {
+          "value": null,
+          "unit": "barrel/day",
+          "displayUnit": "Mio. Barrel/Tag",
+          "scope": "global",
+          "time": null,
+          "source": null
+        },
+        "note": "In v1.3 bewusst noch ohne konkreten Zahlenwert; die Architektur wird unabhängig vom später gewählten Datensatz getestet."
+      },
+      {
+        "id": "oil_extraction",
+        "type": "human_activity",
+        "label": "Förderung"
+      },
+      {
+        "id": "oil_refining",
+        "type": "human_activity",
+        "label": "Raffination"
+      },
+      {
+        "id": "oil_combustion",
+        "type": "mechanism",
+        "label": "Verbrennung"
+      },
+      {
+        "id": "petrochemical_use",
+        "type": "human_activity",
+        "label": "Petrochemische Nutzung"
+      },
+      {
+        "id": "co2_from_oil",
+        "type": "pressure",
+        "label": "CO₂-Emissionen aus Erdölnutzung"
+      },
+      {
+        "id": "land_water_pressure_oil",
+        "type": "pressure",
+        "label": "Flächen- und Wasserbeanspruchung durch Förderung"
+      },
+      {
+        "id": "chemical_material_flows",
+        "type": "system_flow",
+        "label": "Petrochemische Stoffströme"
+      }
+    ],
+    "edges": [
+      {
+        "from": "energy",
+        "to": "oil",
+        "relationType": "contains"
+      },
+      {
+        "from": "oil",
+        "to": "global_oil_production",
+        "relationType": "contains"
+      },
+      {
+        "from": "global_oil_production",
+        "to": "oil_extraction",
+        "relationType": "associated_with",
+        "note": "Produktionsmessung quantifiziert den Förderstrom; Prozess und Messgröße bleiben getrennt."
+      },
+      {
+        "from": "oil_extraction",
+        "to": "land_water_pressure_oil",
+        "relationType": "contributes_to"
+      },
+      {
+        "from": "global_oil_production",
+        "to": "oil_refining",
+        "relationType": "enables"
+      },
+      {
+        "from": "oil_refining",
+        "to": "oil_combustion",
+        "relationType": "enables"
+      },
+      {
+        "from": "oil_combustion",
+        "to": "co2_from_oil",
+        "relationType": "causes"
+      },
+      {
+        "from": "co2_from_oil",
+        "to": "pg_climate_change",
+        "relationType": "boundary_link",
+        "direction": "driver_to_boundary"
+      },
+      {
+        "from": "oil_refining",
+        "to": "petrochemical_use",
+        "relationType": "enables"
+      },
+      {
+        "from": "petrochemical_use",
+        "to": "chemical_material_flows",
+        "relationType": "causes"
+      },
+      {
+        "from": "chemical_material_flows",
+        "to": "pg_novel_entities",
+        "relationType": "boundary_link",
+        "direction": "driver_to_boundary"
+      },
+      {
+        "from": "land_water_pressure_oil",
+        "to": "pg_freshwater",
+        "relationType": "boundary_link",
+        "direction": "driver_to_boundary",
+        "evidenceRequired": true
+      },
+      {
+        "from": "land_water_pressure_oil",
+        "to": "pg_land_system_change",
+        "relationType": "boundary_link",
+        "direction": "driver_to_boundary",
+        "evidenceRequired": true
+      }
+    ],
+    "architectureResult": "PASS_WITH_SYSTEM_FLOW"
+  },
+  "importantFinding": "Stoff- und Energieströme konkurriert nicht mit den Planetaren Grenzen. Es bildet einen vorgelagerten menschlichen Durchsatz ab; die PGs bilden die nachgelagerten Erdsystemzustände bzw. Belastungsgrenzen ab."
+}

@@ -1,0 +1,224 @@
+{
+  "format": "gwl-node-level-spec-v1.2",
+  "status": "draft",
+  "title": "Knoten- und Ebenenspezifikation v1.2 – Technologische & soziale Umwelt",
+  "changesFromV1_1": [
+    "Die oberste Hierarchie wird verallgemeinert: Neben planetary_boundary ist eah_system_boundary zulässig.",
+    "behavioral_mediator wird als neuer Knotentyp eingeführt.",
+    "socio_technical_state wird als neuer Knotentyp für beobachtbare Zustände der technischen/informationellen/sozialen Umwelt eingeführt.",
+    "environmental_state bleibt für physische Umweltzustände reserviert.",
+    "Exposition wird breiter verstanden: physischer, digitaler, informationaler oder sozialer Kontakt.",
+    "Technik wird nicht pauschal als Belastung modelliert; ein Knoten kann schützende, neutrale oder belastende Pfade besitzen.",
+    "Kausalität und Assoziation werden strikt getrennt; viele digitale Gesundheitsbefunde bleiben zunächst associated_with.",
+    "Alter wird nicht als eigene Graph-Ebene modelliert, sondern als Kontextmerkmal an Studien, Kanten, Expositionen und Wirkungen."
+  ],
+  "topHierarchy": {
+    "allowedTypes": [
+      {
+        "type": "planetary_boundary",
+        "framework": "planetary_boundaries"
+      },
+      {
+        "type": "eah_system_boundary",
+        "framework": "eah_extension"
+      }
+    ],
+    "rule": "Beide dürfen in der Navigation auf derselben Ebene stehen, müssen aber ihre Framework-Zugehörigkeit transparent speichern."
+  },
+  "nodeTypes": [
+    {
+      "type": "planetary_boundary",
+      "role": "top_hierarchy",
+      "framework": "planetary_boundaries"
+    },
+    {
+      "type": "eah_system_boundary",
+      "role": "top_hierarchy",
+      "framework": "eah_extension"
+    },
+    {
+      "type": "domain_component",
+      "role": "subdivision"
+    },
+    {
+      "type": "human_activity",
+      "role": "collective_or_system_driver"
+    },
+    {
+      "type": "pressure",
+      "role": "physical_or_system_pressure"
+    },
+    {
+      "type": "mechanism",
+      "role": "process"
+    },
+    {
+      "type": "environmental_state",
+      "role": "physical_environmental_state"
+    },
+    {
+      "type": "socio_technical_state",
+      "role": "technical_social_or_information_environment_state",
+      "newIn": "1.2"
+    },
+    {
+      "type": "environmental_medium",
+      "role": "physical_medium_or_system",
+      "optional": true
+    },
+    {
+      "type": "exposure",
+      "role": "physical_digital_informational_or_social_contact"
+    },
+    {
+      "type": "behavioral_mediator",
+      "role": "behavior_between_environment_and_effect",
+      "newIn": "1.2"
+    },
+    {
+      "type": "biological_effect",
+      "role": "biological_or_psychological_mechanism"
+    },
+    {
+      "type": "life_outcome",
+      "role": "human_health_function_or_wellbeing_outcome"
+    },
+    {
+      "type": "action_scope",
+      "role": "orientation",
+      "scientificLayer": false
+    }
+  ],
+  "newTypeDefinitions": {
+    "socio_technical_state": {
+      "definition": "Beobachtbarer Zustand oder Eigenschaft der technischen, sozialen oder informationellen Umwelt.",
+      "examples": [
+        "permanente digitale Erreichbarkeit",
+        "algorithmisch kuratierter Informationsstrom",
+        "hohe Informationsdichte",
+        "Verfügbarkeit interaktiver Bildschirmmedien"
+      ],
+      "notFor": [
+        "individuelle Bildschirmzeit",
+        "Stress",
+        "Schlafmangel",
+        "Krankheitsdiagnosen"
+      ]
+    },
+    "behavioral_mediator": {
+      "definition": "Verhalten, das zwischen einer Umweltbedingung/Exposition und einer biologischen, psychischen oder funktionellen Wirkung vermittelt.",
+      "examples": [
+        "Smartphonenutzung im Bett",
+        "spätere Schlafenszeit",
+        "sitzende Freizeit",
+        "körperlich aktives Spielen",
+        "wiederholtes Prüfen von Nachrichten"
+      ],
+      "rule": "Verhalten ist weder automatisch Ursache noch Gesundheitswirkung; Richtung und Evidenz müssen pro Kante angegeben werden."
+    }
+  },
+  "relationTypes": [
+    "contains",
+    "part_of",
+    "belongs_to_boundary",
+    "causes",
+    "contributes_to",
+    "increases",
+    "decreases",
+    "transforms_into",
+    "transported_by",
+    "diluted_by",
+    "concentrated_by",
+    "occurs_in",
+    "affects",
+    "amplifies",
+    "reduces",
+    "interacts_with",
+    "exposes_via",
+    "triggers",
+    "impairs",
+    "protects",
+    "associated_with",
+    "mediated_by",
+    "displaces",
+    "enables",
+    "reinforces",
+    "boundary_link",
+    "modifiable_by",
+    "regulated_by",
+    "influenced_by_actor"
+  ],
+  "evidenceRules": {
+    "statuses": [
+      "strong",
+      "moderate",
+      "weak",
+      "open",
+      "conflicting"
+    ],
+    "causalRule": "causes/triggers/impairs nur verwenden, wenn Studiendesign und Evidenz Kausalität ausreichend stützen; sonst associated_with oder contributes_to.",
+    "contextRule": "Alter, Nutzungstyp, Tageszeit, Inhalt, Ausgangsgesundheit und sozialer Kontext können Teil der Kanten-Evidenz sein."
+  },
+  "displayRules": {
+    "maxImmediateNodes": 5,
+    "fullGraphHiddenByDefault": true,
+    "showBenefitsAndHarms": true,
+    "showAssociationVsCausality": true,
+    "frameworkBadgeInDataNotEveryNode": true
+  },
+  "validationRules": [
+    "Technologische Nutzung darf nicht pauschal als gesundheitsschädlich codiert werden.",
+    "Screen time allein darf nicht ohne Kontext als Mechanismus oder Krankheit interpretiert werden.",
+    "Verhaltensvermittler sind von Exposition und biologischer Wirkung zu trennen.",
+    "Misinformation darf nicht direkt mit Krankheit verbunden werden, wenn vermittelnde Knoten fehlen.",
+    "Bei Kindern/Jugendlichen sind Altersgruppe und Entwicklungsphase als Kontext zu speichern.",
+    "Aktive Videospiele dürfen nicht mit sitzendem Gaming zu einem einzigen Wirkpfad zusammengezogen werden.",
+    "Psychische Belastungen gehören in biological_effect oder life_outcome, nicht als oberste Ursache.",
+    "Altersgruppen dürfen nicht als eigenständige Wirkpfade dupliziert werden, wenn der zugrunde liegende Mechanismus derselbe ist.",
+    "Bei altersabhängiger Evidenz müssen lifeStage und – sofern vorhanden – ageRange an der jeweiligen Evidenz oder Kante gespeichert werden.",
+    "Eine Altersgruppe darf nicht allein aus dem Thema abgeleitet werden; sie muss durch Quelle, Mechanismus oder Expositionskontext gestützt sein."
+  ],
+  "contextModel": {
+    "principle": "Alter/Lebensphase ist Kontext, keine eigene Graph-Ebene.",
+    "fields": {
+      "lifeStage": {
+        "type": "array",
+        "allowedExamples": [
+          "prenatal",
+          "early_childhood",
+          "childhood",
+          "adolescence",
+          "adulthood",
+          "older_adulthood"
+        ]
+      },
+      "ageRange": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+          "min": "number|null",
+          "max": "number|null",
+          "unit": "years"
+        }
+      }
+    },
+    "attachTo": [
+      "study_evidence",
+      "edge",
+      "exposure",
+      "biological_effect",
+      "life_outcome"
+    ],
+    "rules": [
+      "Ein Stoff oder Thema darf nicht pauschal einer Altersgruppe zugeordnet werden.",
+      "Altersbezug wird nur dort gespeichert, wo Quelle oder Mechanismus ihn stützen.",
+      "Exakte Altersbereiche aus Studien werden zusätzlich zur allgemeinen Lebensphase gespeichert.",
+      "Die UI zeigt Alterskontext nur, wenn er für Interpretation oder Vulnerabilität relevant ist."
+    ],
+    "uiExamples": [
+      "Besonders relevant: Jugendalter",
+      "Evidenz basiert überwiegend auf 12–17-Jährigen",
+      "Empfindliche Lebensphase: Schwangerschaft"
+    ]
+  }
+}

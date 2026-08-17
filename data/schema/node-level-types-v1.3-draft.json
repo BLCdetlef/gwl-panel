@@ -1,0 +1,63 @@
+{
+  "format": "gwl-node-level-spec-v1.3",
+  "status": "draft",
+  "title": "Knoten- und Ebenenspezifikation v1.3 – Stoff- und Energieströme",
+  "basedOn": "v1.2",
+  "testQuestion": "Kann Stoff- und Energieströme als ergänzende Systemgrenze modelliert werden, ohne mit den Planetaren Grenzen zu konkurrieren oder Treiber und Erdsystemzustand zu vermischen?",
+  "result": "PASS_WITH_EXTENSION",
+  "principles": [
+    "Ergänzende Systemgrenzen dürfen vorgelagerte Treiber der Planetaren Grenzen enthalten.",
+    "Planetare Grenzen bleiben Referenz für den Zustand und die Belastbarkeit des Erdsystems.",
+    "Ein Treiberknoten wird nur einmal gespeichert und über Kanten mit mehreren Planetaren Grenzen oder Gesundheitswirkungen verbunden.",
+    "Durchsatzgrößen sind Messgrößen, aber nicht automatisch Grenzwerte.",
+    "Produktion, Verbrauch, Förderung, Verarbeitung und physische Stoffbewegung müssen semantisch unterscheidbar bleiben."
+  ],
+  "changesFromV1_2": [
+    "system_flow wird als neuer Knotentyp eingeführt.",
+    "flow_metric wird nicht als eigener Knotentyp geführt; Messwerte hängen als measurement an system_flow oder anderen passenden Knoten.",
+    "cross_framework_driver wird als Rollenmerkmal statt als eigener Knotentyp modelliert.",
+    "Treiber-zu-PG-Verbindungen werden als boundary_link mit direction='driver_to_boundary' gespeichert."
+  ],
+  "nodeTypesAdded": [
+    {
+      "type": "system_flow",
+      "role": "measurable_material_or_energy_throughput",
+      "definition": "Quantifizierbarer Stoff- oder Energiestrom durch menschliche Wirtschafts- und Versorgungssysteme.",
+      "examples": [
+        "globale Erdölproduktion",
+        "globaler Primärenergieverbrauch",
+        "Materialextraktion",
+        "Kunststoffproduktion"
+      ]
+    }
+  ],
+  "measurementRule": {
+    "rule": "Eine Größe wie Barrel pro Tag ist ein measurement am Knoten system_flow, kein eigener Grenzwertknoten.",
+    "requiredFields": [
+      "value",
+      "unit",
+      "time",
+      "scope",
+      "source"
+    ],
+    "optionalFields": [
+      "uncertainty",
+      "method",
+      "coverage",
+      "conversion"
+    ]
+  },
+  "crossFrameworkRule": {
+    "rule": "Ein Knoten aus einer ergänzenden Systemgrenze kann Treiber mehrerer Planetarer Grenzen sein. Er wird nicht unter jeder PG dupliziert.",
+    "example": "Erdöl -> Verbrennung -> CO2 -> Klimawandel; Erdöl -> petrochemische Nutzung -> Kunststoffe/Chemikalien -> Neue Substanzen."
+  },
+  "validationRules": [
+    "Globale Ölproduktion darf nicht als planetarer Grenzwert bezeichnet werden.",
+    "Erdöl darf nicht separat unter Stoff- und Energieströme und Klimawandel dupliziert werden.",
+    "Ein Produktionswert darf nicht ohne Umrechnung als Emissionswert verwendet werden.",
+    "Förderung, Raffination, Verbrennung und petrochemische Nutzung sind getrennte Prozessknoten.",
+    "Eine Kante zu einer Planetaren Grenze muss den vermittelnden Mechanismus bzw. Zustandsknoten erhalten, sofern wissenschaftlich relevant.",
+    "Messwert, Referenzwert und Grenzwert müssen als unterschiedliche Rollen gespeichert werden.",
+    "Lebensphasen bleiben Kontext und werden nur an gesundheitsrelevanten Kanten/Evidenzen ergänzt."
+  ]
+}
