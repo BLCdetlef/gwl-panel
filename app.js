@@ -360,6 +360,12 @@ function renderNutrientMainView(componentId) {
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
 
+  const activeBoundary = getBoundary(state.boundaryId);
+  if (isEahExtension(activeBoundary)) {
+    renderExtensionView(activeBoundary);
+    return;
+  }
+
   if (componentId === "nitrogen") {
     const m1 = getMeasurement(nitrate, "de_n_surplus");
     const m2 = getMeasurement(nitrate, "de_groundwater_2024");
@@ -698,6 +704,38 @@ function getVisibleItems(boundary) {
 function getTimePoints(item) { return item?.timePoints ? [...item.timePoints].sort((a,b)=>a.year-b.year) : []; }
 function renderRegionPath() { const scope = data.scopes[getSelectedScope()]; regionPath.textContent = scope?.path || scope?.label || "Global"; }
 
+
+function isEahExtension(boundary) {
+  return boundary?.framework === "eah_extension";
+}
+
+function renderExtensionView(boundary) {
+  setStandardEffectBlocksVisible(false);
+
+  if (focusType) focusType.textContent = "EAH-MIRROR · ERGÄNZENDE SYSTEMGRENZE";
+  if (focusTitle) focusTitle.textContent = boundary.label;
+  if (focusSummary) focusSummary.textContent = boundary.summary || "";
+
+  renderHealth(null);
+
+  const panel = ensureKnowledgePanel();
+  panel.innerHTML = `
+    <div class="extension-intro">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE</div>
+      <h2>${boundary.label}</h2>
+      <p>${boundary.summary || ""}</p>
+      <div class="extension-note">
+        Diese Kategorie gehört <strong>nicht</strong> zum klassischen Modell der neun Planetaren Grenzen.
+        Sie wird im EAH-Mirror auf derselben Navigationsebene geführt, weil sie für Lebensgrundlagen,
+        Gesundheit und Handlungsspielraum systemisch relevant ist.
+      </div>
+      <div class="extension-status">
+        <strong>Status:</strong> Struktur angelegt · Messgrößen und Referenzwerte noch in Entwicklung
+      </div>
+    </div>`;
+  panel.hidden = false;
+}
+
 function renderBoundaries() {
   boundaryList.innerHTML = "";
   data.boundaries.forEach(boundary => {
@@ -706,6 +744,10 @@ function renderBoundaries() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "boundary-button";
+    if (isEahExtension(boundary)) {
+      button.classList.add("extension-boundary");
+      button.title = "Ergänzende Systemgrenze des EAH-Mirror";
+    }
     if (!boundary.enabled) button.classList.add("disabled");
     if (boundary.id === selectedBoundaryId) button.classList.add("active");
     button.innerHTML = `<span>${boundary.label}</span><span>${boundary.enabled ? "›" : ""}</span>`;
@@ -1046,6 +1088,16 @@ const boundary = getBoundary(boundaryId);
   closeOrganOverlay();
   closeAllCauseOverlays();
   if (items.length) { selectItem(boundaryId, items[0].id); return; }
+
+  if (isEahExtension(boundary)) {
+    selectedItemId = null;
+    selectedYear = null;
+    closeAllCauseOverlays();
+    renderBoundaries();
+    renderExtensionView(boundary);
+    return;
+  }
+
   selectedItemId = null; selectedYear = null;
   focusType.textContent = `Grundlage · ${data.scopes[getSelectedScope()]?.label || ""}`;
   focusTitle.textContent = boundary.label;

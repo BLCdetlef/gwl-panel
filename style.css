@@ -781,3 +781,48 @@ body.nutrient-mode #uncertaintyValue {
 body.nutrient-mode .connections-panel {
   margin-top: 10px;
 }
+
+
+/* v0.9.13 – EAH-Erweiterungen: gleiche Navigationsebene, fachlich klar markiert */
+.boundary-button.extension-boundary {
+  position: relative;
+}
+.boundary-button.extension-boundary::after {
+  content: "EAH";
+  margin-left: auto;
+  margin-right: 4px;
+  padding: 2px 5px;
+  border: 1px solid #b9c1bd;
+  border-radius: 999px;
+  color: var(--muted);
+  background: #f7f9f8;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+.extension-intro {
+  padding: 12px;
+  border: 1px solid #cfd7d3;
+  border-radius: 12px;
+  background: #f6f9f7;
+}
+.extension-intro h2 {
+  margin: 3px 0 5px;
+  font-size: 17px;
+}
+.extension-intro > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.extension-note,
+.extension-status {
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background: #fff;
+  border: 1px solid #dbe1de;
+  font-size: 9px;
+  line-height: 1.45;
+}
