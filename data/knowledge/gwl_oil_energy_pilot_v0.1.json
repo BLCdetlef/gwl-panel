@@ -1,0 +1,421 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Erdöl / globale Öl- und Energieströme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "Erdöl"
+  },
+  "corePrinciples": [
+    "Ölproduktion ist ein menschlicher Stoff- und Energiestrom, keine Planetare Grenze.",
+    "Barrel pro Tag ist eine Durchsatzmessung und kein Grenzwert.",
+    "Produktion, Verbrauch/Nachfrage und CO2-Emissionen sind getrennte Messgrößen.",
+    "Erdöl wird nur einmal als Knoten gespeichert; Verbindungen zu Klimawandel, Süßwasser, Landnutzung und Neuen Substanzen erfolgen über belegte Pfade.",
+    "Aus Produktionsmengen werden keine Emissionen ohne eigene belastbare Daten oder Umrechnung abgeleitet."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_energy",
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "id": "component_oil",
+      "type": "domain_component",
+      "label": "Erdöl"
+    },
+    {
+      "id": "flow_global_oil_production",
+      "type": "system_flow",
+      "label": "Globale Ölproduktion"
+    },
+    {
+      "id": "flow_global_oil_demand",
+      "type": "system_flow",
+      "label": "Globale Ölnachfrage / Ölverbrauch"
+    },
+    {
+      "id": "flow_oil_co2",
+      "type": "system_flow",
+      "label": "CO₂-Emissionen aus Ölnutzung"
+    },
+    {
+      "id": "activity_oil_extraction",
+      "type": "human_activity",
+      "label": "Erdölförderung"
+    },
+    {
+      "id": "activity_refining",
+      "type": "human_activity",
+      "label": "Raffination"
+    },
+    {
+      "id": "activity_transport_use",
+      "type": "human_activity",
+      "label": "Verbrennung in Verkehr, Industrie und weiteren Anwendungen"
+    },
+    {
+      "id": "activity_petrochemistry",
+      "type": "human_activity",
+      "label": "Petrochemische Nutzung"
+    },
+    {
+      "id": "pressure_co2_oil",
+      "type": "pressure",
+      "label": "CO₂-Emissionen aus Ölverbrennung"
+    },
+    {
+      "id": "pressure_land_water_oil",
+      "type": "pressure",
+      "label": "Flächen- und Wasserbeanspruchung durch Förderung"
+    },
+    {
+      "id": "flow_petrochemical_materials",
+      "type": "system_flow",
+      "label": "Petrochemische Stoffströme"
+    },
+    {
+      "id": "pb_climate",
+      "type": "planetary_boundary",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "pb_freshwater",
+      "type": "planetary_boundary",
+      "label": "Süßwasser"
+    },
+    {
+      "id": "pb_land",
+      "type": "planetary_boundary",
+      "label": "Landnutzungsänderung"
+    },
+    {
+      "id": "pb_novel",
+      "type": "planetary_boundary",
+      "label": "Neue Substanzen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_energy",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_energy",
+      "to": "component_oil",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_oil",
+      "to": "flow_global_oil_production",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_oil",
+      "to": "flow_global_oil_demand",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_global_oil_production",
+      "to": "activity_oil_extraction",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong",
+      "note": "Die Produktionsmessung quantifiziert den Förderstrom; sie ist nicht identisch mit dem Förderprozess."
+    },
+    {
+      "from": "activity_oil_extraction",
+      "to": "pressure_land_water_oil",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate",
+      "note": "Art und Stärke hängen stark von Fördermethode und Standort ab."
+    },
+    {
+      "from": "flow_global_oil_production",
+      "to": "activity_refining",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_refining",
+      "to": "activity_transport_use",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_transport_use",
+      "to": "pressure_co2_oil",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_co2_oil",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_refining",
+      "to": "activity_petrochemistry",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_petrochemistry",
+      "to": "flow_petrochemical_materials",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_petrochemical_materials",
+      "to": "pb_novel",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Der genaue Pfad hängt von Stoffklasse, Produktion, Freisetzung und Persistenz ab."
+    },
+    {
+      "from": "pressure_land_water_oil",
+      "to": "pb_freshwater",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Kein globaler quantitativer Effektwert im Pilot; Verbindung bleibt mechanistisch."
+    },
+    {
+      "from": "pressure_land_water_oil",
+      "to": "pb_land",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate",
+      "note": "Kein globaler quantitativer Effektwert im Pilot; Verbindung bleibt mechanistisch."
+    }
+  ],
+  "measurements": [
+    {
+      "id": "world_oil_production_2023_eia",
+      "node": "flow_global_oil_production",
+      "geography": "Global",
+      "period": "2023",
+      "metric": "Gesamte Ölproduktion",
+      "value": 101.81,
+      "unit": "million_barrels_per_day",
+      "display": "101,81 Mio. Barrel/Tag",
+      "definition": "EIA 'total oil': Rohöl, andere Petroleumflüssigkeiten und Biokraftstoffe; Produktion einschließlich Raffinerieverarbeitungsgewinn.",
+      "interpretation": "Durchsatzmessung. Kein planetarer oder gesundheitlicher Grenzwert.",
+      "sourceRefs": [
+        "src_eia_top_oil_producers"
+      ]
+    },
+    {
+      "id": "world_oil_demand_2024_iea",
+      "node": "flow_global_oil_demand",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Ölnachfrage / Verbrauch",
+      "value": 193,
+      "unit": "EJ_per_year",
+      "display": "193 EJ/Jahr",
+      "change": "2024 +0,8 % bzw. +830.000 Barrel/Tag gegenüber 2023",
+      "interpretation": "Verbrauchs-/Nachfragegröße; nicht mit Produktion gleichsetzen.",
+      "sourceRefs": [
+        "src_iea_global_energy_review_2025_oil"
+      ]
+    },
+    {
+      "id": "world_liquid_fuels_production_2024_eia",
+      "node": "flow_global_oil_production",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Globale Produktion flüssiger Kraftstoffe",
+      "value": 103.1,
+      "unit": "million_barrels_per_day",
+      "display": "103,1 Mio. Barrel/Tag",
+      "definition": "EIA STEO 'global liquid fuels production'; breiter als reines Rohöl.",
+      "interpretation": "Aktuellerer Vergleichswert, aber definitorisch nicht identisch mit dem EIA-'total oil'-Wert 2023.",
+      "sourceRefs": [
+        "src_eia_steo_global_oil"
+      ]
+    },
+    {
+      "id": "oil_co2_share_2024_gcb",
+      "node": "flow_oil_co2",
+      "geography": "Global",
+      "period": "2024",
+      "metric": "Anteil Öl an fossilen CO₂-Emissionen",
+      "value": 32,
+      "unit": "percent_of_fossil_CO2",
+      "display": "32 % der fossilen CO₂-Emissionen",
+      "sourceValueFossilEmissions": "10,3 ± 0,5 GtC fossile CO₂-Emissionen 2024",
+      "derivedApproximation": {
+        "value": 12.09,
+        "unit": "GtCO2_per_year",
+        "display": "ca. 12.09 Gt CO₂/Jahr",
+        "method": "10,3 GtC × 32 % × 44/12",
+        "warning": "Abgeleiteter Näherungswert aus dem publizierten Brennstoffanteil; nicht als separater Originalmesswert der Quelle behandeln."
+      },
+      "interpretation": "Klimatreiber. Keine Aussage über die gesamte Umweltwirkung von Erdöl.",
+      "sourceRefs": [
+        "src_gcb_2025"
+      ]
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "oil_to_climate",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Klimawandel"
+      ],
+      "mechanism": "Öl wird in großen Mengen energetisch genutzt; Verbrennung erzeugt CO₂ und trägt dadurch zum anthropogenen Klimawandel bei.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "oil_to_novel",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Neue Substanzen"
+      ],
+      "mechanism": "Ein Teil des Erdöls wird petrochemisch zu Kunststoffen und Chemikalien weiterverarbeitet; deren Freisetzung und Persistenz kann zur Belastung durch Neue Substanzen beitragen.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "oil_to_water_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Süßwasser",
+        "Landnutzungsänderung"
+      ],
+      "mechanism": "Förderung und Verarbeitung können lokal Flächen und Wasserressourcen beanspruchen oder belasten; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "id": "gap_production_definition",
+      "question": "Welche Produktionsdefinition soll im GWL dauerhaft Standard sein: Rohöl, Rohöl+Kondensate, 'total oil' oder gesamte flüssige Kraftstoffe?",
+      "priority": "very_high",
+      "reason": "Die Werte unterscheiden sich je nach Definition; ein Zeittrend darf nicht verschiedene Definitionen mischen."
+    },
+    {
+      "id": "gap_production_consumption_link",
+      "question": "Wie sollen Produktion, Raffineriedurchsatz, Verbrauch und Lagerveränderungen getrennt und miteinander verknüpft werden?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_oil_climate_attribution",
+      "question": "Welche Emissionsreihe aus Ölnutzung eignet sich als dauerhafte, zitierbare Klimaverbindung im GWL?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_water_land_quantification",
+      "question": "Gibt es robuste globale Kennzahlen für Wasser- und Flächenbeanspruchung der Ölförderung, die unterschiedliche Fördermethoden sinnvoll aggregieren?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_petrochemical_flow",
+      "question": "Welcher messbare Teil des Ölstroms wird petrochemisch genutzt und wie lässt er sich sauber mit Kunststoff-/Chemikalienströmen verknüpfen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_demand",
+        "label": "Individuelle Nachfrage",
+        "level": "mittel",
+        "rationale": "Mobilität, Heizung, Flugreisen und Konsum petrochemischer Produkte können den persönlichen Ölbedarf beeinflussen, bilden aber nur einen Teil des globalen Systems."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering",
+        "rationale": "Eine Einzelperson verändert globale Förder-, Raffinerie- und Infrastrukturstrukturen nur begrenzt."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Energie-, Verkehrs-, Industrie-, Gebäude- und Stoffpolitik sowie technologische Substitution beeinflussen die Nachfrage und damit langfristig die Stoff- und Energieströme."
+      }
+    ],
+    "primaryLevers": [
+      {
+        "actor": "Energie- und Verkehrssektor",
+        "role": "Elektrifizierung, Effizienz, alternative Energieträger"
+      },
+      {
+        "actor": "Industrie",
+        "role": "Prozessumstellung, Materialeffizienz, petrochemische Substitution"
+      },
+      {
+        "actor": "Staaten & internationale Politik",
+        "role": "Infrastruktur, Standards, CO₂- und Energiepolitik"
+      },
+      {
+        "actor": "Städte & Kommunen",
+        "role": "Mobilitäts- und Gebäudestrukturen"
+      },
+      {
+        "actor": "Haushalte",
+        "role": "Nachfrageentscheidungen innerhalb der verfügbaren Infrastruktur"
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Welche Definition von 'globaler Ölproduktion' ist für einen langfristigen GWL-Zeittrend am robustesten?",
+    "Soll der primäre Flow-Knoten Produktion oder Verbrauch/Nachfrage abbilden – oder beide parallel?",
+    "Wie weit dürfen wir Ölproduktion als vorgelagerten Treiber von CO₂ modellieren, ohne Lagerbestände, Raffinerieprozesse und nichtenergetische Nutzung zu übergehen?",
+    "Welche Öl-bezogenen Stoffströme sind für Neue Substanzen quantitativ erfassbar?",
+    "Welche Wasser-/Landwirkungen sind global belastbar quantifizierbar und welche sollten regional bleiben?"
+  ],
+  "sources": [
+    {
+      "id": "src_eia_top_oil_producers",
+      "title": "What countries are the top producers and consumers of oil?",
+      "publisher": "U.S. Energy Information Administration",
+      "type": "official_statistics",
+      "dataYear": 2023,
+      "url": "https://www.eia.gov/tools/faqs/faq.php?id=709&t=6"
+    },
+    {
+      "id": "src_eia_steo_global_oil",
+      "title": "Short-Term Energy Outlook: Global oil markets",
+      "publisher": "U.S. Energy Information Administration",
+      "type": "official_statistics_and_forecast",
+      "url": "https://www.eia.gov/outlooks/steo/report/global_oil.php"
+    },
+    {
+      "id": "src_iea_global_energy_review_2025_oil",
+      "title": "Oil – Global Energy Review 2025",
+      "publisher": "International Energy Agency",
+      "type": "official_energy_analysis",
+      "year": 2025,
+      "url": "https://www.iea.org/reports/global-energy-review-2025/oil"
+    },
+    {
+      "id": "src_gcb_2025",
+      "title": "Global Carbon Budget 2025",
+      "publisher": "Global Carbon Project / Earth System Science Data",
+      "type": "peer_reviewed_global_dataset",
+      "year": 2026,
+      "url": "https://essd.copernicus.org/articles/18/3211/2026/"
+    }
+  ]
+}
