@@ -1,12 +1,13 @@
 window.GWL_DATA = {
-  version: "0.9.17",
+  version: "0.9.18",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
     pfas: "data/knowledge/gwl_pfas_pilot_v0.1.json",
     oilEnergy: "data/knowledge/gwl_oil_energy_pilot_v0.1b.json",
     coalEnergy: "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
-    windEnergy: "data/knowledge/gwl_wind_energy_pilot_v0.1.json"
+    windEnergy: "data/knowledge/gwl_wind_energy_pilot_v0.1.json",
+    solarEnergy: "data/knowledge/gwl_solar_energy_pilot_v0.1.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
@@ -291,7 +292,8 @@ window.GWL_DATA = {
         { id: "energy", scope: "all", label: "Energie", enabled: true },
         { id: "oil", scope: "all", label: "↳ Erdöl", enabled: true },
         { id: "coal", scope: "all", label: "↳ Kohle", enabled: true },
-        { id: "wind", scope: "all", label: "↳ Wind", enabled: true }
+        { id: "wind", scope: "all", label: "↳ Wind", enabled: true },
+        { id: "solar", scope: "all", label: "↳ Solar", enabled: true }
       ]
     },
     {
