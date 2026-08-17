@@ -1,0 +1,538 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Gaming / problematisches Gaming / aktive Videospiele / Schlaf und Bewegung",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Technologische & soziale Umwelt",
+    "domainComponent": "Digitale Freizeit / Gaming",
+    "subComponent": "Gaming-Nutzungsformen"
+  },
+  "corePrinciples": [
+    "Gaming wird nicht pauschal als gesundheitsschädlich oder gesundheitsfördernd modelliert.",
+    "Normales Gaming, problematisches Gaming und aktive Videospiele/Exergames sind getrennte Knoten.",
+    "Spielzeit allein ist kein ausreichender Ersatz für problematisches Gaming.",
+    "Sitzendes Gaming kann körperliche Aktivität verdrängen, muss dies aber nicht in jedem Kontext tun.",
+    "Aktive Videospiele können während des Spielens körperliche Aktivität erzeugen; daraus folgt nicht automatisch mehr Gesamtaktivität im Alltag.",
+    "Gaming Disorder / Internet Gaming Disorder wird nur verwendet, wenn validierte diagnostische oder symptomorientierte Instrumente eingesetzt wurden.",
+    "Schlaf, Bewegung, Wohlbefinden und soziale Funktion sind getrennte Wirkungspfade.",
+    "Alter/Lebensphase ist Kontext der Evidenz, keine eigene Graph-Ebene.",
+    "Quantitative Studienwerte werden nur bei direkt verlinktem öffentlich zugänglichem Volltext gezeigt."
+  ],
+  "sourcePolicy": {
+    "rule": "Kein Studienwert ohne direkt sichtbare, öffentlich zugängliche Volltextquelle.",
+    "paywalledStudyValuesAllowed": false,
+    "uiRule": "Jeder Studienwert oder Studienbeleg zeigt mindestens einen direkten Open-Access-Link."
+  },
+  "nodes": [
+    {
+      "id": "eah_tech_social_environment",
+      "type": "eah_system_boundary",
+      "label": "Technologische & soziale Umwelt",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_gaming",
+      "type": "domain_component",
+      "label": "Digitale Freizeit / Gaming"
+    },
+    {
+      "id": "exposure_sedentary_gaming",
+      "type": "exposure",
+      "label": "Sitzendes Gaming"
+    },
+    {
+      "id": "exposure_problematic_gaming",
+      "type": "exposure",
+      "label": "Problematisches Gaming / Gaming-Disorder-Symptome"
+    },
+    {
+      "id": "exposure_active_gaming",
+      "type": "exposure",
+      "label": "Aktive Videospiele / Exergames"
+    },
+    {
+      "id": "behavior_sedentary_time",
+      "type": "behavioral_mediator",
+      "label": "Sitzende Freizeit"
+    },
+    {
+      "id": "behavior_activity_displacement",
+      "type": "behavioral_mediator",
+      "label": "Mögliche Verdrängung anderer körperlicher Aktivität"
+    },
+    {
+      "id": "behavior_active_play",
+      "type": "behavioral_mediator",
+      "label": "Körperlich aktives Spielen"
+    },
+    {
+      "id": "behavior_late_gaming",
+      "type": "behavioral_mediator",
+      "label": "Spätes / nächtliches Gaming"
+    },
+    {
+      "id": "effect_reduced_activity",
+      "type": "biological_effect",
+      "label": "Geringere körperliche Aktivität / Fitness – kontextabhängig"
+    },
+    {
+      "id": "effect_increased_activity",
+      "type": "biological_effect",
+      "label": "Zusätzliche körperliche Aktivität während des Spiels"
+    },
+    {
+      "id": "effect_sleep_quality",
+      "type": "biological_effect",
+      "label": "Schlechtere Schlafqualität / kürzere Schlafdauer"
+    },
+    {
+      "id": "effect_body_composition",
+      "type": "biological_effect",
+      "label": "Veränderung der Körperzusammensetzung"
+    },
+    {
+      "id": "life_wellbeing",
+      "type": "life_outcome",
+      "label": "Wohlbefinden / Lebenszufriedenheit"
+    },
+    {
+      "id": "life_physical_health",
+      "type": "life_outcome",
+      "label": "Körperliche Gesundheit"
+    },
+    {
+      "id": "life_daytime_function",
+      "type": "life_outcome",
+      "label": "Tagesfunktion"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_tech_social_environment",
+      "to": "component_gaming",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_gaming",
+      "to": "exposure_sedentary_gaming",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_gaming",
+      "to": "exposure_problematic_gaming",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_gaming",
+      "to": "exposure_active_gaming",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_sedentary_gaming",
+      "to": "behavior_sedentary_time",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "behavior_sedentary_time",
+      "to": "behavior_activity_displacement",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "behavior_activity_displacement",
+      "to": "effect_reduced_activity",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_reduced_activity",
+      "to": "life_physical_health",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_active_gaming",
+      "to": "behavior_active_play",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "behavior_active_play",
+      "to": "effect_increased_activity",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_increased_activity",
+      "to": "life_physical_health",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "moderate",
+      "note": "Mehr Bewegung während des Spiels bedeutet nicht automatisch mehr gesamte tägliche Aktivität."
+    },
+    {
+      "from": "exposure_problematic_gaming",
+      "to": "effect_sleep_quality",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "behavior_late_gaming",
+      "to": "effect_sleep_quality",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_sleep_quality",
+      "to": "life_daytime_function",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_problematic_gaming",
+      "to": "life_wellbeing",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate",
+      "note": "Problematisches Gaming ist nicht dasselbe wie hohe Spielzeit; Querschnittsbefunde erlauben keine einfache Kausalitätsaussage."
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "van_der_neut_2023_problematic_gaming",
+      "sourceRefs": [
+        "src_vanderneut_2023"
+      ],
+      "design": "cross-national adolescent survey",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ]
+      },
+      "countries": [
+        "Azerbaijan",
+        "England",
+        "Netherlands",
+        "Slovenia",
+        "Estonia"
+      ],
+      "outcomes": [
+        "problematic gaming prevalence",
+        "life satisfaction",
+        "psychological complaints",
+        "peer support"
+      ],
+      "effectEstimates": [
+        {
+          "metric": "highest problematic gaming prevalence",
+          "geography": "Azerbaijan",
+          "estimate": "16.1%"
+        },
+        {
+          "metric": "lowest problematic gaming prevalence",
+          "geography": "Netherlands",
+          "estimate": "4.3%"
+        }
+      ],
+      "finding": "Problematisches Gaming hing länderübergreifend mit geringerem Wohlbefinden zusammen; die Prävalenz unterschied sich deutlich zwischen Ländern.",
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate",
+      "interpretation": "Studienbeleg für problematisches Gaming und Wohlbefinden, nicht für eine pauschale Schädlichkeit von Gaming."
+    },
+    {
+      "id": "abdallat_2024_igd_sleep",
+      "sourceRefs": [
+        "src_abdallat_2024"
+      ],
+      "design": "cross-sectional university student study",
+      "sampleSize": 2041,
+      "context": {
+        "lifeStage": [
+          "adulthood"
+        ],
+        "ageRange": {
+          "min": 18,
+          "max": 26,
+          "unit": "years"
+        }
+      },
+      "geography": "Jordan",
+      "outcomes": [
+        "Internet Gaming Disorder",
+        "sleep quality"
+      ],
+      "effectEstimates": [
+        {
+          "metric": "IGD prevalence",
+          "estimate": "15.2%"
+        },
+        {
+          "metric": "poor sleep quality",
+          "estimate": "64.6%"
+        },
+        {
+          "metric": "IGD predicting poor sleep quality",
+          "estimate": "OR 1.882"
+        }
+      ],
+      "relationType": "associated_with",
+      "evidenceStatus": "moderate",
+      "interpretation": "Querschnittsstudie: IGD war mit schlechter Schlafqualität assoziiert; keine sichere Kausalrichtung."
+    },
+    {
+      "id": "staiano_2017_dance_exergaming",
+      "sourceRefs": [
+        "src_staiano_2017"
+      ],
+      "design": "randomized controlled trial",
+      "intervention": "12 weeks of dance exergaming, 180 min/week",
+      "population": "overweight and obese adolescent girls",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ]
+      },
+      "outcomes": [
+        "body fat",
+        "visceral adiposity",
+        "subcutaneous adiposity"
+      ],
+      "finding": "Zwölf Wochen Dance-Exergaming reduzierten im Vergleich zur Kontrollgruppe mehrere Adipositasmaße, darunter Körperfett und viszerale Adipositas.",
+      "relationType": "causes",
+      "evidenceStatus": "strong_for_study_population",
+      "interpretation": "Experimenteller positiver Pfad für eine spezifische aktive Spielform; nicht auf normales sitzendes Gaming übertragbar."
+    }
+  ],
+  "measurements": [
+    {
+      "id": "problematic_gaming_prevalence_range",
+      "node": "exposure_problematic_gaming",
+      "geography": "5 europäische / eurasische Länder",
+      "period": "publiziert 2023",
+      "metric": "Spannweite problematisches Gaming in der Vergleichsstudie",
+      "valueMin": 4.3,
+      "valueMax": 16.1,
+      "unit": "percent",
+      "display": "4,3 % bis 16,1 % problematisches Gaming",
+      "interpretation": "Studienbeleg für starke Länderunterschiede; kein globaler Prävalenzwert und kein Grenzwert.",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ]
+      },
+      "sourceRefs": [
+        "src_vanderneut_2023"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "igd_sleep_or_jordan",
+      "node": "effect_sleep_quality",
+      "geography": "Jordanien",
+      "period": "publiziert 2024",
+      "metric": "Assoziation IGD mit schlechter Schlafqualität",
+      "value": 1.882,
+      "unit": "odds_ratio",
+      "display": "OR 1,882 für schlechte Schlafqualität",
+      "interpretation": "Assoziation in einer Querschnittsstudie bei Studierenden; kein kausaler Effektwert.",
+      "context": {
+        "lifeStage": [
+          "adulthood"
+        ],
+        "ageRange": {
+          "min": 18,
+          "max": 26,
+          "unit": "years"
+        }
+      },
+      "sourceRefs": [
+        "src_abdallat_2024"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "dance_exergaming_intervention",
+      "node": "effect_body_composition",
+      "geography": "USA",
+      "period": "12-Wochen-Intervention; publiziert 2017",
+      "metric": "Dance-Exergaming Intervention",
+      "display": "12 Wochen · 180 Min/Woche aktives Gaming",
+      "interpretation": "Randomisierte Intervention bei übergewichtigen/adipösen jugendlichen Mädchen; mehrere Körperfettmaße verbesserten sich gegenüber der Kontrollgruppe.",
+      "context": {
+        "lifeStage": [
+          "adolescence"
+        ]
+      },
+      "sourceRefs": [
+        "src_staiano_2017"
+      ],
+      "displayType": "study_evidence"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "sedentary_path",
+      "label": "Sitzender Pfad",
+      "chain": [
+        "sitzendes Gaming",
+        "sitzende Freizeit",
+        "mögliche Verdrängung anderer Bewegung",
+        "körperliche Aktivität / Fitness",
+        "LEBEN"
+      ],
+      "evidenceStatus": "moderate",
+      "caution": "Spielzeit allein beweist keine Bewegungsverdrängung."
+    },
+    {
+      "id": "problematic_path",
+      "label": "Problematisches Gaming",
+      "chain": [
+        "problematisches Gaming / Gaming-Disorder-Symptome",
+        "Schlaf / Wohlbefinden",
+        "Tagesfunktion / LEBEN"
+      ],
+      "evidenceStatus": "moderate",
+      "caution": "Problematisches Gaming darf nicht mit normalem oder häufigem Gaming gleichgesetzt werden."
+    },
+    {
+      "id": "active_path",
+      "label": "Aktiver Pfad",
+      "chain": [
+        "aktive Videospiele / Exergames",
+        "körperlich aktives Spielen",
+        "zusätzliche körperliche Aktivität",
+        "körperliche Gesundheit"
+      ],
+      "evidenceStatus": "moderate_to_strong",
+      "caution": "Zusätzliche Aktivität während des Spiels garantiert keinen Anstieg der gesamten täglichen Aktivität."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "system_level_only",
+    "systemImpacts": [
+      {
+        "system": "sleep",
+        "label": "Schlaf / Tagesfunktion",
+        "evidenceStatus": "moderate"
+      },
+      {
+        "system": "movement",
+        "label": "Bewegung / körperliche Aktivität",
+        "evidenceStatus": "moderate"
+      }
+    ],
+    "bodymapRule": "Keinen Organmarker allein aufgrund von Gaming aktivieren. Erst konkrete gesundheitliche Endpunkte mit geeigneter Evidenz dürfen Organ-/Systemmarker auslösen."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_time_vs_problem",
+      "question": "Wie trennen wir hohe Spielzeit sauber von problematischem Gaming?",
+      "priority": "very_high",
+      "workingDecision": "Symptome/Funktionsbeeinträchtigung haben Vorrang vor bloßer Stundenanzahl."
+    },
+    {
+      "id": "gap_displacement",
+      "question": "Wann verdrängt sitzendes Gaming tatsächlich körperliche Aktivität und wann lediglich andere sitzende Freizeit?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_active_total_activity",
+      "question": "Führt Exergaming langfristig zu mehr Gesamtaktivität oder ersetzt es andere Bewegung?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_sleep_direction",
+      "question": "Verursacht problematisches Gaming schlechteren Schlaf oder begünstigt schlechter Schlaf problematisches Gaming?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_game_type",
+      "question": "Wie stark unterscheiden sich kompetitives Gaming, soziale Spiele, Casual Games, VR und Exergames?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_age",
+      "question": "Welche Pfade unterscheiden sich zwischen Kindern, Jugendlichen und Erwachsenen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_social_benefit",
+      "question": "Welche sozialen oder kognitiven Vorteile bestimmter Spielformen sollten als positive Gegenpfade modelliert werden?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_behavior",
+        "label": "Eigene Nutzung / eigenes Verhalten",
+        "level": "mittel_bis_hoch",
+        "rationale": "Spielzeitpunkt, Pausen, Nutzungsform und Auswahl aktiver oder sitzender Spiele sind teilweise individuell beeinflussbar."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Veränderung der Gaming-Umwelt",
+        "level": "gering",
+        "rationale": "Monetarisierung, Belohnungsmechaniken, Plattformdesign und Jugendschutz sind individuell nur begrenzt veränderbar."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Spieldesign, Plattformregeln, Jugendschutz, Bildung und gesundheitsfördernde Gestaltung können Nutzungskontexte strukturell beeinflussen."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll der Oberknoten 'Gaming' zunächst neutral bleiben und erst unterhalb in sitzend, problematisch und aktiv verzweigen?",
+    "Welche Kriterien sind robust genug, um problematisches Gaming von hoher, aber nicht beeinträchtigender Nutzung zu unterscheiden?",
+    "Soll Exergaming als Gaming-Unterpfad oder zusätzlich als Bewegungsintervention geführt werden?",
+    "Wie modellieren wir Schlaf bidirektional, ohne die Kausalrichtung zu übertreiben?",
+    "Welche positiven sozialen/kognitiven Pfade sind ausreichend belegt, um sie in einen nächsten Pilot aufzunehmen?"
+  ],
+  "sources": [
+    {
+      "id": "src_vanderneut_2023",
+      "title": "A cross-national comparison of problematic gaming behavior and well-being in adolescents",
+      "authors": "van der Neut D et al.",
+      "journal": "Journal of Behavioral Addictions",
+      "year": 2023,
+      "type": "peer_reviewed_open_access_original_study",
+      "doi": "10.1556/2006.2023.00010",
+      "url": "https://research-portal.uu.nl/ws/files/205169900/2006-article-p448.pdf",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · Utrecht University Repository"
+    },
+    {
+      "id": "src_abdallat_2024",
+      "title": "Internet Gaming Disorder and Sleep Quality among Jordanian University Students: A Cross-sectional Study",
+      "authors": "Abdallat M et al.",
+      "journal": "Clinical Practice & Epidemiology in Mental Health",
+      "year": 2024,
+      "type": "peer_reviewed_open_access_original_study",
+      "doi": "10.2174/0117450179310269240820042452",
+      "url": "https://clinical-practice-and-epidemiology-in-mental-health.com/VOLUME/20/ELOCATOR/e17450179310269/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · CC BY 4.0"
+    },
+    {
+      "id": "src_staiano_2017",
+      "title": "A randomized controlled trial of dance exergaming for exercise training in overweight and obese adolescent girls",
+      "authors": "Staiano AE et al.",
+      "journal": "Pediatric Obesity",
+      "year": 2017,
+      "type": "peer_reviewed_open_access_randomized_trial",
+      "doi": "10.1111/ijpo.12117",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5191971/",
+      "access": "open_full_text",
+      "accessLabel": "Freier Volltext · PubMed Central"
+    }
+  ]
+}
