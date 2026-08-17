@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.4",
+  version: "0.9.5",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json"
   },

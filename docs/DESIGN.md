@@ -1,6 +1,6 @@
 # GWL-Panel – Designregeln
 
-Stand: Prototyp 0.9.4
+Stand: Prototyp 0.9.2
 
 ## Grundprinzip
 
@@ -72,16 +72,3 @@ Weitere bereits vorhandene Systembilder (`organ_endocrine.jpg`, `organ_immune.jp
 - `Skelett` und `Bewegungsapparat` sind getrennte Systeme:
   - Skelett → `organ_skeleton.jpg`
   - Bewegungsapparat → `organ_musculoskeletal.jpg`
-
-
-## Wissensnetz im Feld WIRKUNG (ab v0.9.4)
-
-Der Nitrat-Pilot wird als **zusätzliche Querverbindung** im Feld WIRKUNG sichtbar. Er darf nicht wie ein weiterer Messwert der aktuell ausgewählten Süßwasserreihe wirken.
-
-Reihenfolge:
-1. kompakter Netzwerkpfad,
-2. ausklappbare Evidenz und Wechselwirkungen,
-3. ausklappbare Wissenslücken,
-4. ausklappbarer Handlungsspielraum.
-
-Der Handlungsspielraum verwendet **keine Prozentwerte**. Er ist eine qualitative Orientierung und wird visuell sowie semantisch von wissenschaftlicher Evidenz getrennt.

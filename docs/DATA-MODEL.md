@@ -1,6 +1,6 @@
 # GWL-Panel – Datenmodell
 
-Stand: Prototyp 0.9.4
+Stand: Prototyp 0.9.2
 
 ## Leitidee
 
@@ -109,32 +109,3 @@ Jeder Eintrag unter `organs` besitzt:
 
 Die vier Sinnesorgane verwenden die IDs `eye`, `ear`, `nose`, `tongue`.
 Die ID `teeth` bleibt aus Kompatibilitätsgründen bestehen, die sichtbare Bezeichnung lautet `Gebiss`.
-
-
-## Wissensnetz-Dateien (ab v0.9.4)
-
-Fachliche Netzwerkdaten liegen unter `data/knowledge/`.
-
-`data.js` enthält unter `knowledgeSources` nur die Pfade zu diesen Datensätzen. Dadurch bleiben die bisherige Panel-Datenstruktur und das neue Wissensnetz zunächst getrennt und können schrittweise zusammengeführt werden.
-
-Der Nitrat-Pilot v0.2 enthält:
-- `nodes` – fachliche Knoten,
-- `edges` – belegte oder noch unsichere Verbindungen,
-- `measurements` – Messwerte und Zeit-/Raumbezug,
-- `interactions` – Wechselwirkungen zwischen Planetaren Grenzen,
-- `knowledgeGaps` – explizite Wissenslücken,
-- `reviewQuestionsForExperts` – Fragen für fachliche Reviews,
-- `sources` – Quellen,
-- `actionScope` – Handlungsspielraum.
-
-### Handlungsspielraum (`actionScope`)
-
-Der Handlungsspielraum ist **keine naturwissenschaftliche Messgröße** und darf nicht mit Evidenz, Risiko oder Gesundheitszustand verwechselt werden.
-
-Er wird zunächst qualitativ über vier Dimensionen beschrieben:
-- `personal_exposure` – eigene Exposition beeinflussbar?
-- `individual_causation` – individuelle Verursachung relevant?
-- `direct_system_change` – direkte Veränderung des Systems durch Einzelne?
-- `collective_leverage` – Wirksamkeit kollektiver/politischer Veränderung?
-
-Zusätzlich nennt `primaryLevers` die Akteure mit den größeren strukturellen Hebeln. Prozentwerte werden nicht verwendet.
