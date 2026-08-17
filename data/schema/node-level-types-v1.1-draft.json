@@ -1,0 +1,101 @@
+{
+  "format": "gwl-node-level-spec-v1.1",
+  "status": "draft",
+  "changesFromV1": [
+    "Aus Ebenen werden primär Knotentypen mit typischer, aber nicht zwingender Reihenfolge.",
+    "planetary_boundary bleibt oberste Hierarchie, aber nicht jeder Pfad muss erneut durch eine Planetare Grenze laufen.",
+    "environmental_medium ist optional und kann je nach Pfad vor oder nach environmental_state stehen.",
+    "environmental_state darf weitere environmental_state- oder biological_effect-Knoten erzeugen.",
+    "Ein neuer Gefahrenstoff oder biologischer Akteur kann im Verlauf eines Pfades entstehen.",
+    "Querverbindungen zu anderen Planetaren Grenzen werden über relationType=boundary_link modelliert."
+  ],
+  "nodeTypes": [
+    {
+      "type": "planetary_boundary",
+      "role": "top_hierarchy",
+      "requiredAtEntry": true
+    },
+    {
+      "type": "domain_component",
+      "role": "subdivision"
+    },
+    {
+      "type": "human_activity",
+      "role": "driver"
+    },
+    {
+      "type": "pressure",
+      "role": "anthropogenic_pressure"
+    },
+    {
+      "type": "mechanism",
+      "role": "process"
+    },
+    {
+      "type": "environmental_state",
+      "role": "measured_or_described_state"
+    },
+    {
+      "type": "environmental_medium",
+      "role": "medium_or_system",
+      "optional": true
+    },
+    {
+      "type": "exposure",
+      "role": "human_or_ecological_contact"
+    },
+    {
+      "type": "biological_effect",
+      "role": "biological_or_psychological_mechanism"
+    },
+    {
+      "type": "life_outcome",
+      "role": "human_outcome"
+    },
+    {
+      "type": "action_scope",
+      "role": "orientation",
+      "scientificLayer": false
+    }
+  ],
+  "relationTypes": [
+    "contains",
+    "part_of",
+    "belongs_to_boundary",
+    "causes",
+    "contributes_to",
+    "increases",
+    "decreases",
+    "transforms_into",
+    "transported_by",
+    "diluted_by",
+    "concentrated_by",
+    "occurs_in",
+    "affects",
+    "amplifies",
+    "reduces",
+    "interacts_with",
+    "exposes_via",
+    "triggers",
+    "impairs",
+    "protects",
+    "associated_with",
+    "boundary_link",
+    "modifiable_by",
+    "regulated_by",
+    "influenced_by_actor"
+  ],
+  "validationRules": [
+    "Planetary boundaries may not directly imply organ or disease outcomes.",
+    "Health outcomes require an exposure or a clearly justified direct mechanism.",
+    "Every causal edge should carry evidenceStatus and sourceRefs before public release.",
+    "A node is stored once and may connect to multiple boundaries and paths.",
+    "UI must not imply that a boundary reference value is a human health threshold."
+  ],
+  "displayRules": {
+    "maxImmediateNodes": 5,
+    "fullGraphHiddenByDefault": true,
+    "secondaryBranchesOnDemand": true,
+    "boundaryCrossLinksAsBadgesFirst": true
+  }
+}

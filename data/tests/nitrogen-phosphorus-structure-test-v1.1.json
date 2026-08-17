@@ -1,0 +1,165 @@
+{
+  "format": "gwl-structure-comparison-v1.1",
+  "status": "draft",
+  "cases": {
+    "nitrogen": {
+      "planetaryBoundary": "Nährstoffkreisläufe",
+      "component": "Stickstoff",
+      "paths": [
+        [
+          {
+            "type": "human_activity",
+            "label": "Landwirtschaft"
+          },
+          {
+            "type": "pressure",
+            "label": "Stickstoffüberschuss"
+          },
+          {
+            "type": "mechanism",
+            "label": "Nitrifikation"
+          },
+          {
+            "type": "mechanism",
+            "label": "Auswaschung"
+          },
+          {
+            "type": "environmental_state",
+            "label": "Nitrat im Grundwasser"
+          },
+          {
+            "type": "environmental_medium",
+            "label": "Grundwasser"
+          },
+          {
+            "type": "exposure",
+            "label": "Trinkwasser"
+          },
+          {
+            "type": "biological_effect",
+            "label": "Methämoglobinbildung"
+          },
+          {
+            "type": "life_outcome",
+            "label": "Gesundheitliche Wirkung"
+          }
+        ],
+        [
+          {
+            "type": "pressure",
+            "label": "Stickstoffüberschuss"
+          },
+          {
+            "type": "mechanism",
+            "label": "mikrobielle Umsetzung"
+          },
+          {
+            "type": "environmental_state",
+            "label": "N₂O-Emission"
+          },
+          {
+            "type": "planetary_boundary_link",
+            "label": "Klimawandel"
+          }
+        ],
+        [
+          {
+            "type": "pressure",
+            "label": "Stickstoffüberschuss"
+          },
+          {
+            "type": "mechanism",
+            "label": "Nährstoffanreicherung"
+          },
+          {
+            "type": "environmental_state",
+            "label": "Eutrophierung"
+          },
+          {
+            "type": "planetary_boundary_link",
+            "label": "Biosphärenintegrität"
+          }
+        ]
+      ]
+    },
+    "phosphorus": {
+      "planetaryBoundary": "Nährstoffkreisläufe",
+      "component": "Phosphor",
+      "paths": [
+        [
+          {
+            "type": "human_activity",
+            "label": "Landwirtschaft / Abwasser"
+          },
+          {
+            "type": "pressure",
+            "label": "Phosphoreintrag"
+          },
+          {
+            "type": "mechanism",
+            "label": "Abschwemmung / Erosion"
+          },
+          {
+            "type": "environmental_medium",
+            "label": "Oberflächenwasser"
+          },
+          {
+            "type": "environmental_state",
+            "label": "erhöhte Phosphorverfügbarkeit"
+          },
+          {
+            "type": "environmental_state",
+            "label": "Eutrophierung"
+          },
+          {
+            "type": "biological_effect",
+            "label": "Algen-/Cyanobakterienblüte"
+          },
+          {
+            "type": "exposure",
+            "label": "Trinkwasser / Badegewässer"
+          },
+          {
+            "type": "life_outcome",
+            "label": "Gesundheitliche Wirkung"
+          }
+        ],
+        [
+          {
+            "type": "pressure",
+            "label": "Phosphoreintrag"
+          },
+          {
+            "type": "mechanism",
+            "label": "Transport über Flüsse"
+          },
+          {
+            "type": "environmental_medium",
+            "label": "Ozean"
+          },
+          {
+            "type": "planetary_boundary_link",
+            "label": "Nährstoffkreisläufe global"
+          }
+        ],
+        [
+          {
+            "type": "environmental_state",
+            "label": "Eutrophierung"
+          },
+          {
+            "type": "planetary_boundary_link",
+            "label": "Biosphärenintegrität"
+          }
+        ]
+      ]
+    }
+  },
+  "findings": [
+    "Die Knotentypen funktionieren für Stickstoff und Phosphor ohne neue Sondertypen.",
+    "Die Abfolge der Knotentypen ist nicht linear: environmental_medium kann vor oder nach environmental_state liegen.",
+    "Ein Umweltprozess kann einen neuen Stoff-/Gefahrenknoten erzeugen, der für die Exposition relevanter ist als der Ausgangsstoff.",
+    "Planetare Grenzen bleiben Hierarchie und Kontext, sind aber nicht zwangsläufig Teil jedes Wirkungspfads.",
+    "Wechselwirkungen zwischen Planetaren Grenzen entstehen aus gemeinsam genutzten Knoten und Mechanismen."
+  ]
+}
