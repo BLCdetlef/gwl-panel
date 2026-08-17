@@ -1,5 +1,5 @@
 window.GWL_DATA = {
-  version: "0.9.15",
+  version: "0.9.15a",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
     phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
@@ -286,8 +286,8 @@ window.GWL_DATA = {
       frameworkLabel: "Ergänzende Systemgrenze",
       summary: "Rohstoffentnahme, Materialdurchsatz und Energieverbrauch wirken häufig indirekt über Umweltveränderungen, Infrastruktur und Versorgungssysteme auf LEBEN.",
       items: [
-        { id: "energy", label: "Energie", enabled: true },
-        { id: "oil", label: "↳ Erdöl", enabled: true }
+        { id: "energy", scope: "all", label: "Energie", enabled: true },
+        { id: "oil", scope: "all", label: "↳ Erdöl", enabled: true }
       ]
     },
     {

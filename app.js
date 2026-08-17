@@ -722,10 +722,27 @@ function renderKnowledgePanel() {
 
   if (state.boundaryId === "materials-energy") {
     if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME";
-    if (focusTitle) focusTitle.textContent = "Energie · Erdöl";
-    if (focusSummary) focusSummary.textContent = "Messbarer globaler Stoff- und Energiestrom mit Verbindungen zu mehreren Planetaren Grenzen.";
     renderHealth(null);
-    panel.innerHTML = renderOilEnergyMainView();
+
+    if (state.componentId === "oil") {
+      if (focusTitle) focusTitle.textContent = "Energie · Erdöl";
+      if (focusSummary) focusSummary.textContent = "Messbarer globaler Stoff- und Energiestrom mit Verbindungen zu mehreren Planetaren Grenzen.";
+      panel.innerHTML = renderOilEnergyMainView();
+    } else {
+      if (focusTitle) focusTitle.textContent = "Energie";
+      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl für den ersten Pilotdatensatz.";
+      panel.innerHTML = `
+        <div class="extension-intro">
+          <div class="eyebrow">STOFF- UND ENERGIESTRÖME</div>
+          <h2>Energie</h2>
+          <p>Energie ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
+          <div class="extension-note">
+            Der erste reale Pilot liegt unter <strong>Erdöl</strong>. Weitere Energieträger
+            und Energieformen können später auf derselben Ebene ergänzt werden.
+          </div>
+        </div>`;
+    }
+
     panel.hidden = false;
     return;
   }
@@ -1216,7 +1233,7 @@ function selectItem(boundaryId, itemId) {
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
   if (boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy") {
-    selectedDomainComponent = boundaryId === "materials-energy" ? "oil" : itemId;
+    selectedDomainComponent = itemId;
     selectedYear = null;
     renderHealth(boundaryId === "novel" && itemId === "pfas" ? getPfasHealthView() : null);
     renderBoundaries();
