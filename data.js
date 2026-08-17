@@ -1,8 +1,9 @@
 window.GWL_DATA = {
-  version: "0.9.10",
+  version: "0.9.11",
   knowledgeSources: {
     nitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
-    phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
+    phosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
+    pfas: "data/knowledge/gwl_pfas_pilot_v0.1.json"
   },
   scopes: {
     global: { label: "Global", path: "Global" },
@@ -261,7 +262,21 @@ window.GWL_DATA = {
     { id: "ocean", label: "Ozeanversauerung", enabled: false },
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
-    { id: "novel", label: "Neue Substanzen", enabled: false }
+    {
+      id: "novel",
+      label: "Neue Substanzen",
+      enabled: true,
+      summary: "Die Planetare Grenze Neue Substanzen umfasst menschengemachte Stoffe und Materialien, deren Produktion und Freisetzung die globale Bewertungs- und Überwachungskapazität überfordert.",
+      items: [
+        {
+          id: "pfas",
+          scope: "all",
+          label: "PFAS",
+          type: "Teilbereich",
+          summary: "Persistente fluorierte Stoffe mit vielfältigen Anwendungen, Umweltpfaden und Expositionswegen."
+        }
+      ]
+    }
   ]
 };
 

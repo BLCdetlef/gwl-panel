@@ -1,0 +1,419 @@
+{
+  "format": "gwl-knowledge-network-v1.1",
+  "version": "0.1-pilot",
+  "topic": "PFAS",
+  "status": "draft",
+  "entry": {
+    "planetaryBoundary": "Neue Substanzen",
+    "domainComponent": "PFAS"
+  },
+  "principles": [
+    "PFAS sind ein Teilbereich der Planetaren Grenze Neue Substanzen, aber keine eigene planetare Kontrollgröße.",
+    "Trinkwasser-Grenzwerte sind regulatorische Qualitätswerte und keine planetaren Grenzwerte.",
+    "Der EFSA-TWI ist eine gesundheitsbezogene Aufnahmebewertung und kein Umweltgrenzwert.",
+    "Gesundheitswirkungen werden nur über konkrete Expositionswege dargestellt."
+  ],
+  "nodes": [
+    {
+      "id": "pb_novel_entities",
+      "type": "planetary_boundary",
+      "label": "Neue Substanzen"
+    },
+    {
+      "id": "component_pfas",
+      "type": "domain_component",
+      "label": "PFAS"
+    },
+    {
+      "id": "activity_industrial_use",
+      "type": "human_activity",
+      "label": "Industrielle Nutzung und Herstellung"
+    },
+    {
+      "id": "activity_firefighting",
+      "type": "human_activity",
+      "label": "PFAS-haltige Feuerlöschschäume"
+    },
+    {
+      "id": "activity_consumer_products",
+      "type": "human_activity",
+      "label": "Produkte und Anwendungen"
+    },
+    {
+      "id": "pressure_pfas_release",
+      "type": "pressure",
+      "label": "PFAS-Freisetzung"
+    },
+    {
+      "id": "mechanism_persistence",
+      "type": "mechanism",
+      "label": "Hohe Persistenz"
+    },
+    {
+      "id": "mechanism_transport",
+      "type": "mechanism",
+      "label": "Transport über Wasser, Boden und Luft"
+    },
+    {
+      "id": "medium_soil",
+      "type": "environmental_medium",
+      "label": "Boden"
+    },
+    {
+      "id": "medium_groundwater",
+      "type": "environmental_medium",
+      "label": "Grundwasser"
+    },
+    {
+      "id": "medium_surfacewater",
+      "type": "environmental_medium",
+      "label": "Oberflächenwasser"
+    },
+    {
+      "id": "medium_food",
+      "type": "environmental_medium",
+      "label": "Nahrung"
+    },
+    {
+      "id": "state_pfas_groundwater",
+      "type": "environmental_state",
+      "label": "PFAS im Grundwasser"
+    },
+    {
+      "id": "state_pfas_drinkingwater",
+      "type": "environmental_state",
+      "label": "PFAS im Trinkwasser"
+    },
+    {
+      "id": "state_pfas_food",
+      "type": "environmental_state",
+      "label": "PFAS in Lebensmitteln"
+    },
+    {
+      "id": "exposure_drinkingwater",
+      "type": "exposure",
+      "label": "Aufnahme über Trinkwasser"
+    },
+    {
+      "id": "exposure_food",
+      "type": "exposure",
+      "label": "Aufnahme über Nahrung"
+    },
+    {
+      "id": "exposure_products",
+      "type": "exposure",
+      "label": "Exposition über Produkte / Beruf"
+    },
+    {
+      "id": "effect_immune",
+      "type": "biological_effect",
+      "label": "Immunologische Wirkungen"
+    },
+    {
+      "id": "life_health",
+      "type": "life_outcome",
+      "label": "Menschliche Gesundheit"
+    },
+    {
+      "id": "pb_link_freshwater",
+      "type": "planetary_boundary",
+      "label": "Süßwasser"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_novel_entities",
+      "to": "component_pfas",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_industrial_use",
+      "to": "pressure_pfas_release",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_firefighting",
+      "to": "pressure_pfas_release",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_consumer_products",
+      "to": "pressure_pfas_release",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_pfas_release",
+      "to": "mechanism_persistence",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_pfas_release",
+      "to": "mechanism_transport",
+      "relationType": "transported_by",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "mechanism_transport",
+      "to": "state_pfas_groundwater",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_pfas_groundwater",
+      "to": "medium_groundwater",
+      "relationType": "occurs_in",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "medium_groundwater",
+      "to": "pb_link_freshwater",
+      "relationType": "boundary_link",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_pfas_groundwater",
+      "to": "state_pfas_drinkingwater",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_pfas_drinkingwater",
+      "to": "exposure_drinkingwater",
+      "relationType": "exposes_via",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_pfas_food",
+      "to": "exposure_food",
+      "relationType": "exposes_via",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_drinkingwater",
+      "to": "effect_immune",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "exposure_food",
+      "to": "effect_immune",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_immune",
+      "to": "life_health",
+      "relationType": "impairs",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "de_drinkingwater_pfas20_limit",
+      "node": "state_pfas_drinkingwater",
+      "geography": "Deutschland",
+      "period": "seit 12.01.2026",
+      "metric": "Trinkwasser-Grenzwert Summe PFAS-20",
+      "result": "100 ng/L",
+      "interpretation": "Rechtlicher Trinkwasser-Grenzwert, kein planetarer Grenzwert.",
+      "sourceRefs": [
+        "src_uba_drinkingwater"
+      ]
+    },
+    {
+      "id": "de_drinkingwater_pfas4_limit",
+      "node": "state_pfas_drinkingwater",
+      "geography": "Deutschland",
+      "period": "ab 12.01.2028",
+      "metric": "Trinkwasser-Grenzwert Summe PFAS-4",
+      "result": "20 ng/L",
+      "interpretation": "Zusätzlicher Grenzwert für PFHxS, PFOS, PFOA und PFNA; ab 2028.",
+      "sourceRefs": [
+        "src_uba_drinkingwater"
+      ]
+    },
+    {
+      "id": "de_drinkingwater_screening",
+      "node": "state_pfas_drinkingwater",
+      "geography": "Deutschland",
+      "period": "UBA-Auswertung / aktuelle Darstellung",
+      "metric": "89 regional verteilte Trinkwasserproben",
+      "result": "PFAS-20: 0/89 über 100 ng/L; PFAS-4: 2/89 über 20 ng/L",
+      "interpretation": "Kleine bundesweite Stichprobe; nicht mit einem vollständigen flächendeckenden Monitoring gleichzusetzen.",
+      "sourceRefs": [
+        "src_uba_drinkingwater"
+      ]
+    },
+    {
+      "id": "de_groundwater_monitoring_gap",
+      "node": "state_pfas_groundwater",
+      "geography": "Deutschland",
+      "period": "Stand 2025",
+      "metric": "PFAS-Grundwassermonitoring",
+      "result": "kein einheitliches flächendeckendes Monitoring",
+      "interpretation": "Untersuchungen erfolgen vor allem anlassbezogen an bekannten oder vermuteten Belastungsstandorten.",
+      "sourceRefs": [
+        "src_uba_groundwater"
+      ]
+    },
+    {
+      "id": "efsa_twi_pfas4",
+      "node": "life_health",
+      "geography": "EU",
+      "period": "EFSA 2020",
+      "metric": "Tolerierbare wöchentliche Aufnahme (TWI), Summe PFAS-4",
+      "result": "4,4 ng/kg Körpergewicht/Woche",
+      "interpretation": "Gesundheitsbezogene Aufnahmereferenz, kein Trinkwasser- und kein planetarer Grenzwert.",
+      "sourceRefs": [
+        "src_efsa_2020"
+      ]
+    }
+  ],
+  "planetaryBoundaryContext": {
+    "primaryBoundary": "Neue Substanzen",
+    "status": "überschritten",
+    "interpretation": "Die Grenze Neue Substanzen wird auf Systemebene als überschritten bewertet, weil Produktion und Freisetzung schneller wachsen als globale Bewertungs- und Überwachungskapazitäten. PFAS sind ein prominentes Beispiel, aber nicht die Kontrollgröße der Grenze.",
+    "sourceRefs": [
+      "src_persson_2022"
+    ]
+  },
+  "healthContext": {
+    "efsaCriticalEffect": "verminderte Immunantwort auf Impfungen",
+    "who2026PriorityCategories": [
+      "kardiometabolisch",
+      "hepatisch",
+      "immunologisch",
+      "Entwicklung",
+      "Reproduktion",
+      "Krebs"
+    ],
+    "note": "WHO bewertet 2026 die Evidenz für 18 priorisierte PFAS und sechs Gesundheitskategorien weiter. Nicht jede PFAS-Substanz hat denselben Evidenzstand."
+  },
+  "boundaryInteractions": [
+    {
+      "id": "pfas_freshwater",
+      "boundaries": [
+        "Neue Substanzen",
+        "Süßwasser"
+      ],
+      "mechanism": "Persistente PFAS gelangen in Grund- und Oberflächenwasser und können dadurch Wasserressourcen und Trinkwasserpfade betreffen.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "id": "gap_groundwater_monitoring",
+      "question": "Wie lässt sich ein bundesweit repräsentativer PFAS-Grundwassertrend bilden, solange kein einheitliches flächendeckendes Monitoring existiert?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_total_pfas",
+      "question": "Wie bilden wir Tausende PFAS ab, ohne die gut untersuchten PFOS/PFOA/PFNA/PFHxS mit weniger untersuchten PFAS gleichzusetzen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_mixture",
+      "question": "Wie sollen Mischungen mehrerer PFAS im Gesundheitsmodell bewertet werden?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_local_exposure",
+      "question": "Welche lokalen PFAS-Messdaten lassen sich zuverlässig mit tatsächlicher Trinkwasser- oder Nahrungsmittelexposition verbinden?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung. Der Handlungsspielraum ist keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_exposure",
+        "label": "Eigene Exposition",
+        "level": "begrenzt",
+        "rationale": "Einzelne Produkt- und Ernährungsentscheidungen können Exposition teilweise beeinflussen; Belastungen in Wasser, Nahrung und Umwelt sind aber nicht vollständig individuell steuerbar."
+      },
+      {
+        "id": "individual_causation",
+        "label": "Individuelle Verursachung",
+        "level": "gering",
+        "rationale": "PFAS-Freisetzungen entstehen überwiegend in industriellen, technischen und historischen Anwendungssystemen."
+      },
+      {
+        "id": "direct_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering",
+        "rationale": "Kontaminierte Böden und Grundwasser sowie persistente Stoffbestände lassen sich individuell kaum direkt verändern."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Beschränkungen, Substitution, Emissionskontrolle, Sanierung, Trinkwasseraufbereitung und Monitoring wirken strukturell."
+      }
+    ],
+    "primaryLevers": [
+      {
+        "actor": "Industrie & Hersteller",
+        "role": "Substitution, Emissionsvermeidung, Produktgestaltung"
+      },
+      {
+        "actor": "Wasserwirtschaft",
+        "role": "Monitoring, Rohwasserschutz, Aufbereitung"
+      },
+      {
+        "actor": "Kommunen & Länder",
+        "role": "Altlastenmanagement, Verdachtsflächen, Vollzug"
+      },
+      {
+        "actor": "Bund & EU",
+        "role": "Stoffrecht, Trinkwasserrecht, Beschränkungen und Monitoring"
+      },
+      {
+        "actor": "Gesundheits- und Lebensmittelbehörden",
+        "role": "Expositionsbewertung und gesundheitliche Referenzwerte"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_persson_2022",
+      "title": "Outside the Safe Operating Space of the Planetary Boundary for Novel Entities",
+      "type": "peer_reviewed",
+      "year": 2022,
+      "url": "https://pubs.acs.org/doi/10.1021/acs.est.1c04158"
+    },
+    {
+      "id": "src_uba_drinkingwater",
+      "title": "UBA PFAS FAQ – Trinkwasser",
+      "type": "official",
+      "updated": "2025-12-05",
+      "url": "https://www.umweltbundesamt.de/faq-0"
+    },
+    {
+      "id": "src_uba_groundwater",
+      "title": "PFAS-Überwachung im Grundwasser",
+      "type": "official",
+      "updated": "2025-03-18",
+      "url": "https://www.umweltbundesamt.de/pfas-ueberwachung-im-grundwasser"
+    },
+    {
+      "id": "src_efsa_2020",
+      "title": "Risk to human health related to the presence of perfluoroalkyl substances in food",
+      "type": "scientific_opinion",
+      "year": 2020,
+      "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2020.6223"
+    },
+    {
+      "id": "src_who_2026",
+      "title": "Key ingested PFAS and their health effects: landscape review",
+      "type": "international_health_review",
+      "year": 2026,
+      "url": "https://iris.who.int/items/074fd3dc-160a-42f3-949b-4ff82f9132b7"
+    }
+  ]
+}

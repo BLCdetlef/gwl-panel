@@ -482,6 +482,92 @@ function setStandardEffectBlocksVisible(visible) {
   });
 }
 
+
+function renderNovelShell() {
+  const state = getActiveViewState();
+  if (state.boundaryId !== "novel") return;
+
+  if (focusType) focusType.textContent = "PLANETARE GRENZE · NEUE SUBSTANZEN";
+  if (focusTitle) focusTitle.textContent = state.componentId === "pfas" ? "PFAS" : "Neue Substanzen";
+  if (focusSummary) {
+    focusSummary.textContent = state.componentId === "pfas"
+      ? "Messwerte, Expositionspfade und gesundheitliche Referenzen für PFAS."
+      : "Wähle links einen Teilbereich.";
+  }
+}
+
+function renderPfasMainView() {
+  const network = knowledgeNetworks.pfas;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>PFAS-Datensatz konnte nicht geladen werden.</strong></div>`;
+  }
+
+  const m20 = getMeasurement(network, "de_drinkingwater_pfas20_limit");
+  const mSample = getMeasurement(network, "de_drinkingwater_screening");
+  const mTwi = getMeasurement(network, "efsa_twi_pfas4");
+
+  return `
+    <div class="nutrient-main">
+      <div class="nutrient-main-head">
+        <div class="eyebrow">PLANETARE GRENZE · NEUE SUBSTANZEN</div>
+        <h2>PFAS</h2>
+        <p>
+          PFAS sind ein Beispiel innerhalb der Planetaren Grenze Neue Substanzen.
+          Sie besitzen keine eigene planetare Kontrollgröße. Entscheidend sind konkrete
+          Umweltmessungen, Expositionswege und gesundheitsbezogene Referenzen.
+        </p>
+      </div>
+
+      <div class="knowledge-scope-note">
+        <strong>Planetarer Kontext:</strong>
+        Die Grenze Neue Substanzen gilt auf Systemebene als überschritten.
+        Daraus folgt jedoch kein einzelner globaler „PFAS-Grenzwert“.
+      </div>
+
+      <div class="nutrient-measurement-grid">
+        ${renderMeasurementTile(m20)}
+        ${renderMeasurementTile(mSample)}
+        ${renderMeasurementTile(mTwi)}
+      </div>
+
+      <div class="nutrient-paths">
+        ${renderPathCard(
+          "Wasserpfad",
+          "Verbindung zu Süßwasser",
+          ["PFAS-Nutzung / Freisetzung","Boden / Grundwasser","Trinkwasser","Exposition","LEBEN"],
+          ["Süßwasser"]
+        )}
+
+        ${renderPathCard(
+          "Nahrungspfad",
+          "weitere wichtige Exposition",
+          ["PFAS in Umwelt","Nahrungskette","Lebensmittel","Aufnahme","LEBEN"],
+          []
+        )}
+
+        ${renderPathCard(
+          "Gesundheitsbewertung",
+          "Evidenz ist stoff- und endpunktspezifisch",
+          ["PFAS-Exposition","innere Belastung","immunologische / weitere Wirkungen","Gesundheit"],
+          ["WHO: weitere Bewertung läuft"]
+        )}
+      </div>
+
+      ${renderActionScope(network)}
+
+      <details class="knowledge-details">
+        <summary>Wissenslücken (${(network.knowledgeGaps || []).length})</summary>
+        <div class="knowledge-gap-list">
+          ${(network.knowledgeGaps || []).map(gap => `
+            <div class="knowledge-gap">
+              <span class="gap-priority">${String(gap.priority || "open").replaceAll("_"," ")}</span>
+              <p>${gap.question}</p>
+            </div>`).join("")}
+        </div>
+      </details>
+    </div>`;
+}
+
 function renderNutrientShell() {
   const state = getActiveViewState();
   if (!isNutrientBoundaryActive()) return;
@@ -510,7 +596,7 @@ function renderKnowledgePanel() {
   const state = getActiveViewState();
 
   syncBoundaryModeClass();
-  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients");
+  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel");
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
@@ -524,6 +610,20 @@ function renderKnowledgePanel() {
         <div class="nutrient-choice-note">
           <strong>Wähle links Stickstoff oder Phosphor.</strong>
           <p>Die Unterbereiche stehen direkt unter der Planetaren Grenze Nährstoffkreisläufe.</p>
+        </div>`;
+
+    panel.hidden = false;
+    return;
+  }
+
+  if (state.boundaryId === "novel") {
+    renderNovelShell();
+
+    panel.innerHTML = state.componentId === "pfas"
+      ? renderPfasMainView()
+      : `
+        <div class="nutrient-choice-note">
+          <strong>Wähle links PFAS.</strong>
         </div>`;
 
     panel.hidden = false;
@@ -935,7 +1035,7 @@ function selectItem(boundaryId, itemId) {
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
-  if (boundaryId === "nutrients") {
+  if (boundaryId === "nutrients" || boundaryId === "novel") {
     selectedDomainComponent = itemId;
     selectedYear = null;
     renderHealth(null);

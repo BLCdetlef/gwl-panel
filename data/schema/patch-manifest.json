@@ -1,12 +1,14 @@
 {
-  "version": "0.9.7a",
-  "baseVersion": "0.9.7",
-  "mode": "hotfix",
+  "version": "0.9.11",
+  "baseVersion": "0.9.10",
+  "mode": "patch",
   "replace": [
+    "app.js",
     "data.js"
   ],
-  "add": [],
+  "add": [
+    "data/knowledge/gwl_pfas_pilot_v0.1.json"
+  ],
   "delete": [],
-  "important": "Nur data.js ersetzen. Keine Ordner oder anderen Dateien verändern.",
-  "fix": "Nährstoffkreisläufe wird aktiviert und kann geöffnet werden."
+  "important": "Nur app.js und data.js ersetzen; PFAS-JSON zusätzlich in data/knowledge/ kopieren. Keine Ordner ersetzen."
 }
