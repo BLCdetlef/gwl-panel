@@ -82,15 +82,37 @@ async function loadBodymapConfig() {
 
 async function loadKnowledgeNetworks() {
   knowledgeNetworks = {};
-  const sources = data.knowledgeSources || {};
-  const entries = Object.entries(sources);
-  for (const [key, url] of entries) {
+  data.knowledgeSources = data.knowledgeSources || {};
+
+  async function loadSource(key, url) {
+    if (!url || knowledgeNetworks[key]) return;
     try {
       const response = await fetch(url, { cache: "no-store" });
       if (!response.ok) throw new Error(`${url}: ${response.status}`);
       knowledgeNetworks[key] = await response.json();
     } catch (error) {
       console.warn("Wissensnetz konnte nicht geladen werden:", error);
+    }
+  }
+
+  // Zuerst die bisher explizit bekannten Quellen laden, insbesondere den Index.
+  for (const [key, url] of Object.entries(data.knowledgeSources)) {
+    await loadSource(key, url);
+  }
+
+  // Danach alle im Index referenzierten Knowledge-Dateien automatisch entdecken.
+  // Neue Themen brauchen damit künftig keinen zusätzlichen Eintrag in data.js.
+  const index = knowledgeNetworks.knowledgeIndex;
+  for (const boundary of index?.systemBoundaries || []) {
+    for (const group of boundary.groups || []) {
+      for (const item of group.items || []) {
+        if (!item.source) continue;
+        const key = `index_${item.id}`;
+        if (!Object.values(data.knowledgeSources).includes(item.source)) {
+          data.knowledgeSources[key] = item.source;
+        }
+        await loadSource(key, item.source);
+      }
     }
   }
 }
@@ -944,42 +966,121 @@ function allOpenSourcesHtml(network) {
 }
 
 
-function getTechSocialIndex() {
-  const index = knowledgeNetworks.knowledgeIndex;
-  return index?.systemBoundaries?.find(item => item.id === "eah_tech_social_environment") || null;
+function getKnowledgeIndex() {
+  return knowledgeNetworks.knowledgeIndex || null;
 }
 
-function syncTechSocialNavigationFromIndex() {
-  const boundary = data.boundaries.find(item => item.id === "mental-load");
-  const indexBoundary = getTechSocialIndex();
-  if (!boundary || !indexBoundary?.groups?.length) return;
-
-  boundary.items = indexBoundary.groups.flatMap(group => [
-    {
-      id: group.id.replaceAll("_", "-"),
-      scope: "all",
-      label: group.label,
-      enabled: true,
-      groupOnly: true
-    },
-    ...(group.items || []).map(item => ({
-      id: item.id.replaceAll("_", "-"),
-      scope: "all",
-      label: `↳ ${item.label}`,
-      enabled: true,
-      knowledgeSource: item.source,
-      knowledgeItemId: item.id,
-      knowledgeGroupId: group.id
-    }))
-  ]);
+function normalizeKnowledgeId(value) {
+  return String(value || "").trim().toLowerCase().replaceAll("_", "-");
 }
 
-function getTechSocialIndexEntry(componentId) {
-  const normalized = String(componentId || "").replaceAll("-", "_");
-  for (const group of getTechSocialIndex()?.groups || []) {
-    if (group.id === normalized) return { type: "group", group };
-    for (const item of group.items || []) {
-      if (item.id === normalized) return { type: "item", group, item };
+function findDataBoundaryForIndexGroup(indexBoundary, group) {
+  const aliases = {
+    "climate-change": "climate",
+    "biosphere-integrity": "biosphere",
+    "land-system-change": "land",
+    "freshwater-change": "freshwater",
+    "biogeochemical-flows": "nutrients",
+    "ocean-acidification": "ocean",
+    "atmospheric-aerosol-loading": "aerosols",
+    "stratospheric-ozone-depletion": "ozone",
+    "novel-entities": "novel"
+  };
+
+  if (indexBoundary?.id === "eah_tech_social_environment") {
+    return data.boundaries.find(item => item.id === "mental-load") || null;
+  }
+
+  const groupId = normalizeKnowledgeId(group?.id);
+  const aliasId = aliases[groupId];
+  if (aliasId) return data.boundaries.find(item => item.id === aliasId) || null;
+
+  const groupLabel = String(group?.label || "").toLowerCase();
+  return data.boundaries.find(boundary =>
+    normalizeKnowledgeId(boundary.id) === groupId ||
+    String(boundary.label || "").toLowerCase() === groupLabel
+  ) || null;
+}
+
+function syncKnowledgeNavigationFromIndex() {
+  const index = getKnowledgeIndex();
+  if (!index?.systemBoundaries?.length) return;
+
+  for (const indexBoundary of index.systemBoundaries) {
+    if (indexBoundary.id === "eah_tech_social_environment") {
+      const boundary = data.boundaries.find(item => item.id === "mental-load");
+      if (!boundary) continue;
+      boundary.enabled = true;
+      boundary.items = (indexBoundary.groups || []).flatMap(group => [
+        {
+          id: normalizeKnowledgeId(group.id),
+          scope: "all",
+          label: group.label,
+          enabled: true,
+          groupOnly: true,
+          knowledgeBoundaryId: indexBoundary.id,
+          knowledgeGroupId: group.id
+        },
+        ...(group.items || []).map(item => ({
+          id: normalizeKnowledgeId(item.id),
+          scope: "all",
+          label: `↳ ${item.label}`,
+          enabled: true,
+          knowledgeSource: item.source,
+          knowledgeItemId: item.id,
+          knowledgeGroupId: group.id,
+          knowledgeBoundaryId: indexBoundary.id
+        }))
+      ]);
+      continue;
+    }
+
+    for (const group of indexBoundary.groups || []) {
+      const boundary = findDataBoundaryForIndexGroup(indexBoundary, group);
+      if (!boundary) continue;
+      const indexedItems = (group.items || []).map(item => ({
+        id: normalizeKnowledgeId(item.id),
+        scope: "all",
+        label: item.label,
+        enabled: true,
+        knowledgeSource: item.source,
+        knowledgeItemId: item.id,
+        knowledgeGroupId: group.id,
+        knowledgeBoundaryId: indexBoundary.id
+      }));
+      if (!indexedItems.length) continue;
+
+      const existing = (boundary.items || []).filter(item => !item.knowledgeSource);
+      boundary.items = [...existing, ...indexedItems];
+      boundary.enabled = true;
+    }
+  }
+}
+
+function getKnowledgeIndexEntry(boundaryId, componentId) {
+  const boundary = data.boundaries.find(item => item.id === boundaryId);
+  const selectedItem = boundary?.items?.find(item => item.id === componentId);
+  if (selectedItem?.knowledgeSource) {
+    const index = getKnowledgeIndex();
+    for (const indexBoundary of index?.systemBoundaries || []) {
+      for (const group of indexBoundary.groups || []) {
+        const item = (group.items || []).find(candidate => candidate.source === selectedItem.knowledgeSource);
+        if (item) return { type: "item", boundary: indexBoundary, group, item };
+      }
+    }
+  }
+
+  const normalized = normalizeKnowledgeId(componentId);
+  for (const indexBoundary of getKnowledgeIndex()?.systemBoundaries || []) {
+    for (const group of indexBoundary.groups || []) {
+      if (normalizeKnowledgeId(group.id) === normalized) {
+        return { type: "group", boundary: indexBoundary, group };
+      }
+      for (const item of group.items || []) {
+        if (normalizeKnowledgeId(item.id) === normalized) {
+          return { type: "item", boundary: indexBoundary, group, item };
+        }
+      }
     }
   }
   return null;
@@ -1084,17 +1185,19 @@ function renderGenericKnowledgeView(network, indexEntry) {
     `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_", " ")}</strong><br>${d.rationale}</p>`
   ).join("");
 
+  const boundaryLabel = indexEntry?.boundary?.label || network.entry?.systemBoundary || "Knowledge";
   const groupLabel = indexEntry?.group?.label || network.entry?.domainComponent || "Knowledge";
   const itemLabel = indexEntry?.item?.label || network.entry?.subComponent || network.topic || "Thema";
+  const isExtension = indexEntry?.boundary?.id?.startsWith("eah_");
 
   return `
     <div class="oil-pilot generic-knowledge-view">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT</div>
+      <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
       <h2>${groupLabel} → ${itemLabel}</h2>
       <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
 
       <div class="oil-path">
-        <span>Technologische & soziale Umwelt</span><b>→</b>
+        <span>${boundaryLabel}</span><b>→</b>
         <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
       </div>
 
@@ -1142,6 +1245,22 @@ function renderTechSocialGroupIntro(group) {
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
+
+  // Generischer Index-Pfad: funktioniert für Planetare Grenzen und Ergänzungen.
+  const activeBoundary = getBoundary(state.boundaryId);
+  const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
+  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
+    const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
+    const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
+    if (focusType) focusType.textContent = `PLANETARE GRENZE · ${activeBoundary.label}`;
+    if (focusTitle) focusTitle.textContent = `${activeBoundary.label} · ${activeItem.label}`;
+    if (focusSummary) focusSummary.textContent = network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
+    renderHealth(null);
+    panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
+    if (organReadout) organReadout.textContent = genericHealthReadout(network);
+    panel.hidden = false;
+    return;
+  }
 
   syncBoundaryModeClass();
   setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy" && state.boundaryId !== "mental-load");
@@ -1220,7 +1339,7 @@ function renderKnowledgePanel() {
     if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT";
     renderHealth(null);
 
-    const indexEntry = getTechSocialIndexEntry(state.componentId);
+    const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.componentId);
 
     if (indexEntry?.type === "item") {
       const network = getKnowledgeNetworkBySource(indexEntry.item.source);
@@ -1233,7 +1352,7 @@ function renderKnowledgePanel() {
       if (focusSummary) focusSummary.textContent = "Umwelt- und Expositionsbereich innerhalb der ergänzenden Systemgrenze.";
       panel.innerHTML = renderTechSocialGroupIntro(indexEntry.group);
     } else {
-      const groups = (getTechSocialIndex()?.groups || []).map(group =>
+      const groups = (getKnowledgeIndex()?.systemBoundaries?.find(item => item.id === "eah_tech_social_environment")?.groups || []).map(group =>
         `<p><strong>${group.label}</strong><br>${(group.items || []).map(item => item.label).join(" · ")}</p>`
       ).join("");
 
@@ -1737,7 +1856,7 @@ function selectItem(boundaryId, itemId) {
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
-  if (boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy" || boundaryId === "mental-load") {
+  if (item.knowledgeSource || boundaryId === "nutrients" || boundaryId === "novel" || boundaryId === "materials-energy" || boundaryId === "mental-load") {
     selectedDomainComponent = itemId;
     selectedYear = null;
     renderHealth(boundaryId === "novel" && itemId === "pfas" ? getPfasHealthView() : null);
@@ -1800,7 +1919,7 @@ async function initPanel() {
   try {
     await loadBodymapConfig();
     await loadKnowledgeNetworks();
-    syncTechSocialNavigationFromIndex();
+    syncKnowledgeNavigationFromIndex();
   } catch (error) {
     console.error(error);
     organReadout.textContent = "Bodymap-Konfiguration konnte nicht geladen werden.";

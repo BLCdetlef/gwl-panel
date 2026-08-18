@@ -1,0 +1,332 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Klimawandel / globale Erwärmung / Erdsystemwärme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Klimawandel",
+    "subComponent": "Globale Erwärmung",
+    "effectFocus": "Erdsystemwärme, Meeresspiegel und Hitzebelastung"
+  },
+  "corePrinciples": [
+    "Klimawandel wird als Veränderung des Erdsystems dargestellt, nicht als einzelnes Wetterereignis.",
+    "Globale Temperatur, Ozeanwärme und Meeresspiegel sind getrennte Messgrößen mit unterschiedlichen Zeitreihen.",
+    "Ein einzelnes Kalenderjahr über 1,5 °C ist nicht gleichbedeutend mit einer dauerhaften Überschreitung des Paris-Langfristziels.",
+    "Beobachtete globale Erwärmung ist nach IPCC eindeutig überwiegend menschengemacht.",
+    "Messwerte, Referenzzeiträume und langfristige Trends werden nicht miteinander vermischt.",
+    "Gesundheitswirkungen werden nur über konkrete Expositionspfade wie Hitze, Luftqualität, Extremereignisse oder Infektionsrisiken verknüpft.",
+    "Keine direkte Organwirkung allein aus dem globalen Temperaturwert ableiten."
+  ],
+  "nodes": [
+    {
+      "id": "pb_climate_change",
+      "type": "domain_component",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "state_global_warming",
+      "type": "socio_technical_state",
+      "label": "Anstieg der globalen Mitteltemperatur"
+    },
+    {
+      "id": "state_ocean_heat",
+      "type": "socio_technical_state",
+      "label": "Zunahme des Ozeanwärmeinhalts"
+    },
+    {
+      "id": "state_sea_level",
+      "type": "socio_technical_state",
+      "label": "Anstieg des globalen mittleren Meeresspiegels"
+    },
+    {
+      "id": "exposure_heat",
+      "type": "exposure",
+      "label": "Hitzebelastung"
+    },
+    {
+      "id": "effect_thermoregulation",
+      "type": "biological_effect",
+      "label": "Belastung der Thermoregulation"
+    },
+    {
+      "id": "life_heat_health",
+      "type": "life_outcome",
+      "label": "Erhöhtes Gesundheitsrisiko bei starker Hitze"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_climate_change",
+      "to": "state_global_warming",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_global_warming",
+      "to": "state_ocean_heat",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_global_warming",
+      "to": "state_sea_level",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_global_warming",
+      "to": "exposure_heat",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "exposure_heat",
+      "to": "effect_thermoregulation",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_thermoregulation",
+      "to": "life_heat_health",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "ipcc_ar6_syr_warming",
+      "sourceRefs": [
+        "src_ipcc_ar6_syr_2023"
+      ],
+      "design": "assessment of observational and attribution evidence",
+      "finding": "Menschliche Aktivitäten, vor allem Treibhausgasemissionen, haben die globale Erwärmung eindeutig verursacht. Die globale Oberflächentemperatur lag 2011–2020 etwa 1,1 °C über 1850–1900.",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "wmo_2025_temperature",
+      "sourceRefs": [
+        "src_wmo_state_climate_2025"
+      ],
+      "design": "consolidated global climate assessment using multiple international datasets",
+      "finding": "2025 war nach WMO das zweit- oder drittwärmste Jahr der Messgeschichte und lag etwa 1,43 °C über dem Mittel 1850–1900.",
+      "relationType": "observed",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "copernicus_sea_level_2025",
+      "sourceRefs": [
+        "src_c3s_sea_level_2026"
+      ],
+      "design": "satellite-based climate indicator",
+      "finding": "Der globale mittlere Meeresspiegel stieg seit 1999 im Mittel um 3,64 mm/Jahr, insgesamt um etwa 9,38 cm bis 2025; die Anstiegsrate beschleunigte sich.",
+      "relationType": "observed",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "copernicus_ocean_heat_2025",
+      "sourceRefs": [
+        "src_c3s_ocean_heat_2026"
+      ],
+      "design": "reanalysis-based climate indicator",
+      "finding": "Der globale Ozeanwärmeinhalt erreichte 2025 den höchsten Wert der Reihe seit 1993.",
+      "relationType": "observed",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "global_temperature_2025",
+      "node": "state_global_warming",
+      "geography": "Global",
+      "period": "2025",
+      "metric": "Globale mittlere bodennahe Temperatur relativ zu 1850–1900",
+      "value": 1.43,
+      "unit": "degC_above_1850_1900",
+      "display": "2025: etwa +1,43 °C gegenüber 1850–1900",
+      "uncertainty": "WMO konsolidiert mehrere internationale Datensätze; einzelne Datensätze unterscheiden sich leicht.",
+      "interpretation": "Kalenderjahreswert. Nicht mit dem langfristigen Erwärmungsniveau oder der Paris-Zieldefinition gleichsetzen.",
+      "sourceRefs": [
+        "src_wmo_state_climate_2025"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "human_caused_warming_2011_2020",
+      "node": "state_global_warming",
+      "geography": "Global",
+      "period": "2011–2020",
+      "metric": "Globale Oberflächentemperatur relativ zu 1850–1900",
+      "value": 1.1,
+      "unit": "degC_above_1850_1900",
+      "display": "2011–2020: +1,1 °C gegenüber 1850–1900",
+      "uncertainty": "IPCC-Synthese; Wert bezieht sich auf ein Zehnjahresmittel.",
+      "interpretation": "Der IPCC bewertet den menschlichen Einfluss auf die beobachtete Erwärmung als eindeutig.",
+      "sourceRefs": [
+        "src_ipcc_ar6_syr_2023"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "global_mean_sea_level_1999_2025",
+      "node": "state_sea_level",
+      "geography": "Global",
+      "period": "1999–2025",
+      "metric": "Anstieg des globalen mittleren Meeresspiegels",
+      "value": 9.38,
+      "unit": "cm",
+      "display": "1999–2025: +9,38 cm",
+      "uncertainty": "Satellitengestützter globaler Indikator; regionale Meeresspiegeländerungen können deutlich abweichen.",
+      "interpretation": "Der mittlere Trend seit 1999 beträgt 3,64 mm/Jahr; die Trendrate stieg von 2,92 mm/Jahr (1999–2009) auf 3,82 mm/Jahr (2015–2025).",
+      "sourceRefs": [
+        "src_c3s_sea_level_2026"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "ocean_heat_content_1993_2025",
+      "node": "state_ocean_heat",
+      "geography": "Global",
+      "period": "1993–2025",
+      "metric": "Änderung des Ozeanwärmeinhalts, 0–2000 m",
+      "value": 1.3,
+      "unit": "W_per_m2",
+      "display": "1993–2025: +1,30 W/m² im globalen Ozean (0–2000 m)",
+      "uncertainty": "Copernicus ORAS5; angegeben mit ±0,01 W/m² für die globale Reihe.",
+      "interpretation": "2025 war der höchste Wert in der Copernicus-Reihe seit 1993.",
+      "sourceRefs": [
+        "src_c3s_ocean_heat_2026"
+      ],
+      "displayType": "study_value"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_heat_health",
+      "label": "Erwärmung → Hitzeexposition → Thermoregulation → Gesundheitsrisiko",
+      "nodes": [
+        "state_global_warming",
+        "exposure_heat",
+        "effect_thermoregulation",
+        "life_heat_health"
+      ],
+      "evidenceStatus": "strong",
+      "note": "Für konkrete Gesundheitsdarstellungen sind regionale Expositionsdaten und passende Gesundheitsquellen erforderlich."
+    },
+    {
+      "id": "path_warming_sea_level",
+      "label": "Erwärmung → Ozeanerwärmung / Eisschmelze → Meeresspiegelanstieg",
+      "nodes": [
+        "state_global_warming",
+        "state_ocean_heat",
+        "state_sea_level"
+      ],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "system_level_only",
+    "systemImpacts": [
+      {
+        "system": "thermoregulation",
+        "label": "Thermoregulation / Hitzebelastung",
+        "evidenceStatus": "strong",
+        "note": "Eine konkrete Organmarkierung soll erst bei regional bzw. individuell belegter Hitzeexposition erfolgen."
+      }
+    ],
+    "bodymapRule": "Keinen Organmarker allein aufgrund des globalen Temperatur- oder Meeresspiegelwerts aktivieren."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_planetary_boundary_metric",
+      "question": "Welche Kontrollvariable der planetaren Grenze Klimawandel soll im GWL-Panel als primäre Referenz verwendet werden: atmosphärische CO₂-Konzentration, Strahlungsantrieb oder ein ergänzender Zustandsindikator?",
+      "priority": "very_high",
+      "workingDecision": "Pilot zunächst mit beobachteten Klimazustandsindikatoren; planetare Grenzvariable separat ergänzen."
+    },
+    {
+      "id": "gap_health_region",
+      "question": "Welche regionalen Hitzebelastungs- und Gesundheitsmessreihen sollen für Deutschland bzw. Schleswig-Holstein angebunden werden?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_timeseries",
+      "question": "Welche vollständigen Zeitreihen sollen für den BLC-Zeitraum 1700–2100 eingebunden werden, ohne Zwischenwerte zu erfinden?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_exposure",
+        "label": "Eigene Exposition / Anpassung",
+        "level": "mittel",
+        "rationale": "Hitzeschutz und Verhalten können individuelle Exposition beeinflussen, verändern aber nicht allein den globalen Klimazustand."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Veränderung des Klimasystems",
+        "level": "gering",
+        "rationale": "Der globale Klimazustand ist durch kumulative Emissionen und großskalige Systeme geprägt."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Emissionsminderung, Energie-, Verkehrs-, Industrie- und Landnutzungssysteme sowie Anpassungspolitik wirken strukturell."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Welche Messgröße eignet sich am besten, um den Zustand der planetaren Grenze Klimawandel im Panel verständlich und wissenschaftlich korrekt darzustellen?",
+    "Wie sollten kurzfristige Jahreswerte und langfristiges Erwärmungsniveau getrennt visualisiert werden?",
+    "Welche globale Zeitreihe ist für die BLC-Darstellung 1700–2100 am robustesten?",
+    "Welche regionalen Expositionspfade eignen sich für die Verbindung zum Bereich LEBEN?"
+  ],
+  "sources": [
+    {
+      "id": "src_ipcc_ar6_syr_2023",
+      "title": "AR6 Synthesis Report: Climate Change 2023",
+      "authors": "IPCC",
+      "publisher": "Intergovernmental Panel on Climate Change",
+      "year": 2023,
+      "type": "official_assessment",
+      "url": "https://www.ipcc.ch/report/ar6/syr/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_wmo_state_climate_2025",
+      "title": "State of the Global Climate 2025",
+      "authors": "WMO",
+      "publisher": "World Meteorological Organization",
+      "year": 2026,
+      "type": "official_global_climate_assessment",
+      "url": "https://wmo.int/publication-series/state-of-global-climate/state-of-global-climate-2025",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_c3s_sea_level_2026",
+      "title": "Climate Indicators — Sea level",
+      "authors": "Copernicus Climate Change Service",
+      "publisher": "Copernicus Climate Change Service",
+      "year": 2026,
+      "type": "official_climate_indicator",
+      "url": "https://climate.copernicus.eu/climate-indicators/sea-level",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_c3s_ocean_heat_2026",
+      "title": "Climate Indicators — Ocean heat content",
+      "authors": "Copernicus Climate Change Service",
+      "publisher": "Copernicus Climate Change Service",
+      "year": 2026,
+      "type": "official_climate_indicator",
+      "url": "https://climate.copernicus.eu/climate-indicators/ocean-heat-content",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": "Klimawandel bleibt eine Planetare Grenze. Gesundheitswirkungen werden nur über konkrete Expositionspfade in LEBEN aktiviert."
+}

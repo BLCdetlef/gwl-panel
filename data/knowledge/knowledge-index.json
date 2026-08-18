@@ -3,6 +3,23 @@
   "status": "draft",
   "systemBoundaries": [
     {
+      "id": "planetary_boundaries",
+      "label": "Planetare Grenzen",
+      "groups": [
+        {
+          "id": "climate_change",
+          "label": "Klimawandel",
+          "items": [
+            {
+              "id": "global_warming",
+              "label": "Globale Erwärmung",
+              "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "eah_tech_social_environment",
       "label": "Technologische & soziale Umwelt",
       "groups": [
