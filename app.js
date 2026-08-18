@@ -1410,6 +1410,15 @@ function renderKnowledgeTime(network) {
   }
 }
 
+
+function getKnowledgeStatusLabel(network) {
+  const year = network?.presentation?.statusYear
+    || network?.statusYear
+    || network?.presentation?.assessmentYear
+    || network?.assessmentYear;
+  return year ? `Stand ${year}` : "Stand der Grundlagenstudie";
+}
+
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
 
@@ -1428,8 +1437,8 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeSlider.max = "1";
   timeSlider.value = "0";
   timeMarkers.innerHTML = "";
-  timeReadout.textContent = getPrimaryKnowledgeMeasurement(network)?.period || "–";
-  timeStatus.textContent = "Messwert aus der ausgewählten Knowledge-Datei. Keine Zwischenwerte werden interpoliert.";
+  timeReadout.textContent = getKnowledgeStatusLabel(network);
+  timeStatus.textContent = "Noch keine Zeitreihe hinterlegt. Angezeigt wird der Stand der Grundlagenstudie.";
 }
 
 function renderKnowledgePanel() {

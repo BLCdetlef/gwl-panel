@@ -185,7 +185,9 @@
     "referenceLabel": "Planetare Grenze: <10 E/MSY",
     "finding": "Die Biosphärenintegrität ist überschritten. Die geschätzte globale Aussterberate liegt bei >100 E/MSY gegenüber einer Grenze von <10 E/MSY. Zusätzlich liegt die funktionelle Kontrollvariable HANPP bei etwa 30 %, gegenüber einer Grenze von etwa 10 %.",
     "effectPath": "Verlust genetischer Vielfalt + hohe HANPP → geschwächte Ökosystemfunktionen und Resilienz → Rückwirkungen auf Klima, Land, Wasser und menschliche Lebensgrundlagen",
-    "uncertainty": "Die beiden Kontrollvariablen beschreiben unterschiedliche Komponenten. Eine einzelne Zahl kann den Zustand der Biosphäre nicht vollständig abbilden."
+    "uncertainty": "Die beiden Kontrollvariablen beschreiben unterschiedliche Komponenten. Eine einzelne Zahl kann den Zustand der Biosphäre nicht vollständig abbilden.",
+    "statusYear": 2023,
+    "statusLabel": "Stand 2023"
   },
   "pathways": [
     {
