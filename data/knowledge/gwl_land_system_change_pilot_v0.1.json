@@ -240,6 +240,43 @@
   "presentation": {
     "referenceLabel": "Grenze: 75 %",
     "compactKnowledgeView": true,
-    "hidePrimaryMeasurementInKnowledgeView": true
-  }
+    "hidePrimaryMeasurementInKnowledgeView": true,
+    "primaryTimeSeriesId": "global_forest_cover_1992_2022",
+    "statusYear": 2025
+  },
+  "timeSeries": [
+    {
+      "id": "global_forest_cover_1992_2022",
+      "label": "Globaler Waldanteil relativ zur potenziellen natürlichen Waldfläche",
+      "unit": "%",
+      "dataStartYear": 1992,
+      "dataEndYear": 2022,
+      "temporalResolution": "annual",
+      "observationMethod": "Remote Sensing / Datenintegration",
+      "reference": {
+        "display": "Grenze: 75 %",
+        "value": 75,
+        "unit": "%"
+      },
+      "finding": "Der Planetary Health Check dokumentiert eine jährliche Beobachtungsreihe 1992–2022. Im GWL-Datensatz werden nur numerisch belastbar hinterlegte Punkte angezeigt; Zwischenwerte werden nicht geschätzt.",
+      "uncertainty": "Die vollständigen 31 numerischen Jahreswerte sind in den verwendeten PHC-Quellen nicht als Tabelle verfügbar; deshalb keine Interpolation oder Digitalisierung aus der Abbildung.",
+      "sourceRefs": [
+        "src_phc_2025_report",
+        "src_phc_land_2025"
+      ],
+      "points": [
+        {
+          "year": 2022,
+          "value": 59,
+          "display": "≈ 59 %",
+          "finding": "Global verbleiben rund 59 % der potenziellen natürlichen Waldfläche; die planetare Grenze von 75 % ist überschritten.",
+          "uncertainty": "PHC-Zustandswert auf Basis der Land-System-Datengrundlage. Weitere Jahreswerte werden erst ergänzt, wenn sie numerisch belastbar verfügbar sind.",
+          "sourceRefs": [
+            "src_phc_2025_report",
+            "src_phc_land_2025"
+          ]
+        }
+      ]
+    }
+  ]
 }
