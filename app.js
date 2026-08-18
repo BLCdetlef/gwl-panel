@@ -30,6 +30,8 @@ const organOverlayMedia = document.getElementById("organOverlayMedia");
 const organOverlayFinding = document.getElementById("organOverlayFinding");
 const organOverlayNote = document.getElementById("organOverlayNote");
 const organOverlayContent = document.getElementById("organOverlayContent");
+const organOverlayNoteHomeParent = organOverlayNote?.parentElement || null;
+const organOverlayNoteHomeNextSibling = organOverlayNote?.nextSibling || null;
 const closeOverlayButton = document.getElementById("closeOverlayButton");
 const causeButtonGround = document.getElementById("causeButtonGround");
 const causeButtonEffect = document.getElementById("causeButtonEffect");
@@ -2180,6 +2182,11 @@ function openOrganOverlay(organId, preserveHidden = false) {
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
   if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
+    organOverlayContent.classList.add("health-contribution-layout");
+    if (organOverlayNote?.parentElement !== organOverlayContent) {
+      organOverlayContent.appendChild(organOverlayNote);
+    }
+
     const hasColor = typeof impact.burdenScore === "number";
     organOverlayFinding.textContent = hasColor
       ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
@@ -2223,6 +2230,15 @@ function openOrganOverlay(organId, preserveHidden = false) {
         </div>
       </details>`;
   } else {
+    organOverlayContent.classList.remove("health-contribution-layout");
+    if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
+      if (organOverlayNoteHomeNextSibling && organOverlayNoteHomeNextSibling.parentNode === organOverlayNoteHomeParent) {
+        organOverlayNoteHomeParent.insertBefore(organOverlayNote, organOverlayNoteHomeNextSibling);
+      } else {
+        organOverlayNoteHomeParent.appendChild(organOverlayNote);
+      }
+    }
+
     // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
     // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
     organOverlayFinding.textContent = findingText.textContent || "–";
@@ -2500,6 +2516,75 @@ initPanel();
       }
       .organ-contribution-button {
         padding: 10px 11px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_HEALTH_OVERLAY_LAYOUT_V2 */
+(function installHealthOverlayLayoutV2() {
+  if (document.getElementById("gwl-health-overlay-layout-v2")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-overlay-layout-v2";
+  style.textContent = `
+    #organOverlayContent.health-contribution-layout {
+      display: grid !important;
+      grid-template-columns: minmax(250px, 40%) minmax(0, 1fr) !important;
+      align-items: start !important;
+      gap: 14px 18px !important;
+    }
+
+    #organOverlayContent.health-contribution-layout > #organOverlayMedia,
+    #organOverlayContent.health-contribution-layout > .organ-overlay-media {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+      min-width: 0;
+    }
+
+    /* The existing text block remains beside the image for the short finding. */
+    #organOverlayContent.health-contribution-layout > :not(#organOverlayMedia):not(#organOverlayNote) {
+      min-width: 0;
+    }
+
+    /* Method and all causes now use the complete width below image + finding. */
+    #organOverlayContent.health-contribution-layout > #organOverlayNote {
+      grid-column: 1 / -1 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-context-details {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-button {
+      min-width: 0;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: auto;
+    }
+
+    @media (max-width: 760px) {
+      #organOverlayContent.health-contribution-layout {
+        grid-template-columns: 1fr !important;
+      }
+
+      #organOverlayContent.health-contribution-layout > #organOverlayMedia,
+      #organOverlayContent.health-contribution-layout > #organOverlayNote {
+        grid-column: 1 !important;
+      }
+
+      #organOverlayContent.health-contribution-layout .organ-contribution-list {
+        grid-template-columns: 1fr;
       }
     }
   `;
