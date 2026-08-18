@@ -1,0 +1,240 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Land-System-Wandel / Zustand der planetaren Grenze",
+  "status": "draft-reviewed-sources",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Land-System-Wandel",
+    "subComponent": "Globaler Waldzustand",
+    "effectFocus": "Wie viel der potenziellen natürlichen Waldfläche noch vorhanden ist und wie weit dieser Zustand von der planetaren Grenze entfernt ist"
+  },
+  "corePrinciples": [
+    "Die Kontrollvariable ist der Anteil der verbleibenden Waldfläche relativ zur potenziellen natürlichen Waldfläche ohne menschliche Landnutzungsänderung.",
+    "Die planetare Grenze wird global und zusätzlich biomspezifisch betrachtet, weil tropische, boreale und temperate Wälder unterschiedlich stark auf Klima- und Wasserkreisläufe wirken.",
+    "Der globale Grenzwert liegt bei 75 % der potenziellen natürlichen Waldfläche; für tropische und boreale Wälder gelten 85 %, für temperate Wälder 50 %.",
+    "Der Planetary Health Check 2025 beziffert den globalen Zustand auf rund 59 % und bewertet die Grenze damit als überschritten.",
+    "Waldfläche allein beschreibt nicht alle Aspekte des Land-System-Wandels. Fragmentierung, Waldtyp, Degradation und Ökosystemfunktionen sind wichtige Vertiefungen.",
+    "Keine Organmarker allein aufgrund des Oberthemas Land-System-Wandel."
+  ],
+  "measurements": [
+    {
+      "id": "global_forest_cover_2022",
+      "metric": "Verbleibende globale Waldfläche relativ zur potenziellen natürlichen Waldfläche",
+      "display": "≈ 59 %",
+      "value": 59,
+      "unit": "%",
+      "period": "2022; Bewertung im Planetary Health Check 2025",
+      "geography": "Global",
+      "reference": {
+        "display": "Planetare Grenze: 75 %",
+        "value": 75,
+        "unit": "%"
+      },
+      "interpretation": "Die globale Waldfläche liegt deutlich unter dem sicheren Mindestwert von 75 % der potenziellen natürlichen Waldfläche. Die planetare Grenze Land-System-Wandel ist überschritten.",
+      "uncertainty": "Der Wert ist eine global aggregierte Kontrollvariable. Regionale und biomspezifische Zustände unterscheiden sich deutlich; Waldqualität und Fragmentierung werden durch diese Zahl nicht vollständig erfasst.",
+      "sourceRefs": [
+        "src_phc_2025_report",
+        "src_phc_land_2025"
+      ]
+    },
+    {
+      "id": "biome_forest_boundaries",
+      "metric": "Biomspezifische Grenzwerte für verbleibende Waldfläche",
+      "display": "tropisch 85 % · boreal 85 % · temperiert 50 %",
+      "period": "aktueller Planetary-Boundaries-Rahmen",
+      "geography": "Globale Wald-Biome",
+      "interpretation": "Die unterschiedlichen Grenzwerte berücksichtigen, dass tropische und boreale Wälder besonders stark auf regionale und entfernte Klima- und Wasserkreisläufe wirken.",
+      "uncertainty": "Die Grenzwerte sind Sicherheitsgrenzen des Earth-System-Rahmens und keine lokalen Bewirtschaftungsziele für einzelne Wälder.",
+      "sourceRefs": [
+        "src_phc_land_2025",
+        "src_richardson_2023"
+      ]
+    },
+    {
+      "id": "forest_cover_trend_1992_2022",
+      "metric": "Entwicklung der Waldfläche in den großen Wald-Biomen",
+      "display": "1992–2022: insgesamt rückläufig",
+      "period": "1992–2022",
+      "geography": "Global · tropisch · boreal · temperiert",
+      "interpretation": "Der Planetary Health Check beschreibt über die letzten Jahrzehnte einen Rückgang der relativen Waldfläche in allen großen Wald-Biomen; die räumlichen Muster von Verlust und Zunahme sind jedoch heterogen.",
+      "uncertainty": "Die zugrunde liegenden Fernerkundungs- und Referenzdaten hängen von Walddefinition, räumlicher Auflösung und der Rekonstruktion potenzieller natürlicher Waldflächen ab.",
+      "sourceRefs": [
+        "src_phc_land_2025"
+      ]
+    }
+  ],
+  "thresholds": {
+    "controlVariable": "Anteil verbleibender Waldfläche an der potenziellen natürlichen Waldfläche",
+    "unit": "%",
+    "baseline": {
+      "label": "potenzielle natürliche Waldfläche",
+      "value": 100
+    },
+    "planetaryBoundary": {
+      "global": 75,
+      "tropical": 85,
+      "boreal": 85,
+      "temperate": 50
+    },
+    "currentAssessment": {
+      "global": 59,
+      "status": "transgressed"
+    }
+  },
+  "pathways": [
+    {
+      "id": "land_to_climate",
+      "label": "Waldverlust → geringere Kohlenstoffspeicherung und veränderte Landoberfläche → Klimawirkung",
+      "chain": [
+        "Entwaldung / Walddegradation",
+        "geringere Kohlenstoffspeicherung und veränderte Albedo",
+        "veränderte Treibhausgas- und Energieflüsse",
+        "Klimawandel"
+      ],
+      "crosslinks": [
+        "Klimawandel"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "land_to_water",
+      "label": "Waldverlust → veränderte Verdunstung und Niederschlagsmuster → Wasserhaushalt",
+      "chain": [
+        "Entwaldung",
+        "weniger Evapotranspiration",
+        "veränderte regionale Niederschlags- und Abflussmuster",
+        "Süßwasser"
+      ],
+      "crosslinks": [
+        "Süßwasser"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "land_to_biosphere",
+      "label": "Waldverlust und Fragmentierung → Habitatverlust → Biosphärenintegrität",
+      "chain": [
+        "Landnutzungsänderung",
+        "Habitatverlust / Fragmentierung",
+        "veränderte Arten- und Ökosystemfunktionen",
+        "Biosphärenintegrität"
+      ],
+      "crosslinks": [
+        "Biosphärenintegrität"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "land_to_life",
+      "label": "Land-System-Wandel → veränderte Ökosystemleistungen und Expositionen → LEBEN",
+      "chain": [
+        "Land-System-Wandel",
+        "veränderte Wasser-, Klima- und Ökosystemleistungen",
+        "konkrete Expositions- und Wirkungspfade",
+        "LEBEN"
+      ],
+      "crosslinks": [
+        "LEBEN"
+      ],
+      "evidenceStatus": "context_dependent",
+      "caution": "Kein direkter Organmarker allein aufgrund des Oberthemas. Gesundheitsbeiträge werden erst über konkrete, separat belegte Expositions- und Krankheitslastpfade aufgenommen."
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Klimawandel",
+      "relation": "bidirectional",
+      "note": "Waldverlust beeinflusst Kohlenstoff- und Energieflüsse; zugleich verändern Erwärmung, Dürre, Feuer und Schädlinge den Waldzustand."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "strong",
+      "note": "Landnutzungsänderung verändert Lebensräume, Fragmentierung und Ökosystemfunktionen."
+    },
+    {
+      "boundary": "Süßwasser",
+      "relation": "strong",
+      "note": "Vegetation und Wald beeinflussen Evapotranspiration, Niederschlagsrecycling, Abfluss und Bodenschutz."
+    }
+  ],
+  "healthContext": {
+    "systemImpacts": [],
+    "note": "Aus der Überschreitung der planetaren Grenze Land-System-Wandel folgt keine direkte Organwirkung. Gesundheitswirkungen werden nur über konkrete Expositions- und Wirkungspfade in health-contributions.json abgebildet."
+  },
+  "knowledgeGaps": [
+    {
+      "question": "Wie lassen sich Fragmentierung, Waldqualität und Degradation ergänzend zur Flächen-Kontrollvariable robust darstellen?",
+      "reason": "Die globale Waldflächenzahl allein kann starke regionale Qualitätsunterschiede verdecken.",
+      "priority": "high"
+    },
+    {
+      "question": "Welche biomspezifischen Zeitreihen können für den BLC-Regler offen und reproduzierbar hinterlegt werden?",
+      "reason": "Der Planetary Health Check zeigt Zeitreihen 1992–2022, veröffentlicht auf der Webseite aber nicht alle Einzelwerte in maschinenlesbarer Form.",
+      "priority": "high"
+    },
+    {
+      "question": "Wie stark beeinflusst der Klimawandel selbst die Kontrollvariable, unabhängig von direkter Landnutzungsänderung?",
+      "reason": "Neuere Arbeiten zeigen, dass klimabedingte Biomverschiebungen die Land-System-Grenze zusätzlich verändern können.",
+      "priority": "medium"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; nicht Teil der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "avoid_conversion",
+        "label": "Umwandlung natürlicher Waldflächen vermeiden",
+        "level": "hoch",
+        "rationale": "Die Kontrollvariable reagiert unmittelbar auf Verlust potenziell natürlicher Waldflächen."
+      },
+      {
+        "id": "restore_forest",
+        "label": "Waldlandschaften wiederherstellen",
+        "level": "hoch",
+        "rationale": "Wiederbewaldung und Regeneration können Waldfläche und Ökosystemfunktionen erhöhen, ersetzen aber nicht automatisch ursprüngliche Waldqualität."
+      },
+      {
+        "id": "cross_boundary",
+        "label": "Klima, Wasser und Biosphäre gemeinsam betrachten",
+        "level": "hoch",
+        "rationale": "Land-System-Wandel ist eng mit mehreren anderen planetaren Grenzen gekoppelt."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_phc_2025_report",
+      "title": "Planetary Health Check 2025",
+      "authors": "Kitzmann, N. et al.",
+      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_phc_land_2025",
+      "title": "Land System Change",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "official_boundary_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/land-system-change/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "doi": "10.1126/sciadv.adh2458",
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10499318/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": "Dieses Grundlagenmodul gehört als erster Eintrag unter Planetare Grenzen → Land-System-Wandel. Die vorhandene Datei gwl_land_system_lippe_pilot_v0.1.json bleibt als Vertiefung 'Waldtransition und Waldzustand' erhalten."
+}
