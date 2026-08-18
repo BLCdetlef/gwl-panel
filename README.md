@@ -1,4 +1,4 @@
-# GWL-Panel – Prototyp 0.8.1
+# GWL-Panel – Prototyp 0.8.1 
 
 GRUNDLAGE · WIRKUNG · LEBEN · URSACHEN
 
