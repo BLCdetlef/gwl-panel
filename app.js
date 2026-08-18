@@ -2044,6 +2044,9 @@ function ensureHealthLegend() {
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
       <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare 0–100-%-Funktionsskala vorhanden.</span>
+    </div>
+    <div class="health-legend-row health-legend-method">
+      <span><strong>Methodik:</strong> Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert werden kann.</span>
     </div>`;
   bodymapPanel.insertBefore(healthLegend, readout);
   return healthLegend;
