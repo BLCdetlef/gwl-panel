@@ -38,6 +38,17 @@
               "source": "data/knowledge/gwl_land_system_lippe_pilot_v0.1.json"
             }
           ]
+        },
+        {
+          "id": "nutrient_cycles",
+          "label": "Nährstoffkreisläufe",
+          "items": [
+            {
+              "id": "nitrogen_phosphorus",
+              "label": "Stickstoff & Phosphor",
+              "source": "data/knowledge/gwl_nutrient_cycles_pilot_v0.1.json"
+            }
+          ]
         }
       ]
     },

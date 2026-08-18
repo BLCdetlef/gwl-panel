@@ -1,0 +1,306 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Nährstoffkreisläufe / Stickstoff / Phosphor",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Nährstoffkreisläufe",
+    "subComponent": "Stickstoff- und Phosphorkreisläufe",
+    "effectFocus": "Anthropogene Veränderung biogeochemischer Flüsse und Folgen für Land-, Süßwasser- und Meeresökosysteme"
+  },
+  "corePrinciples": [
+    "Die planetare Grenze der Nährstoffkreisläufe umfasst zwei getrennte Kontrollvariablen für Stickstoff und Phosphor.",
+    "Stickstoff wird über die anthropogene Fixierung für die Landwirtschaft bewertet.",
+    "Für Phosphor existieren eine regionale und eine globale Grenzdimension; für die kompakte Zustandsanzeige wird die stärker begrenzende regionale Kontrollvariable verwendet.",
+    "Stickstoff- und Phosphorwerte werden nicht zu einer künstlichen Gesamtzahl verrechnet.",
+    "Wirkungspfade dürfen systemisch zu Biosphärenintegrität, Süßwasser, Klima, Ozon und menschlichen Lebensgrundlagen führen.",
+    "Keine Organmarker allein aufgrund des Oberthemas Nährstoffkreisläufe."
+  ],
+  "nodes": [
+    {
+      "id": "pb_nutrient_cycles",
+      "type": "domain_component",
+      "label": "Nährstoffkreisläufe"
+    },
+    {
+      "id": "state_nitrogen",
+      "type": "socio_technical_state",
+      "label": "Anthropogene Stickstofffixierung"
+    },
+    {
+      "id": "state_phosphorus",
+      "type": "socio_technical_state",
+      "label": "Phosphoreintrag auf Ackerflächen"
+    },
+    {
+      "id": "effect_eutrophication",
+      "type": "biological_effect",
+      "label": "Eutrophierung und Sauerstoffmangel"
+    },
+    {
+      "id": "effect_biodiversity",
+      "type": "biological_effect",
+      "label": "Veränderte Artenzusammensetzung und Biodiversitätsverlust"
+    },
+    {
+      "id": "effect_air_climate",
+      "type": "biological_effect",
+      "label": "Luft-, Klima- und Ozonwirkungen reaktiver Stickstoffverbindungen"
+    },
+    {
+      "id": "life_water_food",
+      "type": "life_outcome",
+      "label": "Risiken für Wasserqualität, Fischerei, Landwirtschaft und menschliche Lebensgrundlagen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_nutrient_cycles",
+      "to": "state_nitrogen",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pb_nutrient_cycles",
+      "to": "state_phosphorus",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_nitrogen",
+      "to": "effect_eutrophication",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_phosphorus",
+      "to": "effect_eutrophication",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_eutrophication",
+      "to": "effect_biodiversity",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_nitrogen",
+      "to": "effect_air_climate",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_eutrophication",
+      "to": "life_water_food",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "phc_2025_nutrients",
+      "sourceRefs": [
+        "src_phc_2025"
+      ],
+      "design": "Aktuelle globale Bewertung der planetaren Grenze für biogeochemische Flüsse.",
+      "finding": "2025 werden etwa 165 Tg N/Jahr anthropogen für die Landwirtschaft fixiert; die planetare Grenze liegt bei 62 Tg N/Jahr. Die Anwendung von abgebautem Phosphor auf Ackerflächen liegt bei etwa 18,2 Tg P/Jahr; die regionale planetare Grenze liegt bei 6,2 Tg P/Jahr. Beide Komponenten liegen außerhalb des sicheren Bereichs.",
+      "relationType": "current_global_assessment",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "nutrients_nitrogen_fixation",
+      "node": "state_nitrogen",
+      "geography": "Global",
+      "period": "Stand 2025",
+      "metric": "Anthropogene Stickstofffixierung für die Landwirtschaft",
+      "value": 165,
+      "unit": "Tg N/Jahr",
+      "display": "etwa 165 Tg N/Jahr",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 62,
+        "unit": "Tg N/Jahr",
+        "display": "Planetare Grenze: 62 Tg N/Jahr"
+      },
+      "highRisk": {
+        "value": 82,
+        "unit": "Tg N/Jahr",
+        "display": "Hochrisikogrenze: 82 Tg N/Jahr"
+      },
+      "uncertainty": "Globale Modell- und Bilanzschätzung. Regionale Stickstoffüberschüsse unterscheiden sich stark.",
+      "interpretation": "Die Stickstoffkomponente liegt deutlich außerhalb des sicheren Bereichs und oberhalb der Hochrisikogrenze.",
+      "sourceRefs": [
+        "src_phc_2025"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "nutrients_phosphorus_cropland",
+      "node": "state_phosphorus",
+      "geography": "Global aggregiert",
+      "period": "Stand 2025; zugrunde liegende Anwendungsdaten bis 2022",
+      "metric": "Anwendung von abgebautem Phosphor auf globalen Ackerflächen",
+      "value": 18.2,
+      "unit": "Tg P/Jahr",
+      "display": "etwa 18,2 Tg P/Jahr",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 6.2,
+        "unit": "Tg P/Jahr",
+        "display": "Regionale planetare Grenze, global aggregiert: 6,2 Tg P/Jahr"
+      },
+      "highRisk": {
+        "value": 11.2,
+        "unit": "Tg P/Jahr",
+        "display": "Hochrisikogrenze: 11,2 Tg P/Jahr"
+      },
+      "uncertainty": "Die 6,2-Tg-Grenze ist eine global aggregierte regionale Kontrollvariable zur Begrenzung der Eutrophierung von Süßwassersystemen. Regionale Belastungen unterscheiden sich stark.",
+      "interpretation": "Die Phosphorkomponente liegt deutlich außerhalb des sicheren Bereichs und oberhalb der Hochrisikogrenze.",
+      "sourceRefs": [
+        "src_phc_2025"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "nutrients_phosphorus_ocean",
+      "node": "state_phosphorus",
+      "geography": "Global",
+      "period": "aktuelle globale Einordnung",
+      "metric": "Phosphorfluss in den Ozean",
+      "value": 4.4,
+      "unit": "Tg P/Jahr",
+      "display": "etwa 4,4 Tg P/Jahr",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 11,
+        "unit": "Tg P/Jahr",
+        "display": "Globale Ozean-Grenze: 11 Tg P/Jahr"
+      },
+      "uncertainty": "Diese globale Ozean-Komponente ist von der stärker begrenzenden regionalen Phosphor-Kontrollvariable zu unterscheiden.",
+      "interpretation": "Die globale Ozean-Komponente wird separat dokumentiert; für die Hauptanzeige wird die stärker begrenzende regionale Phosphorvariable verwendet.",
+      "sourceRefs": [
+        "src_phc_web_2025"
+      ],
+      "displayType": "secondary_value"
+    }
+  ],
+  "presentation": {
+    "statusYear": 2025,
+    "statusLabel": "Stand 2025",
+    "primaryMeasurementId": "nutrients_nitrogen_fixation",
+    "referenceLabel": "Planetare Grenze: 62 Tg N/Jahr",
+    "finding": "Die planetare Grenze der Nährstoffkreisläufe ist deutlich überschritten. Die anthropogene Stickstofffixierung für die Landwirtschaft liegt bei etwa 165 Tg N/Jahr gegenüber einer Grenze von 62 Tg N/Jahr. Auch die Phosphorkomponente ist überschritten: etwa 18,2 Tg P/Jahr werden auf Ackerflächen eingebracht, gegenüber einer regionalen, global aggregierten Grenze von 6,2 Tg P/Jahr.",
+    "effectPath": "Übermäßige Stickstoff- und Phosphoreinträge → Verluste in Luft, Böden und Gewässer → Eutrophierung, Sauerstoffmangel und veränderte Ökosysteme → Rückwirkungen auf Biosphäre, Süßwasser, Klima und menschliche Lebensgrundlagen",
+    "uncertainty": "Stickstoff und Phosphor besitzen unterschiedliche Kontrollvariablen und räumliche Skalen. Die beiden Werte dürfen nicht zu einer gemeinsamen Kennzahl verrechnet werden."
+  },
+  "pathways": [
+    {
+      "id": "path_nutrients_water",
+      "label": "N- und P-Überschüsse → Einträge in Gewässer → Algenwachstum / Eutrophierung → Sauerstoffmangel → Belastung aquatischer Ökosysteme",
+      "nodes": [
+        "state_nitrogen",
+        "state_phosphorus",
+        "effect_eutrophication",
+        "effect_biodiversity"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_nitrogen_air_climate",
+      "label": "Reaktiver Stickstoff → Emissionen und Umwandlungsprodukte → Luftverschmutzung sowie N₂O → Klima- und Ozonwirkungen",
+      "nodes": [
+        "state_nitrogen",
+        "effect_air_climate"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_nutrients_life",
+      "label": "Veränderte Nährstoffflüsse → beeinträchtigte Wasser- und Ökosystemqualität → Risiken für Fischerei, Landwirtschaft und menschliche Lebensgrundlagen",
+      "nodes": [
+        "effect_eutrophication",
+        "life_water_food"
+      ],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keinen Organmarker allein aufgrund der global überschrittenen Nährstoffgrenze aktivieren. Organwirkungen benötigen einen konkreten, belegten Expositionspfad, zum Beispiel über Nitrat im Trinkwasser, Luftschadstoffe oder Cyanobakterientoxine."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_n_timeseries",
+      "question": "Welche konsistente, zitierfähige Zeitreihe der anthropogenen Stickstofffixierung soll für den BLC-Regler übernommen werden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_p_timeseries",
+      "question": "Welche konsistente Zeitreihe der globalen Phosphoranwendung soll übernommen werden, ohne unterschiedliche Definitionen der Kontrollvariable zu vermischen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_regionalization",
+      "question": "Wie werden globale Zustandsanzeige und regional stark unterschiedliche N- und P-Überschüsse im GWL-Panel miteinander verknüpft?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_health_paths",
+      "question": "Welche konkreten Expositionspfade sind robust genug, um später vom globalen Nährstoffthema bis zu Gesundheits- oder Organwirkungen zu führen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; nicht Teil der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "nutrient_efficiency",
+        "label": "Nährstoffeffizienz",
+        "level": "hoch",
+        "rationale": "Ein großer Teil der eingesetzten Nährstoffe wird nicht von Nutzpflanzen aufgenommen und gelangt in die Umwelt."
+      },
+      {
+        "id": "nutrient_recycling",
+        "label": "Kreislaufführung",
+        "level": "hoch",
+        "rationale": "Bessere Rückgewinnung und Kreislaufführung können Verluste von Stickstoff und Phosphor verringern."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Soll in der kompakten Zustandsanzeige Stickstoff oder Phosphor zuerst erscheinen, oder brauchen beide gleichrangige Hauptkarten?",
+    "Wie erklären wir verständlich, warum die Phosphorgrenze eine regionale und eine globale Komponente besitzt?",
+    "Welche Zeitreihen eignen sich wissenschaftlich am besten für Stickstoff und Phosphor im BLC-Regler?",
+    "Welche regionalen Messreihen eignen sich später als Vertiefungsmodule für Deutschland bzw. Norddeutschland?"
+  ],
+  "sources": [
+    {
+      "id": "src_phc_2025",
+      "title": "Planetary Health Check 2025 – Modification of Biogeochemical Flows",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/wp-content/uploads/PlanetaryHealthCheck2025.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_phc_web_2025",
+      "title": "Modification of Biogeochemical Flows",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "official_boundary_information",
+      "url": "https://www.planetaryhealthcheck.org/boundary/modification-of-biogeochemical-flows/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": "Das Grundlagenmodul gehört unter Planetare Grenzen → Nährstoffkreisläufe. Stickstoff und Phosphor bleiben getrennte Kontrollvariablen innerhalb derselben planetaren Grenze. Regionale Messprogramme und konkrete Expositionspfade docken als Vertiefungsmodule darunter an."
+}
