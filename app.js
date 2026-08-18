@@ -1344,7 +1344,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   const measurement = getPrimaryKnowledgeMeasurement(network);
   const source = getKnowledgeSource(network, measurement);
   metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
-  referenceValue.textContent = presentation.referenceLabel || "–";
+  referenceValue.textContent = measurement?.reference?.display || presentation.referenceLabel || "–";
   periodValue.textContent = measurement?.period || "–";
   findingText.textContent = presentation.finding || measurement?.interpretation || "–";
   effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
@@ -1448,6 +1448,69 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeStatus.textContent = "Noch keine Zeitreihe hinterlegt. Angezeigt wird der Stand der Grundlagenstudie.";
 }
 
+
+function renderNutrientDepthConnections(activeItem) {
+  if (!activeItem || selectedBoundaryId !== "nutrients") return "";
+
+  if (activeItem.id === "nitrogen") {
+    return `
+      <section class="connections-panel nutrient-depth-connections">
+        <div class="connections-head">
+          <div>
+            <div class="eyebrow">VERTIEFUNG · REGIONALER WIRKUNGSPFAD</div>
+            <h2>Von der globalen Stickstoffgrenze zum Nitrat im Grundwasser</h2>
+            <p>
+              Die globale Grundlagen-Knowledge beschreibt den Zustand der planetaren Grenze.
+              Diese vorhandene Knowledge-Datei vertieft einen konkreten Pfad für Deutschland.
+            </p>
+          </div>
+        </div>
+        <div class="connection-list">
+          ${renderKnowledgeCard({
+            key: "nitrate",
+            network: knowledgeNetworks.nitrate,
+            eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF · VERTIEFUNG",
+            title: "Stickstoff → Nitrat im Grundwasser",
+            intro: "Regionaler Wirkungspfad über Stickstoffüberschuss, Auswaschung und Nitrat im Grundwasser. Die dortigen Messwerte ersetzen nicht den globalen Zustandswert der planetaren Grenze.",
+            chain: ["globale Stickstoffgrenze","Stickstoffüberschuss","Auswaschung","Nitrat im Grundwasser","Trinkwasser","LEBEN"],
+            previewMeasurements: ["de_n_surplus","de_groundwater_2024"],
+            interactionField: "interactions"
+          })}
+        </div>
+      </section>`;
+  }
+
+  if (activeItem.id === "phosphorus") {
+    return `
+      <section class="connections-panel nutrient-depth-connections">
+        <div class="connections-head">
+          <div>
+            <div class="eyebrow">VERTIEFUNG · REGIONALER WIRKUNGSPFAD</div>
+            <h2>Von der globalen Phosphorgrenze zur Eutrophierung von Oberflächengewässern</h2>
+            <p>
+              Die globale Grundlagen-Knowledge beschreibt den Zustand der planetaren Grenze.
+              Diese vorhandene Knowledge-Datei vertieft einen konkreten Pfad für Deutschland.
+            </p>
+          </div>
+        </div>
+        <div class="connection-list">
+          ${renderKnowledgeCard({
+            key: "phosphorus",
+            network: knowledgeNetworks.phosphorus,
+            eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR · VERTIEFUNG",
+            title: "Phosphor → Oberflächenwasser → Eutrophierung",
+            intro: "Regionaler Wirkungspfad über Phosphoreinträge in Oberflächengewässer. Die dortigen Messwerte ersetzen nicht den globalen Zustandswert der planetaren Grenze.",
+            chain: ["globale Phosphorgrenze","Phosphoreintrag","Oberflächenwasser","Eutrophierung","aquatische Ökosysteme","LEBEN"],
+            previewMeasurements: ["de_river_p_exceedance","de_river_p_orientation_values"],
+            interactionField: "boundaryInteractions"
+          })}
+        </div>
+      </section>`;
+  }
+
+  return "";
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -1459,7 +1522,9 @@ function renderKnowledgePanel() {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
     applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
-    panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
+    panel.innerHTML =
+      renderGenericKnowledgeView(network, indexEntry) +
+      renderNutrientDepthConnections(activeItem);
     panel.hidden = false;
     return;
   }
