@@ -1169,7 +1169,12 @@ function renderGenericKnowledgeView(network, indexEntry) {
     return `<div class="nutrient-choice-note"><strong>Knowledge-Datensatz nicht geladen.</strong></div>`;
   }
 
-  const cards = (network.measurements || []).map(m => genericStudyCard(network, m));
+  const presentation = network.presentation || {};
+  const primaryMeasurement = getPrimaryKnowledgeMeasurement(network);
+  const measurements = presentation.hidePrimaryMeasurementInKnowledgeView
+    ? (network.measurements || []).filter(m => m.id !== primaryMeasurement?.id)
+    : (network.measurements || []);
+  const cards = measurements.map(m => genericStudyCard(network, m));
   const evidence = cards.filter(c => c.displayType === "study_evidence");
   const values = cards.filter(c => c.displayType !== "study_evidence");
 
@@ -1199,17 +1204,18 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
   return `
     <div class="oil-pilot generic-knowledge-view">
-      <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
-      <h2>${groupLabel} → ${itemLabel}</h2>
-      <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
-
-      <div class="oil-path">
-        <span>${boundaryLabel}</span><b>→</b>
-        <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
-      </div>
+      ${presentation.compactKnowledgeView ? `<div class="eyebrow">ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE</div>` : `
+        <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
+        <h2>${groupLabel} → ${itemLabel}</h2>
+        <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
+        <div class="oil-path">
+          <span>${boundaryLabel}</span><b>→</b>
+          <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
+        </div>
+      `}
 
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
-      ${values.length ? `<h3>STUDIENWERTE</h3><div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
+      ${values.length ? `${presentation.compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
       <h3>WIRKUNGSPFADE</h3>
       <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
