@@ -1519,32 +1519,21 @@ function renderKnowledgePanel() {
   const activeBoundary = getBoundary(state.boundaryId);
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
-    // Index-gesteuerte Grundlagenmodule benutzen immer die Standard-WIRKUNG-Ansicht.
-    // Die alte nutrient-mode-Klasse gehört nur zur früheren Sonderdarstellung
-    // und kann die Standardfelder optisch unterdrücken.
+    // Index-gesteuerte Grundlagenmodule benutzen die Standard-WIRKUNG-Ansicht.
     document.body.classList.remove("nutrient-mode");
 
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
+
+    // Erst die Inhalte im unteren Knowledge-Bereich aufbauen.
     panel.innerHTML =
       renderGenericKnowledgeView(network, indexEntry) +
       renderNutrientDepthConnections(activeItem);
     panel.hidden = false;
 
-    // Erst nach dem Aufbau der generischen Knowledge-Ansicht die kompakten
-    // WIRKUNG-Felder setzen. Das verhindert, dass ältere boundary-spezifische
-    // Renderzustände (insbesondere Nährstoffkreisläufe) die Werte wieder leeren.
+    // Danach die kompakte WIRKUNG-Ansicht setzen; so bleibt die funktionierende
+    // globale Grundlagenanzeige unangetastet und die Vertiefung erscheint nur darunter.
     applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
-
-    // Ein zweiter Abgleich im nächsten Browser-Frame stabilisiert den Übergang
-    // von Legacy-Ansichten zu indexgesteuerten Grundlagenmodulen.
-    const expectedBoundaryId = state.boundaryId;
-    const expectedItemId = state.itemId;
-    requestAnimationFrame(() => {
-      const current = getActiveViewState();
-      if (current.boundaryId !== expectedBoundaryId || current.itemId !== expectedItemId) return;
-      applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
-    });
     return;
   }
 
