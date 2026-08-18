@@ -2142,7 +2142,20 @@ regionSelect.addEventListener("change", chooseFirstItemForScope);
 resetButton.addEventListener("click", resetPanel);
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));
 blcWindowButton.addEventListener("click", () => setTimeWindow("blc"));
-timeSlider.addEventListener("input", event => selectYear(Number(event.target.value)));
+timeSlider.addEventListener("input", event => {
+  let year = Number(event.target.value);
+  const context = getActiveKnowledgeContext();
+  const series = context?.network ? getKnowledgeSeries(context.network) : null;
+  if (timeWindow === "data" && series?.points?.length) {
+    year = series.points
+      .map(point => Number(point.year))
+      .filter(Number.isFinite)
+      .reduce((nearest, candidate) =>
+        Math.abs(candidate - year) < Math.abs(nearest - year) ? candidate : nearest
+      );
+  }
+  selectYear(year);
+});
 closeOverlayButton.addEventListener("click", closeOrganOverlay);
 causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
