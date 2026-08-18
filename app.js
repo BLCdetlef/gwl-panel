@@ -57,6 +57,98 @@ let knowledgePanel = null;
 let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
 
+let LIFE_PROTOTYPE_MODE = true;
+
+// Reiner Architekturtest für die Rückkopplung LEBEN → GRUNDLAGE.
+// Die Zahlen sind absichtlich technische Testgewichte, KEINE medizinischen
+// Risiko-, Prävalenz- oder Funktionswerte. Später werden sie durch
+// evidenzbasierte Beiträge aus den Knowledge-Dateien ersetzt.
+const LIFE_PROTOTYPE_CONTRIBUTIONS = [
+  {
+    organLabels: ["Niere", "Nieren", "kidney"],
+    contributions: [
+      {
+        id: "demo_nitrate_kidney",
+        label: "DEMO · Nitrat-Pfad",
+        weight: 0.35,
+        evidence: "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
+        route: { boundaryId: "nutrients", itemId: "nitrat-im-grundwasser" }
+      },
+      {
+        id: "demo_pfas_kidney",
+        label: "DEMO · PFAS-Pfad",
+        weight: 0.45,
+        evidence: "Testgewicht zur Prüfung mehrerer Beiträge an einem Organ.",
+        route: { boundaryId: "novel", itemId: "pfas" }
+      }
+    ]
+  },
+  {
+    organLabels: ["Leber", "liver"],
+    contributions: [
+      {
+        id: "demo_pfas_liver",
+        label: "DEMO · PFAS-Pfad",
+        weight: 0.40,
+        evidence: "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
+        route: { boundaryId: "novel", itemId: "pfas" }
+      },
+      {
+        id: "demo_nitrate_liver",
+        label: "DEMO · Nitrat-Pfad",
+        weight: 0.20,
+        evidence: "Technischer Gegenbeitrag; keine medizinische Aussage.",
+        route: { boundaryId: "nutrients", itemId: "nitrat-im-grundwasser" }
+      }
+    ]
+  }
+];
+
+function findHotspotIdByLabels(labels = []) {
+  const wanted = labels.map(x => String(x).toLowerCase());
+  for (const [id, def] of Object.entries(HOTSPOTS || {})) {
+    const hay = `${id} ${def?.label || ""}`.toLowerCase();
+    if (wanted.some(label => hay.includes(label))) return id;
+  }
+  return null;
+}
+
+function aggregatePrototypeWeight(contributions = []) {
+  // 1 - Produkt(1-w): mehrere Beiträge erhöhen den Index, ohne >100 zu werden.
+  // Nur technische Demo-Aggregation, keine medizinische Formel.
+  const remaining = contributions.reduce(
+    (product, item) => product * (1 - Math.max(0, Math.min(1, Number(item.weight) || 0))),
+    1
+  );
+  return Math.round((1 - remaining) * 100);
+}
+
+function getPrototypeAggregateHealth() {
+  if (!LIFE_PROTOTYPE_MODE) return null;
+
+  const impacts = LIFE_PROTOTYPE_CONTRIBUTIONS
+    .map(bundle => {
+      const organId = findHotspotIdByLabels(bundle.organLabels);
+      if (!organId) return null;
+      return {
+        organ: organId,
+        label: HOTSPOTS[organId]?.label || bundle.organLabels[0],
+        burdenScore: aggregatePrototypeWeight(bundle.contributions),
+        contributors: bundle.contributions,
+        prototypeOnly: true
+      };
+    })
+    .filter(Boolean);
+
+  return impacts.length
+    ? {
+        prototypeAggregate: true,
+        impacts,
+        note: "Prototyp: Aggregierte Testgewichte zur Prüfung der Navigation. Keine medizinische Bewertung."
+      }
+    : null;
+}
+
 async function loadBodymapConfig() {
   const response = await fetch("bodymap.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`bodymap.json konnte nicht geladen werden (${response.status})`);
@@ -1978,7 +2070,7 @@ function ensureHealthLegend() {
         <span style="--legend-shade:#777"></span>
         <span style="--legend-shade:#111"></span>
       </span>
-      <span><strong>hell</strong> = geringe/keine quantifizierte Beeinträchtigung · <strong>dunkel</strong> = stärkere quantifizierte Beeinträchtigung</span>
+      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Im aktuellen Organ-Prototyp sind dies Testgewichte, keine medizinischen Funktionswerte.</span>
     </div>
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
@@ -2016,7 +2108,12 @@ function clearHotspotStates() {
 }
 
 function renderHealth(health) {
-  currentHealth = health; clearHotspotStates();
+  if (!health && LIFE_PROTOTYPE_MODE) {
+    health = getPrototypeAggregateHealth();
+  }
+
+  currentHealth = health;
+  clearHotspotStates();
   const impacts = health?.impacts || [];
   if (!impacts.length) {
     const systemImpacts = health?.systemImpacts || [];
@@ -2035,7 +2132,14 @@ function renderHealth(health) {
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) return;
-    if (typeof impact.functionLoss === "number") {
+    if (typeof impact.burdenScore === "number") {
+      const score = Math.max(0, Math.min(100, impact.burdenScore));
+      const shade = Math.round(255 * (1 - score / 100));
+      dot.classList.remove("is-neutral");
+      dot.classList.add("is-quantified");
+      dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
+      texts.push(`${impact.label}: Prototyp-Belastungsindex ${score}/100 · ${impact.contributors?.length || 0} Beiträge.`);
+    } else if (typeof impact.functionLoss === "number") {
       const loss = Math.max(0, Math.min(100, impact.functionLoss));
       const shade = Math.round(255 * (1 - loss / 100));
       dot.classList.remove("is-neutral"); dot.classList.add("is-quantified"); dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
@@ -2077,17 +2181,44 @@ function openOrganOverlay(organId, preserveHidden = false) {
   const impact = getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
-  // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
-  // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
-  organOverlayFinding.textContent = findingText.textContent || "–";
+  if (impact?.prototypeOnly && Array.isArray(impact.contributors)) {
+    organOverlayFinding.textContent =
+      `Prototyp-Belastungsindex ${impact.burdenScore}/100 aus ${impact.contributors.length} Testbeiträgen. ` +
+      `Dies ist keine medizinische Funktions- oder Risikobewertung.`;
 
-  // Einordnung bleibt standardmäßig zugeklappt und verweist auf WIRKUNG,
-  // statt denselben Kontext im Organfenster erneut auszuschreiben.
-  organOverlayNote.innerHTML = `
-    <details class="organ-context-details">
-      <summary>Einordnung</summary>
-      <p>Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>.</p>
-    </details>`;
+    organOverlayNote.innerHTML = `
+      <div class="organ-prototype-warning">
+        <strong>ARCHITEKTURTEST</strong>
+        <p>Die Gewichte dienen nur dazu, Aggregation und Rücksprung zu testen.</p>
+      </div>
+      <details class="organ-context-details" open>
+        <summary>Beitragende Ursachen / Pfade</summary>
+        <div class="organ-contribution-list">
+          ${impact.contributors.map(item => `
+            <button
+              type="button"
+              class="organ-contribution-button"
+              data-life-route-boundary="${item.route?.boundaryId || ""}"
+              data-life-route-item="${item.route?.itemId || ""}">
+              <span><strong>${item.label}</strong></span>
+              <span>Testgewicht ${Math.round((Number(item.weight) || 0) * 100)}/100</span>
+              <small>${item.evidence || ""}</small>
+              <b>→ Ursache öffnen</b>
+            </button>
+          `).join("")}
+        </div>
+      </details>`;
+  } else {
+    // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
+    // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
+    organOverlayFinding.textContent = findingText.textContent || "–";
+
+    organOverlayNote.innerHTML = `
+      <details class="organ-context-details">
+        <summary>Einordnung</summary>
+        <p>Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>.</p>
+      </details>`;
+  }
   document.querySelectorAll('.hotspot-dot').forEach(dot => dot.classList.toggle('is-selected', dot.dataset.organ === organId));
   if (!preserveHidden || organOverlay.hidden) organOverlay.hidden = false;
 }
@@ -2221,6 +2352,16 @@ resetButton.addEventListener("click", resetPanel);
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));
 blcWindowButton.addEventListener("click", () => setTimeWindow("blc"));
 timeSlider.addEventListener("input", event => selectYear(Number(event.target.value)));
+organOverlayNote.addEventListener("click", event => {
+  const button = event.target.closest("[data-life-route-boundary][data-life-route-item]");
+  if (!button) return;
+  const boundaryId = button.dataset.lifeRouteBoundary;
+  const itemId = button.dataset.lifeRouteItem;
+  if (!boundaryId || !itemId) return;
+  closeOrganOverlay();
+  selectItem(boundaryId, itemId);
+});
+
 closeOverlayButton.addEventListener("click", closeOrganOverlay);
 causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
