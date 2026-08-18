@@ -1,14 +1,38 @@
 {
-  "format": "gwl-health-contributions-v1",
-  "status": "prototype",
-  "note": "Nur Architekturtest. Gewichte sind keine medizinischen Risiko-, Prävalenz- oder Funktionswerte.",
-  "aggregation": {
-    "method": "bounded_union",
-    "formula": "1 - product(1 - weight)",
-    "meaning": "technischer Belastungsindex für den Prototyp"
+  "format": "gwl-health-contributions-v2",
+  "status": "pilot",
+  "methodPolicy": {
+    "organColorRule": "Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert und für die Organfarbe auf eine gemeinsame Bezugsgröße normiert werden kann.",
+    "evidenceLevels": {
+      "A": "Quantifizierte, zurechenbare Krankheitslast vorhanden. Grundsätzlich für die Organfarbe geeignet; eine gemeinsame Bezugsgröße ist zusätzlich erforderlich.",
+      "B": "Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe.",
+      "C": "Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe."
+    },
+    "colorMetric": "normalized_attributable_burden_only",
+    "evidenceIsGateNotMultiplier": true,
+    "noSyntheticNormalization": true
   },
+  "sources": [
+    {
+      "id": "ilo_climate_osh_2024",
+      "title": "Ensuring safety and health at work in a changing climate",
+      "publisher": "International Labour Organization (ILO)",
+      "year": 2024,
+      "url": "https://www.ilo.org/publications/ensuring-safety-and-health-work-changing-climate",
+      "access": "open_full_text"
+    },
+    {
+      "id": "iarc_pfoa_pfos_135",
+      "title": "IARC Monographs Volume 135: Perfluorooctanoic acid (PFOA) and perfluorooctanesulfonic acid (PFOS)",
+      "publisher": "International Agency for Research on Cancer (IARC)",
+      "year": 2025,
+      "url": "https://monographs.iarc.who.int/iarc-monographs-volume-135/",
+      "access": "open_full_text"
+    }
+  ],
   "organs": [
     {
+      "organId": "kidneys",
       "organLabels": [
         "Niere",
         "Nieren",
@@ -16,76 +40,56 @@
       ],
       "contributions": [
         {
-          "id": "demo_nitrate_kidney",
-          "label": "DEMO · Nitrat-Pfad",
-          "weight": 0.35,
-          "evidence": "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
-          "route": {
-            "boundaryId": "nutrients",
-            "itemId": "nitrat-im-grundwasser"
+          "id": "heat_ckd_occupational_global",
+          "label": "Übermäßige Hitze am Arbeitsplatz → chronische Nierenerkrankung",
+          "exposure": {
+            "agent": "übermäßige Hitze am Arbeitsplatz",
+            "path": "Umgebungshitze + körperliche Arbeit → Hitzestress / Dehydrierung"
           },
-          "evidenceLevel": "prototype",
+          "healthEndpoint": "chronische Nierenerkrankung (CKD)",
+          "evidenceLevel": "A",
+          "burden": {
+            "metric": "DALYs attributable to occupational heat exposure",
+            "display": "2,09 Mio. DALYs",
+            "value": 2.09,
+            "unit": "million DALYs",
+            "period": "2020",
+            "geography": "global",
+            "secondary": "26,2 Mio. Menschen mit CKD wurden 2020 der Exposition gegenüber übermäßiger Hitze am Arbeitsplatz zugerechnet.",
+            "normalization": null
+          },
           "affectsOrganColor": false,
-          "prototypeOnly": true
+          "colorStatus": "eligible_pending_common_denominator",
+          "whyNoColor": "Die zurechenbare Krankheitslast ist quantifiziert, aber noch nicht auf eine gemeinsame organspezifische Bezugsgröße normiert. Deshalb bleibt der Organmarker vorerst ungefärbt.",
+          "sourceRefs": [
+            "ilo_climate_osh_2024"
+          ],
+          "route": {
+            "boundaryId": "climate"
+          }
         },
         {
-          "id": "demo_pfas_kidney",
-          "label": "DEMO · PFAS-Pfad",
-          "weight": 0.45,
-          "evidence": "Testgewicht zur Prüfung mehrerer Beiträge an einem Organ.",
+          "id": "pfoa_renal_cell_carcinoma",
+          "label": "PFOA/PFAS → Nierenzellkarzinom",
+          "exposure": {
+            "agent": "PFOA als Vertreter der PFAS",
+            "path": "Umweltexposition, u. a. über Nahrung und Trinkwasser"
+          },
+          "healthEndpoint": "Nierenzellkarzinom",
+          "evidenceLevel": "C",
+          "burden": null,
+          "affectsOrganColor": false,
+          "colorStatus": "not_quantified",
+          "whyNoColor": "IARC berichtet für PFOA nur begrenzte Evidenz beim Menschen für Nierenzellkarzinom; eine belastbare zurechenbare Krankheitslast für diesen Pfad ist hier nicht hinterlegt.",
+          "sourceRefs": [
+            "iarc_pfoa_pfos_135"
+          ],
           "route": {
             "boundaryId": "novel",
             "itemId": "pfas"
-          },
-          "evidenceLevel": "prototype",
-          "affectsOrganColor": false,
-          "prototypeOnly": true
-        }
-      ]
-    },
-    {
-      "organLabels": [
-        "Leber",
-        "liver"
-      ],
-      "contributions": [
-        {
-          "id": "demo_pfas_liver",
-          "label": "DEMO · PFAS-Pfad",
-          "weight": 0.4,
-          "evidence": "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
-          "route": {
-            "boundaryId": "novel",
-            "itemId": "pfas"
-          },
-          "evidenceLevel": "prototype",
-          "affectsOrganColor": false,
-          "prototypeOnly": true
-        },
-        {
-          "id": "demo_nitrate_liver",
-          "label": "DEMO · Nitrat-Pfad",
-          "weight": 0.2,
-          "evidence": "Technischer Gegenbeitrag; keine medizinische Aussage.",
-          "route": {
-            "boundaryId": "nutrients",
-            "itemId": "nitrat-im-grundwasser"
-          },
-          "evidenceLevel": "prototype",
-          "affectsOrganColor": false,
-          "prototypeOnly": true
+          }
         }
       ]
     }
-  ],
-  "methodPolicy": {
-    "organColorRule": "Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert werden kann.",
-    "evidenceLevels": {
-      "A": "Quantifizierte, zurechenbare Krankheitslast vorhanden. Darf die Organfarbe beeinflussen.",
-      "B": "Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe.",
-      "C": "Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe."
-    },
-    "colorMetric": "attributable_burden_only",
-    "evidenceIsGateNotMultiplier": true
-  }
+  ]
 }

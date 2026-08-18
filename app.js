@@ -58,6 +58,7 @@ let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
 
 let LIFE_PROTOTYPE_MODE = true;
+let LIFE_HEALTH_DATA = null;
 let LIFE_PROTOTYPE_CONTRIBUTIONS = [];
 
 async function loadHealthContributionPrototype() {
@@ -66,9 +67,11 @@ async function loadHealthContributionPrototype() {
     const response = await fetch("health-contributions.json", { cache: "no-store" });
     if (!response.ok) throw new Error(`data/health-contributions.json: ${response.status}`);
     const payload = await response.json();
+    LIFE_HEALTH_DATA = payload;
     LIFE_PROTOTYPE_CONTRIBUTIONS = Array.isArray(payload.organs) ? payload.organs : [];
   } catch (error) {
     console.warn("Health-Contributions-Prototyp konnte nicht geladen werden:", error);
+    LIFE_HEALTH_DATA = null;
     LIFE_PROTOTYPE_CONTRIBUTIONS = [];
   }
 }
@@ -82,14 +85,25 @@ function findHotspotIdByLabels(labels = []) {
   return null;
 }
 
-function aggregatePrototypeWeight(contributions = []) {
-  // 1 - Produkt(1-w): mehrere Beiträge erhöhen den Index, ohne >100 zu werden.
-  // Nur technische Demo-Aggregation, keine medizinische Formel.
-  const remaining = contributions.reduce(
-    (product, item) => product * (1 - Math.max(0, Math.min(1, Number(item.weight) || 0))),
-    1
-  );
-  return Math.round((1 - remaining) * 100);
+function getHealthSourceById(id) {
+  return (LIFE_HEALTH_DATA?.sources || []).find(source => source.id === id) || null;
+}
+
+function normalizedOrganBurdenScore(contributions = []) {
+  // Nur explizit hinterlegte, bereits normierte zurechenbare Krankheitslast
+  // darf die Graustufe bestimmen. Keine eigene Umrechnung aus DALYs, Fällen
+  // oder relativen Risiken.
+  const values = contributions
+    .filter(item => item.affectsOrganColor === true)
+    .map(item => Number(item?.burden?.normalization?.organBurdenPercent))
+    .filter(Number.isFinite);
+
+  if (!values.length) return null;
+
+  // Mehrere Anteile dürfen nur dann addiert werden, wenn die Datenquelle sie
+  // auf dieselbe organspezifische Bezugsgröße bezieht. V2 nutzt deshalb
+  // standardmäßig nur die explizit gelieferten Prozentwerte und begrenzt bei 100.
+  return Math.max(0, Math.min(100, values.reduce((sum, value) => sum + value, 0)));
 }
 
 function getPrototypeAggregateHealth() {
@@ -97,23 +111,29 @@ function getPrototypeAggregateHealth() {
 
   const impacts = LIFE_PROTOTYPE_CONTRIBUTIONS
     .map(bundle => {
-      const organId = findHotspotIdByLabels(bundle.organLabels);
+      const organId = bundle.organId && HOTSPOTS[bundle.organId]
+        ? bundle.organId
+        : findHotspotIdByLabels(bundle.organLabels || []);
       if (!organId) return null;
+
+      const contributors = Array.isArray(bundle.contributions) ? bundle.contributions : [];
+      if (!contributors.length) return null;
+
       return {
         organ: organId,
-        label: HOTSPOTS[organId]?.label || bundle.organLabels[0],
-        burdenScore: aggregatePrototypeWeight(bundle.contributions),
-        contributors: bundle.contributions,
-        prototypeOnly: true
+        label: HOTSPOTS[organId]?.label || bundle.organLabels?.[0] || organId,
+        burdenScore: normalizedOrganBurdenScore(contributors),
+        contributors,
+        healthContributionView: true
       };
     })
     .filter(Boolean);
 
   return impacts.length
     ? {
-        prototypeAggregate: true,
+        contributionModel: true,
         impacts,
-        note: "Prototyp: Aggregierte Testgewichte zur Prüfung der Navigation. Keine medizinische Bewertung."
+        note: LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""
       }
     : null;
 }
@@ -2039,7 +2059,7 @@ function ensureHealthLegend() {
         <span style="--legend-shade:#777"></span>
         <span style="--legend-shade:#111"></span>
       </span>
-      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Im aktuellen Organ-Prototyp sind dies Testgewichte, keine medizinischen Krankheitslastwerte.</span>
+      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
     </div>
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
@@ -2104,13 +2124,19 @@ function renderHealth(health) {
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) return;
-    if (typeof impact.burdenScore === "number") {
-      const score = Math.max(0, Math.min(100, impact.burdenScore));
-      const shade = Math.round(255 * (1 - score / 100));
-      dot.classList.remove("is-neutral");
-      dot.classList.add("is-quantified");
-      dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
-      texts.push(`${impact.label}: Prototyp-Belastungsindex ${score}/100 · ${impact.contributors?.length || 0} Beiträge.`);
+    if (impact.healthContributionView) {
+      if (typeof impact.burdenScore === "number") {
+        const score = Math.max(0, Math.min(100, impact.burdenScore));
+        const shade = Math.round(255 * (1 - score / 100));
+        dot.classList.remove("is-neutral");
+        dot.classList.add("is-quantified");
+        dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
+        texts.push(`${impact.label}: ${score} % normierte zurechenbare Krankheitslast · ${impact.contributors?.length || 0} Beiträge.`);
+      } else {
+        dot.classList.remove("is-neutral");
+        dot.classList.add("is-unquantified");
+        texts.push(`${impact.label}: ${impact.contributors?.length || 0} belegte Beiträge; noch keine gemeinsame normierte Krankheitslast für die Organfarbe.`);
+      }
     } else if (typeof impact.functionLoss === "number") {
       const loss = Math.max(0, Math.min(100, impact.functionLoss));
       const shade = Math.round(255 * (1 - loss / 100));
@@ -2153,31 +2179,47 @@ function openOrganOverlay(organId, preserveHidden = false) {
   const impact = getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
-  if (impact?.prototypeOnly && Array.isArray(impact.contributors)) {
-    organOverlayFinding.textContent =
-      `Prototyp-Belastungsindex ${impact.burdenScore}/100 aus ${impact.contributors.length} Testbeiträgen. ` +
-      `Dies ist keine medizinische Funktions- oder Risikobewertung.`;
+  if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
+    const hasColor = typeof impact.burdenScore === "number";
+    organOverlayFinding.textContent = hasColor
+      ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
+      : `${impact.contributors.length} gesundheitlich relevante Beiträge. Für die Organfarbe liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`;
 
     organOverlayNote.innerHTML = `
       <div class="organ-prototype-warning">
-        <strong>ARCHITEKTURTEST</strong>
-        <p>Die Gewichte dienen nur dazu, Aggregation und Rücksprung zu testen.</p>
+        <strong>METHODIK</strong>
+        <p>${LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""}</p>
       </div>
       <details class="organ-context-details" open>
         <summary>Beitragende Ursachen / Pfade</summary>
         <div class="organ-contribution-list">
-          ${impact.contributors.map(item => `
-            <button
-              type="button"
-              class="organ-contribution-button"
-              data-life-route-boundary="${item.route?.boundaryId || ""}"
-              data-life-route-item="${item.route?.itemId || ""}">
-              <span><strong>${item.label}</strong></span>
-              <span>Testgewicht ${Math.round((Number(item.weight) || 0) * 100)}/100</span>
-              <small>${item.evidence || ""}</small>
-              <b>→ Ursache öffnen</b>
-            </button>
-          `).join("")}
+          ${impact.contributors.map(item => {
+            const source = getHealthSourceById(item.sourceRefs?.[0]);
+            const burden = item.burden;
+            const routeBoundary = item.route?.boundaryId || "";
+            const routeItem = item.route?.itemId || "";
+            const burdenHtml = burden
+              ? `<span><strong>Krankheitslast:</strong> ${burden.display || ""}${burden.period ? ` · ${burden.period}` : ""}${burden.geography ? ` · ${burden.geography}` : ""}</span>
+                 ${burden.secondary ? `<small>${burden.secondary}</small>` : ""}`
+              : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
+            return `
+              <div class="organ-contribution-button">
+                <span><strong>${item.label}</strong></span>
+                <span>Evidenzstufe ${item.evidenceLevel || "–"}</span>
+                ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
+                ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
+                ${burdenHtml}
+                ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
+                ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+                ${routeBoundary ? `
+                  <button
+                    type="button"
+                    data-life-route-boundary="${routeBoundary}"
+                    data-life-route-item="${routeItem}">
+                    → Ursache im GWL-Panel öffnen
+                  </button>` : ""}
+              </div>`;
+          }).join("")}
         </div>
       </details>`;
   } else {
@@ -2329,9 +2371,10 @@ organOverlayNote.addEventListener("click", event => {
   if (!button) return;
   const boundaryId = button.dataset.lifeRouteBoundary;
   const itemId = button.dataset.lifeRouteItem;
-  if (!boundaryId || !itemId) return;
+  if (!boundaryId) return;
   closeOrganOverlay();
-  selectItem(boundaryId, itemId);
+  if (itemId) selectItem(boundaryId, itemId);
+  else selectBoundary(boundaryId);
 });
 
 closeOverlayButton.addEventListener("click", closeOrganOverlay);
