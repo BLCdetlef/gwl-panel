@@ -1,0 +1,314 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Biosphärenintegrität / genetische Vielfalt / funktionelle Integrität",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Biosphärenintegrität",
+    "subComponent": "Genetische und funktionelle Integrität",
+    "effectFocus": "Verlust biologischer Vielfalt und Verringerung der Fähigkeit der Biosphäre, Erdsystemfunktionen aufrechtzuerhalten"
+  },
+  "corePrinciples": [
+    "Biosphärenintegrität wird im Planetary-Boundaries-Rahmen mit zwei komplementären Komponenten beschrieben: genetische Vielfalt und funktionelle Integrität.",
+    "Die genetische Komponente wird über die Aussterberate in E/MSY operationalisiert.",
+    "Die funktionelle Komponente wird in Richardson et al. 2023 über die menschliche Aneignung der Nettoprimärproduktion (HANPP) operationalisiert.",
+    "Artenverlust und funktionelle Schwächung der Biosphäre sind nicht dieselbe Messgröße und werden getrennt dargestellt.",
+    "Wirkungspfade dürfen systemisch zu Klima, Land-System-Wandel, Süßwasser, Nährstoffkreisläufen und menschlichen Lebensgrundlagen führen.",
+    "Keine Organmarker allein aufgrund des Oberthemas Biosphärenintegrität."
+  ],
+  "nodes": [
+    {
+      "id": "pb_biosphere_integrity",
+      "type": "domain_component",
+      "label": "Biosphärenintegrität"
+    },
+    {
+      "id": "state_genetic_diversity",
+      "type": "socio_technical_state",
+      "label": "Genetische Vielfalt / Aussterberate"
+    },
+    {
+      "id": "state_functional_integrity",
+      "type": "socio_technical_state",
+      "label": "Funktionelle Integrität / HANPP"
+    },
+    {
+      "id": "effect_ecosystem_function",
+      "type": "biological_effect",
+      "label": "Schwächung von Ökosystemfunktionen"
+    },
+    {
+      "id": "effect_resilience",
+      "type": "biological_effect",
+      "label": "Verringerte Resilienz und Anpassungsfähigkeit"
+    },
+    {
+      "id": "effect_cross_boundary",
+      "type": "biological_effect",
+      "label": "Rückwirkungen auf andere planetare Grenzen"
+    },
+    {
+      "id": "life_ecosystem_services",
+      "type": "life_outcome",
+      "label": "Risiken für Ökosystemleistungen und menschliche Lebensgrundlagen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_biosphere_integrity",
+      "to": "state_genetic_diversity",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pb_biosphere_integrity",
+      "to": "state_functional_integrity",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_genetic_diversity",
+      "to": "effect_resilience",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_functional_integrity",
+      "to": "effect_ecosystem_function",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_ecosystem_function",
+      "to": "effect_cross_boundary",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_ecosystem_function",
+      "to": "life_ecosystem_services",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "richardson_2023_biosphere",
+      "sourceRefs": [
+        "src_richardson_2023"
+      ],
+      "design": "Aktualisierung des Planetary-Boundaries-Rahmens mit globaler Bewertung aller neun Grenzen.",
+      "finding": "Die genetische Komponente der Biosphärenintegrität liegt mit einer geschätzten Aussterberate von mehr als 100 E/MSY deutlich außerhalb der Grenze von weniger als 10 E/MSY. Für die funktionelle Komponente wird HANPP als neue Kontrollvariable eingeführt; der globale Wert liegt bei etwa 30 %, gegenüber einer planetaren Grenze von etwa 10 %.",
+      "relationType": "observed_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "steffen_2015_biosphere",
+      "sourceRefs": [
+        "src_steffen_2015"
+      ],
+      "design": "Weiterentwicklung und Quantifizierung des Planetary-Boundaries-Rahmens.",
+      "finding": "Biosphärenintegrität wird als eine der Kern-Grenzen des Erdsystems behandelt; genetische Vielfalt und funktionelle Rolle der Biosphäre werden als unterschiedliche, aber verbundene Dimensionen beschrieben.",
+      "relationType": "framework_definition",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "planetary_health_check_2025_biosphere",
+      "sourceRefs": [
+        "src_phc_2025"
+      ],
+      "design": "Aktuelle jährliche Bewertung des Zustands der planetaren Grenzen.",
+      "finding": "Die Biosphärenintegrität wird 2025 weiterhin als überschritten und sich verschlechternd bewertet.",
+      "relationType": "current_status",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "biosphere_extinction_rate",
+      "node": "state_genetic_diversity",
+      "geography": "Global",
+      "period": "aktuelle globale Abschätzung in Richardson et al. 2023",
+      "metric": "Aussterberate",
+      "value": 100,
+      "operator": ">",
+      "unit": "E/MSY",
+      "display": ">100 E/MSY",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "operator": "<",
+        "unit": "E/MSY",
+        "display": "Planetare Grenze: <10 E/MSY"
+      },
+      "uncertainty": "Globale Aussterberaten sind nur näherungsweise bestimmbar; Richardson et al. verwenden deshalb eine Größenordnung von >100 E/MSY.",
+      "interpretation": "Die genetische Komponente der Biosphärenintegrität liegt deutlich außerhalb des sicheren Bereichs.",
+      "sourceRefs": [
+        "src_richardson_2023"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "biosphere_hanpp",
+      "node": "state_functional_integrity",
+      "geography": "Global",
+      "period": "2020-Abschätzung in Richardson et al. 2023",
+      "metric": "Human Appropriation of Net Primary Production (HANPP)",
+      "value": 30,
+      "unit": "percent_of_potential_NPP",
+      "display": "etwa 30 % HANPP",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "operator": "<",
+        "unit": "percent_of_potential_NPP",
+        "display": "Planetare Grenze: etwa 10 % HANPP"
+      },
+      "highRisk": {
+        "value": 20,
+        "operator": ">",
+        "unit": "percent_of_potential_NPP",
+        "display": "Hochrisikobereich: >20 % HANPP"
+      },
+      "uncertainty": "HANPP ist ein global aggregierter Indikator. Regionale Auswirkungen und Verteilungsmuster werden dadurch nicht vollständig abgebildet.",
+      "interpretation": "Auch die funktionelle Komponente liegt deutlich außerhalb des sicheren Bereichs.",
+      "sourceRefs": [
+        "src_richardson_2023"
+      ],
+      "displayType": "study_value"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "biosphere_extinction_rate",
+    "referenceLabel": "Planetare Grenze: <10 E/MSY",
+    "finding": "Die Biosphärenintegrität ist überschritten. Die geschätzte globale Aussterberate liegt bei >100 E/MSY gegenüber einer Grenze von <10 E/MSY. Zusätzlich liegt die funktionelle Kontrollvariable HANPP bei etwa 30 %, gegenüber einer Grenze von etwa 10 %.",
+    "effectPath": "Verlust genetischer Vielfalt + hohe HANPP → geschwächte Ökosystemfunktionen und Resilienz → Rückwirkungen auf Klima, Land, Wasser und menschliche Lebensgrundlagen",
+    "uncertainty": "Die beiden Kontrollvariablen beschreiben unterschiedliche Komponenten. Eine einzelne Zahl kann den Zustand der Biosphäre nicht vollständig abbilden."
+  },
+  "pathways": [
+    {
+      "id": "path_genetic_resilience",
+      "label": "Erhöhte Aussterberate → Verlust genetischer Vielfalt → geringere Anpassungsfähigkeit und Resilienz",
+      "nodes": [
+        "state_genetic_diversity",
+        "effect_resilience"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_hanpp_ecosystem_function",
+      "label": "Hohe menschliche Aneignung der Primärproduktion → weniger Energie/Biomasse für nichtmenschliche Biosphäre → veränderte Ökosystemfunktionen",
+      "nodes": [
+        "state_functional_integrity",
+        "effect_ecosystem_function"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_biosphere_cross_boundaries",
+      "label": "Geschwächte Biosphärenfunktionen → Wechselwirkungen mit Klima, Land-System-Wandel, Süßwasser und Nährstoffkreisläufen",
+      "nodes": [
+        "effect_ecosystem_function",
+        "effect_cross_boundary"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_biosphere_life",
+      "label": "Veränderte Ökosystemfunktionen → veränderte Ökosystemleistungen → Risiken für menschliche Lebensgrundlagen",
+      "nodes": [
+        "effect_ecosystem_function",
+        "life_ecosystem_services"
+      ],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keinen Organmarker allein aufgrund des globalen Zustands der Biosphärenintegrität aktivieren. Konkrete Organwirkungen benötigen einen belegten Expositionspfad."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_extinction_timeseries",
+      "question": "Welche belastbare globale Zeitreihe eignet sich für die Aussterberate, ohne aus heterogenen Schätzungen eine scheinbar kontinuierliche Messreihe zu erzeugen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_hanpp_timeseries",
+      "question": "Welche veröffentlichte HANPP-Zeitreihe soll für den Zeitregler übernommen werden und wie werden methodische Änderungen zwischen Datensätzen transparent gemacht?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_functional_metric",
+      "question": "Wie soll im GWL-Panel erklärt werden, dass HANPP ein Proxy für funktionelle Integrität ist und nicht die Funktion jedes Ökosystems direkt misst?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_cross_boundary_quantification",
+      "question": "Welche Wechselwirkungen mit Klima, Land-System-Wandel, Süßwasser und Nährstoffkreisläufen lassen sich quantitativ genug belegen, um sie später als verknüpfte GWL-Pfade darzustellen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; nicht Teil der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "habitat_pressure",
+        "label": "Lebensraum- und Nutzungsdruck",
+        "level": "hoch",
+        "rationale": "Landnutzung, Biomasseentnahme und Habitatveränderung beeinflussen genetische und funktionelle Biosphärenintegrität."
+      },
+      {
+        "id": "cross_boundary_management",
+        "label": "Systemische Hebel",
+        "level": "hoch",
+        "rationale": "Klima-, Land-, Wasser-, Nährstoff- und Biodiversitätspolitik greifen ineinander; isolierte Einzelmaßnahmen können Wechselwirkungen übersehen."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Welche der beiden Kontrollvariablen eignet sich für eine erste verständliche Zustandsanzeige – und wie vermeiden wir, die zweite dadurch unsichtbar zu machen?",
+    "Wie lässt sich E/MSY für ein nichtfachliches Publikum verständlich erklären, ohne Genauigkeit vorzutäuschen?",
+    "Wie sollte HANPP als Proxy für funktionelle Integrität erläutert werden?",
+    "Welche Zeitreihen sind für beide Komponenten wissenschaftlich robust genug für den BLC-Regler?"
+  ],
+  "sources": [
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adh2458",
+      "doi": "10.1126/sciadv.adh2458",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_steffen_2015",
+      "title": "Planetary boundaries: Guiding human development on a changing planet",
+      "authors": "Steffen, W. et al.",
+      "publisher": "Science",
+      "year": 2015,
+      "type": "peer_reviewed_planetary_boundaries_framework",
+      "url": "https://www.science.org/doi/10.1126/science.1259855",
+      "doi": "10.1126/science.1259855",
+      "access": "article"
+    },
+    {
+      "id": "src_phc_2025",
+      "title": "Planetary Health Check 2025",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/change-in-biosphere-integrity/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": "Das Grundlagenmodul gehört unter Planetare Grenzen → Biosphärenintegrität. Vertiefungsmodule zu Arten, Ökosystemen, Regionen oder konkreten Expositionen docken darunter an."
+}

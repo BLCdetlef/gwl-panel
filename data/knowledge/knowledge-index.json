@@ -18,6 +18,17 @@
           ]
         },
         {
+          "id": "biosphere_integrity",
+          "label": "Biosphärenintegrität",
+          "items": [
+            {
+              "id": "genetic_functional_integrity",
+              "label": "Genetische & funktionelle Integrität",
+              "source": "data/knowledge/gwl_biosphere_integrity_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
           "id": "land_system_change",
           "label": "Land-System-Wandel",
           "items": [
