@@ -1157,7 +1157,8 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeSource: item.source,
         knowledgeItemId: item.id,
         knowledgeGroupId: group.id,
-        knowledgeBoundaryId: indexBoundary.id
+        knowledgeBoundaryId: indexBoundary.id,
+        depthOf: item.depthOf || null
       }));
       if (!indexedItems.length) continue;
 
@@ -1321,7 +1322,11 @@ function renderGenericKnowledgeView(network, indexEntry) {
     return `<div class="nutrient-choice-note"><strong>Knowledge-Datensatz nicht geladen.</strong></div>`;
   }
 
-  const cards = (network.measurements || []).map(m => genericStudyCard(network, m));
+  const presentation = network?.presentation || {};
+  const measurementsForKnowledge = presentation.hidePrimaryMeasurementInKnowledgeView
+    ? (network.measurements || []).slice(1)
+    : (network.measurements || []);
+  const cards = measurementsForKnowledge.map(m => genericStudyCard(network, m));
   const evidence = cards.filter(c => c.displayType === "study_evidence");
   const values = cards.filter(c => c.displayType !== "study_evidence");
 
@@ -1351,14 +1356,18 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
   return `
     <div class="oil-pilot generic-knowledge-view">
-      <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
-      <h2>${groupLabel} → ${itemLabel}</h2>
-      <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
+      ${presentation.compactKnowledgeView ? `
+        <div class="eyebrow">ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE</div>
+      ` : `
+        <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
+        <h2>${groupLabel} → ${itemLabel}</h2>
+        <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
 
-      <div class="oil-path">
-        <span>${boundaryLabel}</span><b>→</b>
-        <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
-      </div>
+        <div class="oil-path">
+          <span>${boundaryLabel}</span><b>→</b>
+          <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
+        </div>
+      `}
 
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
       ${values.length ? `<h3>STUDIENWERTE</h3><div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
@@ -1874,6 +1883,7 @@ function renderBoundaries() {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
           itemButton.textContent = item.label;
+          if (item.depthOf) itemButton.classList.add("submenu-depth");
           if (item.id === selectedItemId) itemButton.classList.add("active");
           itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
           submenu.appendChild(itemButton);
@@ -3002,4 +3012,26 @@ function gwlHealthIconSvg(key) {
     requestAnimationFrame(hideIt);
     window.addEventListener("load", hideIt, { once: true });
   }
+})();
+
+/* GWL_SUBMENU_DEPTH_V1 */
+(function installSubmenuDepthStyle() {
+  if (document.getElementById("gwl-submenu-depth-style")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-submenu-depth-style";
+  style.textContent = `
+    .submenu button.submenu-depth {
+      width: calc(100% - 12px);
+      margin-left: 12px;
+      padding-left: 14px;
+      font-size: .94em;
+      position: relative;
+    }
+    .submenu button.submenu-depth::before {
+      content: "↳";
+      margin-right: 5px;
+      opacity: .65;
+    }
+  `;
+  document.head.appendChild(style);
 })();

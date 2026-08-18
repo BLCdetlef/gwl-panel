@@ -238,6 +238,8 @@
   ],
   "navigationRule": "Dieses Grundlagenmodul gehört als erster Eintrag unter Planetare Grenzen → Land-System-Wandel. Die vorhandene Datei gwl_land_system_lippe_pilot_v0.1.json bleibt als Vertiefung 'Waldtransition und Waldzustand' erhalten.",
   "presentation": {
-    "referenceLabel": "Grenze: 75 %"
+    "referenceLabel": "Grenze: 75 %",
+    "compactKnowledgeView": true,
+    "hidePrimaryMeasurementInKnowledgeView": true
   }
 }
