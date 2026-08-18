@@ -1038,7 +1038,7 @@ function syncKnowledgeNavigationFromIndex() {
     for (const group of indexBoundary.groups || []) {
       const boundary = findDataBoundaryForIndexGroup(indexBoundary, group);
       if (!boundary) continue;
-      const indexedItems = (group.items || []).map(item => ({
+      let indexedItems = (group.items || []).map(item => ({
         id: normalizeKnowledgeId(item.id),
         scope: "all",
         label: item.label,
@@ -1046,9 +1046,50 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeSource: item.source,
         knowledgeItemId: item.id,
         knowledgeGroupId: group.id,
-        knowledgeBoundaryId: indexBoundary.id
+        knowledgeBoundaryId: indexBoundary.id,
+        depthOf: item.depthOf || null
       }));
       if (!indexedItems.length) continue;
+
+      // Nährstoffkreisläufe: Grundlagenknoten + eingerückte Vertiefungen.
+      if (boundary.id === "nutrients") {
+        const nestedItems = [];
+        for (const item of indexedItems) {
+          nestedItems.push(item);
+
+          const label = String(item.label || "").toLowerCase();
+          const id = normalizeKnowledgeId(item.id);
+
+          if (label.includes("stickstoff") || id.includes("nitrogen") || id.includes("stickstoff")) {
+            nestedItems.push({
+              id: "nitrat-im-grundwasser",
+              scope: "all",
+              label: "↳ Nitrat im Grundwasser",
+              enabled: true,
+              knowledgeSource: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
+              knowledgeItemId: "nitrat_im_grundwasser",
+              knowledgeGroupId: group.id,
+              knowledgeBoundaryId: indexBoundary.id,
+              depthOf: item.id
+            });
+          }
+
+          if (label.includes("phosphor") || id.includes("phosphorus") || id.includes("phosphor")) {
+            nestedItems.push({
+              id: "oberflaechenwasser-eutrophierung",
+              scope: "all",
+              label: "↳ Oberflächengewässer / Eutrophierung",
+              enabled: true,
+              knowledgeSource: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
+              knowledgeItemId: "oberflaechenwasser_eutrophierung",
+              knowledgeGroupId: group.id,
+              knowledgeBoundaryId: indexBoundary.id,
+              depthOf: item.id
+            });
+          }
+        }
+        indexedItems = nestedItems;
+      }
 
       // Der Knowledge-Index ist für gleichnamige Unterpunkte die maßgebliche Quelle.
       // Bereits fest programmierte Legacy-Einträge mit derselben ID werden ersetzt,
@@ -1713,6 +1754,7 @@ function renderBoundaries() {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
           itemButton.textContent = item.label;
+          if (item.depthOf) itemButton.classList.add("submenu-depth");
           if (item.id === selectedItemId) itemButton.classList.add("active");
           itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
           submenu.appendChild(itemButton);
