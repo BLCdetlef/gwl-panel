@@ -529,6 +529,20 @@ function setStandardEffectBlocksVisible(visible) {
   });
 }
 
+function setStandardFocusCardVisible(visible) {
+  // Der Titel-/Zusammenfassungsblock oberhalb der Standardfelder ist ein
+  // eigener Altbestand der bisherigen WIRKUNG-Darstellung.
+  // Für hierarchische Knowledge-Knoten der Nährstoffkreisläufe wird er
+  // zusammen mit den vier Feldern und Akkordeons ausgeblendet.
+  const focusCard =
+    focusTitle?.closest(".focus-card, .effect-focus, .state-card, article, section")
+    || focusTitle?.parentElement;
+
+  if (focusCard) {
+    focusCard.style.display = visible ? "" : "none";
+  }
+}
+
 
 function renderNovelShell() {
   const state = getActiveViewState();
@@ -1513,13 +1527,26 @@ function renderKnowledgePanel() {
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
-    applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+
+    if (state.boundaryId === "nutrients") {
+      // Für Stickstoff, Nitrat, Phosphor und Eutrophierung zeigt WIRKUNG nur
+      // noch die jeweils ausgewählte Knowledge-Ansicht. Der alte Standardblock
+      // darüber würde denselben Knoten doppelt darstellen und bleibt deshalb weg.
+      document.body.classList.remove("nutrient-mode");
+      setStandardFocusCardVisible(false);
+      setStandardEffectBlocksVisible(false);
+    } else {
+      setStandardFocusCardVisible(true);
+      applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+    }
+
     panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
     panel.hidden = false;
     return;
   }
 
   syncBoundaryModeClass();
+  setStandardFocusCardVisible(true);
   setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy" && state.boundaryId !== "mental-load");
 
   const nitrate = knowledgeNetworks.nitrate;
