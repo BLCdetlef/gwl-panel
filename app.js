@@ -2400,3 +2400,108 @@ async function initPanel() {
 }
 
 initPanel();
+
+
+/* GWL_HEALTH_OVERLAY_COMPACT_V1 */
+(function installCompactHealthOverlayStyles() {
+  if (document.getElementById("gwl-health-overlay-compact-style")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-overlay-compact-style";
+  style.textContent = `
+    /* Organfenster: bewusst größer als der frühere schmale Prototyp */
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay {
+      width: min(680px, calc(100vw - 32px)) !important;
+      max-width: min(680px, calc(100vw - 32px)) !important;
+    }
+
+    .organ-overlay-card,
+    .organ-overlay-panel,
+    #organOverlay > div {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .organ-contribution-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .organ-contribution-button {
+      display: grid;
+      gap: 5px;
+      padding: 12px 14px;
+      border: 1px solid #d3d3ce;
+      border-radius: 12px;
+      background: #fff;
+      line-height: 1.32;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-button > span:first-child strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .organ-contribution-button > span:nth-child(2) {
+      width: fit-content;
+      padding: 2px 7px;
+      border: 1px solid #d3d3ce;
+      border-radius: 999px;
+      font-size: .78rem;
+    }
+
+    .organ-contribution-button small {
+      display: block;
+      font-size: .82rem;
+      line-height: 1.35;
+    }
+
+    .organ-contribution-button a {
+      width: fit-content;
+      font-size: .86rem;
+    }
+
+    .organ-contribution-button button {
+      justify-self: start;
+      width: auto;
+      max-width: 100%;
+      margin-top: 3px;
+      padding: 7px 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: .86rem;
+    }
+
+    .organ-prototype-warning {
+      margin: 8px 0 12px;
+      padding: 10px 12px;
+      border: 1px solid #d3d3ce;
+      border-radius: 10px;
+    }
+
+    .organ-prototype-warning p {
+      margin: 4px 0 0;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 760px) {
+      .organ-overlay,
+      #organOverlay,
+      .organ-detail-overlay {
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+      }
+      .organ-contribution-button {
+        padding: 10px 11px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
