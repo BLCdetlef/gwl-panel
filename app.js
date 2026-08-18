@@ -100,6 +100,13 @@ async function loadKnowledgeNetworks() {
     await loadSource(key, url);
   }
 
+  // Regionale Vertiefungen bleiben bewusst außerhalb des zentralen Grundlagen-Index.
+  // Sie werden zusätzlich geladen und unter festen Schlüsseln bereitgestellt.
+  // So kann der Index die globale PG-Grundlage liefern, ohne die vorhandenen
+  // Wirkungs-/Regionaldaten (Nitrat, Phosphor) zu verdrängen.
+  await loadSource("nitrate", "knowledge/gwl_nitrat_pilot_v0.2.json");
+  await loadSource("phosphorus", "knowledge/gwl_phosphor_pilot_v0.1.json");
+
   // Danach alle im Index referenzierten Knowledge-Dateien automatisch entdecken.
   // Neue Themen brauchen damit künftig keinen zusätzlichen Eintrag in data.js.
   const index = knowledgeNetworks.knowledgeIndex;
@@ -1452,7 +1459,21 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
 function renderNutrientDepthConnections(activeItem) {
   if (!activeItem || selectedBoundaryId !== "nutrients") return "";
 
-  if (activeItem.id === "nitrogen") {
+  // Der zentrale Index darf seine eigenen stabilen IDs verwenden. Für die
+  // Vertiefung erkennen wir Stickstoff/Phosphor deshalb nicht nur an der ID,
+  // sondern auch an Label und Quelldatei. Das entkoppelt die Darstellung von
+  // einer zufälligen Benennung im knowledge-index.json.
+  const nutrientIdentity = [
+    activeItem.id,
+    activeItem.label,
+    activeItem.knowledgeItemId,
+    activeItem.knowledgeSource
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  const isNitrogen = nutrientIdentity.includes("nitrogen") || nutrientIdentity.includes("stickstoff");
+  const isPhosphorus = nutrientIdentity.includes("phosphorus") || nutrientIdentity.includes("phosphor");
+
+  if (isNitrogen) {
     return `
       <section class="connections-panel nutrient-depth-connections">
         <div class="connections-head">
@@ -1480,7 +1501,7 @@ function renderNutrientDepthConnections(activeItem) {
       </section>`;
   }
 
-  if (activeItem.id === "phosphorus") {
+  if (isPhosphorus) {
     return `
       <section class="connections-panel nutrient-depth-connections">
         <div class="connections-head">
