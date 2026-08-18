@@ -1,0 +1,41 @@
+{
+  "format": "gwl-health-contributions-v2-template",
+  "organ": {
+    "organId": "example-organ-id",
+    "organLabels": [
+      "Beispielorgan"
+    ],
+    "contributions": [
+      {
+        "id": "stable_unique_contribution_id",
+        "label": "Ursache / Exposition → gesundheitlicher Endpunkt",
+        "icon": "unknown",
+        "exposure": {
+          "agent": "Auslösende Exposition",
+          "path": "Quelle → Exposition → Aufnahme / Belastung"
+        },
+        "healthEndpoint": "Gesundheitlicher Endpunkt",
+        "evidenceLevel": "C",
+        "burden": null,
+        "affectsOrganColor": false,
+        "colorStatus": "not_quantified",
+        "whyNoColor": "Keine belastbar quantifizierte und normierte zurechenbare Krankheitslast hinterlegt.",
+        "sourceRefs": [
+          "source_id"
+        ],
+        "route": {
+          "boundaryId": "boundary-id",
+          "itemId": "optional-item-id"
+        }
+      }
+    ]
+  },
+  "sourceTemplate": {
+    "id": "source_id",
+    "title": "Titel der Quelle",
+    "publisher": "Institution / Journal",
+    "year": 2026,
+    "url": "https://...",
+    "access": "open_full_text"
+  }
+}
