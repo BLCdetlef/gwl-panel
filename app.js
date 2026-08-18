@@ -1522,12 +1522,13 @@ function renderKnowledgePanel() {
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
 
     if (state.boundaryId === "nutrients") {
-      // Bei Stickstoff, Nitrat, Phosphor und Eutrophierung zeigt WIRKUNG
-      // nur die jeweils ausgewählte Knowledge-Ansicht. Die leeren Standardfelder
-      // darüber wären redundant und bleiben deshalb ausgeblendet.
+      // Nährstoffkreisläufe sollen dieselbe Grundstruktur wie Landnutzung zeigen:
+      // Titelblock + vier Standardfelder + Befund/Wirkung/Unsicherheit.
+      // nutrient-mode wird entfernt, damit diese Felder nicht per CSS ausgeblendet werden.
       document.body.classList.remove("nutrient-mode");
-      setStandardFocusCardVisible(false);
-      setStandardEffectBlocksVisible(false);
+      setStandardFocusCardVisible(true);
+      setStandardEffectBlocksVisible(true);
+      applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
     } else {
       setStandardFocusCardVisible(true);
       applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
