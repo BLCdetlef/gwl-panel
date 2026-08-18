@@ -16,6 +16,17 @@
               "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json"
             }
           ]
+        },
+        {
+          "id": "land_system_change",
+          "label": "Land-System-Wandel",
+          "items": [
+            {
+              "id": "forest_transition_state",
+              "label": "Waldtransition und Waldzustand",
+              "source": "data/knowledge/gwl_land_system_lippe_pilot_v0.1.json"
+            }
+          ]
         }
       ]
     },
