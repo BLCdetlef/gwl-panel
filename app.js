@@ -1519,6 +1519,11 @@ function renderKnowledgePanel() {
   const activeBoundary = getBoundary(state.boundaryId);
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
+    // Index-gesteuerte Grundlagenmodule benutzen immer die Standard-WIRKUNG-Ansicht.
+    // Die alte nutrient-mode-Klasse gehört nur zur früheren Sonderdarstellung
+    // und kann die Standardfelder optisch unterdrücken.
+    document.body.classList.remove("nutrient-mode");
+
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
     panel.innerHTML =
