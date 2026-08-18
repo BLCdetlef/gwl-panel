@@ -1,0 +1,322 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Land-System-Wandel / Waldtransition / Fernerkundung und Ökosystemfunktionen",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Land-System-Wandel",
+    "subComponent": "Waldtransition und Waldzustand",
+    "effectFocus": "Wie Veränderungen von Wald- und Landnutzung gemessen werden und welche Folgen sie für Ökosystemfunktionen haben"
+  },
+  "interviewConnection": {
+    "researcher": "Dr. Melvin Lippe",
+    "institution": "Thünen-Institut für Waldwirtschaft",
+    "fitToZustandQuestion": "hoch",
+    "fitExplanation": "Die Arbeiten passen zum ZUSTAND-Ziel vor allem über die Frage, wie der Zustand von Waldlandschaften aus Fernerkundung, Inventuren und Landnutzungsdaten bestimmt wird, wie sicher diese Aussagen sind und welche Veränderungen von Ökosystemfunktionen entlang von Entwaldungs- und Fragmentierungsgradienten beobachtet werden.",
+    "importantLimitation": "Die ausgewählten Arbeiten liefern keine einzelne globale Langzeit-Messreihe der planetaren Grenze Land-System-Wandel. Sie liefern regionale Zustandsmessungen, Methoden zur Zustandsbestimmung und belastbare Aussagen zu Folgen von Waldtransition. Globale Grenzwerte müssen aus dem Planetary-Boundaries-Rahmen separat ergänzt werden."
+  },
+  "corePrinciples": [
+    "Beobachtete Zustände, Fernerkundungsprodukte und Zukunftssimulationen werden strikt getrennt.",
+    "Waldfläche allein beschreibt den Zustand einer Waldlandschaft nicht vollständig; Fragmentierung, Waldtyp und Ökosystemfunktionen sind zusätzliche Zustandsmerkmale.",
+    "Kartendaten sind Messprodukte mit Definitionen, Auflösung und Klassifikationsfehlern; unterschiedliche Waldkarten können zu unterschiedlichen Zustandsaussagen führen.",
+    "Wirkungspfade dürfen von Landnutzungsänderung zu Kohlenstoffspeicherung, Biodiversität, Wasserhaushalt und lokalen Lebensgrundlagen führen.",
+    "Keine Organmarker allein aufgrund des Oberthemas Land-System-Wandel."
+  ],
+  "nodes": [
+    {
+      "id": "pb_land_system_change",
+      "type": "domain_component",
+      "label": "Land-System-Wandel"
+    },
+    {
+      "id": "state_forest_transition",
+      "type": "socio_technical_state",
+      "label": "Waldtransition: von weitgehend intakten Wäldern zu Agrar-Wald-Mosaiken"
+    },
+    {
+      "id": "state_fragmentation",
+      "type": "socio_technical_state",
+      "label": "Entwaldung und Fragmentierung"
+    },
+    {
+      "id": "state_forest_mapping_uncertainty",
+      "type": "socio_technical_state",
+      "label": "Unsicherheit der Waldkartierung"
+    },
+    {
+      "id": "effect_ecosystem_services",
+      "type": "biological_effect",
+      "label": "Veränderung von Ökosystemfunktionen und -leistungen"
+    },
+    {
+      "id": "effect_carbon_storage",
+      "type": "biological_effect",
+      "label": "Veränderung der Kohlenstoffspeicherung"
+    },
+    {
+      "id": "effect_species",
+      "type": "biological_effect",
+      "label": "Veränderung nützlicher und gefährdeter Arten"
+    },
+    {
+      "id": "effect_livelihoods",
+      "type": "life_outcome",
+      "label": "Folgen für lokale Lebensgrundlagen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_land_system_change",
+      "to": "state_forest_transition",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_forest_transition",
+      "to": "state_fragmentation",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_fragmentation",
+      "to": "effect_ecosystem_services",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_ecosystem_services",
+      "to": "effect_carbon_storage",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_ecosystem_services",
+      "to": "effect_species",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_ecosystem_services",
+      "to": "effect_livelihoods",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "state_forest_mapping_uncertainty",
+      "to": "state_forest_transition",
+      "relationType": "limits_confidence_in",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "lippe_peters_forest_transition_2023",
+      "sourceRefs": [
+        "src_peters_lippe_2023"
+      ],
+      "design": "Inventurdaten aus 331 Probeflächen in 24 Landschaften in Ecuador und den Philippinen; fünf Waldtypen und acht Wald-Ökosystemleistungen entlang eines Waldtransition-Gradienten.",
+      "finding": "Wenig gestörte Referenzwälder lieferten die höchsten Ökosystemleistungs-Niveaus. Mit zunehmender Entwaldung und Fragmentierung gingen nicht nur Waldfläche, sondern auch Kohlenstoffspeicherung, Holzvorräte sowie nützliche oder gefährdete Arten in verbleibenden Wäldern zurück.",
+      "relationType": "observed",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "lippe_global_forest_maps_2025",
+      "sourceRefs": [
+        "src_beyer_lippe_2025"
+      ],
+      "design": "Systematische Bewertung von 21 öffentlich verfügbaren globalen Wald-/Landbedeckungskarten hinsichtlich EUDR-relevanter Kriterien.",
+      "finding": "Acht Datensätze wurden als grundsätzlich geeignet bewertet; nur zwei erfüllten alle geprüften Indikatoren. Viele globale Landbedeckungskarten neigten zur Überschätzung von Waldfläche, während höhenbasierte Karten Waldflächen unterschätzen können. Regionale Unterschiede zwischen Karten waren erheblich.",
+      "relationType": "measurement_quality",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "lippe_cluinpy_2026",
+      "sourceRefs": [
+        "src_thomsen_lippe_2026"
+      ],
+      "design": "Landnutzungsmodellierung für Mato Grosso mit beobachteten Landnutzungsdaten 2012 und 2022; Vergleich verschiedener Modellierungsverfahren und Projektionen bis 2040.",
+      "finding": "Vergangenheit und Gegenwart können aus Fernerkundungs- bzw. Landnutzungsdaten kartiert werden; zukünftige Zustände sind dagegen Simulationen. Unterschiedliche Modellverfahren erzeugen messbar unterschiedliche Projektionen für Waldverlust und Biomasse.",
+      "relationType": "methodological",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "forest_transition_inventory_scope",
+      "node": "state_forest_transition",
+      "geography": "Ecuador und Philippinen",
+      "period": "Projekt 2020–2023",
+      "metric": "Umfang der empirischen Wald- und Ökosystemleistungsaufnahme",
+      "value": 331,
+      "unit": "Probeflächen",
+      "display": "331 Probeflächen in 24 Landschaften",
+      "uncertainty": "Die Ergebnisse sind auf die untersuchten tropischen Landschaften und Waldtypen bezogen und keine globale Zustandsmessung.",
+      "interpretation": "Geeignet, um zu zeigen, wie sich Waldzustand und Ökosystemleistungen entlang eines realen Entwaldungs-/Fragmentierungsgradienten verändern.",
+      "sourceRefs": [
+        "src_peters_lippe_2023"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "forest_map_review_count",
+      "node": "state_forest_mapping_uncertainty",
+      "geography": "Global",
+      "period": "Bewertung 2025",
+      "metric": "Untersuchte globale Wald-/Landbedeckungskarten",
+      "value": 21,
+      "unit": "Datensätze",
+      "display": "21 globale Karten geprüft; 8 grundsätzlich geeignet, 2 erfüllten alle Kriterien",
+      "uncertainty": "Die Arbeit lag 2025 als Preprint/Thünen-Auswertung vor; die Eignung bezieht sich auf EUDR-Kriterien, nicht auf die planetare Grenze selbst.",
+      "interpretation": "Der Zustand 'Wald / Nicht-Wald' hängt auch von Definition, Auflösung und Datensatzwahl ab. Zustandsaussagen brauchen daher eine explizite Unsicherheitsangabe.",
+      "sourceRefs": [
+        "src_beyer_lippe_2025"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "cluinpy_observation_period",
+      "node": "state_forest_transition",
+      "geography": "Mato Grosso, Brasilien",
+      "period": "2012–2022",
+      "metric": "Beobachtete Landnutzungsdaten als Modellgrundlage",
+      "value": 10,
+      "unit": "Jahre",
+      "display": "Beobachtete Landnutzung 2012 und 2022; Zukunft ab 2022 modelliert",
+      "uncertainty": "Die Studie dient primär der Modellvalidierung; Zukunftswerte sind Szenarien und keine Messwerte.",
+      "interpretation": "Methodisch wichtig für GWL: beobachteter Zustand und modellierte Zukunft müssen in der UI klar getrennt werden.",
+      "sourceRefs": [
+        "src_thomsen_lippe_2026"
+      ],
+      "displayType": "study_value"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_forest_transition_ecosystem_services",
+      "label": "Entwaldung / Fragmentierung → veränderter Waldzustand → geringere Ökosystemleistungen",
+      "nodes": [
+        "state_fragmentation",
+        "state_forest_transition",
+        "effect_ecosystem_services"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_forest_transition_carbon_species",
+      "label": "Waldtransition → geringere Kohlenstoffspeicherung / Holzvorräte / Verlust nützlicher und gefährdeter Arten",
+      "nodes": [
+        "state_forest_transition",
+        "effect_carbon_storage",
+        "effect_species"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_measurement_uncertainty",
+      "label": "Walddefinition + räumliche Auflösung + Klassifikationsfehler → unterschiedliche Waldkarten → unterschiedliche Zustandsaussage",
+      "nodes": [
+        "state_forest_mapping_uncertainty",
+        "state_forest_transition"
+      ],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Für dieses Modul keine Organmarker aktivieren. Die direkte Stärke liegt in der Verbindung GRUNDLAGE → WIRKUNG: Landschaftszustand, Ökosystemfunktionen und Lebensgrundlagen."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_global_boundary_series",
+      "question": "Welche globale Zeitreihe und welche biome-spezifische Kontrollvariable des Planetary-Boundaries-Rahmens soll als primäre Land-System-Wandel-Zustandsanzeige verwendet werden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_interview_primary_series",
+      "question": "Welche konkrete Messreihe oder Kartenfolge aus Dr. Lippes eigener Arbeit eignet sich am besten, um im Interview eine Zustandsänderung über die Zeit anschaulich zu zeigen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_map_definition",
+      "question": "Welche Walddefinition und räumliche Auflösung sollte ZUSTAND für vergleichbare Karten verwenden?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_cross_boundary",
+      "question": "Welche quantitativ belegten Verknüpfungen zu Klima, Biodiversität und Süßwasser können aus Lippes Arbeiten direkt übernommen werden?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Trennung zwischen Zustandsmessung, Ursachenanalyse und Szenariomodellierung.",
+    "dimensions": [
+      {
+        "id": "measurement",
+        "label": "Zustand messen",
+        "level": "hoch",
+        "rationale": "Fernerkundung, Inventuren und GIS erlauben quantitative Zustandsbeschreibungen, müssen aber Definitionen und Unsicherheiten transparent machen."
+      },
+      {
+        "id": "land_management",
+        "label": "Landnutzung und Wiederherstellung",
+        "level": "hoch",
+        "rationale": "Die Arbeiten zeigen, dass Management und Wiederherstellung an den jeweiligen Entwaldungs- und Landschaftskontext angepasst werden müssen."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Wenn wir fragen 'Wie ist der Zustand unserer Wälder und Landschaften?' – welche Messgröße oder Kartenfolge würden Sie selbst zuerst zeigen?",
+    "Was kann man aus Satellitendaten über Waldverlust wirklich sicher ablesen – und wo beginnen Definition und Unsicherheit?",
+    "Welche Veränderung Ihrer eigenen Untersuchungslandschaften halten Sie für besonders aussagekräftig?",
+    "Welche Folgen von Entwaldung und Fragmentierung lassen sich aus Ihren Daten besonders belastbar für Kohlenstoff, Biodiversität, Wasser oder lokale Lebensgrundlagen ableiten?"
+  ],
+  "sources": [
+    {
+      "id": "src_lippe_profile",
+      "title": "Dr. Melvin Lippe – wissenschaftliches Personal",
+      "authors": "Thünen-Institut für Waldwirtschaft",
+      "publisher": "Thünen-Institut",
+      "year": 2026,
+      "type": "official_profile",
+      "url": "https://www.thuenen.de/en/fachinstitute/waldwirtschaft/personal/wissenschaftliches-personal/dr-melvin-lippe",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_peters_lippe_2023",
+      "title": "Forest ecosystem services at landscape level – Why forest transition matters?",
+      "authors": "Peters, F.; Lippe, M.; Eguiguren, P.; Günter, S.",
+      "publisher": "Forest Ecology and Management / Thünen project brief",
+      "year": 2023,
+      "type": "peer_reviewed_study_and_official_summary",
+      "url": "https://literatur.thuenen.de/digbib_extern/dn066595.pdf",
+      "doi": "10.1016/j.foreco.2023.120782",
+      "access": "open_summary"
+    },
+    {
+      "id": "src_beyer_lippe_2025",
+      "title": "Assessing the Suitability of Available Global Forest Maps as Reference Tools for EUDR-Compliant Deforestation Monitoring",
+      "authors": "Freitas Beyer, J.; Köthke, M.; Lippe, M.",
+      "publisher": "Thünen-Institut / Preprint",
+      "year": 2025,
+      "type": "preprint_method_assessment",
+      "url": "https://literatur.thuenen.de/digbib_extern/dn070045.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_thomsen_lippe_2026",
+      "title": "Improving spatial land-use and land-cover change simulations with machine learning: A Python adaptation of the CLUMondo model",
+      "authors": "Thomsen, S.; Levers, C.; Lippe, M.",
+      "publisher": "Environmental Modelling & Software",
+      "year": 2026,
+      "type": "peer_reviewed_method_study",
+      "url": "https://literatur.thuenen.de/digbib_extern/dn070942.pdf",
+      "doi": "10.1016/j.envsoft.2026.106917",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": "Das Modul gehört primär unter Planetare Grenzen → Land-System-Wandel. Es dient zugleich als methodisches Beispiel dafür, wie ZUSTAND zwischen beobachtetem Zustand, Messunsicherheit und Zukunftssimulation unterscheidet."
+}
