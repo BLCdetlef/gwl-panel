@@ -1370,7 +1370,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
       `}
 
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
-      ${values.length ? `<h3>STUDIENWERTE</h3><div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
+      ${values.length ? `${presentation.compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
       <h3>WIRKUNGSPFADE</h3>
       <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
