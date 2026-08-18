@@ -184,15 +184,6 @@
       "evidenceStatus": "strong"
     },
     {
-      "id": "path_nitrogen_air_climate",
-      "label": "Reaktiver Stickstoff → Emissionen und Umwandlungsprodukte → Luftverschmutzung sowie N₂O → Klima- und Ozonwirkungen",
-      "nodes": [
-        "state_nitrogen",
-        "effect_air_climate"
-      ],
-      "evidenceStatus": "strong"
-    },
-    {
       "id": "path_nutrients_life",
       "label": "Veränderte Nährstoffflüsse → beeinträchtigte Wasser- und Ökosystemqualität → Risiken für Fischerei, Landwirtschaft und menschliche Lebensgrundlagen",
       "nodes": [
