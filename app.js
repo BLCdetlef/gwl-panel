@@ -1465,7 +1465,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
     lifeNote.textContent = genericHealthReadout(network);
     if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
     else setLink("–", null);
-    // Globale Klimazustandswerte allein aktivieren bewusst keine Organkuller.
+    // Globale Klimazustandswerte allein aktivieren bewusst keine OrganOrganmarker.
     renderHealth(null);
     updateCauseButtons(null, null);
     return;
@@ -2007,7 +2007,7 @@ function getPfasHealthView() {
         system: "immune",
         label: "Immunsystem",
         evidence: `EFSA: ${critical}.`,
-        note: "Kein belastbarer 0–100-%-Funktionswert und in der aktuellen Bodymap kein eigener Immunsystem-Kuller."
+        note: "Kein belastbarer 0–100-%-Krankheitslastwert und in der aktuellen Bodymap kein eigener Immunsystem-Organmarker."
       }
     ]
   };
@@ -2039,11 +2039,11 @@ function ensureHealthLegend() {
         <span style="--legend-shade:#777"></span>
         <span style="--legend-shade:#111"></span>
       </span>
-      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Im aktuellen Organ-Prototyp sind dies Testgewichte, keine medizinischen Funktionswerte.</span>
+      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Im aktuellen Organ-Prototyp sind dies Testgewichte, keine medizinischen Krankheitslastwerte.</span>
     </div>
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
-      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare 0–100-%-Funktionsskala vorhanden.</span>
+      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
     </div>
     <div class="health-legend-row health-legend-method">
       <span><strong>Methodik:</strong> Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert werden kann.</span>
