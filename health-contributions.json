@@ -1,0 +1,69 @@
+{
+  "format": "gwl-health-contributions-v1",
+  "status": "prototype",
+  "note": "Nur Architekturtest. Gewichte sind keine medizinischen Risiko-, Prävalenz- oder Funktionswerte.",
+  "aggregation": {
+    "method": "bounded_union",
+    "formula": "1 - product(1 - weight)",
+    "meaning": "technischer Belastungsindex für den Prototyp"
+  },
+  "organs": [
+    {
+      "organLabels": [
+        "Niere",
+        "Nieren",
+        "kidney"
+      ],
+      "contributions": [
+        {
+          "id": "demo_nitrate_kidney",
+          "label": "DEMO · Nitrat-Pfad",
+          "weight": 0.35,
+          "evidence": "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
+          "route": {
+            "boundaryId": "nutrients",
+            "itemId": "nitrat-im-grundwasser"
+          }
+        },
+        {
+          "id": "demo_pfas_kidney",
+          "label": "DEMO · PFAS-Pfad",
+          "weight": 0.45,
+          "evidence": "Testgewicht zur Prüfung mehrerer Beiträge an einem Organ.",
+          "route": {
+            "boundaryId": "novel",
+            "itemId": "pfas"
+          }
+        }
+      ]
+    },
+    {
+      "organLabels": [
+        "Leber",
+        "liver"
+      ],
+      "contributions": [
+        {
+          "id": "demo_pfas_liver",
+          "label": "DEMO · PFAS-Pfad",
+          "weight": 0.4,
+          "evidence": "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
+          "route": {
+            "boundaryId": "novel",
+            "itemId": "pfas"
+          }
+        },
+        {
+          "id": "demo_nitrate_liver",
+          "label": "DEMO · Nitrat-Pfad",
+          "weight": 0.2,
+          "evidence": "Technischer Gegenbeitrag; keine medizinische Aussage.",
+          "route": {
+            "boundaryId": "nutrients",
+            "itemId": "nitrat-im-grundwasser"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -58,51 +58,20 @@ let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
 
 let LIFE_PROTOTYPE_MODE = true;
+let LIFE_PROTOTYPE_CONTRIBUTIONS = [];
 
-// Reiner Architekturtest für die Rückkopplung LEBEN → GRUNDLAGE.
-// Die Zahlen sind absichtlich technische Testgewichte, KEINE medizinischen
-// Risiko-, Prävalenz- oder Funktionswerte. Später werden sie durch
-// evidenzbasierte Beiträge aus den Knowledge-Dateien ersetzt.
-const LIFE_PROTOTYPE_CONTRIBUTIONS = [
-  {
-    organLabels: ["Niere", "Nieren", "kidney"],
-    contributions: [
-      {
-        id: "demo_nitrate_kidney",
-        label: "DEMO · Nitrat-Pfad",
-        weight: 0.35,
-        evidence: "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
-        route: { boundaryId: "nutrients", itemId: "nitrat-im-grundwasser" }
-      },
-      {
-        id: "demo_pfas_kidney",
-        label: "DEMO · PFAS-Pfad",
-        weight: 0.45,
-        evidence: "Testgewicht zur Prüfung mehrerer Beiträge an einem Organ.",
-        route: { boundaryId: "novel", itemId: "pfas" }
-      }
-    ]
-  },
-  {
-    organLabels: ["Leber", "liver"],
-    contributions: [
-      {
-        id: "demo_pfas_liver",
-        label: "DEMO · PFAS-Pfad",
-        weight: 0.40,
-        evidence: "Testgewicht zur Prüfung der Aggregations- und Rücksprunglogik.",
-        route: { boundaryId: "novel", itemId: "pfas" }
-      },
-      {
-        id: "demo_nitrate_liver",
-        label: "DEMO · Nitrat-Pfad",
-        weight: 0.20,
-        evidence: "Technischer Gegenbeitrag; keine medizinische Aussage.",
-        route: { boundaryId: "nutrients", itemId: "nitrat-im-grundwasser" }
-      }
-    ]
+async function loadHealthContributionPrototype() {
+  if (!LIFE_PROTOTYPE_MODE) return;
+  try {
+    const response = await fetch("health-contributions.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`data/health-contributions.json: ${response.status}`);
+    const payload = await response.json();
+    LIFE_PROTOTYPE_CONTRIBUTIONS = Array.isArray(payload.organs) ? payload.organs : [];
+  } catch (error) {
+    console.warn("Health-Contributions-Prototyp konnte nicht geladen werden:", error);
+    LIFE_PROTOTYPE_CONTRIBUTIONS = [];
   }
-];
+}
 
 function findHotspotIdByLabels(labels = []) {
   const wanted = labels.map(x => String(x).toLowerCase());
@@ -2370,6 +2339,7 @@ document.querySelectorAll("[data-close-cause]").forEach(button => button.addEven
 async function initPanel() {
   try {
     await loadBodymapConfig();
+  await loadHealthContributionPrototype();
     await loadKnowledgeNetworks();
     syncKnowledgeNavigationFromIndex();
   } catch (error) {
