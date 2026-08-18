@@ -44,9 +44,14 @@
           "label": "Nährstoffkreisläufe",
           "items": [
             {
-              "id": "nitrogen_phosphorus",
-              "label": "Stickstoff & Phosphor",
-              "source": "data/knowledge/gwl_nutrient_cycles_pilot_v0.1.json"
+              "id": "nitrogen",
+              "label": "Stickstoff",
+              "source": "data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json"
+            },
+            {
+              "id": "phosphorus",
+              "label": "Phosphor",
+              "source": "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json"
             }
           ]
         }

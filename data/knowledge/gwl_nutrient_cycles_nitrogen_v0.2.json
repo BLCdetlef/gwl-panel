@@ -1,14 +1,14 @@
 {
   "format": "gwl-knowledge-network-v1.3",
-  "version": "0.1-pilot",
-  "topic": "Nährstoffkreisläufe / Stickstoff / Phosphor",
+  "version": "0.2-pilot",
+  "topic": "Nährstoffkreisläufe / Stickstoff",
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
     "systemBoundary": "Planetare Grenzen",
     "domainComponent": "Nährstoffkreisläufe",
-    "subComponent": "Stickstoff- und Phosphorkreisläufe",
-    "effectFocus": "Anthropogene Veränderung biogeochemischer Flüsse und Folgen für Land-, Süßwasser- und Meeresökosysteme"
+    "subComponent": "Stickstoff",
+    "effectFocus": "Anthropogene Stickstofffixierung und Folgen für Land-, Gewässer-, Klima- und Ökosystemfunktionen"
   },
   "corePrinciples": [
     "Die planetare Grenze der Nährstoffkreisläufe umfasst zwei getrennte Kontrollvariablen für Stickstoff und Phosphor.",
@@ -138,55 +138,6 @@
         "src_phc_2025"
       ],
       "displayType": "study_value"
-    },
-    {
-      "id": "nutrients_phosphorus_cropland",
-      "node": "state_phosphorus",
-      "geography": "Global aggregiert",
-      "period": "Stand 2025; zugrunde liegende Anwendungsdaten bis 2022",
-      "metric": "Anwendung von abgebautem Phosphor auf globalen Ackerflächen",
-      "value": 18.2,
-      "unit": "Tg P/Jahr",
-      "display": "etwa 18,2 Tg P/Jahr",
-      "reference": {
-        "type": "planetary_boundary",
-        "value": 6.2,
-        "unit": "Tg P/Jahr",
-        "display": "Regionale planetare Grenze, global aggregiert: 6,2 Tg P/Jahr"
-      },
-      "highRisk": {
-        "value": 11.2,
-        "unit": "Tg P/Jahr",
-        "display": "Hochrisikogrenze: 11,2 Tg P/Jahr"
-      },
-      "uncertainty": "Die 6,2-Tg-Grenze ist eine global aggregierte regionale Kontrollvariable zur Begrenzung der Eutrophierung von Süßwassersystemen. Regionale Belastungen unterscheiden sich stark.",
-      "interpretation": "Die Phosphorkomponente liegt deutlich außerhalb des sicheren Bereichs und oberhalb der Hochrisikogrenze.",
-      "sourceRefs": [
-        "src_phc_2025"
-      ],
-      "displayType": "study_value"
-    },
-    {
-      "id": "nutrients_phosphorus_ocean",
-      "node": "state_phosphorus",
-      "geography": "Global",
-      "period": "aktuelle globale Einordnung",
-      "metric": "Phosphorfluss in den Ozean",
-      "value": 4.4,
-      "unit": "Tg P/Jahr",
-      "display": "etwa 4,4 Tg P/Jahr",
-      "reference": {
-        "type": "planetary_boundary",
-        "value": 11,
-        "unit": "Tg P/Jahr",
-        "display": "Globale Ozean-Grenze: 11 Tg P/Jahr"
-      },
-      "uncertainty": "Diese globale Ozean-Komponente ist von der stärker begrenzenden regionalen Phosphor-Kontrollvariable zu unterscheiden.",
-      "interpretation": "Die globale Ozean-Komponente wird separat dokumentiert; für die Hauptanzeige wird die stärker begrenzende regionale Phosphorvariable verwendet.",
-      "sourceRefs": [
-        "src_phc_web_2025"
-      ],
-      "displayType": "secondary_value"
     }
   ],
   "presentation": {
@@ -194,9 +145,9 @@
     "statusLabel": "Stand 2025",
     "primaryMeasurementId": "nutrients_nitrogen_fixation",
     "referenceLabel": "Planetare Grenze: 62 Tg N/Jahr",
-    "finding": "Die planetare Grenze der Nährstoffkreisläufe ist deutlich überschritten. Die anthropogene Stickstofffixierung für die Landwirtschaft liegt bei etwa 165 Tg N/Jahr gegenüber einer Grenze von 62 Tg N/Jahr. Auch die Phosphorkomponente ist überschritten: etwa 18,2 Tg P/Jahr werden auf Ackerflächen eingebracht, gegenüber einer regionalen, global aggregierten Grenze von 6,2 Tg P/Jahr.",
-    "effectPath": "Übermäßige Stickstoff- und Phosphoreinträge → Verluste in Luft, Böden und Gewässer → Eutrophierung, Sauerstoffmangel und veränderte Ökosysteme → Rückwirkungen auf Biosphäre, Süßwasser, Klima und menschliche Lebensgrundlagen",
-    "uncertainty": "Stickstoff und Phosphor besitzen unterschiedliche Kontrollvariablen und räumliche Skalen. Die beiden Werte dürfen nicht zu einer gemeinsamen Kennzahl verrechnet werden."
+    "finding": "Die Stickstoffkomponente der planetaren Grenze ist deutlich überschritten. Die anthropogene Stickstofffixierung für die Landwirtschaft liegt bei etwa 165 Tg N/Jahr gegenüber einer planetaren Grenze von 62 Tg N/Jahr.",
+    "effectPath": "Übermäßige Stickstofffixierung → Verluste in Luft, Böden und Gewässer → Eutrophierung sowie Luft-, Klima- und Ozonwirkungen → Rückwirkungen auf Ökosysteme und menschliche Lebensgrundlagen",
+    "uncertainty": "Globale Modell- und Bilanzschätzung. Regionale Stickstoffüberschüsse unterscheiden sich stark."
   },
   "pathways": [
     {
@@ -302,5 +253,8 @@
       "access": "open_full_text"
     }
   ],
-  "navigationRule": "Das Grundlagenmodul gehört unter Planetare Grenzen → Nährstoffkreisläufe. Stickstoff und Phosphor bleiben getrennte Kontrollvariablen innerhalb derselben planetaren Grenze. Regionale Messprogramme und konkrete Expositionspfade docken als Vertiefungsmodule darunter an."
+  "navigationRule": {
+    "group": "Nährstoffkreisläufe",
+    "item": "Stickstoff"
+  }
 }
