@@ -516,6 +516,17 @@ function setStandardEffectBlocksVisible(visible) {
 }
 
 
+function setStandardFocusCardVisible(visible) {
+  const focusCard =
+    focusTitle?.closest(".focus-card, .effect-focus, .state-card, article, section")
+    || focusTitle?.parentElement;
+
+  if (focusCard) {
+    focusCard.style.display = visible ? "" : "none";
+  }
+}
+
+
 function renderNovelShell() {
   const state = getActiveViewState();
   if (state.boundaryId !== "novel") return;
@@ -1509,13 +1520,26 @@ function renderKnowledgePanel() {
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
-    applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+
+    if (state.boundaryId === "nutrients") {
+      // Bei Stickstoff, Nitrat, Phosphor und Eutrophierung zeigt WIRKUNG
+      // nur die jeweils ausgewählte Knowledge-Ansicht. Die leeren Standardfelder
+      // darüber wären redundant und bleiben deshalb ausgeblendet.
+      document.body.classList.remove("nutrient-mode");
+      setStandardFocusCardVisible(false);
+      setStandardEffectBlocksVisible(false);
+    } else {
+      setStandardFocusCardVisible(true);
+      applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+    }
+
     panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
     panel.hidden = false;
     return;
   }
 
   syncBoundaryModeClass();
+  setStandardFocusCardVisible(true);
   setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy" && state.boundaryId !== "mental-load");
 
   const nitrate = knowledgeNetworks.nitrate;
