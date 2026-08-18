@@ -2967,3 +2967,33 @@ function gwlHealthIconSvg(key) {
   `;
   document.head.appendChild(style);
 })();
+
+
+/* GWL_HIDE_HEALTH_CONTEXT_ACCORDION_V1 */
+(function hideHealthContextAccordion() {
+  function hideIt() {
+    const nodes = Array.from(document.querySelectorAll("summary,button,h3,h4,div,span"));
+    const heading = nodes.find(el =>
+      (el.textContent || "").trim() === "Einordnung Gesundheit"
+    );
+    if (!heading) return false;
+
+    const container =
+      heading.closest("details") ||
+      heading.closest(".accordion-item") ||
+      heading.closest(".organ-readout") ||
+      heading.parentElement;
+
+    if (container) {
+      container.style.display = "none";
+      container.setAttribute("aria-hidden", "true");
+      return true;
+    }
+    return false;
+  }
+
+  if (!hideIt()) {
+    requestAnimationFrame(hideIt);
+    window.addEventListener("load", hideIt, { once: true });
+  }
+})();
