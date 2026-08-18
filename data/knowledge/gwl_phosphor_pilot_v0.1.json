@@ -14,36 +14,36 @@
   "measurements": [
     {
       "id": "de_river_p_exceedance",
-      "label": "Anteil repräsentativer Fluss-Messstellen oberhalb des Orientierungswertes für Gesamtphosphor",
-      "valueDisplay": "Indikator aus rund 250 repräsentativen Messstellen",
-      "period": "aktuelle UBA-Auswertung",
-      "region": "Deutschland",
-      "finding": "Der UBA-Indikator vergleicht den Mittelwert der Phosphorkonzentration je Messstelle mit dem typspezifischen Orientierungswert für den guten ökologischen Zustand.",
-      "uncertainty": "Die Orientierungswerte unterscheiden sich nach Fließgewässertyp; der Indikator ist keine menschliche Gesundheitsgrenze.",
+      "metric": "Messstellen an deutschen Flüssen mit Überschreitung des Orientierungswertes für Gesamtphosphor",
+      "display": "seit 2018 knapp 60 %",
+      "period": "seit 2018; UBA-Stand 2026",
+      "geography": "Deutschland",
+      "interpretation": "Anfang der 1980er Jahre lagen fast 90 % der Messstellen über dem Orientierungswert; seit 2018 liegt der Anteil bei knapp 60 %. Hohe Belastungen sind deutlich zurückgegangen.",
+      "uncertainty": "Der Indikator vergleicht typspezifische ökologische Orientierungswerte. Er ist keine menschliche Gesundheitsgrenze.",
       "sourceRefs": [
         "uba_eutrophierung_fluesse"
       ]
     },
     {
       "id": "de_river_p_orientation_values",
-      "label": "Orientierungswerte für Gesamtphosphor in Fließgewässern",
-      "valueDisplay": "meist 0,10–0,15 mg P/l",
-      "period": "OGewV 2016 / aktueller UBA-Indikator",
-      "region": "Deutschland",
-      "finding": "Je nach Fließgewässertyp gelten überwiegend 0,10–0,15 mg P/l; für einen Typ 0,30 mg P/l und für Übergangsgewässer 0,045 mg P/l.",
-      "uncertainty": "Typspezifische ökologische Orientierungswerte, keine allgemeine Toxizitäts- oder Gesundheitsgrenze.",
+      "metric": "Orientierungswerte für Gesamtphosphor für den guten ökologischen Zustand",
+      "display": "meist 0,10–0,15 mg P/l",
+      "period": "OGewV 2016; UBA-Indikator Stand 2026",
+      "geography": "Deutschland",
+      "interpretation": "Je nach Fließgewässertyp liegen die Orientierungswerte überwiegend zwischen 0,10 und 0,15 mg P/l; bei einem Typ bei 0,30 mg P/l und in Übergangsgewässern bei 0,045 mg P/l.",
+      "uncertainty": "Typspezifische ökologische Orientierungswerte; keine allgemeine Toxizitäts- oder Gesundheitsgrenze.",
       "sourceRefs": [
         "uba_eutrophierung_fluesse"
       ]
     },
     {
       "id": "eu_phosphorus_trend",
-      "label": "Phosphat in Flüssen und Gesamtphosphor in Seen",
-      "valueDisplay": "Langzeittrend seit 1992",
+      "metric": "Phosphat in Flüssen und Gesamtphosphor in Seen",
+      "display": "Fluss-Phosphat 1992–2012 mehr als halbiert",
       "period": "1992–2023",
-      "region": "Europa",
-      "finding": "Phosphatkonzentrationen in Flüssen und Gesamtphosphor in Seen gingen seit den 1990er Jahren zurück; in jüngeren Jahren flachten die Trends ab.",
-      "uncertainty": "Europäische Aggregation über unterschiedlich viele Gewässer und Messstellen; regionale Entwicklungen können abweichen.",
+      "geography": "Europa",
+      "interpretation": "Phosphat in europäischen Flüssen nahm bis 2012 stark ab; seit 2013 zeigt sich keine weitere klare Abnahme und teils wieder eine Zunahmetendenz. Gesamtphosphor in Seen ist seit 1992 gesunken und hat sich zuletzt stabilisiert.",
+      "uncertainty": "Europäische Aggregation mit unterschiedlicher räumlicher Abdeckung; jährliche Mittelwerte und Gap-Filling glätten lokale und kurzfristige Belastungsspitzen.",
       "sourceRefs": [
         "eea_nutrients_freshwater"
       ]
@@ -83,18 +83,18 @@
     {
       "id": "uba_eutrophierung_fluesse",
       "title": "Indikator: Eutrophierung von Flüssen durch Phosphor",
-      "institution": "Umweltbundesamt",
-      "year": 2025,
+      "publisher": "Umweltbundesamt",
+      "year": 2026,
       "url": "https://www.umweltbundesamt.de/indikator-eutrophierung-von-fluessen-durch-phosphor",
-      "openAccess": true
+      "access": "open_full_text"
     },
     {
       "id": "eea_nutrients_freshwater",
       "title": "Nutrients in freshwater in Europe",
-      "institution": "European Environment Agency",
-      "year": 2026,
+      "publisher": "European Environment Agency",
+      "year": 2025,
       "url": "https://www.eea.europa.eu/en/analysis/indicators/nutrients-in-freshwater-in-europe",
-      "openAccess": true
+      "access": "open_full_text"
     }
   ],
   "sourcePolicy": {
