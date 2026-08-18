@@ -1259,13 +1259,43 @@ function getPrimaryKnowledgeMeasurement(network) {
     || null;
 }
 
-function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
-  setStandardEffectBlocksVisible(true);
 
-  const measurement = getPrimaryKnowledgeMeasurement(network);
-  const source = getKnowledgeSource(network, measurement);
+function getActiveKnowledgeContext() {
+  const state = getActiveViewState();
+  const boundary = getBoundary(state.boundaryId);
+  const item = boundary?.items?.find(entry => entry.id === state.itemId);
+  if (!item?.knowledgeSource || state.boundaryId === "mental-load") return null;
+  return {
+    state,
+    boundary,
+    item,
+    network: getKnowledgeNetworkBySource(item.knowledgeSource),
+    indexEntry: getKnowledgeIndexEntry(state.boundaryId, state.itemId)
+  };
+}
+
+function getKnowledgeSeries(network) {
+  const preferredId = network?.presentation?.primaryTimeSeriesId;
+  if (preferredId) {
+    const preferred = (network?.timeSeries || []).find(series => series.id === preferredId);
+    if (preferred) return preferred;
+  }
+  return (network?.timeSeries || [])[0] || null;
+}
+
+function getKnowledgeSeriesPoint(network, year) {
+  const series = getKnowledgeSeries(network);
+  return (series?.points || []).find(point => Number(point.year) === Number(year)) || null;
+}
+
+function getKnowledgePointSource(network, point, series) {
+  const ids = point?.sourceRefs || series?.sourceRefs || [];
+  return (network?.sources || []).find(source => ids.includes(source.id)) || null;
+}
+
+function setKnowledgePointDetails(network, activeBoundary, activeItem, point = null, noMeasurementYear = null) {
+  const series = getKnowledgeSeries(network);
   const presentation = network?.presentation || {};
-  const firstEvidence = (network?.studyEvidence || [])[0];
   const firstPathway = (network?.pathways || [])[0];
 
   if (focusType) focusType.textContent = `PLANETARE GRENZE · ${activeBoundary?.label || ""}`;
@@ -1273,50 +1303,133 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   if (focusSummary) focusSummary.textContent =
     network?.entry?.effectFocus || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
 
-  metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
-  referenceValue.textContent =
-    presentation.referenceLabel || "Referenz / planetare Grenzvariable: im Pilot noch nicht hinterlegt";
-  periodValue.textContent = measurement?.period || "–";
-
-  findingText.textContent =
-    presentation.finding ||
-    measurement?.interpretation ||
-    firstEvidence?.finding ||
-    "–";
-
-  effectPath.textContent =
-    presentation.effectPath ||
-    firstPathway?.label ||
-    (firstPathway?.nodes || firstPathway?.chain || []).join(" → ") ||
-    "–";
-
-  uncertaintyValue.textContent =
-    presentation.uncertainty ||
-    measurement?.uncertainty ||
-    "–";
-
-  lifeNote.textContent = genericHealthReadout(network);
-
-  if (source?.url) {
-    setLink(source.title || source.publisher || "Quelle", source.url);
-  } else {
+  if (noMeasurementYear !== null) {
+    metricValue.textContent = "kein Messpunkt";
+    referenceValue.textContent = series?.reference?.display || presentation.referenceLabel || "–";
+    periodValue.textContent = String(noMeasurementYear);
+    findingText.textContent = `Für ${noMeasurementYear} ist in dieser Knowledge-Zeitreihe kein Messpunkt hinterlegt. Es wird nichts interpoliert.`;
+    effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
+    uncertaintyValue.textContent = "Keine Zwischenwerte werden erfunden. Wähle einen tatsächlich hinterlegten Messzeitpunkt.";
+    lifeNote.textContent = genericHealthReadout(network);
     setLink("–", null);
+    renderHealth(null);
+    updateCauseButtons(null, null);
+    return;
   }
 
-  // Knowledge-Dateien können Messwerte verschiedener Zeitreihen enthalten.
-  // Bis eine explizite timeseries hinterlegt ist, wird nichts interpoliert.
+  if (point && series) {
+    const source = getKnowledgePointSource(network, point, series);
+    metricValue.textContent = point.display || `${point.value ?? "–"} ${series.unit || ""}`.trim();
+    referenceValue.textContent = series.reference?.display || presentation.referenceLabel || "–";
+    periodValue.textContent = String(point.year);
+    findingText.textContent = point.finding || series.finding || presentation.finding || "–";
+    effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
+    uncertaintyValue.textContent = point.uncertainty || series.uncertainty || presentation.uncertainty || "–";
+    lifeNote.textContent = genericHealthReadout(network);
+    if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
+    else setLink("–", null);
+    // Globale Klimazustandswerte allein aktivieren bewusst keine Organkuller.
+    renderHealth(null);
+    updateCauseButtons(null, null);
+    return;
+  }
+
+  const measurement = getPrimaryKnowledgeMeasurement(network);
+  const source = getKnowledgeSource(network, measurement);
+  metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
+  referenceValue.textContent = presentation.referenceLabel || "–";
+  periodValue.textContent = measurement?.period || "–";
+  findingText.textContent = presentation.finding || measurement?.interpretation || "–";
+  effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
+  uncertaintyValue.textContent = presentation.uncertainty || measurement?.uncertainty || "–";
+  lifeNote.textContent = genericHealthReadout(network);
+  if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
+  else setLink("–", null);
+  renderHealth(null);
+  updateCauseButtons(null, null);
+}
+
+function renderKnowledgeTime(network) {
+  const series = getKnowledgeSeries(network);
+  const points = series?.points || [];
+  const blc = data.timePresets.blc;
+
+  dataWindowButton.classList.toggle("active", timeWindow === "data");
+  blcWindowButton.classList.toggle("active", timeWindow === "blc");
+  timeMarkers.innerHTML = "";
+
+  if (!series || !points.length) {
+    timeSlider.disabled = true;
+    timeSlider.min = "0";
+    timeSlider.max = "1";
+    timeSlider.value = "0";
+    timeReadout.textContent = "–";
+    timeStatus.textContent = "Für diese Knowledge-Datei ist noch keine Zeitreihe hinterlegt.";
+    return;
+  }
+
+  let min, max;
+  if (timeWindow === "blc") {
+    min = blc.min;
+    max = blc.max;
+  } else {
+    min = Math.min(...points.map(point => Number(point.year)));
+    max = Math.max(...points.map(point => Number(point.year)));
+  }
+
+  timeSlider.disabled = false;
+  timeSlider.min = String(min);
+  timeSlider.max = String(max);
+  timeSlider.step = "1";
+
+  const fallbackYear = Number(points[points.length - 1].year);
+  if (selectedYear === null || selectedYear < min || selectedYear > max) selectedYear = fallbackYear;
+  timeSlider.value = String(selectedYear);
+  timeReadout.textContent = String(selectedYear);
+
+  // Bei langen Jahresreihen nur ausgewählte Marker beschriften, damit die Anzeige lesbar bleibt.
+  points.forEach((point, index) => {
+    const year = Number(point.year);
+    if (year < min || year > max) return;
+    const showMarker = points.length <= 15 || index === 0 || index === points.length - 1 || year % 5 === 0;
+    if (!showMarker) return;
+    const marker = document.createElement("span");
+    marker.className = "time-marker";
+    marker.textContent = String(year);
+    marker.style.left = `${((year - min) / (max - min)) * 100}%`;
+    timeMarkers.appendChild(marker);
+  });
+
+  const exact = points.find(point => Number(point.year) === Number(selectedYear));
+  if (exact) {
+    timeStatus.textContent = `${series.label || "Messreihe"} · ${selectedYear} ist als Messwert hinterlegt.`;
+  } else if (timeWindow === "blc") {
+    timeStatus.textContent = "BLC-Zeitfenster 1700–2100. Außerhalb der hinterlegten Messjahre werden keine Werte interpoliert oder projiziert.";
+  } else {
+    timeStatus.textContent = "Nur tatsächlich hinterlegte Messjahre werden angezeigt; keine Interpolation.";
+  }
+}
+
+function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
+  setStandardEffectBlocksVisible(true);
+
+  const series = getKnowledgeSeries(network);
+  if (series?.points?.length) {
+    if (selectedYear === null) selectedYear = Number(series.points[series.points.length - 1].year);
+    renderKnowledgeTime(network);
+    const point = getKnowledgeSeriesPoint(network, selectedYear);
+    setKnowledgePointDetails(network, activeBoundary, activeItem, point, point ? null : selectedYear);
+    return;
+  }
+
+  setKnowledgePointDetails(network, activeBoundary, activeItem);
   timeSlider.disabled = true;
   timeSlider.min = "0";
   timeSlider.max = "1";
   timeSlider.value = "0";
   timeMarkers.innerHTML = "";
-  timeReadout.textContent = measurement?.period || "–";
-  timeStatus.textContent = measurement
-    ? "Messwert aus der ausgewählten Knowledge-Datei. Keine Zwischenwerte werden interpoliert."
-    : "Für diese Knowledge-Datei ist noch kein primärer Messwert hinterlegt.";
-
-  renderHealth(network?.healthContext || null);
-  updateCauseButtons(null, null);
+  timeReadout.textContent = getPrimaryKnowledgeMeasurement(network)?.period || "–";
+  timeStatus.textContent = "Messwert aus der ausgewählten Knowledge-Datei. Keine Zwischenwerte werden interpoliert.";
 }
 
 function renderKnowledgePanel() {
@@ -1959,6 +2072,23 @@ renderBoundaries();
 }
 
 function selectYear(year) {
+  const knowledge = getActiveKnowledgeContext();
+  if (knowledge?.network && getKnowledgeSeries(knowledge.network)?.points?.length) {
+    selectedYear = year;
+    timeReadout.textContent = String(year);
+    const point = getKnowledgeSeriesPoint(knowledge.network, year);
+    setKnowledgePointDetails(
+      knowledge.network,
+      knowledge.boundary,
+      knowledge.item,
+      point,
+      point ? null : year
+    );
+    renderKnowledgeTime(knowledge.network);
+    renderKnowledgePanel();
+    return;
+  }
+
   const item = getCurrentItem(); if (!item) return; selectedYear = year;
   const points = getTimePoints(item); const point = points.find(entry => entry.year === year) || null; timeReadout.textContent = String(year);
   if (point) { setDetails(item, point); renderHealth(point.health || item.health || null); updateCauseButtons(item, point); timeStatus.textContent = `${point.label || "Messpunkt"}. Dieser Zeitpunkt ist im Datensatz belegt.`; renderKnowledgePanel(); }
@@ -1966,6 +2096,16 @@ function selectYear(year) {
 }
 
 function setTimeWindow(nextWindow) {
+  const knowledge = getActiveKnowledgeContext();
+  if (knowledge?.network && getKnowledgeSeries(knowledge.network)?.points?.length) {
+    timeWindow = nextWindow;
+    const points = getKnowledgeSeries(knowledge.network).points;
+    selectedYear = Number(points[points.length - 1].year);
+    renderKnowledgeTime(knowledge.network);
+    selectYear(selectedYear);
+    return;
+  }
+
   const item = getCurrentItem(); if (!item) return; timeWindow = nextWindow;
   const points = getTimePoints(item); if (points.length) selectedYear = points[points.length - 1].year; renderTime(item); selectYear(selectedYear);
 }
