@@ -318,5 +318,12 @@
       "access": "open_full_text"
     }
   ],
-  "navigationRule": "Das Modul gehört primär unter Planetare Grenzen → Land-System-Wandel. Es dient zugleich als methodisches Beispiel dafür, wie ZUSTAND zwischen beobachtetem Zustand, Messunsicherheit und Zukunftssimulation unterscheidet."
+  "navigationRule": "Das Modul gehört primär unter Planetare Grenzen → Land-System-Wandel. Es dient zugleich als methodisches Beispiel dafür, wie ZUSTAND zwischen beobachtetem Zustand, Messunsicherheit und Zukunftssimulation unterscheidet.",
+  "presentation": {
+    "compactKnowledgeView": true,
+    "hidePrimaryMeasurementInKnowledgeView": true,
+    "methodPathwayIds": [
+      "path_measurement_uncertainty"
+    ]
+  }
 }

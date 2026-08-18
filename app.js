@@ -1330,13 +1330,21 @@ function renderGenericKnowledgeView(network, indexEntry) {
   const evidence = cards.filter(c => c.displayType === "study_evidence");
   const values = cards.filter(c => c.displayType !== "study_evidence");
 
-  const pathways = deriveGenericPathways(network).map(p => `
+  const methodPathwayIds = new Set(presentation.methodPathwayIds || []);
+  const allGenericPathways = deriveGenericPathways(network);
+  const effectPathways = allGenericPathways.filter(p => !methodPathwayIds.has(p.id));
+  const methodPathways = allGenericPathways.filter(p => methodPathwayIds.has(p.id));
+
+  const renderGenericPathways = paths => paths.map(p => `
     <div class="oil-boundary-link">
       <strong>${p.label || "Wirkungspfad"}</strong>
       <p>${(p.chain || p.path || []).map(x => typeof x === "string" ? x : x.label).filter(Boolean).join(" → ")}</p>
       ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
       ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
     </div>`).join("");
+
+  const pathways = renderGenericPathways(effectPathways);
+  const measurementPaths = renderGenericPathways(methodPathways);
 
   const gaps = (network.knowledgeGaps || []).map(g => `
     <p><strong>${g.question}</strong>
@@ -1374,6 +1382,10 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
       <h3>WIRKUNGSPFADE</h3>
       <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
+      ${measurementPaths ? `
+        <h3>MESSUNG & EINORDNUNG</h3>
+        <div class="oil-boundary-links">${measurementPaths}</div>
+      ` : ""}
 
       ${network.sourcePolicy?.rule ? `<div class="extension-note"><strong>Quellenregel:</strong> ${network.sourcePolicy.rule}</div>` : ""}
 
