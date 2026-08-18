@@ -328,5 +328,12 @@
       "access": "open_full_text"
     }
   ],
-  "navigationRule": "Klimawandel bleibt eine Planetare Grenze. Gesundheitswirkungen werden nur über konkrete Expositionspfade in LEBEN aktiviert."
+  "navigationRule": "Klimawandel bleibt eine Planetare Grenze. Gesundheitswirkungen werden nur über konkrete Expositionspfade in LEBEN aktiviert.",
+  "presentation": {
+    "primaryMeasurementId": "global_temperature_2025",
+    "referenceLabel": "Planetare Grenzvariable: im Pilot noch nicht hinterlegt",
+    "finding": "2025 lag die globale mittlere bodennahe Temperatur nach WMO etwa 1,43 °C über 1850–1900. Das ist ein Kalenderjahreswert und nicht mit dem langfristigen Paris-Erwärmungsniveau gleichzusetzen.",
+    "effectPath": "Globale Erwärmung → Hitzebelastung → Belastung der Thermoregulation → erhöhtes Gesundheitsrisiko",
+    "uncertainty": "WMO konsolidiert mehrere internationale Temperaturdatensätze; einzelne Datensätze unterscheiden sich leicht. Für die planetare Grenze selbst muss die passende Kontrollvariable noch separat hinterlegt werden."
+  }
 }

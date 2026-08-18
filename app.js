@@ -1242,6 +1242,83 @@ function renderTechSocialGroupIntro(group) {
     </div>`;
 }
 
+
+function getKnowledgeSource(network, measurement) {
+  const ids = measurement?.sourceRefs || [];
+  return (network?.sources || []).find(source => ids.includes(source.id)) || null;
+}
+
+function getPrimaryKnowledgeMeasurement(network) {
+  const preferredId = network?.presentation?.primaryMeasurementId;
+  if (preferredId) {
+    const preferred = (network.measurements || []).find(item => item.id === preferredId);
+    if (preferred) return preferred;
+  }
+  return (network?.measurements || []).find(item => item.displayType !== "study_evidence")
+    || (network?.measurements || [])[0]
+    || null;
+}
+
+function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
+  setStandardEffectBlocksVisible(true);
+
+  const measurement = getPrimaryKnowledgeMeasurement(network);
+  const source = getKnowledgeSource(network, measurement);
+  const presentation = network?.presentation || {};
+  const firstEvidence = (network?.studyEvidence || [])[0];
+  const firstPathway = (network?.pathways || [])[0];
+
+  if (focusType) focusType.textContent = `PLANETARE GRENZE · ${activeBoundary?.label || ""}`;
+  if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${activeItem?.label || ""}`;
+  if (focusSummary) focusSummary.textContent =
+    network?.entry?.effectFocus || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
+
+  metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
+  referenceValue.textContent =
+    presentation.referenceLabel || "Referenz / planetare Grenzvariable: im Pilot noch nicht hinterlegt";
+  periodValue.textContent = measurement?.period || "–";
+
+  findingText.textContent =
+    presentation.finding ||
+    measurement?.interpretation ||
+    firstEvidence?.finding ||
+    "–";
+
+  effectPath.textContent =
+    presentation.effectPath ||
+    firstPathway?.label ||
+    (firstPathway?.nodes || firstPathway?.chain || []).join(" → ") ||
+    "–";
+
+  uncertaintyValue.textContent =
+    presentation.uncertainty ||
+    measurement?.uncertainty ||
+    "–";
+
+  lifeNote.textContent = genericHealthReadout(network);
+
+  if (source?.url) {
+    setLink(source.title || source.publisher || "Quelle", source.url);
+  } else {
+    setLink("–", null);
+  }
+
+  // Knowledge-Dateien können Messwerte verschiedener Zeitreihen enthalten.
+  // Bis eine explizite timeseries hinterlegt ist, wird nichts interpoliert.
+  timeSlider.disabled = true;
+  timeSlider.min = "0";
+  timeSlider.max = "1";
+  timeSlider.value = "0";
+  timeMarkers.innerHTML = "";
+  timeReadout.textContent = measurement?.period || "–";
+  timeStatus.textContent = measurement
+    ? "Messwert aus der ausgewählten Knowledge-Datei. Keine Zwischenwerte werden interpoliert."
+    : "Für diese Knowledge-Datei ist noch kein primärer Messwert hinterlegt.";
+
+  renderHealth(network?.healthContext || null);
+  updateCauseButtons(null, null);
+}
+
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -1252,12 +1329,8 @@ function renderKnowledgePanel() {
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
-    if (focusType) focusType.textContent = `PLANETARE GRENZE · ${activeBoundary.label}`;
-    if (focusTitle) focusTitle.textContent = `${activeBoundary.label} · ${activeItem.label}`;
-    if (focusSummary) focusSummary.textContent = network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
-    renderHealth(null);
+    applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
     panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
-    if (organReadout) organReadout.textContent = genericHealthReadout(network);
     panel.hidden = false;
     return;
   }
