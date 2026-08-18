@@ -1496,7 +1496,13 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   const measurement = getPrimaryKnowledgeMeasurement(network);
   const source = getKnowledgeSource(network, measurement);
   metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
-  referenceValue.textContent = presentation.referenceLabel || "–";
+  referenceValue.textContent =
+    presentation.referenceLabel ||
+    measurement?.reference?.display ||
+    measurement?.referenceLabel ||
+    (measurement?.referenceValue != null
+      ? `${measurement.referenceLabel || "Grenze:"} ${measurement.referenceValue} ${measurement.referenceUnit || ""}`.replace("Grenze: Grenze:", "Grenze:").trim()
+      : "–");
   periodValue.textContent = measurement?.period || "–";
   findingText.textContent = presentation.finding || measurement?.interpretation || "–";
   effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
