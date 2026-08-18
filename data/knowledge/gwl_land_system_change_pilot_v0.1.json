@@ -37,7 +37,10 @@
       "sourceRefs": [
         "src_phc_2025_report",
         "src_phc_land_2025"
-      ]
+      ],
+      "referenceValue": 75,
+      "referenceUnit": "%",
+      "referenceLabel": "Grenze: 75 %"
     },
     {
       "id": "biome_forest_boundaries",
