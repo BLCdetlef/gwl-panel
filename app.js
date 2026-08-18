@@ -2210,22 +2210,29 @@ function openOrganOverlay(organId, preserveHidden = false) {
                  ${burden.secondary ? `<small>${burden.secondary}</small>` : ""}`
               : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
             return `
-              <div class="organ-contribution-button">
-                <span><strong>${item.label}</strong></span>
-                <span>Evidenzstufe ${item.evidenceLevel || "–"}</span>
-                ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
-                ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
-                ${burdenHtml}
-                ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
-                ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
-                ${routeBoundary ? `
-                  <button
-                    type="button"
-                    data-life-route-boundary="${routeBoundary}"
-                    data-life-route-item="${routeItem}">
-                    → Ursache im GWL-Panel öffnen
-                  </button>` : ""}
-              </div>`;
+              <details class="organ-contribution-item">
+                <summary class="organ-contribution-summary">
+                  <span class="organ-contribution-summary-title">${item.label}</span>
+                  <span class="organ-contribution-summary-meta">
+                    Evidenz ${item.evidenceLevel || "–"} ·
+                    ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}
+                  </span>
+                </summary>
+                <div class="organ-contribution-body">
+                  ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
+                  ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
+                  ${burdenHtml}
+                  ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
+                  ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+                  ${routeBoundary ? `
+                    <button
+                      type="button"
+                      data-life-route-boundary="${routeBoundary}"
+                      data-life-route-item="${routeItem}">
+                      → Ursache im GWL-Panel öffnen
+                    </button>` : ""}
+                </div>
+              </details>`;
           }).join("")}
         </div>
       </details>`;
@@ -2659,4 +2666,119 @@ initPanel();
     requestAnimationFrame(() => applyMainColumns());
     window.addEventListener("load", applyMainColumns, { once: true });
   }
+})();
+
+
+/* GWL_HEALTH_CONTRIBUTIONS_COLLAPSIBLE_V1 */
+(function installCollapsibleHealthContributions() {
+  if (document.getElementById("gwl-health-contributions-collapsible")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-contributions-collapsible";
+  style.textContent = `
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay,
+    #organOverlayContent,
+    #organOverlayContent * {
+      box-sizing: border-box;
+    }
+
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent.health-contribution-layout {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .organ-contribution-item {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid #d3d3ce;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .organ-contribution-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px 14px;
+      align-items: center;
+      padding: 10px 12px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .organ-contribution-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .organ-contribution-summary::after {
+      content: "＋";
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .organ-contribution-item[open] .organ-contribution-summary::after {
+      content: "−";
+    }
+
+    .organ-contribution-summary-title {
+      min-width: 0;
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-summary-meta {
+      grid-column: 1 / -1;
+      font-size: .78rem;
+      color: #555;
+      line-height: 1.25;
+    }
+
+    .organ-contribution-body {
+      display: grid;
+      gap: 6px;
+      padding: 0 12px 12px;
+      border-top: 1px solid #ecece8;
+      min-width: 0;
+    }
+
+    .organ-contribution-body small,
+    .organ-contribution-body a,
+    .organ-contribution-body button {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-body a {
+      width: fit-content;
+    }
+
+    .organ-contribution-body button {
+      justify-self: start;
+      width: auto;
+      padding: 7px 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: .86rem;
+    }
+  `;
+  document.head.appendChild(style);
 })();
