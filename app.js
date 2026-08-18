@@ -2590,3 +2590,73 @@ initPanel();
   `;
   document.head.appendChild(style);
 })();
+
+
+/* GWL_MAIN_COLUMNS_RIGHT_PRIORITY_V1 */
+(function installRightPriorityMainColumns() {
+  const TARGET = "26% 33% 41%";
+
+  function findHeading(text) {
+    return Array.from(document.querySelectorAll("h1,h2,h3,.panel-title,.section-title"))
+      .find(node => (node.textContent || "").trim().toUpperCase() === text);
+  }
+
+  function directChildUnder(ancestor, node) {
+    let current = node;
+    while (current && current.parentElement !== ancestor) current = current.parentElement;
+    return current;
+  }
+
+  function applyMainColumns() {
+    const groundHeading = findHeading("GRUNDLAGE");
+    const effectHeading = findHeading("WIRKUNG");
+    const lifeHeading = findHeading("LEBEN");
+    if (!groundHeading || !effectHeading || !lifeHeading) return false;
+
+    let ancestor = groundHeading.parentElement;
+    while (ancestor && ancestor !== document.body) {
+      const g = directChildUnder(ancestor, groundHeading);
+      const e = directChildUnder(ancestor, effectHeading);
+      const l = directChildUnder(ancestor, lifeHeading);
+
+      if (g && e && l && g !== e && g !== l && e !== l) {
+        const style = getComputedStyle(ancestor);
+        if (style.display === "grid") {
+          ancestor.style.gridTemplateColumns = TARGET;
+          ancestor.style.setProperty("--gwl-ground-column", "26%");
+          ancestor.style.setProperty("--gwl-effect-column", "33%");
+          ancestor.style.setProperty("--gwl-life-column", "41%");
+          ancestor.classList.add("gwl-right-priority-columns");
+          return true;
+        }
+      }
+      ancestor = ancestor.parentElement;
+    }
+    return false;
+  }
+
+  function installResponsiveRule() {
+    if (document.getElementById("gwl-main-columns-right-priority-style")) return;
+    const style = document.createElement("style");
+    style.id = "gwl-main-columns-right-priority-style";
+    style.textContent = `
+      @media (max-width: 980px) {
+        .gwl-right-priority-columns {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      .gwl-right-priority-columns > * {
+        min-width: 0;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  installResponsiveRule();
+
+  if (!applyMainColumns()) {
+    requestAnimationFrame(() => applyMainColumns());
+    window.addEventListener("load", applyMainColumns, { once: true });
+  }
+})();
