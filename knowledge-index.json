@@ -1,0 +1,99 @@
+{
+  "format": "gwl-knowledge-index",
+  "status": "draft",
+  "systemBoundaries": [
+    {
+      "id": "planetary_boundaries",
+      "label": "Planetare Grenzen",
+      "groups": [
+        {
+          "id": "climate_change",
+          "label": "Klimawandel",
+          "items": [
+            {
+              "id": "global_warming",
+              "label": "Globale Erwärmung",
+              "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "biosphere_integrity",
+          "label": "Biosphärenintegrität",
+          "items": [
+            {
+              "id": "genetic_functional_integrity",
+              "label": "Genetische & funktionelle Integrität",
+              "source": "data/knowledge/gwl_biosphere_integrity_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "land_system_change",
+          "label": "Land-System-Wandel",
+          "items": [
+            {
+              "id": "global_forest_cover",
+              "label": "Globaler Waldzustand",
+              "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json"
+            },
+            {
+              "id": "forest_transition_state",
+              "label": "↳ Waldtransition und Waldzustand",
+              "source": "data/knowledge/gwl_land_system_lippe_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "nutrient_cycles",
+          "label": "Nährstoffkreisläufe",
+          "items": [
+            {
+              "id": "nitrogen",
+              "label": "Stickstoff",
+              "source": "data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json"
+            },
+            {
+              "id": "phosphorus",
+              "label": "Phosphor",
+              "source": "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eah_tech_social_environment",
+      "label": "Technologische & soziale Umwelt",
+      "groups": [
+        {
+          "id": "digital_environment",
+          "label": "Digitale Umwelt",
+          "items": [
+            {
+              "id": "screen_device_use",
+              "label": "Bildschirm- & Gerätenutzung",
+              "source": "data/knowledge/gwl_digital_sleep_pilot_v0.1.json"
+            },
+            {
+              "id": "gaming",
+              "label": "Gaming",
+              "source": "data/knowledge/gwl_gaming_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "information_environment",
+          "label": "Informationsumwelt",
+          "items": [
+            {
+              "id": "disinformation",
+              "label": "Desinformation",
+              "source": "data/knowledge/gwl_disinformation_pilot_v0.1.json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
