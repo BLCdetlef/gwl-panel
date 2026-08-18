@@ -1050,7 +1050,14 @@ function syncKnowledgeNavigationFromIndex() {
       }));
       if (!indexedItems.length) continue;
 
-      const existing = (boundary.items || []).filter(item => !item.knowledgeSource);
+      // Der Knowledge-Index ist für gleichnamige Unterpunkte die maßgebliche Quelle.
+      // Bereits fest programmierte Legacy-Einträge mit derselben ID werden ersetzt,
+      // statt zusätzlich neben dem Index-Eintrag stehen zu bleiben.
+      const indexedIds = new Set(indexedItems.map(item => normalizeKnowledgeId(item.id)));
+      const existing = (boundary.items || []).filter(item =>
+        !item.knowledgeSource &&
+        !indexedIds.has(normalizeKnowledgeId(item.id))
+      );
       boundary.items = [...existing, ...indexedItems];
       boundary.enabled = true;
     }
