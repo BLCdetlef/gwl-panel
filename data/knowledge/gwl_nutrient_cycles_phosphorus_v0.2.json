@@ -247,22 +247,22 @@
   "sources": [
     {
       "id": "src_phc_2025",
-      "title": "Planetary Health Check 2025 – Modification of Biogeochemical Flows",
+      "title": "Planetary Health Check 2025",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Planetary Health Check",
+      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
       "year": 2025,
       "type": "current_planetary_boundaries_assessment",
-      "url": "https://www.planetaryhealthcheck.org/wp-content/uploads/PlanetaryHealthCheck2025.pdf",
+      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
       "access": "open_full_text"
     },
     {
       "id": "src_phc_web_2025",
-      "title": "Modification of Biogeochemical Flows",
+      "title": "Planetary Health Check 2025 – archived open report",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Planetary Health Check",
+      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
       "year": 2025,
       "type": "official_boundary_information",
-      "url": "https://www.planetaryhealthcheck.org/boundary/modification-of-biogeochemical-flows/",
+      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
       "access": "open_full_text"
     }
   ],
