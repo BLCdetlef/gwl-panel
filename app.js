@@ -2212,6 +2212,7 @@ function openOrganOverlay(organId, preserveHidden = false) {
             return `
               <details class="organ-contribution-item">
                 <summary class="organ-contribution-summary">
+                  <span class="organ-contribution-icon" data-icon="${gwlHealthIconKey(item)}">${gwlHealthIconSvg(gwlHealthIconKey(item))}</span>
                   <span class="organ-contribution-summary-title">${item.label}</span>
                   <span class="organ-contribution-summary-meta">
                     Evidenz ${item.evidenceLevel || "–"} ·
@@ -2778,6 +2779,140 @@ initPanel();
       cursor: pointer;
       font: inherit;
       font-size: .86rem;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_HEALTH_ICON_SYSTEM_V1 */
+function gwlHealthIconKey(item = {}) {
+  const text = `${item.label || ""} ${item.exposure?.path || ""} ${item.healthEndpoint || ""}`.toLowerCase();
+  if (/(hitze|heat|dehydrat|temperatur)/.test(text)) return "heat";
+  if (/(pfas|pfoa|pfos|chem|stoff)/.test(text)) return "chemical-pfas";
+  return "unknown";
+}
+
+function gwlHealthIconSvg(key) {
+  const common = `viewBox="0 0 32 32" width="30" height="30" aria-hidden="true" focusable="false"`;
+  if (key === "heat") {
+    return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 5a3 3 0 0 1 6 0v13.1a6 6 0 1 1-6 0V5Z"/>
+      <path d="M16 8v13"/><path d="M23 7h4M23 12h3M5 7h4M6 12h3"/>
+      <circle cx="16" cy="24" r="2.5" fill="currentColor" stroke="none"/>
+    </svg>`;
+  }
+  if (key === "chemical-pfas") {
+    return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="7" cy="16" r="3"/><circle cx="15" cy="8" r="3"/><circle cx="24" cy="12" r="3"/>
+      <circle cx="17" cy="22" r="3"/><circle cx="27" cy="24" r="2.5"/>
+      <path d="M9.5 14 12.7 10.4M17.8 8.9l3.3 1.7M9.8 17.5l4.5 3M19.8 20.9l4.8 2M17.5 11l-.2 8"/>
+    </svg>`;
+  }
+  return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="16" cy="16" r="11"/><path d="M13 12a3.5 3.5 0 0 1 6.5 1.8c0 3-3.5 3.1-3.5 6"/><path d="M16 24h.01"/>
+  </svg>`;
+}
+
+
+/* GWL_HEALTH_CARDS_VISUAL_LANGUAGE_V1 */
+(function installHealthCardVisualLanguage() {
+  if (document.getElementById("gwl-health-cards-visual-language")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-cards-visual-language";
+  style.textContent = `
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      gap: 7px !important;
+    }
+
+    .organ-contribution-item {
+      background: #f7f7f5 !important;
+      border-color: #d8d8d3 !important;
+      border-radius: 9px !important;
+    }
+
+    .organ-contribution-summary {
+      display: grid !important;
+      grid-template-columns: 36px minmax(0, 1fr) minmax(125px, 28%) 18px !important;
+      grid-template-rows: auto auto !important;
+      column-gap: 10px !important;
+      row-gap: 2px !important;
+      min-height: 54px !important;
+      padding: 7px 10px !important;
+      align-items: center !important;
+    }
+
+    .organ-contribution-summary::after {
+      grid-column: 4 !important;
+      grid-row: 1 / 3 !important;
+      align-self: center;
+      justify-self: center;
+      content: "⌄" !important;
+      font-size: 1.05rem !important;
+      font-weight: 700;
+    }
+
+    .organ-contribution-item[open] .organ-contribution-summary::after {
+      content: "⌃" !important;
+    }
+
+    .organ-contribution-icon {
+      grid-column: 1 !important;
+      grid-row: 1 / 3 !important;
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: #555;
+    }
+
+    .organ-contribution-icon[data-icon="heat"] {
+      color: #b65b18;
+    }
+
+    .organ-contribution-icon[data-icon="chemical-pfas"] {
+      color: #6b58a8;
+    }
+
+    .organ-contribution-summary-title {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      font-size: .9rem !important;
+      line-height: 1.18 !important;
+    }
+
+    .organ-contribution-summary-meta {
+      grid-column: 2 / 4 !important;
+      grid-row: 2 !important;
+      font-size: .71rem !important;
+      line-height: 1.15 !important;
+      color: #62625d !important;
+    }
+
+    .organ-contribution-summary-meta::first-letter {
+      text-transform: uppercase;
+    }
+
+    .organ-contribution-body {
+      background: #fbfbfa;
+      padding: 8px 12px 10px 48px !important;
+      gap: 5px !important;
+      font-size: .84rem;
+    }
+
+    @media (max-width: 560px) {
+      .organ-contribution-summary {
+        grid-template-columns: 34px minmax(0, 1fr) 18px !important;
+      }
+      .organ-contribution-summary-meta {
+        grid-column: 2 !important;
+      }
+      .organ-contribution-summary::after {
+        grid-column: 3 !important;
+      }
+      .organ-contribution-body {
+        padding-left: 10px !important;
+      }
     }
   `;
   document.head.appendChild(style);
