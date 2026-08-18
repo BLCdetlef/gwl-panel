@@ -100,12 +100,19 @@ async function loadKnowledgeNetworks() {
     await loadSource(key, url);
   }
 
-  // Regionale Vertiefungen bleiben bewusst außerhalb des zentralen Grundlagen-Index.
-  // Sie werden zusätzlich geladen und unter festen Schlüsseln bereitgestellt.
-  // So kann der Index die globale PG-Grundlage liefern, ohne die vorhandenen
-  // Wirkungs-/Regionaldaten (Nitrat, Phosphor) zu verdrängen.
-  await loadSource("nitrate", "knowledge/gwl_nitrat_pilot_v0.2.json");
-  await loadSource("phosphorus", "knowledge/gwl_phosphor_pilot_v0.1.json");
+  // Regionale Vertiefungen bleiben eigenständige Knowledge-Dateien.
+  // Sie stehen bewusst nicht als globale Grundlagenwerte im Index, werden aber
+  // für die hierarchische Navigation unter Stickstoff/Phosphor geladen.
+  const nutrientDepthSources = {
+    nutrientDepthNitrate: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
+    nutrientDepthPhosphorus: "data/knowledge/gwl_phosphor_pilot_v0.1.json"
+  };
+  for (const [key, url] of Object.entries(nutrientDepthSources)) {
+    if (!Object.values(data.knowledgeSources).includes(url)) {
+      data.knowledgeSources[key] = url;
+    }
+    await loadSource(key, url);
+  }
 
   // Danach alle im Index referenzierten Knowledge-Dateien automatisch entdecken.
   // Neue Themen brauchen damit künftig keinen zusätzlichen Eintrag in data.js.
@@ -1045,7 +1052,7 @@ function syncKnowledgeNavigationFromIndex() {
     for (const group of indexBoundary.groups || []) {
       const boundary = findDataBoundaryForIndexGroup(indexBoundary, group);
       if (!boundary) continue;
-      const indexedItems = (group.items || []).map(item => ({
+      let indexedItems = (group.items || []).map(item => ({
         id: normalizeKnowledgeId(item.id),
         scope: "all",
         label: item.label,
@@ -1056,6 +1063,47 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeBoundaryId: indexBoundary.id
       }));
       if (!indexedItems.length) continue;
+
+      // Nährstoffkreisläufe erhalten dieselbe sichtbare Hierarchie wie die
+      // Technologische & soziale Umwelt: Grundlagenknoten + eingerückte Vertiefung.
+      if (boundary.id === "nutrients") {
+        const nestedItems = [];
+        for (const item of indexedItems) {
+          nestedItems.push(item);
+
+          const label = String(item.label || "").toLowerCase();
+          const id = normalizeKnowledgeId(item.id);
+
+          if (label.includes("stickstoff") || id.includes("nitrogen") || id.includes("stickstoff")) {
+            nestedItems.push({
+              id: "nitrat-im-grundwasser",
+              scope: "all",
+              label: "↳ Nitrat im Grundwasser",
+              enabled: true,
+              knowledgeSource: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
+              knowledgeItemId: "nitrat_im_grundwasser",
+              knowledgeGroupId: group.id,
+              knowledgeBoundaryId: indexBoundary.id,
+              depthOf: item.id
+            });
+          }
+
+          if (label.includes("phosphor") || id.includes("phosphorus") || id.includes("phosphor")) {
+            nestedItems.push({
+              id: "oberflaechenwasser-eutrophierung",
+              scope: "all",
+              label: "↳ Oberflächengewässer / Eutrophierung",
+              enabled: true,
+              knowledgeSource: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
+              knowledgeItemId: "oberflaechenwasser_eutrophierung",
+              knowledgeGroupId: group.id,
+              knowledgeBoundaryId: indexBoundary.id,
+              depthOf: item.id
+            });
+          }
+        }
+        indexedItems = nestedItems;
+      }
 
       // Der Knowledge-Index ist für gleichnamige Unterpunkte die maßgebliche Quelle.
       // Bereits fest programmierte Legacy-Einträge mit derselben ID werden ersetzt,
@@ -1351,7 +1399,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   const measurement = getPrimaryKnowledgeMeasurement(network);
   const source = getKnowledgeSource(network, measurement);
   metricValue.textContent = measurement?.display || measurementValue(measurement) || "–";
-  referenceValue.textContent = measurement?.reference?.display || presentation.referenceLabel || "–";
+  referenceValue.textContent = presentation.referenceLabel || "–";
   periodValue.textContent = measurement?.period || "–";
   findingText.textContent = presentation.finding || measurement?.interpretation || "–";
   effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
@@ -1455,83 +1503,6 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeStatus.textContent = "Noch keine Zeitreihe hinterlegt. Angezeigt wird der Stand der Grundlagenstudie.";
 }
 
-
-function renderNutrientDepthConnections(activeItem) {
-  if (!activeItem || selectedBoundaryId !== "nutrients") return "";
-
-  // Der zentrale Index darf seine eigenen stabilen IDs verwenden. Für die
-  // Vertiefung erkennen wir Stickstoff/Phosphor deshalb nicht nur an der ID,
-  // sondern auch an Label und Quelldatei. Das entkoppelt die Darstellung von
-  // einer zufälligen Benennung im knowledge-index.json.
-  const nutrientIdentity = [
-    activeItem.id,
-    activeItem.label,
-    activeItem.knowledgeItemId,
-    activeItem.knowledgeSource
-  ].filter(Boolean).join(" ").toLowerCase();
-
-  const isNitrogen = nutrientIdentity.includes("nitrogen") || nutrientIdentity.includes("stickstoff");
-  const isPhosphorus = nutrientIdentity.includes("phosphorus") || nutrientIdentity.includes("phosphor");
-
-  if (isNitrogen) {
-    return `
-      <section class="connections-panel nutrient-depth-connections">
-        <div class="connections-head">
-          <div>
-            <div class="eyebrow">VERTIEFUNG · REGIONALER WIRKUNGSPFAD</div>
-            <h2>Von der globalen Stickstoffgrenze zum Nitrat im Grundwasser</h2>
-            <p>
-              Die globale Grundlagen-Knowledge beschreibt den Zustand der planetaren Grenze.
-              Diese vorhandene Knowledge-Datei vertieft einen konkreten Pfad für Deutschland.
-            </p>
-          </div>
-        </div>
-        <div class="connection-list">
-          ${renderKnowledgeCard({
-            key: "nitrate",
-            network: knowledgeNetworks.nitrate,
-            eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF · VERTIEFUNG",
-            title: "Stickstoff → Nitrat im Grundwasser",
-            intro: "Regionaler Wirkungspfad über Stickstoffüberschuss, Auswaschung und Nitrat im Grundwasser. Die dortigen Messwerte ersetzen nicht den globalen Zustandswert der planetaren Grenze.",
-            chain: ["globale Stickstoffgrenze","Stickstoffüberschuss","Auswaschung","Nitrat im Grundwasser","Trinkwasser","LEBEN"],
-            previewMeasurements: ["de_n_surplus","de_groundwater_2024"],
-            interactionField: "interactions"
-          })}
-        </div>
-      </section>`;
-  }
-
-  if (isPhosphorus) {
-    return `
-      <section class="connections-panel nutrient-depth-connections">
-        <div class="connections-head">
-          <div>
-            <div class="eyebrow">VERTIEFUNG · REGIONALER WIRKUNGSPFAD</div>
-            <h2>Von der globalen Phosphorgrenze zur Eutrophierung von Oberflächengewässern</h2>
-            <p>
-              Die globale Grundlagen-Knowledge beschreibt den Zustand der planetaren Grenze.
-              Diese vorhandene Knowledge-Datei vertieft einen konkreten Pfad für Deutschland.
-            </p>
-          </div>
-        </div>
-        <div class="connection-list">
-          ${renderKnowledgeCard({
-            key: "phosphorus",
-            network: knowledgeNetworks.phosphorus,
-            eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR · VERTIEFUNG",
-            title: "Phosphor → Oberflächenwasser → Eutrophierung",
-            intro: "Regionaler Wirkungspfad über Phosphoreinträge in Oberflächengewässer. Die dortigen Messwerte ersetzen nicht den globalen Zustandswert der planetaren Grenze.",
-            chain: ["globale Phosphorgrenze","Phosphoreintrag","Oberflächenwasser","Eutrophierung","aquatische Ökosysteme","LEBEN"],
-            previewMeasurements: ["de_river_p_exceedance","de_river_p_orientation_values"],
-            interactionField: "boundaryInteractions"
-          })}
-        </div>
-      </section>`;
-  }
-
-  return "";
-}
-
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
@@ -1540,21 +1511,11 @@ function renderKnowledgePanel() {
   const activeBoundary = getBoundary(state.boundaryId);
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
-    // Index-gesteuerte Grundlagenmodule benutzen die Standard-WIRKUNG-Ansicht.
-    document.body.classList.remove("nutrient-mode");
-
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
-
-    // Erst die Inhalte im unteren Knowledge-Bereich aufbauen.
-    panel.innerHTML =
-      renderGenericKnowledgeView(network, indexEntry) +
-      renderNutrientDepthConnections(activeItem);
-    panel.hidden = false;
-
-    // Danach die kompakte WIRKUNG-Ansicht setzen; so bleibt die funktionierende
-    // globale Grundlagenanzeige unangetastet und die Vertiefung erscheint nur darunter.
     applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+    panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
+    panel.hidden = false;
     return;
   }
 
