@@ -2436,8 +2436,8 @@ initPanel();
     .organ-overlay,
     #organOverlay,
     .organ-detail-overlay {
-      width: min(680px, calc(100vw - 32px)) !important;
-      max-width: min(680px, calc(100vw - 32px)) !important;
+      width: min(600px, calc(100% - 12px)) !important;
+      max-width: min(600px, calc(100% - 12px)) !important;
     }
 
     .organ-overlay-card,
@@ -2913,6 +2913,56 @@ function gwlHealthIconSvg(key) {
       .organ-contribution-body {
         padding-left: 10px !important;
       }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_ORGAN_OVERLAY_CONTAINMENT_V1 */
+(function installOrganOverlayContainment() {
+  if (document.getElementById("gwl-organ-overlay-containment")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-organ-overlay-containment";
+  style.textContent = `
+    .bodymap-panel,
+    .bodymap-panel > *,
+    #organOverlay,
+    #organOverlayContent,
+    #organOverlayContent > * {
+      min-width: 0 !important;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .bodymap-panel {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlay {
+      width: min(600px, calc(100% - 12px)) !important;
+      max-width: min(600px, calc(100% - 12px)) !important;
+      overflow-x: hidden !important;
+      margin-left: auto;
+      margin-right: 6px;
+    }
+
+    #organOverlayContent {
+      width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent img {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .organ-contribution-summary,
+    .organ-contribution-body,
+    .organ-prototype-warning,
+    .organ-context-details {
+      min-width: 0 !important;
+      max-width: 100% !important;
     }
   `;
   document.head.appendChild(style);
