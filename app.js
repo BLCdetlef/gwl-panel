@@ -1058,7 +1058,12 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeItemId: item.id,
         knowledgeGroupId: group.id,
         knowledgeBoundaryId: indexBoundary.id,
-        depthOf: item.depthOf || null
+        depthOf: item.depthOf || (
+          boundary.id === "land-use" &&
+          /waldtransition/i.test(String(item.label || ""))
+            ? "globaler-waldzustand"
+            : null
+        )
       }));
       if (!indexedItems.length) continue;
 
