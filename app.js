@@ -1521,11 +1521,25 @@ function renderKnowledgePanel() {
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
-    applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
     panel.innerHTML =
       renderGenericKnowledgeView(network, indexEntry) +
       renderNutrientDepthConnections(activeItem);
     panel.hidden = false;
+
+    // Erst nach dem Aufbau der generischen Knowledge-Ansicht die kompakten
+    // WIRKUNG-Felder setzen. Das verhindert, dass ältere boundary-spezifische
+    // Renderzustände (insbesondere Nährstoffkreisläufe) die Werte wieder leeren.
+    applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+
+    // Ein zweiter Abgleich im nächsten Browser-Frame stabilisiert den Übergang
+    // von Legacy-Ansichten zu indexgesteuerten Grundlagenmodulen.
+    const expectedBoundaryId = state.boundaryId;
+    const expectedItemId = state.itemId;
+    requestAnimationFrame(() => {
+      const current = getActiveViewState();
+      if (current.boundaryId !== expectedBoundaryId || current.itemId !== expectedItemId) return;
+      applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
+    });
     return;
   }
 
