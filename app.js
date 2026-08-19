@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.24 · B06";
+const GWL_BUILD_VERSION = "0.9.24 · B07";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -284,10 +284,22 @@ function syncFreshwaterBlueGreenNavigation() {
   const boundary = data.boundaries.find(item => item.id === "freshwater");
   if (!boundary) return;
 
-  const keep = (boundary.items || []).filter(item =>
-    item.id !== "blue-water-streamflow" &&
-    item.id !== "green-water-rootzone-soil-moisture"
-  );
+  const freshwaterControlLabels = new Set([
+    "blaues wasser · abfluss",
+    "grünes wasser · bodenfeuchte"
+  ]);
+
+  const keep = (boundary.items || []).filter(item => {
+    const id = normalizeKnowledgeId(item.id);
+    const label = String(item.label || "").trim().toLowerCase();
+
+    const isBlueGreenControl =
+      id === "blue-water-streamflow" ||
+      id === "green-water-rootzone-soil-moisture" ||
+      freshwaterControlLabels.has(label);
+
+    return !isBlueGreenControl;
+  });
 
   const freshwaterItems = [
     {
