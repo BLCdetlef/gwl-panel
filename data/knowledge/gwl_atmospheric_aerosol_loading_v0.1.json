@@ -1,0 +1,210 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Atmosphärische Aerosolbelastung / interhemisphärische AOD-Differenz",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Atmosphärische Aerosolbelastung",
+    "subComponent": "Interhemisphärische Differenz der Aerosol Optical Depth",
+    "effectFocus": "Wie die ungleiche Verteilung atmosphärischer Partikel zwischen Nord- und Südhalbkugel Strahlungsbilanz, Wolken, Niederschlagsmuster und regionale Klimasysteme beeinflussen kann"
+  },
+  "corePrinciples": [
+    "Die globale Kontrollvariable ist die Differenz der Aerosol Optical Depth (AOD) zwischen Nord- und Südhalbkugel, nicht die lokale Feinstaubkonzentration.",
+    "AOD beschreibt, wie stark Aerosole Licht in der gesamten Atmosphärensäule streuen oder absorbieren; sie unterscheidet nicht unmittelbar zwischen chemischen Bestandteilen oder gesundheitlicher Gefährlichkeit.",
+    "Der Planetary Health Check 2025 bewertet eine interhemisphärische Differenz von 0,063 gegenüber einer Grenze von 0,10 als innerhalb des sicheren Handlungsbereichs.",
+    "Der globale sichere Status schließt starke regionale Überschreitungen, Gesundheitsbelastungen und klimatische Wirkungen nicht aus.",
+    "Sinkende Aerosolbelastung verbessert Luftqualität und Gesundheit, kann aber zugleich die bisher verdeckte Erwärmungswirkung von Treibhausgasen stärker sichtbar werden lassen."
+  ],
+  "nodes": [
+    { "id": "pb_atmospheric_aerosol_loading", "type": "domain_component", "label": "Atmosphärische Aerosolbelastung" },
+    { "id": "activity_combustion_industry", "type": "human_activity", "label": "Verbrennung fossiler Brennstoffe und Biomasse sowie industrielle Aktivitäten" },
+    { "id": "pressure_aerosol_emissions", "type": "environmental_pressure", "label": "Emission von Sulfaten, Ruß und organischen Partikeln" },
+    { "id": "state_interhemispheric_aod", "type": "environmental_state", "label": "Interhemisphärische AOD-Differenz" },
+    { "id": "mechanism_radiation_clouds", "type": "mechanism", "label": "Streuung und Absorption von Strahlung sowie Veränderung von Wolken" },
+    { "id": "effect_climate_hydrology", "type": "environmental_effect", "label": "Veränderte regionale Temperatur- und Niederschlagsmuster" },
+    { "id": "pressure_regional_pm25", "type": "environmental_pressure", "label": "Regionale PM2,5- und Luftschadstoffbelastung" },
+    { "id": "life_health_risk", "type": "life_outcome", "label": "Gesundheitsrisiken durch konkrete regionale Feinstaubexposition" }
+  ],
+  "edges": [
+    { "from": "pb_atmospheric_aerosol_loading", "to": "state_interhemispheric_aod", "relationType": "measured_by", "evidenceStatus": "strong" },
+    { "from": "activity_combustion_industry", "to": "pressure_aerosol_emissions", "relationType": "contributes_to", "evidenceStatus": "strong" },
+    { "from": "pressure_aerosol_emissions", "to": "state_interhemispheric_aod", "relationType": "influences", "evidenceStatus": "strong" },
+    { "from": "state_interhemispheric_aod", "to": "mechanism_radiation_clouds", "relationType": "indicates_imbalance_in", "evidenceStatus": "strong" },
+    { "from": "mechanism_radiation_clouds", "to": "effect_climate_hydrology", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "pressure_aerosol_emissions", "to": "pressure_regional_pm25", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "pressure_regional_pm25", "to": "life_health_risk", "relationType": "can_contribute_to", "evidenceStatus": "strong" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "planetary_health_check_2025_aerosols",
+      "sourceRefs": ["src_phc_2025_aerosols", "src_cams_eac4"],
+      "design": "Aktuelle Bewertung der planetaren Grenze auf Basis der CAMS-EAC4-Reanalyse; Vergleich der mittleren AOD zwischen 60° N und 60° S als gleitendes Fünfjahresmittel für 2003–2024.",
+      "finding": "Die interhemisphärische AOD-Differenz liegt 2025 bei 0,063 und damit unterhalb der planetaren Grenze von 0,10. Seit 2010 nimmt die Differenz ab und bewegt sich weiter in den sicheren Bereich.",
+      "relationType": "current_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "richardson_2023_aerosols",
+      "sourceRefs": ["src_richardson_2023"],
+      "design": "Globale Aktualisierung des Planetary-Boundaries-Rahmens einschließlich einer Kontrollvariable für die interhemisphärische AOD-Differenz und einer regionalen Betrachtung.",
+      "finding": "Die globale Kontrollvariable wurde 2023 mit 0,076 innerhalb der Grenze von 0,10 eingeordnet; zugleich können regionale Aerosolbelastungen deutlich außerhalb sicherer Bereiche liegen.",
+      "relationType": "previous_global_assessment",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "aerosol_interhemispheric_aod_difference_2025",
+      "node": "state_interhemispheric_aod",
+      "geography": "Global, Nord- gegenüber Südhalbkugel zwischen 60° N und 60° S",
+      "period": "Stand Planetary Health Check 2025; Datenbasis 2003–2024",
+      "metric": "Interhemisphärische Differenz der Aerosol Optical Depth",
+      "value": 0.063,
+      "unit": "ΔAOD (dimensionslos)",
+      "display": "ΔAOD 0,063",
+      "reference": {
+        "type": "baseline_and_planetary_boundary",
+        "baselineValue": 0.04,
+        "boundaryValue": 0.1,
+        "highRiskValue": 0.25,
+        "unit": "ΔAOD",
+        "display": "Referenz: 0,04 · Planetare Grenze: 0,10"
+      },
+      "uncertainty": "Die globale Differenz ist ein grober Indikator für die hemisphärische Verteilung und erfasst weder regionale Hotspots noch Zusammensetzung, bodennahe PM2,5-Exposition oder gegensätzliche Erwärmungs- und Kühlwirkungen einzelner Aerosolarten vollständig.",
+      "interpretation": "Der Wert liegt unterhalb der planetaren Grenze und damit im sicheren Handlungsbereich der globalen Kontrollvariable. Daraus folgt keine Entwarnung für regionale Luftverschmutzung.",
+      "sourceRefs": ["src_phc_2025_aerosols", "src_cams_eac4"],
+      "displayType": "control_variable"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "aerosol_interhemispheric_aod_difference_2025",
+    "referenceLabel": "Referenz: 0,04 · Planetare Grenze: 0,10",
+    "finding": "Die interhemisphärische AOD-Differenz liegt bei 0,063 und damit unter der planetaren Grenze von 0,10. Die globale Kontrollvariable befindet sich im sicheren Bereich und entwickelt sich derzeit in Richtung niedrigerer Werte.",
+    "effectPath": "Verbrennung und Industrie → Aerosolemissionen → ungleiche atmosphärische Verteilung → veränderte Strahlungs-, Wolken- und Niederschlagsprozesse",
+    "uncertainty": "Die Kontrollvariable bildet eine globale hemisphärische Asymmetrie ab. Sie ist weder ein globaler Feinstaub-Gesundheitswert noch eine vollständige Bewertung regionaler Klima- und Luftqualitätsrisiken.",
+    "statusYear": 2025,
+    "statusLabel": "Planetary Health Check 2025"
+  },
+  "pathways": [
+    {
+      "id": "path_aerosols_climate_hydrology",
+      "label": "Verbrennung und Industrie → Aerosolemissionen → veränderte AOD-Verteilung → Strahlungs- und Wolkenprozesse → regionale Klima- und Niederschlagswirkungen",
+      "nodes": ["activity_combustion_industry", "pressure_aerosol_emissions", "state_interhemispheric_aod", "mechanism_radiation_clouds", "effect_climate_hydrology"],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_regional_air_pollution_health",
+      "label": "Verbrennung und Industrie → regionale PM2,5-Belastung → konkrete Exposition → Gesundheitsrisiken",
+      "nodes": ["activity_combustion_industry", "pressure_aerosol_emissions", "pressure_regional_pm25", "life_health_risk"],
+      "evidenceStatus": "strong",
+      "scopeNote": "Dieser regionale Expositionspfad ist fachlich relevant, aber nicht aus dem globalen ΔAOD-Wert allein quantifizierbar."
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Klimawandel",
+      "relation": "Sulfataerosole wirken überwiegend kühlend, Ruß beziehungsweise Black Carbon überwiegend erwärmend. Sinkende Aerosolbelastung verbessert die Luftqualität, kann aber einen Teil der durch Aerosole verdeckten Treibhauserwärmung sichtbar machen."
+    },
+    {
+      "boundary": "Süßwasser",
+      "relation": "Aerosole können Wolkenbildung, Monsune und regionale Niederschlagsmuster beeinflussen und damit Wasserverfügbarkeit und Abfluss verändern."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "Veränderte Strahlungs- und Niederschlagsbedingungen sowie die Ablagerung von Partikeln und Nährstoffen können Ökosysteme regional beeinflussen."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_control_variable",
+    "systemImpacts": [],
+    "bodymapRule": "Aus der globalen interhemisphärischen ΔAOD-Kontrollvariable keine Organmarker ableiten. Atemwegs- und Herz-Kreislauf-Bezüge benötigen regionale PM2,5- oder Schadstoffmessungen, Expositionsdaten und eigene Gesundheitsquellen."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_aerosol_timeseries",
+      "question": "Welche exakt reproduzierbare, offen bereitgestellte Reihe der jährlichen beziehungsweise gleitenden interhemisphärischen ΔAOD-Werte soll aus CAMS EAC4 in den Panel-Regler übernommen werden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_regional_control",
+      "question": "Wie lassen sich regionale aerosolbedingte Klima- und Niederschlagsrisiken ergänzend darstellen, ohne sie mit der globalen interhemisphärischen Kontrollvariable zu vermischen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_health_separation",
+      "question": "Welche regionalen PM2,5-Messreihen und Expositionsdaten eignen sich für eine eigenständige Gesundheitsvertiefung?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "methodNote": "Maßnahmen zur Luftreinhaltung sind fachlich geboten, müssen aber gemeinsam mit schneller Treibhausgasminderung betrachtet werden, damit wegfallende Aerosolkühlung nicht isoliert bewertet wird.",
+    "dimensions": [
+      {
+        "id": "clean_combustion",
+        "label": "Aerosol- und Vorläuferemissionen senken",
+        "level": "hoch",
+        "rationale": "Saubere Energie, Industrie und Verbrennung reduzieren regionale Luftverschmutzung und Aerosolbelastung."
+      },
+      {
+        "id": "co2_parallel",
+        "label": "CO₂ gleichzeitig schnell reduzieren",
+        "level": "sehr hoch",
+        "rationale": "Mit abnehmenden kühlenden Aerosolen muss die Treibhausgaswirkung umso konsequenter begrenzt werden."
+      },
+      {
+        "id": "regional_monitoring",
+        "label": "Regionale Zusammensetzung und Exposition beobachten",
+        "level": "hoch",
+        "rationale": "Globale ΔAOD-Werte ersetzen keine regionale Beobachtung von AOD, PM2,5, Black Carbon und klimatischen Wirkungen."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_phc_2025_aerosols",
+      "title": "Planetary Health Check 2025 – Increase in Atmospheric Aerosol Loading",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/increase-in-atmospheric-aerosol-loading/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_cams_eac4",
+      "title": "CAMS global reanalysis (EAC4)",
+      "authors": "Copernicus Atmosphere Monitoring Service / ECMWF",
+      "publisher": "Copernicus Atmosphere Data Store",
+      "year": 2025,
+      "type": "global_atmospheric_composition_reanalysis_dataset",
+      "url": "https://ads.atmosphere.copernicus.eu/datasets/cams-global-reanalysis-eac4?tab=overview",
+      "access": "open_data",
+      "temporalCoverage": "2003–2025"
+    },
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://doi.org/10.1126/sciadv.adh2458",
+      "doi": "10.1126/sciadv.adh2458",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Aerosole",
+    "item": "Interhemisphärische AOD-Differenz",
+    "type": "control"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Die Quelle zeigt ein gleitendes Fünfjahresmittel für 2003–2024, aber in dieser ersten Datei ist noch keine vollständig reproduzierte numerische Reihe aus dem CAMS-EAC4-Datensatz hinterlegt.",
+    "panelRule": "Keinen Zeitregler anzeigen. Nur den belegten Statuswert 2025 darstellen."
+  }
+}

@@ -93,6 +93,30 @@
           ]
         },
         {
+          "id": "atmospheric_aerosol_loading",
+          "label": "Aerosole",
+          "items": [
+            {
+              "id": "interhemispheric_aod_difference",
+              "label": "Interhemisphärische AOD-Differenz",
+              "type": "control",
+              "source": "data/knowledge/gwl_atmospheric_aerosol_loading_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "stratospheric_ozone_depletion",
+          "label": "Stratosphärisches Ozon",
+          "items": [
+            {
+              "id": "global_stratospheric_ozone",
+              "label": "Globale Ozonkonzentration",
+              "type": "control",
+              "source": "data/knowledge/gwl_stratospheric_ozone_depletion_v0.1.json"
+            }
+          ]
+        },
+        {
           "id": "novel_entities",
           "label": "Neue Substanzen",
           "items": [

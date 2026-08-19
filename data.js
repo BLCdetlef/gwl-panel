@@ -268,8 +268,8 @@ window.GWL_DATA = {
       ]
     },
     { id: "ocean", label: "Ozeanversauerung", enabled: true },
-    { id: "aerosols", label: "Aerosole", enabled: false },
-    { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
+    { id: "aerosols", label: "Aerosole", enabled: true },
+    { id: "ozone", label: "Stratosphärisches Ozon", enabled: true },
     {
       id: "novel",
       label: "Neue Substanzen",

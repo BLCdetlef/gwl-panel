@@ -1,0 +1,218 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Stratosphärischer Ozonabbau / globale mittlere Ozonkonzentration",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Stratosphärischer Ozonabbau",
+    "subComponent": "Globale mittlere stratosphärische Ozonkonzentration",
+    "effectFocus": "Wie ozonabbauende Stoffe die stratosphärische Ozonschicht schwächen, dadurch mehr ultraviolette Strahlung die Erdoberfläche erreicht und internationale Regulierung eine langsame Erholung ermöglicht"
+  },
+  "corePrinciples": [
+    "Die Kontrollvariable ist die globale mittlere stratosphärische Ozonkonzentration in Dobson Units (DU).",
+    "Niedrigere DU-Werte bedeuten eine dünnere Ozonschicht und einen schlechteren Zustand; die Leserichtung ist daher gegenüber vielen Belastungsgrößen umgekehrt.",
+    "Der Planetary Health Check 2025 weist 285,7 DU gegenüber einer planetaren Grenze von 277 DU und einer Referenz von 292 DU aus.",
+    "Der globale Mittelwert liegt im sicheren Bereich, bildet aber das saisonale antarktische Ozonloch und regionale Unterschiede nicht vollständig ab.",
+    "Das Montrealer Protokoll hat den Großteil der kontrollierten ozonabbauenden Stoffe aus dem Verkehr genommen; wegen ihrer langen atmosphärischen Lebensdauer verläuft die Erholung über Jahrzehnte."
+  ],
+  "nodes": [
+    { "id": "pb_stratospheric_ozone_depletion", "type": "domain_component", "label": "Stratosphärischer Ozonabbau" },
+    { "id": "activity_ods_production", "type": "human_activity", "label": "Herstellung und Nutzung ozonabbauender Stoffe" },
+    { "id": "pressure_chlorine_bromine", "type": "environmental_pressure", "label": "Langlebige Chlor- und Bromverbindungen in der Atmosphäre" },
+    { "id": "mechanism_ozone_destruction", "type": "mechanism", "label": "Katalytischer Abbau stratosphärischer Ozonmoleküle" },
+    { "id": "state_stratospheric_ozone", "type": "environmental_state", "label": "Globale mittlere stratosphärische Ozonkonzentration" },
+    { "id": "pressure_surface_uv", "type": "environmental_pressure", "label": "Erhöhte ultraviolette Strahlung an der Erdoberfläche" },
+    { "id": "effect_ecosystems_materials", "type": "environmental_effect", "label": "Schäden an Ökosystemen, Nutzpflanzen und Materialien" },
+    { "id": "life_uv_health", "type": "life_outcome", "label": "UV-bedingte Risiken für Haut und Augen" },
+    { "id": "intervention_montreal_protocol", "type": "intervention", "label": "Montrealer Protokoll und Ausstieg aus ozonabbauenden Stoffen" }
+  ],
+  "edges": [
+    { "from": "pb_stratospheric_ozone_depletion", "to": "state_stratospheric_ozone", "relationType": "measured_by", "evidenceStatus": "strong" },
+    { "from": "activity_ods_production", "to": "pressure_chlorine_bromine", "relationType": "contributes_to", "evidenceStatus": "strong" },
+    { "from": "pressure_chlorine_bromine", "to": "mechanism_ozone_destruction", "relationType": "drives", "evidenceStatus": "strong" },
+    { "from": "mechanism_ozone_destruction", "to": "state_stratospheric_ozone", "relationType": "reduces", "evidenceStatus": "strong" },
+    { "from": "state_stratospheric_ozone", "to": "pressure_surface_uv", "relationType": "when_reduced_increases", "evidenceStatus": "strong" },
+    { "from": "pressure_surface_uv", "to": "effect_ecosystems_materials", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "pressure_surface_uv", "to": "life_uv_health", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "intervention_montreal_protocol", "to": "activity_ods_production", "relationType": "reduces", "evidenceStatus": "strong" },
+    { "from": "intervention_montreal_protocol", "to": "state_stratospheric_ozone", "relationType": "supports_recovery_of", "evidenceStatus": "strong" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "planetary_health_check_2025_ozone",
+      "sourceRefs": ["src_phc_2025_ozone"],
+      "design": "Aktuelle Bewertung der planetaren Grenze anhand der globalen mittleren stratosphärischen Ozonkonzentration und räumlicher Veränderungen zwischen 1979–1989 und 2012–2022.",
+      "finding": "Der globale Wert beträgt 285,7 DU und liegt damit oberhalb der planetaren Grenze von 277 DU. Die Grenze befindet sich im sicheren Handlungsbereich; die Erholung ist langsam und regional uneinheitlich.",
+      "relationType": "current_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "wmo_unep_2022_ozone_assessment",
+      "sourceRefs": ["src_wmo_unep_2022"],
+      "design": "Internationale wissenschaftliche Gesamtbewertung im Rahmen des Montrealer Protokolls auf Basis globaler Beobachtungen, Emissionsdaten und Chemie-Klima-Modellen.",
+      "finding": "Nahezu 99 % der verbotenen ozonabbauenden Stoffe wurden aus dem Verkehr genommen. Ihre atmosphärischen Belastungen sinken, und deutliche Erholungssignale zeigen sich besonders in der oberen Stratosphäre; eine vollständige Erholung benötigt weiterhin Jahrzehnte.",
+      "relationType": "international_scientific_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "nasa_noaa_2025_antarctic_ozone_hole",
+      "sourceRefs": ["src_nasa_noaa_2025"],
+      "design": "Jährliche Beobachtung des antarktischen Ozonlochs mit Satelliten, Wetterballons und bodengebundenen Instrumenten.",
+      "finding": "Das Ozonloch 2025 war das fünftkleinste seit 1992 und löste sich früher als in den vergangenen Jahren auf. Es bleibt jedoch großflächig, und die Rückkehr zu Verhältnissen der 1980er-Jahre wird erst für die zweite Hälfte des Jahrhunderts erwartet.",
+      "relationType": "regional_monitoring_update",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "ozone_global_stratospheric_concentration_2025",
+      "node": "state_stratospheric_ozone",
+      "geography": "Global",
+      "period": "Stand Planetary Health Check 2025",
+      "metric": "Globale mittlere stratosphärische Ozonkonzentration",
+      "value": 285.7,
+      "unit": "DU",
+      "display": "285,7 DU",
+      "reference": {
+        "type": "baseline_and_planetary_boundary",
+        "baselineValue": 292,
+        "boundaryValue": 277,
+        "highRiskValue": 263,
+        "unit": "DU",
+        "display": "Referenz: 292 DU · Planetare Grenze: 277 DU"
+      },
+      "uncertainty": "Der globale Mittelwert glättet starke saisonale, regionale und höhenabhängige Unterschiede. Er ist nicht mit dem lokalen Minimum oder der Fläche des antarktischen Ozonlochs gleichzusetzen.",
+      "interpretation": "Da höhere Ozonwerte günstiger sind, liegt 285,7 DU oberhalb der Grenze von 277 DU und damit im sicheren Handlungsbereich. Die Referenz von 292 DU ist noch nicht vollständig wieder erreicht.",
+      "sourceRefs": ["src_phc_2025_ozone"],
+      "displayType": "control_variable"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "ozone_global_stratospheric_concentration_2025",
+    "referenceLabel": "Referenz: 292 DU · Planetare Grenze: 277 DU",
+    "finding": "Die globale mittlere stratosphärische Ozonkonzentration liegt bei 285,7 DU und damit oberhalb der planetaren Grenze von 277 DU. Die Grenze befindet sich im sicheren Bereich, die Referenz von 292 DU ist jedoch noch nicht vollständig erreicht.",
+    "effectPath": "Ozonabbauende Stoffe → Chlor und Brom in der Stratosphäre → Ozonabbau → mehr UV-Strahlung an der Erdoberfläche → Risiken für Leben und Ökosysteme",
+    "uncertainty": "Der globale Mittelwert beschreibt weder das saisonale antarktische Ozonloch noch konkrete regionale UV-Exposition. Beides benötigt eigene Messgrößen und Zeitreihen.",
+    "statusYear": 2025,
+    "statusLabel": "Planetary Health Check 2025"
+  },
+  "pathways": [
+    {
+      "id": "path_ods_to_uv",
+      "label": "Ozonabbauende Stoffe → langlebige Chlor- und Bromverbindungen → stratosphärischer Ozonabbau → erhöhte UV-Strahlung → Risiken für Menschen und Ökosysteme",
+      "nodes": ["activity_ods_production", "pressure_chlorine_bromine", "mechanism_ozone_destruction", "state_stratospheric_ozone", "pressure_surface_uv", "effect_ecosystems_materials", "life_uv_health"],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_montreal_recovery",
+      "label": "Montrealer Protokoll → geringere Produktion ozonabbauender Stoffe → sinkende Halogenbelastung → langsame Erholung der Ozonschicht",
+      "nodes": ["intervention_montreal_protocol", "activity_ods_production", "pressure_chlorine_bromine", "state_stratospheric_ozone"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Klimawandel",
+      "relation": "Viele ozonabbauende Stoffe sind zugleich starke Treibhausgase; Temperatur- und Zirkulationsänderungen beeinflussen zudem Ozonabbau und Erholung regional."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "Erhöhte UV-B-Strahlung kann Pflanzen, Plankton, Tiere und ökologische Prozesse schädigen."
+    },
+    {
+      "boundary": "Neue Substanzen",
+      "relation": "Ozonabbauende Industriechemikalien und ihre Ersatzstoffe zeigen, wie langlebige technische Stoffe globale atmosphärische Prozesse beeinflussen können."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_control_variable",
+    "systemImpacts": [],
+    "bodymapRule": "Aus dem globalen Ozonmittelwert keine Organmarker ableiten. Augen- und Hautwirkungen benötigen eine konkrete regionale UV-Exposition sowie eigenständige epidemiologische oder klinische Evidenz."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_ozone_timeseries",
+      "question": "Welche harmonisierte globale DU-Zeitreihe soll mit klarer räumlicher Abgrenzung und Unsicherheit in den Panel-Regler übernommen werden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_global_antarctic_separation",
+      "question": "Wie lassen sich globaler Mittelwert, antarktisches Ozonloch und regionale Ozonentwicklung als getrennte, aber verbundene Ebenen darstellen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_emerging_threats",
+      "question": "Wie verändern neue Emissionen, Altbestände, große Waldbrände, Vulkanausbrüche und zunehmende Raketenstarts die erwartete Erholung?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "methodNote": "Der sichere globale Status beruht auf fortgesetzter internationaler Regulierung; er ist kein Grund, Überwachung und Vollzug zu beenden.",
+    "dimensions": [
+      {
+        "id": "montreal_compliance",
+        "label": "Montrealer Protokoll vollständig umsetzen",
+        "level": "sehr hoch",
+        "rationale": "Der weltweite Ausstieg aus ozonabbauenden Stoffen ist die Grundlage der beobachteten und projizierten Erholung."
+      },
+      {
+        "id": "legacy_banks",
+        "label": "Altbestände und illegale Emissionen begrenzen",
+        "level": "hoch",
+        "rationale": "Kältemittel, Schäume, Deponien und nicht gemeldete Produktion können weiterhin langlebige Stoffe freisetzen."
+      },
+      {
+        "id": "monitoring",
+        "label": "Globale und polare Beobachtung fortführen",
+        "level": "hoch",
+        "rationale": "Satelliten, Ballons und Bodenstationen sind nötig, um Erholung, natürliche Schwankungen und neue Risiken zu unterscheiden."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_phc_2025_ozone",
+      "title": "Planetary Health Check 2025 – Stratospheric Ozone Depletion",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/stratospheric-ozone-depletion/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_wmo_unep_2022",
+      "title": "Scientific Assessment of Ozone Depletion: 2022",
+      "authors": "World Meteorological Organization / United Nations Environment Programme Scientific Assessment Panel",
+      "publisher": "WMO / UNEP",
+      "year": 2022,
+      "type": "international_scientific_assessment",
+      "url": "https://www.unep.org/resources/publication/scientific-assessment-ozone-layer-depletion-2022",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_nasa_noaa_2025",
+      "title": "NASA, NOAA Rank 2025 Ozone Hole as 5th Smallest Since 1992",
+      "authors": "NASA / NOAA",
+      "publisher": "NASA Science",
+      "year": 2025,
+      "type": "official_regional_monitoring_update",
+      "url": "https://science.nasa.gov/earth/nasa-noaa-rank-2025-ozone-hole-as-5th-smallest-since-1992/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Stratosphärisches Ozon",
+    "item": "Globale Ozonkonzentration",
+    "type": "control"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Die Quellen enthalten globale und regionale Langzeitbeobachtungen, aber für diese erste Kontrollvariablen-Datei wurde noch keine harmonisierte numerische DU-Zeitreihe mit vollständig dokumentierter Provenienz übernommen.",
+    "panelRule": "Keinen Zeitregler anzeigen. Nur den belegten Statuswert 2025 darstellen."
+  }
+}
