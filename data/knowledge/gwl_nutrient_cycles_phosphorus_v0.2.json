@@ -169,7 +169,8 @@
     "referenceLabel": "Regionale planetare Grenze, global aggregiert: 6,2 Tg P/Jahr",
     "finding": "Die Phosphorkomponente ist in der regionalen, global aggregierten Kontrollvariable deutlich überschritten: etwa 18,2 Tg P/Jahr werden auf Ackerflächen eingebracht, gegenüber einer Grenze von 6,2 Tg P/Jahr.",
     "effectPath": "Übermäßige Phosphoreinträge → Verluste in Böden und Gewässer → Eutrophierung und Sauerstoffmangel → veränderte aquatische Ökosysteme und Biodiversität",
-    "uncertainty": "Die regionale, global aggregierte Kontrollvariable ist von der globalen Ozean-Komponente zu unterscheiden; regionale Belastungen unterscheiden sich stark."
+    "uncertainty": "Die regionale, global aggregierte Kontrollvariable ist von der globalen Ozean-Komponente zu unterscheiden; regionale Belastungen unterscheiden sich stark.",
+    "primaryTimeSeriesId": "phosphorus_cropland_1961_2022"
   },
   "pathways": [
     {
@@ -180,6 +181,15 @@
         "state_phosphorus",
         "effect_eutrophication",
         "effect_biodiversity"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_nitrogen_air_climate",
+      "label": "Reaktiver Stickstoff → Emissionen und Umwandlungsprodukte → Luftverschmutzung sowie N₂O → Klima- und Ozonwirkungen",
+      "nodes": [
+        "state_nitrogen",
+        "effect_air_climate"
       ],
       "evidenceStatus": "strong"
     },
@@ -202,11 +212,6 @@
     {
       "id": "gap_n_timeseries",
       "question": "Welche konsistente, zitierfähige Zeitreihe der anthropogenen Stickstofffixierung soll für den BLC-Regler übernommen werden?",
-      "priority": "very_high"
-    },
-    {
-      "id": "gap_p_timeseries",
-      "question": "Welche konsistente Zeitreihe der globalen Phosphoranwendung soll übernommen werden, ohne unterschiedliche Definitionen der Kontrollvariable zu vermischen?",
       "priority": "very_high"
     },
     {
@@ -247,27 +252,192 @@
   "sources": [
     {
       "id": "src_phc_2025",
-      "title": "Planetary Health Check 2025",
+      "title": "Planetary Health Check 2025 – Modification of Biogeochemical Flows",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
+      "publisher": "Planetary Health Check",
       "year": 2025,
       "type": "current_planetary_boundaries_assessment",
-      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+      "url": "https://www.planetaryhealthcheck.org/wp-content/uploads/PlanetaryHealthCheck2025.pdf",
       "access": "open_full_text"
     },
     {
       "id": "src_phc_web_2025",
-      "title": "Planetary Health Check 2025 – archived open report",
+      "title": "Modification of Biogeochemical Flows",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
+      "publisher": "Planetary Health Check",
       "year": 2025,
       "type": "official_boundary_information",
-      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+      "url": "https://www.planetaryhealthcheck.org/boundary/modification-of-biogeochemical-flows/",
       "access": "open_full_text"
     }
   ],
   "navigationRule": {
     "group": "Nährstoffkreisläufe",
     "item": "Phosphor"
-  }
+  },
+  "timeSeries": [
+    {
+      "id": "phosphorus_cropland_1961_2022",
+      "label": "Mineralischer Phosphoreinsatz auf globalen Ackerflächen",
+      "metric": "Anwendung von abgebautem/mineralischem Phosphor auf globalen Ackerflächen",
+      "unit": "Tg P/Jahr",
+      "geography": "Global aggregiert",
+      "dataStartYear": 1961,
+      "dataEndYear": 2022,
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 6.2,
+        "unit": "Tg P/Jahr",
+        "display": "Planetare Grenze: 6,2 Tg P/Jahr"
+      },
+      "sourceRefs": [
+        "src_phc_2025",
+        "src_phc_web_2025"
+      ],
+      "methodNote": "5-Jahres-Stützwerte näherungsweise aus Planetary Health Check 2025, Fig. 35, abgelesen; 1961 und 2022 als Randjahre zusätzlich. Keine Interpolation und keine höhere Genauigkeit beansprucht.",
+      "uncertainty": "Näherungsweises Ablesen aus der publizierten Abbildung; die Werte dienen der Trenddarstellung im GWL-Panel.",
+      "points": [
+        {
+          "year": 1961,
+          "value": 4.8,
+          "display": "≈ 4,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1961 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 4,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1965,
+          "value": 5.8,
+          "display": "≈ 5,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1965 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 5,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1970,
+          "value": 7.8,
+          "display": "≈ 7,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1970 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 7,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1975,
+          "value": 10.2,
+          "display": "≈ 10,2 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1975 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 10,2 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1980,
+          "value": 12.8,
+          "display": "≈ 12,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1980 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 12,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1985,
+          "value": 12.4,
+          "display": "≈ 12,4 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1985 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 12,4 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1990,
+          "value": 10.8,
+          "display": "≈ 10,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1990 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 10,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1995,
+          "value": 10.9,
+          "display": "≈ 10,9 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1995 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 10,9 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2000,
+          "value": 11.8,
+          "display": "≈ 11,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2000 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 11,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2005,
+          "value": 13.7,
+          "display": "≈ 13,7 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2005 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 13,7 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2010,
+          "value": 15.8,
+          "display": "≈ 15,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2010 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 15,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2015,
+          "value": 17.4,
+          "display": "≈ 17,4 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2015 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 17,4 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2020,
+          "value": 17.8,
+          "display": "≈ 17,8 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2020 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 17,8 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2022,
+          "value": 18.2,
+          "display": "≈ 18,2 Tg P/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2022 liegt die Anwendung von mineralischem Phosphor auf globalen Ackerflächen nach näherungsweisem Ablesen von Fig. 35 bei rund 18,2 Tg P/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 35; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        }
+      ]
+    }
+  ]
 }

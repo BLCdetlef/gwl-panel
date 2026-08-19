@@ -147,7 +147,8 @@
     "referenceLabel": "Planetare Grenze: 62 Tg N/Jahr",
     "finding": "Die Stickstoffkomponente der planetaren Grenze ist deutlich überschritten. Die anthropogene Stickstofffixierung für die Landwirtschaft liegt bei etwa 165 Tg N/Jahr gegenüber einer planetaren Grenze von 62 Tg N/Jahr.",
     "effectPath": "Übermäßige Stickstofffixierung → Verluste in Luft, Böden und Gewässer → Eutrophierung sowie Luft-, Klima- und Ozonwirkungen → Rückwirkungen auf Ökosysteme und menschliche Lebensgrundlagen",
-    "uncertainty": "Globale Modell- und Bilanzschätzung. Regionale Stickstoffüberschüsse unterscheiden sich stark."
+    "uncertainty": "Globale Modell- und Bilanzschätzung. Regionale Stickstoffüberschüsse unterscheiden sich stark.",
+    "primaryTimeSeriesId": "nitrogen_fixation_1961_2022"
   },
   "pathways": [
     {
@@ -186,11 +187,6 @@
     "bodymapRule": "Keinen Organmarker allein aufgrund der global überschrittenen Nährstoffgrenze aktivieren. Organwirkungen benötigen einen konkreten, belegten Expositionspfad, zum Beispiel über Nitrat im Trinkwasser, Luftschadstoffe oder Cyanobakterientoxine."
   },
   "knowledgeGaps": [
-    {
-      "id": "gap_n_timeseries",
-      "question": "Welche konsistente, zitierfähige Zeitreihe der anthropogenen Stickstofffixierung soll für den BLC-Regler übernommen werden?",
-      "priority": "very_high"
-    },
     {
       "id": "gap_p_timeseries",
       "question": "Welche konsistente Zeitreihe der globalen Phosphoranwendung soll übernommen werden, ohne unterschiedliche Definitionen der Kontrollvariable zu vermischen?",
@@ -234,27 +230,192 @@
   "sources": [
     {
       "id": "src_phc_2025",
-      "title": "Planetary Health Check 2025",
+      "title": "Planetary Health Check 2025 – Modification of Biogeochemical Flows",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
+      "publisher": "Planetary Health Check",
       "year": 2025,
       "type": "current_planetary_boundaries_assessment",
-      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+      "url": "https://www.planetaryhealthcheck.org/wp-content/uploads/PlanetaryHealthCheck2025.pdf",
       "access": "open_full_text"
     },
     {
       "id": "src_phc_web_2025",
-      "title": "Planetary Health Check 2025 – archived open report",
+      "title": "Modification of Biogeochemical Flows",
       "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
-      "publisher": "Potsdam Institute for Climate Impact Research (PIK)",
+      "publisher": "Planetary Health Check",
       "year": 2025,
       "type": "official_boundary_information",
-      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+      "url": "https://www.planetaryhealthcheck.org/boundary/modification-of-biogeochemical-flows/",
       "access": "open_full_text"
     }
   ],
   "navigationRule": {
     "group": "Nährstoffkreisläufe",
     "item": "Stickstoff"
-  }
+  },
+  "timeSeries": [
+    {
+      "id": "nitrogen_fixation_1961_2022",
+      "label": "Anthropogene Stickstofffixierung für die Landwirtschaft",
+      "metric": "Anthropogene Stickstofffixierung durch Mineraldünger und intentionale biologische Fixierung",
+      "unit": "Tg N/Jahr",
+      "geography": "Global",
+      "dataStartYear": 1961,
+      "dataEndYear": 2022,
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 62,
+        "unit": "Tg N/Jahr",
+        "display": "Planetare Grenze: 62 Tg N/Jahr"
+      },
+      "sourceRefs": [
+        "src_phc_2025",
+        "src_phc_web_2025"
+      ],
+      "methodNote": "5-Jahres-Stützwerte näherungsweise aus Planetary Health Check 2025, Fig. 37, abgelesen; 1961 und 2022 als Randjahre zusätzlich. Keine Interpolation und keine höhere Genauigkeit beansprucht.",
+      "uncertainty": "Näherungsweises Ablesen aus der publizierten Abbildung; die Werte dienen der Trenddarstellung im GWL-Panel.",
+      "points": [
+        {
+          "year": 1961,
+          "value": 45,
+          "display": "≈ 45 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1961 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 45 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1965,
+          "value": 51,
+          "display": "≈ 51 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1965 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 51 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1970,
+          "value": 63,
+          "display": "≈ 63 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1970 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 63 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1975,
+          "value": 76,
+          "display": "≈ 76 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1975 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 76 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1980,
+          "value": 89,
+          "display": "≈ 89 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1980 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 89 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1985,
+          "value": 96,
+          "display": "≈ 96 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1985 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 96 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1990,
+          "value": 102,
+          "display": "≈ 102 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1990 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 102 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 1995,
+          "value": 109,
+          "display": "≈ 109 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1995 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 109 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2000,
+          "value": 119,
+          "display": "≈ 119 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2000 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 119 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2005,
+          "value": 130,
+          "display": "≈ 130 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2005 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 130 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2010,
+          "value": 143,
+          "display": "≈ 143 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2010 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 143 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2015,
+          "value": 153,
+          "display": "≈ 153 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2015 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 153 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2020,
+          "value": 161,
+          "display": "≈ 161 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2020 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 161 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        },
+        {
+          "year": 2022,
+          "value": 165,
+          "display": "≈ 165 Tg N/Jahr",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2022 liegt die anthropogene Stickstofffixierung für die Landwirtschaft nach näherungsweisem Ablesen von Fig. 37 bei rund 165 Tg N/Jahr.",
+          "uncertainty": "Näherungswert aus PHC 2025, Fig. 37; für die Trenddarstellung, nicht als exakter Tabellenwert."
+        }
+      ]
+    }
+  ]
 }
