@@ -1,8 +1,8 @@
 {
   "format": "gwl-knowledge-network-v1.3",
-  "version": "0.1-pilot",
+  "version": "0.2-timeseries",
   "topic": "Biosphärenintegrität / genetische Vielfalt / funktionelle Integrität",
-  "status": "draft",
+  "status": "pilot",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
     "systemBoundary": "Planetare Grenzen",
@@ -130,7 +130,7 @@
       "id": "biosphere_extinction_rate",
       "node": "state_genetic_diversity",
       "geography": "Global",
-      "period": "aktuelle globale Abschätzung in Richardson et al. 2023",
+      "period": "Stand Planetary Health Check 2025",
       "metric": "Aussterberate",
       "value": 100,
       "operator": ">",
@@ -146,6 +146,7 @@
       "uncertainty": "Globale Aussterberaten sind nur näherungsweise bestimmbar; Richardson et al. verwenden deshalb eine Größenordnung von >100 E/MSY.",
       "interpretation": "Die genetische Komponente der Biosphärenintegrität liegt deutlich außerhalb des sicheren Bereichs.",
       "sourceRefs": [
+        "src_phc_2025",
         "src_richardson_2023"
       ],
       "displayType": "study_value"
@@ -154,7 +155,7 @@
       "id": "biosphere_hanpp",
       "node": "state_functional_integrity",
       "geography": "Global",
-      "period": "2020-Abschätzung in Richardson et al. 2023",
+      "period": "2020-Abschätzung; im Planetary Health Check 2025 weitergeführt",
       "metric": "Human Appropriation of Net Primary Production (HANPP)",
       "value": 30,
       "unit": "percent_of_potential_NPP",
@@ -175,19 +176,21 @@
       "uncertainty": "HANPP ist ein global aggregierter Indikator. Regionale Auswirkungen und Verteilungsmuster werden dadurch nicht vollständig abgebildet.",
       "interpretation": "Auch die funktionelle Komponente liegt deutlich außerhalb des sicheren Bereichs.",
       "sourceRefs": [
+        "src_phc_2025",
         "src_richardson_2023"
       ],
       "displayType": "study_value"
     }
   ],
   "presentation": {
-    "primaryMeasurementId": "biosphere_extinction_rate",
-    "referenceLabel": "Planetare Grenze: <10 E/MSY",
-    "finding": "Die Biosphärenintegrität ist überschritten. Die geschätzte globale Aussterberate liegt bei >100 E/MSY gegenüber einer Grenze von <10 E/MSY. Zusätzlich liegt die funktionelle Kontrollvariable HANPP bei etwa 30 %, gegenüber einer Grenze von etwa 10 %.",
+    "primaryMeasurementId": "biosphere_hanpp",
+    "referenceLabel": "Planetare Grenze: etwa 10 % HANPP",
+    "finding": "Die funktionelle Integrität der Biosphäre ist deutlich überschritten. HANPP liegt 2020 bei etwa 30 % gegenüber einer planetaren Grenze von etwa 10 %. Die genetische Komponente ist ebenfalls überschritten (>100 E/MSY; Grenze <10 E/MSY).",
     "effectPath": "Verlust genetischer Vielfalt + hohe HANPP → geschwächte Ökosystemfunktionen und Resilienz → Rückwirkungen auf Klima, Land, Wasser und menschliche Lebensgrundlagen",
     "uncertainty": "Die beiden Kontrollvariablen beschreiben unterschiedliche Komponenten. Eine einzelne Zahl kann den Zustand der Biosphäre nicht vollständig abbilden.",
-    "statusYear": 2023,
-    "statusLabel": "Stand 2023"
+    "primaryTimeSeriesId": "biosphere_hanpp_1910_2020",
+    "statusYear": 2020,
+    "statusLabel": "2020-Abschätzung"
   },
   "pathways": [
     {
@@ -236,11 +239,6 @@
     {
       "id": "gap_extinction_timeseries",
       "question": "Welche belastbare globale Zeitreihe eignet sich für die Aussterberate, ohne aus heterogenen Schätzungen eine scheinbar kontinuierliche Messreihe zu erzeugen?",
-      "priority": "very_high"
-    },
-    {
-      "id": "gap_hanpp_timeseries",
-      "question": "Welche veröffentlichte HANPP-Zeitreihe soll für den Zeitregler übernommen werden und wie werden methodische Änderungen zwischen Datensätzen transparent gemacht?",
       "priority": "very_high"
     },
     {
@@ -312,5 +310,155 @@
       "access": "open_full_text"
     }
   ],
-  "navigationRule": "Das Grundlagenmodul gehört unter Planetare Grenzen → Biosphärenintegrität. Vertiefungsmodule zu Arten, Ökosystemen, Regionen oder konkreten Expositionen docken darunter an."
+  "navigationRule": "Das Grundlagenmodul gehört unter Planetare Grenzen → Biosphärenintegrität. Vertiefungsmodule zu Arten, Ökosystemen, Regionen oder konkreten Expositionen docken darunter an.",
+  "timeSeries": [
+    {
+      "id": "biosphere_hanpp_1910_2020",
+      "label": "Funktionelle Integrität – HANPP",
+      "metric": "Human Appropriation of Net Primary Production (HANPP) als Anteil der Referenz-NPP",
+      "unit": "%",
+      "geography": "Global",
+      "dataStartYear": 1910,
+      "dataEndYear": 2020,
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "unit": "%",
+        "display": "Planetare Grenze: etwa 10 % HANPP"
+      },
+      "highRisk": {
+        "value": 20,
+        "unit": "%",
+        "display": "Hochrisikobereich: >20 % HANPP"
+      },
+      "sourceRefs": [
+        "src_phc_2025",
+        "src_richardson_2023"
+      ],
+      "methodNote": "Planetary Health Check 2025 beschreibt die HANPP-Zeitreihe für 1910–2010 als 10–20-Jahres-Mittel; 2020 ist eine separate Abschätzung von etwa 30 %. Die hier hinterlegten historischen Stützwerte sind näherungsweise aus der publizierten Abbildung abgelesen. Deshalb wird bewusst kein künstliches 5-Jahres-Raster erzeugt.",
+      "uncertainty": "HANPP ist ein Proxy für funktionelle Integrität. Verschiedene Datensätze und Methoden ergeben unterschiedliche absolute Werte, stimmen aber darin überein, dass die Grenze deutlich überschritten ist.",
+      "points": [
+        {
+          "year": 1910,
+          "value": 13.0,
+          "display": "≈ 13,0 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1910 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 13,0 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1920,
+          "value": 13.8,
+          "display": "≈ 13,8 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1920 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 13,8 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1930,
+          "value": 14.8,
+          "display": "≈ 14,8 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1930 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 14,8 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1940,
+          "value": 15.8,
+          "display": "≈ 15,8 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1940 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 15,8 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1950,
+          "value": 17.0,
+          "display": "≈ 17,0 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1950 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 17,0 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1960,
+          "value": 18.5,
+          "display": "≈ 18,5 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1960 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 18,5 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1970,
+          "value": 20.5,
+          "display": "≈ 20,5 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1970 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 20,5 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1980,
+          "value": 22.8,
+          "display": "≈ 22,8 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1980 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 22,8 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 1990,
+          "value": 24.8,
+          "display": "≈ 24,8 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 1990 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 24,8 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 2000,
+          "value": 26.5,
+          "display": "≈ 26,5 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2000 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 26,5 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 2010,
+          "value": 28.0,
+          "display": "≈ 28,0 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2010 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 28,0 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        },
+        {
+          "year": 2020,
+          "value": 30.0,
+          "display": "≈ 30,0 % HANPP",
+          "sourceRefs": [
+            "src_phc_2025"
+          ],
+          "finding": "Für 2020 liegt HANPP nach näherungsweisem Ablesen der Planetary-Health-Check-Zeitreihe bei rund 30,0 % der Referenz-NPP.",
+          "uncertainty": "Näherungswert aus der publizierten PHC-Abbildung. Die historische Reihe wird dort als 10–20-Jahres-Mittel dargestellt; keine jährliche oder 5-jährige Messgenauigkeit wird beansprucht."
+        }
+      ]
+    }
+  ]
 }
