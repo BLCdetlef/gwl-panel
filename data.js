@@ -267,7 +267,7 @@ window.GWL_DATA = {
         }
       ]
     },
-    { id: "ocean", label: "Ozeanversauerung", enabled: false },
+    { id: "ocean", label: "Ozeanversauerung", enabled: true },
     { id: "aerosols", label: "Aerosole", enabled: false },
     { id: "ozone", label: "Stratosphärisches Ozon", enabled: false },
     {
@@ -317,4 +317,3 @@ window.GWL_DATA = {
     }
   ]
 };
-

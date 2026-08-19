@@ -1,0 +1,209 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Ozeanversauerung / Aragonit-Sättigungszustand",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Ozeanversauerung",
+    "subComponent": "Globaler Aragonit-Sättigungszustand",
+    "effectFocus": "Wie die Aufnahme anthropogenen Kohlendioxids die Carbonatchemie des Ozeans verändert und die Bildung kalkhaltiger Schalen und Skelette erschwert"
+  },
+  "corePrinciples": [
+    "Die Kontrollvariable ist der globale mittlere Aragonit-Sättigungszustand des Oberflächenmeerwassers (Ωarag), nicht der pH-Wert allein.",
+    "Niedrigere Ωarag-Werte bedeuten stärkere Versauerung und eine geringere Verfügbarkeit von Carbonat für kalkbildende Organismen.",
+    "Der Planetary Health Check 2025 verwendet eine revidierte vorindustrielle Referenz von 3,57 und setzt die planetare Grenze bei 80 % dieses Werts, also Ωarag 2,86.",
+    "Der globale Mittelwert verdeckt starke regionale und vertikale Unterschiede; polare, küstennahe und tiefere Gewässer können früher betroffen sein.",
+    "Keine menschlichen Organmarker allein aufgrund des globalen Zustands der Ozeanversauerung."
+  ],
+  "nodes": [
+    { "id": "pb_ocean_acidification", "type": "domain_component", "label": "Ozeanversauerung" },
+    { "id": "driver_anthropogenic_co2", "type": "human_activity", "label": "Anthropogene CO₂-Emissionen" },
+    { "id": "mechanism_ocean_co2_uptake", "type": "mechanism", "label": "CO₂-Aufnahme und Veränderung der Carbonatchemie" },
+    { "id": "state_aragonite_saturation", "type": "environmental_state", "label": "Globaler Aragonit-Sättigungszustand des Oberflächenozeans" },
+    { "id": "effect_calcification", "type": "biological_effect", "label": "Erschwerte Kalkbildung und Schädigung kalkbildender Organismen" },
+    { "id": "effect_marine_ecosystems", "type": "biological_effect", "label": "Risiken für Korallenriffe, marine Nahrungsnetze und Ökosystemfunktionen" },
+    { "id": "life_ocean_services", "type": "life_outcome", "label": "Risiken für Fischerei, Küstenschutz und weitere Leistungen mariner Ökosysteme" }
+  ],
+  "edges": [
+    { "from": "pb_ocean_acidification", "to": "state_aragonite_saturation", "relationType": "measured_by", "evidenceStatus": "strong" },
+    { "from": "driver_anthropogenic_co2", "to": "mechanism_ocean_co2_uptake", "relationType": "drives", "evidenceStatus": "strong" },
+    { "from": "mechanism_ocean_co2_uptake", "to": "state_aragonite_saturation", "relationType": "reduces", "evidenceStatus": "strong" },
+    { "from": "state_aragonite_saturation", "to": "effect_calcification", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "effect_calcification", "to": "effect_marine_ecosystems", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "effect_marine_ecosystems", "to": "life_ocean_services", "relationType": "can_contribute_to", "evidenceStatus": "moderate" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "planetary_health_check_2025_ocean_acidification",
+      "sourceRefs": ["src_phc_2025_ocean"],
+      "design": "Aktuelle Bewertung der planetaren Grenzen mit revidierter vorindustrieller Referenz und aktualisierten globalen Karten des Aragonit-Sättigungszustands.",
+      "finding": "Der globale mittlere Oberflächenwert liegt bei Ωarag 2,84 und damit knapp unter der revidierten planetaren Grenze von 2,86. Ozeanversauerung wird 2025 erstmals als überschritten bewertet.",
+      "relationType": "current_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "findlay_2025_ocean_acidification",
+      "sourceRefs": ["src_findlay_2025"],
+      "design": "Globale Neubewertung mit Beobachtungs- und Modellprodukten, Unsicherheiten, regionaler Auflösung, Oberflächen- und Tiefenwasser sowie biologischen Schwellenwerten.",
+      "finding": "Für 2020 lag der globale Oberflächenmittelwert innerhalb des Unsicherheitsbereichs der 20-%-Grenze. Rund 40 % der Meeresoberfläche und bis zu 60 % des Wasserkörpers bis 200 m Tiefe hatten die 20-%-Grenze bereits überschritten; geeignete Habitate wichtiger Kalkbildner gingen deutlich zurück.",
+      "relationType": "global_observation_model_and_ecological_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "richardson_2023_ocean_acidification",
+      "sourceRefs": ["src_richardson_2023"],
+      "design": "Globale Aktualisierung des Planetary-Boundaries-Rahmens auf Basis der damaligen Referenz und Kontrollvariablenwerte.",
+      "finding": "Die Ozeanversauerung wurde 2023 mit Ωarag 2,81 noch knapp innerhalb der damaligen Grenze von 2,75 eingeordnet. Die Neubewertung 2025 änderte Referenz, Grenzwert und Status.",
+      "relationType": "previous_global_assessment",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "ocean_global_surface_aragonite_saturation_2025",
+      "node": "state_aragonite_saturation",
+      "geography": "Globaler Oberflächenozean",
+      "period": "Stand Planetary Health Check 2025",
+      "metric": "Globaler mittlerer Aragonit-Sättigungszustand des Oberflächenmeerwassers",
+      "value": 2.84,
+      "unit": "Ωarag (dimensionslos)",
+      "display": "Ωarag 2,84",
+      "reference": {
+        "type": "preindustrial_and_planetary_boundary",
+        "baselineValue": 3.57,
+        "boundaryValue": 2.86,
+        "highRiskValue": 2.5,
+        "unit": "Ωarag",
+        "display": "Vorindustriell: 3,57 · Planetare Grenze: 2,86"
+      },
+      "uncertainty": "Der Wert ist ein globaler Oberflächenmittelwert. Regionale, saisonale und vertikale Unterschiede sind groß; eine knappe globale Überschreitung bedeutet nicht, dass alle Meeresgebiete denselben Zustand aufweisen.",
+      "interpretation": "Da niedrigere Werte stärkere Versauerung bedeuten, liegt Ωarag 2,84 außerhalb des sicheren Bereichs unterhalb der Grenze von 2,86.",
+      "sourceRefs": ["src_phc_2025_ocean"],
+      "displayType": "control_variable"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "ocean_global_surface_aragonite_saturation_2025",
+    "referenceLabel": "Vorindustriell: 3,57 · Planetare Grenze: 2,86",
+    "finding": "Der globale mittlere Aragonit-Sättigungszustand liegt bei 2,84 und damit knapp unter der planetaren Grenze von 2,86. Weil niedrigere Werte stärkere Versauerung anzeigen, gilt die Grenze 2025 erstmals als überschritten.",
+    "effectPath": "Anthropogene CO₂-Emissionen → CO₂-Aufnahme des Ozeans → weniger Carbonat → sinkende Aragonit-Sättigung → Risiken für Kalkbildner und marine Ökosysteme",
+    "uncertainty": "Der globale Mittelwert ist eine Kontrollvariable, keine einheitliche Beschreibung aller Meeresregionen. Besonders starke Veränderungen in polaren, küstennahen und tieferen Gewässern müssen ergänzend betrachtet werden.",
+    "statusYear": 2025,
+    "statusLabel": "Planetary Health Check 2025"
+  },
+  "pathways": [
+    {
+      "id": "path_co2_to_marine_ecosystems",
+      "label": "Anthropogene CO₂-Emissionen → Aufnahme im Meerwasser → veränderte Carbonatchemie → sinkende Aragonit-Sättigung → erschwerte Kalkbildung → Risiken für marine Ökosysteme",
+      "nodes": ["driver_anthropogenic_co2", "mechanism_ocean_co2_uptake", "state_aragonite_saturation", "effect_calcification", "effect_marine_ecosystems"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Klimawandel",
+      "relation": "Atmosphärisches CO₂ ist gemeinsamer Haupttreiber von Erwärmung und Ozeanversauerung; die CO₂-Aufnahme des Ozeans bremst die atmosphärische Erwärmung, verändert aber die Meereschemie."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "Sinkende Aragonit-Sättigung belastet kalkbildende Arten, Korallenriffe und davon abhängige Nahrungsnetze und Lebensräume."
+    },
+    {
+      "boundary": "Nährstoffkreisläufe",
+      "relation": "Nährstoffeinträge und biologische Prozesse können die Versauerung in Küstengewässern lokal verstärken, sind aber nicht der globale Haupttreiber der Kontrollvariable."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keinen Organmarker allein aufgrund des globalen Aragonit-Sättigungszustands aktivieren. Menschliche Gesundheitsfolgen benötigen konkrete Expositions- oder Versorgungspfade und eigene Evidenz."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_ocean_time_series",
+      "question": "Welche offen verfügbare, versionsstabile globale Ωarag-Zeitreihe soll für den Panel-Regler übernommen werden, einschließlich Unsicherheiten und eindeutiger Provenienz?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_regional_depth",
+      "question": "Wie lassen sich Oberflächenmittel, regionale Belastung und Veränderungen bis 200 m Tiefe gemeinsam darstellen, ohne unterschiedliche Kontrollgrößen zu vermischen?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_ecological_thresholds",
+      "question": "Welche artspezifischen und ökosystemaren Schwellenwerte eignen sich als Vertiefungen neben der globalen chemischen Kontrollvariable?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "methodNote": "Handlungsoptionen sind keine Bestandteile der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "co2_reduction",
+        "label": "Anthropogene CO₂-Emissionen senken",
+        "level": "sehr hoch",
+        "rationale": "Die Aufnahme anthropogenen CO₂ durch den Ozean ist der dominante globale Treiber der Versauerung."
+      },
+      {
+        "id": "local_pressures",
+        "label": "Lokale Zusatzbelastungen reduzieren",
+        "level": "hoch",
+        "rationale": "Nährstoffeinträge, Abwasser und weitere lokale Belastungen können Versauerung und ökologische Empfindlichkeit in Küstengewässern verstärken."
+      },
+      {
+        "id": "monitoring",
+        "label": "Carbonatchemie und biologische Wirkungen beobachten",
+        "level": "hoch",
+        "rationale": "Regionale und vertikale Messungen ergänzen den globalen Mittelwert und machen frühe ökologische Folgen sichtbar."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_phc_2025_ocean",
+      "title": "Planetary Health Check 2025 – Ocean Acidification",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/ocean-acidification/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_findlay_2025",
+      "title": "Ocean Acidification: Another Planetary Boundary Crossed",
+      "authors": "Findlay, H. S. et al.",
+      "publisher": "Global Change Biology",
+      "year": 2025,
+      "type": "peer_reviewed_global_assessment",
+      "url": "https://doi.org/10.1111/gcb.70238",
+      "doi": "10.1111/gcb.70238",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://doi.org/10.1126/sciadv.adh2458",
+      "doi": "10.1126/sciadv.adh2458",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Ozeanversauerung",
+    "item": "Aragonit-Sättigungszustand",
+    "type": "control"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Für diese erste Kontrollvariablen-Datei ist noch keine numerische, versionsstabile globale Ωarag-Zeitreihe mit vollständig dokumentierter Provenienz übernommen.",
+    "panelRule": "Keinen Zeitregler anzeigen. Nur den belegten Statuswert 2025 darstellen."
+  }
+}
