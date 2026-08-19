@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.22 · B01";
+const GWL_BUILD_VERSION = "0.9.22 · B02";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -1951,8 +1951,26 @@ function ensureHealthLegend() {
 function updatePrototypeVersion() {
   const version = GWL_BUILD_VERSION || data?.version || "0.9";
   document.title = `GWL-Panel – Prototyp ${version}`;
-  const versionNode = document.querySelector(".version");
-  if (versionNode) versionNode.textContent = `Prototyp ${version}`;
+
+  let versionNode = document.querySelector(".version");
+
+  if (!versionNode) {
+    const header = document.querySelector("header, .app-header, .topbar, .panel-header");
+    if (header) {
+      versionNode = document.createElement("div");
+      versionNode.className = "version";
+      versionNode.style.marginLeft = "auto";
+      versionNode.style.fontSize = "12px";
+      versionNode.style.fontWeight = "400";
+      versionNode.style.opacity = "0.75";
+      versionNode.style.whiteSpace = "nowrap";
+      header.appendChild(versionNode);
+    }
+  }
+
+  if (versionNode) {
+    versionNode.textContent = `Prototyp ${version}`;
+  }
 }
 
 function renderHotspots() {
