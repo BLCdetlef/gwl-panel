@@ -22,9 +22,16 @@
           "label": "Biosphärenintegrität",
           "items": [
             {
-              "id": "genetic_functional_integrity",
-              "label": "Genetische & funktionelle Integrität",
-              "source": "data/knowledge/gwl_biosphere_integrity_pilot_v0.1.json"
+              "id": "genetic_diversity_extinction_rate",
+              "label": "Genetische Vielfalt · Aussterberate",
+              "type": "control",
+              "source": "data/knowledge/gwl_biosphere_genetic_diversity_v0.1.json"
+            },
+            {
+              "id": "functional_integrity_hanpp",
+              "label": "Funktionelle Integrität · HANPP",
+              "type": "control",
+              "source": "data/knowledge/gwl_biosphere_functional_integrity_v0.1.json"
             }
           ]
         },

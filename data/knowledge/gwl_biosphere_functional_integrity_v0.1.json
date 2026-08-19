@@ -1,0 +1,206 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Biosphärenintegrität / funktionelle Integrität / HANPP",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Biosphärenintegrität",
+    "subComponent": "Funktionelle Integrität · HANPP",
+    "effectFocus": "Menschliche Aneignung der Nettoprimärproduktion (HANPP) als eigenständige Kontrollvariable der funktionellen Biosphärenintegrität"
+  },
+  "corePrinciples": [
+    "Die funktionelle Komponente wird über die menschliche Aneignung der Nettoprimärproduktion (HANPP) operationalisiert.",
+    "HANPP beschreibt den Anteil potenzieller Nettoprimärproduktion, den Menschen durch Ernte und Landnutzungsänderung beanspruchen oder vermindern.",
+    "HANPP ist ein globaler Proxy für funktionelle Integrität und misst nicht die Funktion jedes einzelnen Ökosystems direkt.",
+    "HANPP und Aussterberate werden nicht zu einem Gesamtwert verrechnet.",
+    "Keine Organmarker allein aufgrund des globalen HANPP-Zustands."
+  ],
+  "nodes": [
+    { "id": "pb_biosphere_integrity", "type": "domain_component", "label": "Biosphärenintegrität" },
+    { "id": "state_functional_integrity", "type": "socio_technical_state", "label": "Funktionelle Integrität / HANPP" },
+    { "id": "effect_ecosystem_function", "type": "biological_effect", "label": "Schwächung von Ökosystemfunktionen" },
+    { "id": "effect_cross_boundary", "type": "biological_effect", "label": "Rückwirkungen auf andere planetare Grenzen" },
+    { "id": "life_ecosystem_services", "type": "life_outcome", "label": "Risiken für Ökosystemleistungen und menschliche Lebensgrundlagen" }
+  ],
+  "edges": [
+    { "from": "pb_biosphere_integrity", "to": "state_functional_integrity", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "state_functional_integrity", "to": "effect_ecosystem_function", "relationType": "contributes_to", "evidenceStatus": "strong" },
+    { "from": "effect_ecosystem_function", "to": "effect_cross_boundary", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "effect_ecosystem_function", "to": "life_ecosystem_services", "relationType": "can_contribute_to", "evidenceStatus": "strong" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "richardson_2023_functional_integrity",
+      "sourceRefs": ["src_richardson_2023"],
+      "design": "Aktualisierung des Planetary-Boundaries-Rahmens; Einführung von HANPP als Kontrollvariable der funktionellen Biosphärenintegrität.",
+      "finding": "Der globale HANPP-Wert liegt bei etwa 30 % gegenüber einer planetaren Grenze von etwa 10 %.",
+      "relationType": "observed_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "planetary_health_check_2025_functional_integrity",
+      "sourceRefs": ["src_phc_2025"],
+      "design": "Aktuelle Bewertung der planetaren Grenzen und Zusammenführung verfügbarer HANPP-Datensätze.",
+      "finding": "Die funktionelle Integrität bleibt mit etwa 30 % HANPP deutlich überschritten; verfügbare methodisch unterschiedliche Studien verorten sie übereinstimmend im Hochrisikobereich.",
+      "relationType": "current_status",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "biosphere_hanpp",
+      "node": "state_functional_integrity",
+      "geography": "Global",
+      "period": "2020-Abschätzung; im Planetary Health Check 2025 weitergeführt",
+      "metric": "Human Appropriation of Net Primary Production (HANPP)",
+      "value": 30,
+      "unit": "percent_of_potential_NPP",
+      "display": "etwa 30 % HANPP",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "operator": "<",
+        "unit": "percent_of_potential_NPP",
+        "display": "Planetare Grenze: etwa 10 % HANPP"
+      },
+      "highRisk": {
+        "value": 20,
+        "operator": ">",
+        "unit": "percent_of_potential_NPP",
+        "display": "Hochrisikobereich: >20 % HANPP"
+      },
+      "uncertainty": "HANPP ist ein global aggregierter Proxy. Verschiedene Datensätze und Methoden ergeben unterschiedliche absolute Werte und bilden regionale Verteilungsmuster nicht vollständig ab.",
+      "interpretation": "Die funktionelle Komponente der Biosphärenintegrität liegt deutlich außerhalb des sicheren Bereichs.",
+      "sourceRefs": ["src_phc_2025", "src_richardson_2023"],
+      "displayType": "study_value"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "biosphere_hanpp",
+    "referenceLabel": "Planetare Grenze: etwa 10 % HANPP",
+    "finding": "Die funktionelle Integrität der Biosphäre ist deutlich überschritten. HANPP liegt 2020 bei etwa 30 % gegenüber einer planetaren Grenze von etwa 10 %.",
+    "effectPath": "Hohe HANPP → weniger Energie und Biomasse für die nichtmenschliche Biosphäre → veränderte Ökosystemfunktionen",
+    "uncertainty": "HANPP ist ein Proxy für funktionelle Integrität und keine direkte Messung aller lokalen Ökosystemfunktionen.",
+    "primaryTimeSeriesId": "biosphere_hanpp_1910_2020",
+    "statusYear": 2020,
+    "statusLabel": "2020-Abschätzung"
+  },
+  "pathways": [
+    {
+      "id": "path_hanpp_ecosystem_function",
+      "label": "Hohe menschliche Aneignung der Primärproduktion → weniger Energie und Biomasse für die nichtmenschliche Biosphäre → veränderte Ökosystemfunktionen",
+      "nodes": ["state_functional_integrity", "effect_ecosystem_function"],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_biosphere_cross_boundaries",
+      "label": "Geschwächte Biosphärenfunktionen → Wechselwirkungen mit Klima, Land-System-Wandel, Süßwasser und Nährstoffkreisläufen",
+      "nodes": ["effect_ecosystem_function", "effect_cross_boundary"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keinen Organmarker allein aufgrund des globalen HANPP-Zustands aktivieren."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_functional_metric",
+      "question": "Wie soll im GWL-Panel erklärt werden, dass HANPP ein Proxy für funktionelle Integrität ist und nicht die Funktion jedes Ökosystems direkt misst?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_regional_function",
+      "question": "Welche regionalen Studien zu Lebensgemeinschaften und Ökosystemleistungen eignen sich als Vertiefungen unter HANPP, ohne als regionale HANPP-Werte missverstanden zu werden?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; nicht Teil der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "biomass_land_use",
+        "label": "Biomasse- und Landnutzungsdruck",
+        "level": "hoch",
+        "rationale": "Ernte, Beweidung, Forstwirtschaft und Landnutzungsänderungen beeinflussen die für Ökosysteme verfügbare Nettoprimärproduktion."
+      },
+      {
+        "id": "cross_boundary_management",
+        "label": "Systemische Hebel",
+        "level": "hoch",
+        "rationale": "Klima-, Land-, Wasser-, Nährstoff- und Biodiversitätspolitik greifen ineinander."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adh2458",
+      "doi": "10.1126/sciadv.adh2458",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_phc_2025",
+      "title": "Planetary Health Check 2025",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/change-in-biosphere-integrity/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Biosphärenintegrität",
+    "item": "Funktionelle Integrität · HANPP",
+    "type": "control"
+  },
+  "timeSeries": [
+    {
+      "id": "biosphere_hanpp_1910_2020",
+      "label": "Funktionelle Integrität – HANPP",
+      "metric": "Human Appropriation of Net Primary Production (HANPP) als Anteil der Referenz-NPP",
+      "unit": "%",
+      "geography": "Global",
+      "dataStartYear": 1910,
+      "dataEndYear": 2020,
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "unit": "%",
+        "display": "Planetare Grenze: etwa 10 % HANPP"
+      },
+      "highRisk": {
+        "value": 20,
+        "unit": "%",
+        "display": "Hochrisikobereich: >20 % HANPP"
+      },
+      "sourceRefs": ["src_phc_2025", "src_richardson_2023"],
+      "methodNote": "Planetary Health Check 2025 beschreibt die historische HANPP-Reihe als 10–20-Jahres-Mittel; 2020 ist eine separate Abschätzung. Die Stützwerte sind näherungsweise aus der publizierten Abbildung abgelesen; es wird kein künstliches 5-Jahres-Raster erzeugt.",
+      "uncertainty": "Näherungswerte aus einer publizierten Abbildung; keine jährliche Messgenauigkeit. HANPP ist ein Proxy, und methodisch unterschiedliche Datensätze ergeben unterschiedliche absolute Werte.",
+      "points": [
+        { "year": 1910, "value": 13.0, "display": "≈ 13,0 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1910 liegt HANPP näherungsweise bei 13,0 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1920, "value": 13.8, "display": "≈ 13,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1920 liegt HANPP näherungsweise bei 13,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1930, "value": 14.8, "display": "≈ 14,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1930 liegt HANPP näherungsweise bei 14,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1940, "value": 15.8, "display": "≈ 15,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1940 liegt HANPP näherungsweise bei 15,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1950, "value": 17.0, "display": "≈ 17,0 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1950 liegt HANPP näherungsweise bei 17,0 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1960, "value": 18.5, "display": "≈ 18,5 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1960 liegt HANPP näherungsweise bei 18,5 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1970, "value": 20.5, "display": "≈ 20,5 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1970 liegt HANPP näherungsweise bei 20,5 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1980, "value": 22.8, "display": "≈ 22,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1980 liegt HANPP näherungsweise bei 22,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 1990, "value": 24.8, "display": "≈ 24,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1990 liegt HANPP näherungsweise bei 24,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 2000, "value": 26.5, "display": "≈ 26,5 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 2000 liegt HANPP näherungsweise bei 26,5 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 2010, "value": 28.0, "display": "≈ 28,0 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 2010 liegt HANPP näherungsweise bei 28,0 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
+        { "year": 2020, "value": 30.0, "display": "≈ 30,0 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 2020 liegt HANPP bei etwa 30,0 % der Referenz-NPP.", "uncertainty": "Separate 2020-Abschätzung; methodisch unterschiedliche Datensätze ergeben unterschiedliche absolute Werte." }
+      ]
+    }
+  ]
+}

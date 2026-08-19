@@ -1,0 +1,152 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Biosphärenintegrität / genetische Vielfalt / Aussterberate",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Biosphärenintegrität",
+    "subComponent": "Genetische Vielfalt · Aussterberate",
+    "effectFocus": "Genetische Vielfalt: globale Aussterberate als eigenständige Kontrollvariable der planetaren Grenze Biosphärenintegrität"
+  },
+  "corePrinciples": [
+    "Die genetische Komponente der Biosphärenintegrität wird über die Aussterberate in E/MSY operationalisiert.",
+    "Die Aussterberate und HANPP sind unterschiedliche Kontrollvariablen und werden nicht zu einem Gesamtwert verrechnet.",
+    "Regionale Artenzahlen oder Bestandsrückgänge sind wichtige Vertiefungen, aber keine regionalen Ersatzwerte für die globale E/MSY-Kontrollvariable.",
+    "Keine Organmarker allein aufgrund des globalen Zustands der genetischen Vielfalt."
+  ],
+  "nodes": [
+    { "id": "pb_biosphere_integrity", "type": "domain_component", "label": "Biosphärenintegrität" },
+    { "id": "state_genetic_diversity", "type": "socio_technical_state", "label": "Genetische Vielfalt / Aussterberate" },
+    { "id": "effect_resilience", "type": "biological_effect", "label": "Verringerte Resilienz und Anpassungsfähigkeit" },
+    { "id": "life_ecosystem_services", "type": "life_outcome", "label": "Risiken für Ökosystemleistungen und menschliche Lebensgrundlagen" }
+  ],
+  "edges": [
+    { "from": "pb_biosphere_integrity", "to": "state_genetic_diversity", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "state_genetic_diversity", "to": "effect_resilience", "relationType": "contributes_to", "evidenceStatus": "strong" },
+    { "from": "effect_resilience", "to": "life_ecosystem_services", "relationType": "can_contribute_to", "evidenceStatus": "strong" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "richardson_2023_genetic_diversity",
+      "sourceRefs": ["src_richardson_2023"],
+      "design": "Aktualisierung des Planetary-Boundaries-Rahmens mit globaler Bewertung aller neun Grenzen.",
+      "finding": "Die genetische Komponente liegt mit einer konservativ angesetzten Aussterberate von mehr als 100 E/MSY deutlich außerhalb der Grenze von weniger als 10 E/MSY.",
+      "relationType": "observed_global_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "planetary_health_check_2025_genetic_diversity",
+      "sourceRefs": ["src_phc_2025"],
+      "design": "Aktuelle Bewertung der planetaren Grenzen.",
+      "finding": "Der Planetary Health Check 2025 weist für die Aussterberate eine Größenordnung von 100–1.000 E/MSY aus; die Kontrollvariable bleibt im Hochrisikobereich.",
+      "relationType": "current_status",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "biosphere_extinction_rate",
+      "node": "state_genetic_diversity",
+      "geography": "Global",
+      "period": "Stand Planetary Health Check 2025",
+      "metric": "Aussterberate",
+      "value": 100,
+      "operator": ">",
+      "unit": "E/MSY",
+      "display": ">100 E/MSY",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 10,
+        "operator": "<",
+        "unit": "E/MSY",
+        "display": "Planetare Grenze: <10 E/MSY"
+      },
+      "uncertainty": "Globale Aussterberaten sind nur näherungsweise bestimmbar. Der Planetary Health Check 2025 nennt eine Größenordnung von 100–1.000 E/MSY; die kompakte Anzeige bleibt beim konservativen Wert >100 E/MSY.",
+      "interpretation": "Die genetische Komponente der Biosphärenintegrität liegt deutlich außerhalb des sicheren Bereichs.",
+      "sourceRefs": ["src_phc_2025", "src_richardson_2023"],
+      "displayType": "study_value"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "biosphere_extinction_rate",
+    "referenceLabel": "Planetare Grenze: <10 E/MSY",
+    "finding": "Die globale Aussterberate liegt bei mehr als 100 E/MSY und damit deutlich über der planetaren Grenze von weniger als 10 E/MSY.",
+    "effectPath": "Erhöhte Aussterberate → Verlust genetischer Vielfalt → geringere Anpassungsfähigkeit und Resilienz",
+    "uncertainty": "E/MSY ist eine globale, modell- und beobachtungsbasierte Größenordnung. Aus heterogenen Schätzungen wird keine scheinbar kontinuierliche Zeitreihe erzeugt.",
+    "statusYear": 2025,
+    "statusLabel": "Planetary Health Check 2025"
+  },
+  "pathways": [
+    {
+      "id": "path_genetic_resilience",
+      "label": "Erhöhte Aussterberate → Verlust genetischer Vielfalt → geringere Anpassungsfähigkeit und Resilienz",
+      "nodes": ["state_genetic_diversity", "effect_resilience"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keinen Organmarker allein aufgrund der globalen Aussterberate aktivieren."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_extinction_timeseries",
+      "question": "Welche belastbare globale Zeitreihe eignet sich für die Aussterberate, ohne aus heterogenen Schätzungen eine scheinbar kontinuierliche Messreihe zu erzeugen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_regional_depth",
+      "question": "Welche regionalen Arten-, Populations- oder genetischen Datensätze eignen sich als Vertiefung, ohne sie als regionale E/MSY-Kontrollvariable misszuverstehen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; nicht Teil der naturwissenschaftlichen Grenzmessung.",
+    "dimensions": [
+      {
+        "id": "habitat_species_protection",
+        "label": "Arten und Lebensräume schützen",
+        "level": "hoch",
+        "rationale": "Lebensraumverlust, Übernutzung, invasive Arten, Verschmutzung und Klimawandel erhöhen das Aussterberisiko."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_richardson_2023",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson, K. et al.",
+      "publisher": "Science Advances",
+      "year": 2023,
+      "type": "peer_reviewed_planetary_boundaries_assessment",
+      "url": "https://www.science.org/doi/10.1126/sciadv.adh2458",
+      "doi": "10.1126/sciadv.adh2458",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_phc_2025",
+      "title": "Planetary Health Check 2025",
+      "authors": "Planetary Boundaries Science Lab / Potsdam Institute for Climate Impact Research and partners",
+      "publisher": "Planetary Health Check",
+      "year": 2025,
+      "type": "current_planetary_boundaries_assessment",
+      "url": "https://www.planetaryhealthcheck.org/boundary/change-in-biosphere-integrity/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Biosphärenintegrität",
+    "item": "Genetische Vielfalt · Aussterberate",
+    "type": "control"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Es ist keine methodisch konsistente globale E/MSY-Zeitreihe hinterlegt.",
+    "panelRule": "Keinen Zeitregler anzeigen."
+  }
+}
