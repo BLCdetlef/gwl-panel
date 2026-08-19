@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.23 · B05";
+const GWL_BUILD_VERSION = "0.9.24 · B06";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -164,16 +164,172 @@ async function loadBodymapConfig() {
 }
 
 
+
+const FRESHWATER_KNOWLEDGE_SOURCE = "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json";
+
+function normalizeFreshwaterBlueGreenKnowledge(payload) {
+  if (!payload || payload.planetaryBoundary !== "Süßwasser" || !Array.isArray(payload.timeSeries)) {
+    return payload;
+  }
+
+  const datasetDoi = payload?.source?.persistentIdentifiers?.datasetDOI || payload?.source?.doi || "";
+  const publicationDoi = payload?.source?.persistentIdentifiers?.publicationDOI || "";
+  const sourceUrl = publicationDoi ? `https://doi.org/${publicationDoi}` : (datasetDoi ? `https://doi.org/${datasetDoi}` : "");
+
+  const series = payload.timeSeries.map(item => {
+    const refValue = Number(item.boundaryUpperEnd);
+    const refDisplay = Number.isFinite(refValue)
+      ? `Planetare Grenze: ${String(refValue.toFixed(2)).replace(".", ",")} %`
+      : "–";
+
+    const points = (item.values || []).map(point => {
+      const value = Number(point.value);
+      const iqrMin = Number(point.iqrMin);
+      const iqrMax = Number(point.iqrMax);
+      const display = Number.isFinite(value)
+        ? `≈ ${String(value.toFixed(2)).replace(".", ",")} %`
+        : "–";
+      const uncertainty = Number.isFinite(iqrMin) && Number.isFinite(iqrMax)
+        ? `Modellensemble IQR: ${String(iqrMin.toFixed(2)).replace(".", ",")}–${String(iqrMax.toFixed(2)).replace(".", ",")} %.`
+        : "Interquartilsbereich des Modellensembles.";
+
+      return {
+        year: Number(point.year),
+        value,
+        display,
+        sourceRefs: ["src_freshwater_virkki_2026"],
+        finding: `Für ${point.year} liegt der Anteil der globalen eisfreien Landfläche mit starken lokalen Abweichungen bei rund ${String(value.toFixed(2)).replace(".", ",")} %.`,
+        uncertainty
+      };
+    });
+
+    return {
+      id: item.id,
+      label: item.title,
+      metric: item.measure,
+      unit: item.unit || "%",
+      geography: "Global",
+      dataStartYear: 1901,
+      dataEndYear: 2019,
+      reference: {
+        type: "planetary_boundary",
+        value: refValue,
+        unit: "%",
+        display: refDisplay
+      },
+      sourceRefs: ["src_freshwater_virkki_2026"],
+      methodNote: payload.methodNote || "",
+      uncertainty: item.uncertainty || "Interquartilsbereich des Modellensembles (IQR).",
+      provenance: item.provenance || {},
+      points
+    };
+  });
+
+  return {
+    ...payload,
+    topic: "Planetare Grenze Süßwasser: Blaues und Grünes Wasser",
+    entry: {
+      systemBoundary: "Süßwasser",
+      domainComponent: "Süßwasser",
+      effectFocus: "Anteil der globalen eisfreien Landfläche mit starken Abweichungen von präindustriell-ähnlicher Variabilität."
+    },
+    timeSeries: series,
+    presentation: {
+      compactKnowledgeView: true,
+      primaryTimeSeriesId: series[0]?.id || null,
+      effectPath: "Veränderter Süßwasserzustand → Ökosystemfunktionen und Wasserverfügbarkeit",
+      uncertainty: "IQR des hydrologischen Modellensembles; Originaljahreswerte, im Panel im 5-Jahres-Raster plus 2019 dargestellt."
+    },
+    measurements: [],
+    pathways: [
+      {
+        label: "Süßwasserzustand → Ökosysteme und Wasserverfügbarkeit",
+        chain: ["Abweichung vom natürlichen Süßwasserzustand", "veränderte Wasserverfügbarkeit", "Ökosystemfunktionen"],
+        evidenceStatus: "wissenschaftlich modellgestützt"
+      }
+    ],
+    healthContext: { systemImpacts: [] },
+    sources: [
+      {
+        id: "src_freshwater_virkki_2026",
+        title: payload?.source?.publication || "Virkki et al. (2026)",
+        publisher: "Nature Communications",
+        year: 2026,
+        url: sourceUrl,
+        access: "open_full_text"
+      }
+    ],
+    sourcePolicy: {
+      rule: "Originaldateiname, verwendete Spalten, DOI und Panel-Auswahlregel sind in der Knowledge-Datei hinterlegt."
+    }
+  };
+}
+
+function getKnowledgeNetworkForItem(network, item) {
+  if (!network || !item?.knowledgeTimeSeriesId) return network;
+  return {
+    ...network,
+    entry: {
+      ...(network.entry || {}),
+      effectFocus: item.knowledgeEffectFocus || network.entry?.effectFocus
+    },
+    presentation: {
+      ...(network.presentation || {}),
+      primaryTimeSeriesId: item.knowledgeTimeSeriesId
+    }
+  };
+}
+
+function syncFreshwaterBlueGreenNavigation() {
+  const boundary = data.boundaries.find(item => item.id === "freshwater");
+  if (!boundary) return;
+
+  const keep = (boundary.items || []).filter(item =>
+    item.id !== "blue-water-streamflow" &&
+    item.id !== "green-water-rootzone-soil-moisture"
+  );
+
+  const freshwaterItems = [
+    {
+      id: "blue-water-streamflow",
+      scope: "all",
+      label: "Blaues Wasser · Abfluss",
+      enabled: true,
+      knowledgeSource: FRESHWATER_KNOWLEDGE_SOURCE,
+      knowledgeTimeSeriesId: "blue_water_streamflow",
+      knowledgeEffectFocus: "Blaues Wasser: Abfluss (streamflow) als Kontrollvariable der Planetaren Grenze Süßwasser.",
+      menuType: "control"
+    },
+    {
+      id: "green-water-rootzone-soil-moisture",
+      scope: "all",
+      label: "Grünes Wasser · Bodenfeuchte",
+      enabled: true,
+      knowledgeSource: FRESHWATER_KNOWLEDGE_SOURCE,
+      knowledgeTimeSeriesId: "green_water_rootzone_soil_moisture",
+      knowledgeEffectFocus: "Grünes Wasser: Wurzelzonen-Bodenfeuchte als Kontrollvariable der Planetaren Grenze Süßwasser.",
+      menuType: "control"
+    }
+  ];
+
+  boundary.items = [...freshwaterItems, ...keep];
+  boundary.enabled = true;
+}
+
 async function loadKnowledgeNetworks() {
   knowledgeNetworks = {};
   data.knowledgeSources = data.knowledgeSources || {};
+  data.knowledgeSources.freshwaterBlueGreen = FRESHWATER_KNOWLEDGE_SOURCE;
 
   async function loadSource(key, url) {
     if (!url || knowledgeNetworks[key]) return;
     try {
       const response = await fetch(url, { cache: "no-store" });
       if (!response.ok) throw new Error(`${url}: ${response.status}`);
-      knowledgeNetworks[key] = await response.json();
+      const payload = await response.json();
+      knowledgeNetworks[key] = url === FRESHWATER_KNOWLEDGE_SOURCE
+        ? normalizeFreshwaterBlueGreenKnowledge(payload)
+        : payload;
     } catch (error) {
       console.warn("Wissensnetz konnte nicht geladen werden:", error);
     }
@@ -1376,11 +1532,12 @@ function getActiveKnowledgeContext() {
   const boundary = getBoundary(state.boundaryId);
   const item = boundary?.items?.find(entry => entry.id === state.itemId);
   if (!item?.knowledgeSource || state.boundaryId === "mental-load") return null;
+  const rawNetwork = getKnowledgeNetworkBySource(item.knowledgeSource);
   return {
     state,
     boundary,
     item,
-    network: getKnowledgeNetworkBySource(item.knowledgeSource),
+    network: getKnowledgeNetworkForItem(rawNetwork, item),
     indexEntry: getKnowledgeIndexEntry(state.boundaryId, state.itemId)
   };
 }
@@ -1565,7 +1722,8 @@ function renderKnowledgePanel() {
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
-    const network = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
+    const rawNetwork = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
+    const network = getKnowledgeNetworkForItem(rawNetwork, activeItem);
 
     if (state.boundaryId === "nutrients") {
       // Nährstoffkreisläufe sollen dieselbe Grundstruktur wie Landnutzung zeigen:
@@ -2407,6 +2565,7 @@ async function initPanel() {
   await loadHealthContributionPrototype();
     await loadKnowledgeNetworks();
     syncKnowledgeNavigationFromIndex();
+    syncFreshwaterBlueGreenNavigation();
   } catch (error) {
     console.error(error);
     organReadout.textContent = "Bodymap-Konfiguration konnte nicht geladen werden.";
