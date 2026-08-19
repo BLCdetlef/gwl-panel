@@ -1,4 +1,5 @@
 const data = window.GWL_DATA;
+const GWL_BUILD_VERSION = "0.9.22 · B01";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -1948,7 +1949,7 @@ function ensureHealthLegend() {
 }
 
 function updatePrototypeVersion() {
-  const version = data?.version || "0.9";
+  const version = GWL_BUILD_VERSION || data?.version || "0.9";
   document.title = `GWL-Panel – Prototyp ${version}`;
   const versionNode = document.querySelector(".version");
   if (versionNode) versionNode.textContent = `Prototyp ${version}`;
