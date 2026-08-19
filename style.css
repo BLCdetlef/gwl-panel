@@ -52,12 +52,20 @@ a { color: inherit; }
 .time-presets { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
 .time-preset { border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 5px 8px; font-size: 10px; cursor: pointer; }
 .time-preset.active { background: #222; color: #fff; border-color: #222; }
-.slider-wrap { position: relative; padding: 15px 4px 18px; }
+.slider-wrap { position: relative; padding: 15px 4px 22px; }
 #timeSlider { width: 100%; accent-color: #222; cursor: pointer; }
 #timeSlider:disabled { cursor: default; opacity: .45; }
-.time-markers { position: absolute; left: 8px; right: 8px; top: 35px; height: 14px; pointer-events: none; }
-.time-marker { position: absolute; transform: translateX(-50%); font-size: 9px; color: var(--muted); white-space: nowrap; }
-.time-marker::before { content: ""; display: block; width: 1px; height: 5px; margin: -6px auto 1px; background: #777; }
+.time-markers { position: absolute; left: 8px; right: 8px; top: 35px; height: 18px; pointer-events: none; overflow: visible; }
+.time-marker { position: absolute; transform: translateX(-50%); font-size: 8px; line-height: 1; color: var(--muted); white-space: nowrap; }
+.time-marker::before { content: ""; display: block; width: 1px; height: 5px; margin: -6px auto 2px; background: #777; }
+
+/* v0.9.24 B08 – Zeitachsen lesbarer, ohne bestehende Zeitreihen anzutasten.
+   Bei vielen Markierungen wird nur jede zweite Beschriftung gezeigt;
+   Anfang und Ende bleiben immer sichtbar. Die Messpunkte selbst bleiben unverändert. */
+.time-marker:nth-child(even):not(:last-child) { color: transparent; }
+.time-marker:nth-child(even):not(:last-child)::before { background: #aaa; }
+.time-marker:first-child { transform: translateX(0); text-align: left; }
+.time-marker:last-child { transform: translateX(-100%); text-align: right; color: var(--muted); }
 .time-status { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .metric { padding: 10px; min-height: 82px; }
