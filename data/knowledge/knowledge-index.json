@@ -54,12 +54,28 @@
             {
               "id": "nitrogen",
               "label": "Stickstoff",
+              "type": "control",
               "source": "data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json"
+            },
+            {
+              "id": "nitrat_im_grundwasser",
+              "label": "Nitrat im Grundwasser",
+              "type": "study",
+              "parentId": "nitrogen",
+              "source": "data/knowledge/gwl_nitrat_pilot_v0.2.json"
             },
             {
               "id": "phosphorus",
               "label": "Phosphor",
+              "type": "control",
               "source": "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json"
+            },
+            {
+              "id": "oberflaechenwasser_eutrophierung",
+              "label": "Oberflächengewässer / Eutrophierung",
+              "type": "study",
+              "parentId": "phosphorus",
+              "source": "data/knowledge/gwl_phosphor_pilot_v0.1.json"
             }
           ]
         }

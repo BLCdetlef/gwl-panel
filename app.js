@@ -1064,46 +1064,6 @@ function syncKnowledgeNavigationFromIndex() {
       }));
       if (!indexedItems.length) continue;
 
-      // Nährstoffkreisläufe: Grundlagenknoten + eingerückte Vertiefungen.
-      if (boundary.id === "nutrients") {
-        const nestedItems = [];
-        for (const item of indexedItems) {
-          nestedItems.push(item);
-
-          const label = String(item.label || "").toLowerCase();
-          const id = normalizeKnowledgeId(item.id);
-
-          if (label.includes("stickstoff") || id.includes("nitrogen") || id.includes("stickstoff")) {
-            nestedItems.push({
-              id: "nitrat-im-grundwasser",
-              scope: "all",
-              label: "↳ Nitrat im Grundwasser",
-              enabled: true,
-              knowledgeSource: "data/knowledge/gwl_nitrat_pilot_v0.2.json",
-              knowledgeItemId: "nitrat_im_grundwasser",
-              knowledgeGroupId: group.id,
-              knowledgeBoundaryId: indexBoundary.id,
-              depthOf: item.id
-            });
-          }
-
-          if (label.includes("phosphor") || id.includes("phosphorus") || id.includes("phosphor")) {
-            nestedItems.push({
-              id: "oberflaechenwasser-eutrophierung",
-              scope: "all",
-              label: "↳ Oberflächengewässer / Eutrophierung",
-              enabled: true,
-              knowledgeSource: "data/knowledge/gwl_phosphor_pilot_v0.1.json",
-              knowledgeItemId: "oberflaechenwasser_eutrophierung",
-              knowledgeGroupId: group.id,
-              knowledgeBoundaryId: indexBoundary.id,
-              depthOf: item.id
-            });
-          }
-        }
-        indexedItems = nestedItems;
-      }
-
       // Der Knowledge-Index ist für gleichnamige Unterpunkte die maßgebliche Quelle.
       // Bereits fest programmierte Legacy-Einträge mit derselben ID werden ersetzt,
       // statt zusätzlich neben dem Index-Eintrag stehen zu bleiben.
