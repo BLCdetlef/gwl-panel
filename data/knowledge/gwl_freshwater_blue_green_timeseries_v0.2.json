@@ -1,0 +1,390 @@
+{
+  "format": "gwl-knowledge-v1",
+  "planetaryBoundary": "Süßwasser",
+  "title": "Süßwasser – Blaues und Grünes Wasser",
+  "classification": {
+    "level1": "Planetare Grenze",
+    "level2": [
+      {
+        "id": "blue_water",
+        "label": "Blaues Wasser",
+        "role": "Kontrollvariable",
+        "proxy": "Abfluss (streamflow)"
+      },
+      {
+        "id": "green_water",
+        "label": "Grünes Wasser",
+        "role": "Kontrollvariable",
+        "proxy": "Wurzelzonen-Bodenfeuchte (root-zone soil moisture)"
+      }
+    ],
+    "note": "Blaues und Grünes Wasser sind gleichrangige Kontrollvariablen; keine der beiden Reihen ist eine Vertiefungsstudie."
+  },
+  "timeSeries": [
+    {
+      "id": "blue_water_streamflow",
+      "title": "Blaues Wasser – Abfluss",
+      "measure": "Anteil der globalen eisfreien Landfläche mit lokalen Abweichungen von präindustriell-ähnlicher Variabilität",
+      "unit": "%",
+      "period": "1901–2019",
+      "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
+      "boundaryUpperEnd": 12.94,
+      "baseline": 10.31,
+      "uncertainty": "Interquartilsbereich des Modellensembles (IQR)",
+      "values": [
+        {
+          "year": 1905,
+          "value": 14.33,
+          "iqrMin": 13.84,
+          "iqrMax": 14.56
+        },
+        {
+          "year": 1910,
+          "value": 11.87,
+          "iqrMin": 11.47,
+          "iqrMax": 12.59
+        },
+        {
+          "year": 1915,
+          "value": 14.45,
+          "iqrMin": 13.96,
+          "iqrMax": 15.27
+        },
+        {
+          "year": 1920,
+          "value": 13.78,
+          "iqrMin": 12.32,
+          "iqrMax": 14.23
+        },
+        {
+          "year": 1925,
+          "value": 11.53,
+          "iqrMin": 11.38,
+          "iqrMax": 11.81
+        },
+        {
+          "year": 1930,
+          "value": 10.34,
+          "iqrMin": 9.44,
+          "iqrMax": 12.36
+        },
+        {
+          "year": 1935,
+          "value": 10.81,
+          "iqrMin": 10.35,
+          "iqrMax": 11.22
+        },
+        {
+          "year": 1940,
+          "value": 13.77,
+          "iqrMin": 12.67,
+          "iqrMax": 15.58
+        },
+        {
+          "year": 1945,
+          "value": 16.01,
+          "iqrMin": 14.62,
+          "iqrMax": 18.78
+        },
+        {
+          "year": 1950,
+          "value": 14.19,
+          "iqrMin": 13.59,
+          "iqrMax": 14.84
+        },
+        {
+          "year": 1955,
+          "value": 13.62,
+          "iqrMin": 13.04,
+          "iqrMax": 15.42
+        },
+        {
+          "year": 1960,
+          "value": 13.35,
+          "iqrMin": 12.39,
+          "iqrMax": 15.31
+        },
+        {
+          "year": 1965,
+          "value": 14.76,
+          "iqrMin": 13.68,
+          "iqrMax": 16.07
+        },
+        {
+          "year": 1970,
+          "value": 16.43,
+          "iqrMin": 13.65,
+          "iqrMax": 18.39
+        },
+        {
+          "year": 1975,
+          "value": 17.11,
+          "iqrMin": 15.55,
+          "iqrMax": 21.63
+        },
+        {
+          "year": 1980,
+          "value": 15.94,
+          "iqrMin": 14.17,
+          "iqrMax": 21.45
+        },
+        {
+          "year": 1985,
+          "value": 19.07,
+          "iqrMin": 16.73,
+          "iqrMax": 24.05
+        },
+        {
+          "year": 1990,
+          "value": 19.25,
+          "iqrMin": 17.69,
+          "iqrMax": 25.69
+        },
+        {
+          "year": 1995,
+          "value": 18.31,
+          "iqrMin": 16.78,
+          "iqrMax": 24.12
+        },
+        {
+          "year": 2000,
+          "value": 21.11,
+          "iqrMin": 19.5,
+          "iqrMax": 26.25
+        },
+        {
+          "year": 2005,
+          "value": 20.31,
+          "iqrMin": 18.17,
+          "iqrMax": 28.82
+        },
+        {
+          "year": 2010,
+          "value": 22.56,
+          "iqrMin": 19.75,
+          "iqrMax": 31.54
+        },
+        {
+          "year": 2015,
+          "value": 23.22,
+          "iqrMin": 20.68,
+          "iqrMax": 31.25
+        },
+        {
+          "year": 2019,
+          "value": 22.84,
+          "iqrMin": 19.55,
+          "iqrMax": 31.44
+        }
+      ],
+      "provenance": {
+        "originalFile": "PHC_dis_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "variable": "dis",
+        "area": "global",
+        "scenario": "obsclim_histsoc_default",
+        "class": "summed_deviations",
+        "valueColumn": "ensemble_median",
+        "uncertaintyColumns": [
+          "IQR_min",
+          "IQR_max"
+        ],
+        "boundaryColumns": [
+          "boundary_baseline",
+          "boundary_upper_end"
+        ],
+        "originalTemporalResolution": "annual",
+        "originalPeriod": "1901–2019",
+        "panelSamplingRule": "Exact source values for 1905, 1910, …, 2015 plus latest available year 2019; no interpolation and no figure-based estimation."
+      }
+    },
+    {
+      "id": "green_water_rootzone_soil_moisture",
+      "title": "Grünes Wasser – Bodenfeuchte",
+      "measure": "Anteil der globalen eisfreien Landfläche mit lokalen Abweichungen von präindustriell-ähnlicher Variabilität",
+      "unit": "%",
+      "period": "1901–2019",
+      "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
+      "boundaryUpperEnd": 12.38,
+      "baseline": 9.83,
+      "uncertainty": "Interquartilsbereich des Modellensembles (IQR)",
+      "values": [
+        {
+          "year": 1905,
+          "value": 13.68,
+          "iqrMin": 13.02,
+          "iqrMax": 14.31
+        },
+        {
+          "year": 1910,
+          "value": 11.09,
+          "iqrMin": 10.72,
+          "iqrMax": 11.43
+        },
+        {
+          "year": 1915,
+          "value": 13.47,
+          "iqrMin": 12.9,
+          "iqrMax": 13.65
+        },
+        {
+          "year": 1920,
+          "value": 12.78,
+          "iqrMin": 10.8,
+          "iqrMax": 14.53
+        },
+        {
+          "year": 1925,
+          "value": 11.15,
+          "iqrMin": 10.63,
+          "iqrMax": 11.53
+        },
+        {
+          "year": 1930,
+          "value": 10.13,
+          "iqrMin": 8.96,
+          "iqrMax": 11.36
+        },
+        {
+          "year": 1935,
+          "value": 9.72,
+          "iqrMin": 9.54,
+          "iqrMax": 9.96
+        },
+        {
+          "year": 1940,
+          "value": 12.06,
+          "iqrMin": 11.09,
+          "iqrMax": 13.03
+        },
+        {
+          "year": 1945,
+          "value": 15.01,
+          "iqrMin": 13.16,
+          "iqrMax": 16.57
+        },
+        {
+          "year": 1950,
+          "value": 13.08,
+          "iqrMin": 13.02,
+          "iqrMax": 13.29
+        },
+        {
+          "year": 1955,
+          "value": 12.95,
+          "iqrMin": 12.27,
+          "iqrMax": 13.2
+        },
+        {
+          "year": 1960,
+          "value": 11.1,
+          "iqrMin": 10.62,
+          "iqrMax": 11.58
+        },
+        {
+          "year": 1965,
+          "value": 13.3,
+          "iqrMin": 12.79,
+          "iqrMax": 14.15
+        },
+        {
+          "year": 1970,
+          "value": 13.5,
+          "iqrMin": 12.8,
+          "iqrMax": 13.99
+        },
+        {
+          "year": 1975,
+          "value": 16.68,
+          "iqrMin": 15.25,
+          "iqrMax": 17.2
+        },
+        {
+          "year": 1980,
+          "value": 15.1,
+          "iqrMin": 13.98,
+          "iqrMax": 15.42
+        },
+        {
+          "year": 1985,
+          "value": 16.52,
+          "iqrMin": 15.23,
+          "iqrMax": 17.53
+        },
+        {
+          "year": 1990,
+          "value": 17.51,
+          "iqrMin": 15.0,
+          "iqrMax": 19.53
+        },
+        {
+          "year": 1995,
+          "value": 17.07,
+          "iqrMin": 15.07,
+          "iqrMax": 18.49
+        },
+        {
+          "year": 2000,
+          "value": 19.46,
+          "iqrMin": 17.07,
+          "iqrMax": 21.7
+        },
+        {
+          "year": 2005,
+          "value": 19.68,
+          "iqrMin": 16.76,
+          "iqrMax": 22.26
+        },
+        {
+          "year": 2010,
+          "value": 21.66,
+          "iqrMin": 18.13,
+          "iqrMax": 25.66
+        },
+        {
+          "year": 2015,
+          "value": 22.75,
+          "iqrMin": 18.71,
+          "iqrMax": 26.6
+        },
+        {
+          "year": 2019,
+          "value": 23.56,
+          "iqrMin": 19.84,
+          "iqrMax": 27.07
+        }
+      ],
+      "provenance": {
+        "originalFile": "PHC_rootmoist_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "variable": "rootmoist",
+        "area": "global",
+        "scenario": "obsclim_histsoc_default",
+        "class": "summed_deviations",
+        "valueColumn": "ensemble_median",
+        "uncertaintyColumns": [
+          "IQR_min",
+          "IQR_max"
+        ],
+        "boundaryColumns": [
+          "boundary_baseline",
+          "boundary_upper_end"
+        ],
+        "originalTemporalResolution": "annual",
+        "originalPeriod": "1901–2019",
+        "panelSamplingRule": "Exact source values for 1905, 1910, …, 2015 plus latest available year 2019; no interpolation and no figure-based estimation."
+      }
+    }
+  ],
+  "methodNote": "Die Anzeige verwendet exakte Jahreswerte aus den bereitgestellten PHC/Virkki-Datendateien. Für die Panel-Zeitachse werden 5-Jahres-Punkte von 1905 bis 2015 sowie der letzte verfügbare Wert 2019 gezeigt; es wird nicht aus einer Abbildung geschätzt.",
+  "source": {
+    "dataset": "Data for “Regionally divergent drivers behind transgressions of the freshwater change planetary boundary”",
+    "datasetYear": 2026,
+    "doi": "10.5281/zenodo.19663531",
+    "publication": "Virkki et al. (2026), Regionally divergent drivers behind transgressions of the freshwater change planetary boundary, Nature Communications 17, 5132",
+    "publicationDoi": "10.1038/s41467-026-73051-x",
+    "persistentIdentifiers": {
+      "datasetDOI": "10.5281/zenodo.19663531",
+      "publicationDOI": "10.1038/s41467-026-73051-x"
+    },
+    "provenancePolicy": "Original filenames, selected variables/columns, temporal resolution and panel sampling rule are stored with each time series so the displayed values remain traceable even if source URLs change."
+  }
+}
