@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.22 · B02";
+const GWL_BUILD_VERSION = "0.9.23 · B03";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -31,6 +31,8 @@ const organOverlayMedia = document.getElementById("organOverlayMedia");
 const organOverlayFinding = document.getElementById("organOverlayFinding");
 const organOverlayNote = document.getElementById("organOverlayNote");
 const organOverlayContent = document.getElementById("organOverlayContent");
+const organOverlayNoteHomeParent = organOverlayNote?.parentElement || null;
+const organOverlayNoteHomeNextSibling = organOverlayNote?.nextSibling || null;
 const closeOverlayButton = document.getElementById("closeOverlayButton");
 const causeButtonGround = document.getElementById("causeButtonGround");
 const causeButtonEffect = document.getElementById("causeButtonEffect");
@@ -57,6 +59,87 @@ let knowledgePanel = null;
 
 let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
+
+let LIFE_PROTOTYPE_MODE = true;
+let LIFE_HEALTH_DATA = null;
+let LIFE_PROTOTYPE_CONTRIBUTIONS = [];
+
+async function loadHealthContributionPrototype() {
+  if (!LIFE_PROTOTYPE_MODE) return;
+  try {
+    const response = await fetch("health-contributions.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`data/health-contributions.json: ${response.status}`);
+    const payload = await response.json();
+    LIFE_HEALTH_DATA = payload;
+    LIFE_PROTOTYPE_CONTRIBUTIONS = Array.isArray(payload.organs) ? payload.organs : [];
+  } catch (error) {
+    console.warn("Health-Contributions-Prototyp konnte nicht geladen werden:", error);
+    LIFE_HEALTH_DATA = null;
+    LIFE_PROTOTYPE_CONTRIBUTIONS = [];
+  }
+}
+
+function findHotspotIdByLabels(labels = []) {
+  const wanted = labels.map(x => String(x).toLowerCase());
+  for (const [id, def] of Object.entries(HOTSPOTS || {})) {
+    const hay = `${id} ${def?.label || ""}`.toLowerCase();
+    if (wanted.some(label => hay.includes(label))) return id;
+  }
+  return null;
+}
+
+function getHealthSourceById(id) {
+  return (LIFE_HEALTH_DATA?.sources || []).find(source => source.id === id) || null;
+}
+
+function normalizedOrganBurdenScore(contributions = []) {
+  // Nur explizit hinterlegte, bereits normierte zurechenbare Krankheitslast
+  // darf die Graustufe bestimmen. Keine eigene Umrechnung aus DALYs, Fällen
+  // oder relativen Risiken.
+  const values = contributions
+    .filter(item => item.affectsOrganColor === true)
+    .map(item => Number(item?.burden?.normalization?.organBurdenPercent))
+    .filter(Number.isFinite);
+
+  if (!values.length) return null;
+
+  // Mehrere Anteile dürfen nur dann addiert werden, wenn die Datenquelle sie
+  // auf dieselbe organspezifische Bezugsgröße bezieht. V2 nutzt deshalb
+  // standardmäßig nur die explizit gelieferten Prozentwerte und begrenzt bei 100.
+  return Math.max(0, Math.min(100, values.reduce((sum, value) => sum + value, 0)));
+}
+
+function getPrototypeAggregateHealth() {
+  if (!LIFE_PROTOTYPE_MODE) return null;
+
+  const impacts = LIFE_PROTOTYPE_CONTRIBUTIONS
+    .map(bundle => {
+      const organId = bundle.organId && HOTSPOTS[bundle.organId]
+        ? bundle.organId
+        : findHotspotIdByLabels(bundle.organLabels || []);
+      if (!organId) return null;
+
+      const contributors = Array.isArray(bundle.contributions) ? bundle.contributions : [];
+      if (!contributors.length) return null;
+
+      return {
+        organ: organId,
+        label: HOTSPOTS[organId]?.label || bundle.organLabels?.[0] || organId,
+        burdenScore: normalizedOrganBurdenScore(contributors),
+        contributors,
+        healthContributionView: true
+      };
+    })
+    .filter(Boolean);
+
+  return impacts.length
+    ? {
+        contributionModel: true,
+        impacts,
+        note: LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""
+      }
+    : null;
+}
 
 async function loadBodymapConfig() {
   const response = await fetch("bodymap.json", { cache: "no-store" });
@@ -1906,11 +1989,19 @@ function getPfasHealthView() {
         system: "immune",
         label: "Immunsystem",
         evidence: `EFSA: ${critical}.`,
-        note: "Kein belastbarer 0–100-%-Funktionswert und in der aktuellen Bodymap kein eigener Immunsystem-Kuller."
+        note: "Kein belastbarer 0–100-%-Krankheitslastwert und in der aktuellen Bodymap kein eigener Immunsystem-Organmarker."
       }
     ]
   };
 }
+
+function normalizeImpactOrgan(id) {
+  if (id === "reproduction") return "femaleRepro";
+  if (id === "eyes") return "eye";
+  if (id === "gut") return "gut";
+  return id;
+}
+function getImpactForOrgan(organId) { const impacts = currentHealth?.impacts || []; return impacts.find(impact => normalizeImpactOrgan(impact.organ) === organId) || null; }
 
 function normalizeImpactOrgan(id) {
   if (id === "reproduction") return "femaleRepro";
@@ -1938,14 +2029,24 @@ function ensureHealthLegend() {
         <span style="--legend-shade:#777"></span>
         <span style="--legend-shade:#111"></span>
       </span>
-      <span><strong>hell</strong> = geringe/keine quantifizierte Beeinträchtigung · <strong>dunkel</strong> = stärkere quantifizierte Beeinträchtigung</span>
+      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
     </div>
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
-      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare 0–100-%-Funktionsskala vorhanden.</span>
+      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
+    </div>
+    <div class="health-legend-row health-legend-method">
+      <span><strong>Methodik:</strong> Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert werden kann.</span>
     </div>`;
   bodymapPanel.insertBefore(healthLegend, readout);
   return healthLegend;
+}
+
+function updatePrototypeVersion() {
+  const version = data?.version || "0.9";
+  document.title = `GWL-Panel – Prototyp ${version}`;
+  const versionNode = document.querySelector(".version");
+  if (versionNode) versionNode.textContent = `Prototyp ${version}`;
 }
 
 function updatePrototypeVersion() {
@@ -1994,7 +2095,12 @@ function clearHotspotStates() {
 }
 
 function renderHealth(health) {
-  currentHealth = health; clearHotspotStates();
+  if (!health && LIFE_PROTOTYPE_MODE) {
+    health = getPrototypeAggregateHealth();
+  }
+
+  currentHealth = health;
+  clearHotspotStates();
   const impacts = health?.impacts || [];
   if (!impacts.length) {
     const systemImpacts = health?.systemImpacts || [];
@@ -2013,7 +2119,20 @@ function renderHealth(health) {
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) return;
-    if (typeof impact.functionLoss === "number") {
+    if (impact.healthContributionView) {
+      if (typeof impact.burdenScore === "number") {
+        const score = Math.max(0, Math.min(100, impact.burdenScore));
+        const shade = Math.round(255 * (1 - score / 100));
+        dot.classList.remove("is-neutral");
+        dot.classList.add("is-quantified");
+        dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
+        texts.push(`${impact.label}: ${score} % normierte zurechenbare Krankheitslast · ${impact.contributors?.length || 0} Beiträge.`);
+      } else {
+        dot.classList.remove("is-neutral");
+        dot.classList.add("is-unquantified");
+        texts.push(`${impact.label}: ${impact.contributors?.length || 0} belegte Beiträge; noch keine gemeinsame normierte Krankheitslast für die Organfarbe.`);
+      }
+    } else if (typeof impact.functionLoss === "number") {
       const loss = Math.max(0, Math.min(100, impact.functionLoss));
       const shade = Math.round(255 * (1 - loss / 100));
       dot.classList.remove("is-neutral"); dot.classList.add("is-quantified"); dot.style.setProperty("--hotspot-fill", `rgb(${shade}, ${shade}, ${shade})`);
@@ -2055,17 +2174,82 @@ function openOrganOverlay(organId, preserveHidden = false) {
   const impact = getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
-  // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
-  // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
-  organOverlayFinding.textContent = findingText.textContent || "–";
+  if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
+    organOverlayContent.classList.add("health-contribution-layout");
+    if (organOverlayNote?.parentElement !== organOverlayContent) {
+      organOverlayContent.appendChild(organOverlayNote);
+    }
 
-  // Einordnung bleibt standardmäßig zugeklappt und verweist auf WIRKUNG,
-  // statt denselben Kontext im Organfenster erneut auszuschreiben.
-  organOverlayNote.innerHTML = `
-    <details class="organ-context-details">
-      <summary>Einordnung</summary>
-      <p>Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>.</p>
-    </details>`;
+    const hasColor = typeof impact.burdenScore === "number";
+    organOverlayFinding.textContent = hasColor
+      ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
+      : `${impact.contributors.length} gesundheitlich relevante Beiträge. Für die Organfarbe liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`;
+
+    organOverlayNote.innerHTML = `
+      <div class="organ-prototype-warning">
+        <strong>METHODIK</strong>
+        <p>${LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""}</p>
+      </div>
+      <details class="organ-context-details" open>
+        <summary>Beitragende Ursachen / Pfade</summary>
+        <div class="organ-contribution-list">
+          ${impact.contributors.map(item => {
+            const source = getHealthSourceById(item.sourceRefs?.[0]);
+            const burden = item.burden;
+            const routeBoundary = item.route?.boundaryId || "";
+            const routeItem = item.route?.itemId || "";
+            const burdenHtml = burden
+              ? `<span><strong>Krankheitslast:</strong> ${burden.display || ""}${burden.period ? ` · ${burden.period}` : ""}${burden.geography ? ` · ${burden.geography}` : ""}</span>
+                 ${burden.secondary ? `<small>${burden.secondary}</small>` : ""}`
+              : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
+            return `
+              <details class="organ-contribution-item">
+                <summary class="organ-contribution-summary">
+                  <span class="organ-contribution-icon" data-icon="${gwlHealthIconKey(item)}">${gwlHealthIconSvg(gwlHealthIconKey(item))}</span>
+                  <span class="organ-contribution-summary-title">${item.label}</span>
+                  <span class="organ-contribution-summary-meta">
+                    Evidenz ${item.evidenceLevel || "–"} ·
+                    ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}
+                  </span>
+                </summary>
+                <div class="organ-contribution-body">
+                  ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
+                  ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
+                  ${burdenHtml}
+                  ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
+                  ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+                  ${routeBoundary ? `
+                    <button
+                      type="button"
+                      data-life-route-boundary="${routeBoundary}"
+                      data-life-route-item="${routeItem}">
+                      → Ursache im GWL-Panel öffnen
+                    </button>` : ""}
+                </div>
+              </details>`;
+          }).join("")}
+        </div>
+      </details>`;
+  } else {
+    organOverlayContent.classList.remove("health-contribution-layout");
+    if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
+      if (organOverlayNoteHomeNextSibling && organOverlayNoteHomeNextSibling.parentNode === organOverlayNoteHomeParent) {
+        organOverlayNoteHomeParent.insertBefore(organOverlayNote, organOverlayNoteHomeNextSibling);
+      } else {
+        organOverlayNoteHomeParent.appendChild(organOverlayNote);
+      }
+    }
+
+    // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
+    // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
+    organOverlayFinding.textContent = findingText.textContent || "–";
+
+    organOverlayNote.innerHTML = `
+      <details class="organ-context-details">
+        <summary>Einordnung</summary>
+        <p>Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>.</p>
+      </details>`;
+  }
   document.querySelectorAll('.hotspot-dot').forEach(dot => dot.classList.toggle('is-selected', dot.dataset.organ === organId));
   if (!preserveHidden || organOverlay.hidden) organOverlay.hidden = false;
 }
@@ -2220,6 +2404,7 @@ document.querySelectorAll("[data-close-cause]").forEach(button => button.addEven
 async function initPanel() {
   try {
     await loadBodymapConfig();
+  await loadHealthContributionPrototype();
     await loadKnowledgeNetworks();
     syncKnowledgeNavigationFromIndex();
   } catch (error) {
@@ -2233,4 +2418,578 @@ async function initPanel() {
   chooseFirstItemForScope();
 }
 
+
+/* GWL_HEALTH_OVERLAY_COMPACT_V1 */
+(function installCompactHealthOverlayStyles() {
+  if (document.getElementById("gwl-health-overlay-compact-style")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-overlay-compact-style";
+  style.textContent = `
+    /* Organfenster: bewusst größer als der frühere schmale Prototyp */
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay {
+      width: min(600px, calc(100% - 12px)) !important;
+      max-width: min(600px, calc(100% - 12px)) !important;
+    }
+
+    .organ-overlay-card,
+    .organ-overlay-panel,
+    #organOverlay > div {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .organ-contribution-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .organ-contribution-button {
+      display: grid;
+      gap: 5px;
+      padding: 12px 14px;
+      border: 1px solid #d3d3ce;
+      border-radius: 12px;
+      background: #fff;
+      line-height: 1.32;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-button > span:first-child strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .organ-contribution-button > span:nth-child(2) {
+      width: fit-content;
+      padding: 2px 7px;
+      border: 1px solid #d3d3ce;
+      border-radius: 999px;
+      font-size: .78rem;
+    }
+
+    .organ-contribution-button small {
+      display: block;
+      font-size: .82rem;
+      line-height: 1.35;
+    }
+
+    .organ-contribution-button a {
+      width: fit-content;
+      font-size: .86rem;
+    }
+
+    .organ-contribution-button button {
+      justify-self: start;
+      width: auto;
+      max-width: 100%;
+      margin-top: 3px;
+      padding: 7px 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: .86rem;
+    }
+
+    .organ-prototype-warning {
+      margin: 8px 0 12px;
+      padding: 10px 12px;
+      border: 1px solid #d3d3ce;
+      border-radius: 10px;
+    }
+
+    .organ-prototype-warning p {
+      margin: 4px 0 0;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 760px) {
+      .organ-overlay,
+      #organOverlay,
+      .organ-detail-overlay {
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+      }
+      .organ-contribution-button {
+        padding: 10px 11px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_HEALTH_OVERLAY_LAYOUT_V2 */
+(function installHealthOverlayLayoutV2() {
+  if (document.getElementById("gwl-health-overlay-layout-v2")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-overlay-layout-v2";
+  style.textContent = `
+    #organOverlayContent.health-contribution-layout {
+      display: grid !important;
+      grid-template-columns: minmax(250px, 40%) minmax(0, 1fr) !important;
+      align-items: start !important;
+      gap: 14px 18px !important;
+    }
+
+    #organOverlayContent.health-contribution-layout > #organOverlayMedia,
+    #organOverlayContent.health-contribution-layout > .organ-overlay-media {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+      min-width: 0;
+    }
+
+    /* The existing text block remains beside the image for the short finding. */
+    #organOverlayContent.health-contribution-layout > :not(#organOverlayMedia):not(#organOverlayNote) {
+      min-width: 0;
+    }
+
+    /* Method and all causes now use the complete width below image + finding. */
+    #organOverlayContent.health-contribution-layout > #organOverlayNote {
+      grid-column: 1 / -1 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-context-details {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-button {
+      min-width: 0;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: auto;
+    }
+
+    @media (max-width: 760px) {
+      #organOverlayContent.health-contribution-layout {
+        grid-template-columns: 1fr !important;
+      }
+
+      #organOverlayContent.health-contribution-layout > #organOverlayMedia,
+      #organOverlayContent.health-contribution-layout > #organOverlayNote {
+        grid-column: 1 !important;
+      }
+
+      #organOverlayContent.health-contribution-layout .organ-contribution-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_MAIN_COLUMNS_RIGHT_PRIORITY_V1 */
+(function installRightPriorityMainColumns() {
+  const TARGET = "26% 33% 41%";
+
+  function findHeading(text) {
+    return Array.from(document.querySelectorAll("h1,h2,h3,.panel-title,.section-title"))
+      .find(node => (node.textContent || "").trim().toUpperCase() === text);
+  }
+
+  function directChildUnder(ancestor, node) {
+    let current = node;
+    while (current && current.parentElement !== ancestor) current = current.parentElement;
+    return current;
+  }
+
+  function applyMainColumns() {
+    const groundHeading = findHeading("GRUNDLAGE");
+    const effectHeading = findHeading("WIRKUNG");
+    const lifeHeading = findHeading("LEBEN");
+    if (!groundHeading || !effectHeading || !lifeHeading) return false;
+
+    let ancestor = groundHeading.parentElement;
+    while (ancestor && ancestor !== document.body) {
+      const g = directChildUnder(ancestor, groundHeading);
+      const e = directChildUnder(ancestor, effectHeading);
+      const l = directChildUnder(ancestor, lifeHeading);
+
+      if (g && e && l && g !== e && g !== l && e !== l) {
+        const style = getComputedStyle(ancestor);
+        if (style.display === "grid") {
+          ancestor.style.gridTemplateColumns = TARGET;
+          ancestor.style.setProperty("--gwl-ground-column", "26%");
+          ancestor.style.setProperty("--gwl-effect-column", "33%");
+          ancestor.style.setProperty("--gwl-life-column", "41%");
+          ancestor.classList.add("gwl-right-priority-columns");
+          return true;
+        }
+      }
+      ancestor = ancestor.parentElement;
+    }
+    return false;
+  }
+
+  function installResponsiveRule() {
+    if (document.getElementById("gwl-main-columns-right-priority-style")) return;
+    const style = document.createElement("style");
+    style.id = "gwl-main-columns-right-priority-style";
+    style.textContent = `
+      @media (max-width: 980px) {
+        .gwl-right-priority-columns {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      .gwl-right-priority-columns > * {
+        min-width: 0;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  installResponsiveRule();
+
+  if (!applyMainColumns()) {
+    requestAnimationFrame(() => applyMainColumns());
+    window.addEventListener("load", applyMainColumns, { once: true });
+  }
+})();
+
+
+/* GWL_HEALTH_CONTRIBUTIONS_COLLAPSIBLE_V1 */
+(function installCollapsibleHealthContributions() {
+  if (document.getElementById("gwl-health-contributions-collapsible")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-contributions-collapsible";
+  style.textContent = `
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay,
+    #organOverlayContent,
+    #organOverlayContent * {
+      box-sizing: border-box;
+    }
+
+    .organ-overlay,
+    #organOverlay,
+    .organ-detail-overlay {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent.health-contribution-layout {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .organ-contribution-item {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid #d3d3ce;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .organ-contribution-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px 14px;
+      align-items: center;
+      padding: 10px 12px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .organ-contribution-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .organ-contribution-summary::after {
+      content: "＋";
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .organ-contribution-item[open] .organ-contribution-summary::after {
+      content: "−";
+    }
+
+    .organ-contribution-summary-title {
+      min-width: 0;
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-summary-meta {
+      grid-column: 1 / -1;
+      font-size: .78rem;
+      color: #555;
+      line-height: 1.25;
+    }
+
+    .organ-contribution-body {
+      display: grid;
+      gap: 6px;
+      padding: 0 12px 12px;
+      border-top: 1px solid #ecece8;
+      min-width: 0;
+    }
+
+    .organ-contribution-body small,
+    .organ-contribution-body a,
+    .organ-contribution-body button {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .organ-contribution-body a {
+      width: fit-content;
+    }
+
+    .organ-contribution-body button {
+      justify-self: start;
+      width: auto;
+      padding: 7px 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: .86rem;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_HEALTH_ICON_SYSTEM_V1 */
+function gwlHealthIconKey(item = {}) {
+  const text = `${item.label || ""} ${item.exposure?.path || ""} ${item.healthEndpoint || ""}`.toLowerCase();
+  if (/(hitze|heat|dehydrat|temperatur)/.test(text)) return "heat";
+  if (/(pfas|pfoa|pfos|chem|stoff)/.test(text)) return "chemical-pfas";
+  return "unknown";
+}
+
+function gwlHealthIconSvg(key) {
+  const common = `viewBox="0 0 32 32" width="30" height="30" aria-hidden="true" focusable="false"`;
+  if (key === "heat") {
+    return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 5a3 3 0 0 1 6 0v13.1a6 6 0 1 1-6 0V5Z"/>
+      <path d="M16 8v13"/><path d="M23 7h4M23 12h3M5 7h4M6 12h3"/>
+      <circle cx="16" cy="24" r="2.5" fill="currentColor" stroke="none"/>
+    </svg>`;
+  }
+  if (key === "chemical-pfas") {
+    return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="7" cy="16" r="3"/><circle cx="15" cy="8" r="3"/><circle cx="24" cy="12" r="3"/>
+      <circle cx="17" cy="22" r="3"/><circle cx="27" cy="24" r="2.5"/>
+      <path d="M9.5 14 12.7 10.4M17.8 8.9l3.3 1.7M9.8 17.5l4.5 3M19.8 20.9l4.8 2M17.5 11l-.2 8"/>
+    </svg>`;
+  }
+  return `<svg ${common} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="16" cy="16" r="11"/><path d="M13 12a3.5 3.5 0 0 1 6.5 1.8c0 3-3.5 3.1-3.5 6"/><path d="M16 24h.01"/>
+  </svg>`;
+}
+
+
+/* GWL_HEALTH_CARDS_VISUAL_LANGUAGE_V1 */
+(function installHealthCardVisualLanguage() {
+  if (document.getElementById("gwl-health-cards-visual-language")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-health-cards-visual-language";
+  style.textContent = `
+    #organOverlayContent.health-contribution-layout .organ-contribution-list {
+      gap: 7px !important;
+    }
+
+    .organ-contribution-item {
+      background: #f7f7f5 !important;
+      border-color: #d8d8d3 !important;
+      border-radius: 9px !important;
+    }
+
+    .organ-contribution-summary {
+      display: grid !important;
+      grid-template-columns: 36px minmax(0, 1fr) minmax(125px, 28%) 18px !important;
+      grid-template-rows: auto auto !important;
+      column-gap: 10px !important;
+      row-gap: 2px !important;
+      min-height: 54px !important;
+      padding: 7px 10px !important;
+      align-items: center !important;
+    }
+
+    .organ-contribution-summary::after {
+      grid-column: 4 !important;
+      grid-row: 1 / 3 !important;
+      align-self: center;
+      justify-self: center;
+      content: "⌄" !important;
+      font-size: 1.05rem !important;
+      font-weight: 700;
+    }
+
+    .organ-contribution-item[open] .organ-contribution-summary::after {
+      content: "⌃" !important;
+    }
+
+    .organ-contribution-icon {
+      grid-column: 1 !important;
+      grid-row: 1 / 3 !important;
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: #555;
+    }
+
+    .organ-contribution-icon[data-icon="heat"] {
+      color: #b65b18;
+    }
+
+    .organ-contribution-icon[data-icon="chemical-pfas"] {
+      color: #6b58a8;
+    }
+
+    .organ-contribution-summary-title {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      font-size: .9rem !important;
+      line-height: 1.18 !important;
+    }
+
+    .organ-contribution-summary-meta {
+      grid-column: 2 / 4 !important;
+      grid-row: 2 !important;
+      font-size: .71rem !important;
+      line-height: 1.15 !important;
+      color: #62625d !important;
+    }
+
+    .organ-contribution-summary-meta::first-letter {
+      text-transform: uppercase;
+    }
+
+    .organ-contribution-body {
+      background: #fbfbfa;
+      padding: 8px 12px 10px 48px !important;
+      gap: 5px !important;
+      font-size: .84rem;
+    }
+
+    @media (max-width: 560px) {
+      .organ-contribution-summary {
+        grid-template-columns: 34px minmax(0, 1fr) 18px !important;
+      }
+      .organ-contribution-summary-meta {
+        grid-column: 2 !important;
+      }
+      .organ-contribution-summary::after {
+        grid-column: 3 !important;
+      }
+      .organ-contribution-body {
+        padding-left: 10px !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_ORGAN_OVERLAY_CONTAINMENT_V1 */
+(function installOrganOverlayContainment() {
+  if (document.getElementById("gwl-organ-overlay-containment")) return;
+  const style = document.createElement("style");
+  style.id = "gwl-organ-overlay-containment";
+  style.textContent = `
+    .bodymap-panel,
+    .bodymap-panel > *,
+    #organOverlay,
+    #organOverlayContent,
+    #organOverlayContent > * {
+      min-width: 0 !important;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .bodymap-panel {
+      overflow-x: hidden !important;
+    }
+
+    #organOverlay {
+      width: min(600px, calc(100% - 12px)) !important;
+      max-width: min(600px, calc(100% - 12px)) !important;
+      overflow-x: hidden !important;
+      margin-left: auto;
+      margin-right: 6px;
+    }
+
+    #organOverlayContent {
+      width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    #organOverlayContent img {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .organ-contribution-summary,
+    .organ-contribution-body,
+    .organ-prototype-warning,
+    .organ-context-details {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+/* GWL_HIDE_HEALTH_CONTEXT_ACCORDION_V1 */
+(function hideHealthContextAccordion() {
+  function hideIt() {
+    const nodes = Array.from(document.querySelectorAll("summary,button,h3,h4,div,span"));
+    const heading = nodes.find(el =>
+      (el.textContent || "").trim() === "Einordnung Gesundheit"
+    );
+    if (!heading) return false;
+
+    const container =
+      heading.closest("details") ||
+      heading.closest(".accordion-item") ||
+      heading.closest(".organ-readout") ||
+      heading.parentElement;
+
+    if (container) {
+      container.style.display = "none";
+      container.setAttribute("aria-hidden", "true");
+      return true;
+    }
+    return false;
+  }
+
+  if (!hideIt()) {
+    requestAnimationFrame(hideIt);
+    window.addEventListener("load", hideIt, { once: true });
+  }
+})();
+
 initPanel();
+
