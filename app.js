@@ -1052,9 +1052,7 @@ function syncKnowledgeNavigationFromIndex() {
       let indexedItems = (group.items || []).map(item => ({
         id: normalizeKnowledgeId(item.id),
         scope: "all",
-        label: item.type === "study"
-          ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
-          : item.label,
+        label: item.label,
         enabled: true,
         knowledgeSource: item.source,
         knowledgeItemId: item.id,
@@ -1782,7 +1780,9 @@ function renderBoundaries() {
         items.forEach(item => {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
-          itemButton.textContent = item.label;
+          itemButton.textContent = item.menuType === "study"
+            ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
+            : item.label;
           if (item.depthOf) itemButton.classList.add("submenu-depth");
           if (item.id === selectedItemId) itemButton.classList.add("active");
           itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
