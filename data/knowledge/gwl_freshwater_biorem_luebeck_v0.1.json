@@ -1,0 +1,358 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Süßwasser / Blaues Wasser / Gewässerqualität und Eutrophierung / BIOREM Lübeck",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Süßwasser",
+    "subComponent": "Blaues Wasser",
+    "regionalDeepDive": "Stadtgewässer Lübeck · Eutrophierung und Bioremediation",
+    "effectFocus": "Wie Nährstoffüberschüsse, Phytoplanktonblüten und Sauerstoffzehrung den Zustand eutrophierter Stadtgewässer prägen und welches Potenzial die Entnahme von Mikroalgen als Sanierungsmaßnahme besitzt"
+  },
+  "studyConnection": {
+    "project": "BIOREM – Bioremediation von Stillgewässern durch die Entnahme von Mikroalgen aus städtischen Gewässern in Lübeck",
+    "institution": "Technische Hochschule Lübeck",
+    "projectPeriod": "07/2023–12/2024",
+    "geography": "Lübeck; insbesondere Kleiner See, Mühlenteich und Schlutuper Mühlenteich",
+    "fitToFreshwaterQuestion": "hoch für regionale Gewässerqualität und Intervention; nicht geeignet als Kontrollvariable der planetaren Süßwassergrenze",
+    "importantLimitation": "BIOREM untersucht Eutrophierungssymptome und die Machbarkeit einer Phytoplanktonernte. Das Projekt liefert weder eine globale Blue-Water-Kontrollvariable noch den Nachweis einer wirksamen Gewässersanierung im Vollmaßstab."
+  },
+  "corePrinciples": [
+    "BIOREM wird unter Blauem Wasser als regionale Vertiefung zur Qualität von Oberflächengewässern geführt, nicht als Blue-Water-Messreihe.",
+    "Nährstoffeinträge, beobachteter Gewässerzustand, Ernteversuch und modellierte Umweltwirkung werden getrennt dargestellt.",
+    "Die Projektlaufzeit und einzelne Versuchstermine bilden keine belastbare Zustands-Zeitreihe.",
+    "Die Phytoplanktonernte ist eine potenzielle Intervention gegen Symptome der Eutrophierung; sie ersetzt nicht die Verringerung externer Stickstoff- und Phosphoreinträge.",
+    "Gesundheitsbezüge über Cyanotoxine erfordern konkrete Expositions- und Messdaten; aus dem Projektthema allein folgt keine Organwirkung."
+  ],
+  "nodes": [
+    {
+      "id": "pb_freshwater_change",
+      "type": "domain_component",
+      "label": "Süßwasser"
+    },
+    {
+      "id": "component_blue_water",
+      "type": "domain_component",
+      "label": "Blaues Wasser"
+    },
+    {
+      "id": "pressure_nutrient_inputs",
+      "type": "environmental_pressure",
+      "label": "Einträge von Stickstoff und Phosphor"
+    },
+    {
+      "id": "state_eutrophication",
+      "type": "environmental_state",
+      "label": "Eutrophierter Zustand von Stadtgewässern"
+    },
+    {
+      "id": "effect_phytoplankton_bloom",
+      "type": "biological_effect",
+      "label": "Starke Phytoplankton- und mögliche Cyanobakterienblüten"
+    },
+    {
+      "id": "effect_oxygen_depletion",
+      "type": "biological_effect",
+      "label": "Sauerstoffzehrung und anoxische Bedingungen"
+    },
+    {
+      "id": "effect_food_web",
+      "type": "biological_effect",
+      "label": "Veränderungen des aquatischen Nahrungsnetzes"
+    },
+    {
+      "id": "effect_greenhouse_gases",
+      "type": "environmental_effect",
+      "label": "Bildung und Freisetzung von Treibhausgasen aus Gewässern"
+    },
+    {
+      "id": "intervention_algae_harvest",
+      "type": "intervention",
+      "label": "Entnahme und Filtration von Phytoplankton"
+    },
+    {
+      "id": "intervention_biomass_use",
+      "type": "intervention",
+      "label": "Aufbereitung und mögliche Nutzung der geernteten Biomasse"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_freshwater_change",
+      "to": "component_blue_water",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_nutrient_inputs",
+      "to": "state_eutrophication",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "state_eutrophication",
+      "to": "effect_phytoplankton_bloom",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_phytoplankton_bloom",
+      "to": "effect_oxygen_depletion",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "effect_phytoplankton_bloom",
+      "to": "effect_food_web",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "effect_oxygen_depletion",
+      "to": "effect_greenhouse_gases",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "intervention_algae_harvest",
+      "to": "effect_phytoplankton_bloom",
+      "relationType": "intended_to_reduce",
+      "evidenceStatus": "pilot_uncertain"
+    },
+    {
+      "from": "intervention_algae_harvest",
+      "to": "intervention_biomass_use",
+      "relationType": "enables",
+      "evidenceStatus": "pilot_uncertain"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "biorem_luebeck_harvest_trials_2023_2024",
+      "sourceRefs": [
+        "src_biorem_final_report_2024"
+      ],
+      "design": "Anwendungsorientierte Ernteversuche 2023 und 2024 in Lübecker Gewässern mit verschiedenen Entnahme- und Filtersystemen; begleitende Gewässerbeobachtungen, Laboranalysen, Literaturauswertung und Umweltbewertung.",
+      "finding": "Phytoplankton konnte grundsätzlich aus den Gewässern gefiltert werden. Unter den beobachteten Bedingungen blieben Ertrag und Effizienz der Pilottechnik jedoch gering; am Kleinen See waren die Erträge höher als an den beiden Mühlenteichen.",
+      "relationType": "pilot_observation",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "biorem_phytoplankton_composition",
+      "sourceRefs": [
+        "src_biorem_final_report_2024"
+      ],
+      "design": "Mikroskopische Beobachtungen während der Ernteversuche; keine vollständige taxonomische Bestimmung bis auf Artniveau.",
+      "finding": "Im Kleinen See wurden während der Versuche viele Cyanobakterien beobachtet, während in den untersuchten Mühlenteichen überwiegend Grünalgen auftraten.",
+      "relationType": "pilot_observation",
+      "evidenceStatus": "limited"
+    },
+    {
+      "id": "biorem_environmental_assessment",
+      "sourceRefs": [
+        "src_biorem_final_report_2024"
+      ],
+      "design": "Vergleichende Umweltbewertung der Phytoplanktonernte in Pilotskalierung mit einer chemisch-physikalischen Phosphorbindung sowie Szenariomodellierung für technische Verbesserungen und Biomassenutzung.",
+      "finding": "In der Pilotskalierung schnitt die Phytoplanktonernte in den betrachteten Wirkungskategorien schlechter ab als die verglichene Phosphorbindung. Das Ergebnis reagierte stark auf Stromverbrauch, Ernteeffizienz und Biomassekonzentration; Vorteile einer optimierten Vollskalierung wurden nur als Potenzial beziehungsweise Szenario ausgewiesen.",
+      "relationType": "comparative_environmental_assessment",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "biorem_luebeck_trial_scope",
+      "node": "intervention_algae_harvest",
+      "geography": "Kleiner See, Mühlenteich Lübeck und Schlutuper Mühlenteich",
+      "period": "August 2023 und Juli 2024",
+      "metric": "Praktische Ernteversuche in Lübecker Gewässern",
+      "value": 6,
+      "unit": "Versuchstermine",
+      "display": "6 dokumentierte Versuchstermine an 3 Lübecker Gewässern",
+      "uncertainty": "Die Termine bilden Versuche unter wechselnden lokalen und technischen Bedingungen ab. Sie sind keine repräsentative Zeitreihe des Gewässerzustands.",
+      "interpretation": "Der Wert beschreibt den Umfang des Pilottests, nicht die Entwicklung der Eutrophierung oder die Wirksamkeit einer Gewässersanierung.",
+      "sourceRefs": [
+        "src_biorem_final_report_2024"
+      ],
+      "displayType": "study_value"
+    },
+    {
+      "id": "biorem_max_luebeck_harvest_2024",
+      "node": "intervention_algae_harvest",
+      "geography": "Kleiner See, Lübeck",
+      "period": "Juli 2024",
+      "metric": "Größte im Bericht genannte feuchte Erntemenge eines Lübecker Versuchs",
+      "value": 400,
+      "unit": "ml feuchte Biomasse",
+      "display": "maximal 400 ml feuchte Biomasse; etwa 42 g/l Trockengewicht",
+      "uncertainty": "Ein einzelner maximaler Pilotwert; nicht auf andere Gewässer, Zeitpunkte oder eine Vollskala übertragbar.",
+      "interpretation": "Die technische Machbarkeit wurde gezeigt, zugleich bewertete das Projekt den Arbeitsaufwand mit dem eingesetzten Equipment als ineffizient.",
+      "sourceRefs": [
+        "src_biorem_final_report_2024"
+      ],
+      "displayType": "study_value"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_nutrients_eutrophication_oxygen",
+      "label": "Stickstoff- und Phosphoreinträge → Eutrophierung → Phytoplanktonblüte → Sauerstoffzehrung",
+      "nodes": [
+        "pressure_nutrient_inputs",
+        "state_eutrophication",
+        "effect_phytoplankton_bloom",
+        "effect_oxygen_depletion"
+      ],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_eutrophication_climate",
+      "label": "Hohe Biomasseproduktion → Abbau unter sauerstoffarmen Bedingungen → mögliche Methanbildung und Treibhausgasfreisetzung",
+      "nodes": [
+        "effect_phytoplankton_bloom",
+        "effect_oxygen_depletion",
+        "effect_greenhouse_gases"
+      ],
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "path_biorem_intervention",
+      "label": "Phytoplankton entnehmen → Biomasse und gebundene Nährstoffe entfernen → Symptome der Eutrophierung potenziell mindern",
+      "nodes": [
+        "intervention_algae_harvest",
+        "effect_phytoplankton_bloom",
+        "intervention_biomass_use"
+      ],
+      "evidenceStatus": "pilot_uncertain"
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Nährstoffkreisläufe",
+      "relation": "Stickstoff- und Phosphoreinträge sind zentrale Treiber der Eutrophierung; die Reduktion externer Einträge bleibt gegenüber einer reinen Symptombehandlung grundlegend."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "Phytoplanktonblüten, Sauerstoffmangel und Eingriffe in die Biomasse können Artengemeinschaften und Nahrungsnetze verändern."
+    },
+    {
+      "boundary": "Klimawandel",
+      "relation": "Temperatur beeinflusst Algenblüten und Schichtung; der Abbau organischer Biomasse unter sauerstoffarmen Bedingungen kann zur Methanbildung beitragen."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keine Organmarker aktivieren. Ein Gesundheitsbezug über Cyanobakterien oder Cyanotoxine darf erst bei konkretem Toxinnachweis, plausibler Exposition und geeigneter gesundheitlicher Evidenz angezeigt werden."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_local_state_timeseries",
+      "question": "Welche harmonisierte lokale Messreihe zu Nährstoffen, Chlorophyll, Sauerstoff und Temperatur kann BIOREM mit den Wakenitz- und Stadtgewässeruntersuchungen verbinden?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_full_scale_effectiveness",
+      "question": "Wie wirksam, energieeffizient und ökologisch verträglich wäre die Phytoplanktonernte im kontinuierlichen Vollmaßstab?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_external_loads",
+      "question": "Wie groß sind diffuse und punktuelle Stickstoff- und Phosphoreinträge in die betrachteten Gewässer und wie stark müssen sie reduziert werden?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_cyanotoxin_exposure",
+      "question": "Liegen für die Lübecker Untersuchungsgewässer wiederholte Cyanotoxinmessungen und belastbare Expositionsbewertungen vor?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "pilot_orientation",
+    "methodNote": "Die Handlungsebene trennt Ursachenminderung, Gewässermonitoring, symptomorientierte Ernte und Biomassenutzung. BIOREM belegt Machbarkeit im Pilotmaßstab, nicht die Sanierungswirkung im Vollmaßstab.",
+    "dimensions": [
+      {
+        "id": "nutrient_source_control",
+        "label": "Nährstoffeinträge verringern",
+        "level": "hoch",
+        "rationale": "Ohne die wirksame Reduktion diffuser und punktueller Einträge kann eine dauerhafte Verbesserung eutrophierter Gewässer nicht allein durch Biomasseentnahme erwartet werden."
+      },
+      {
+        "id": "water_monitoring",
+        "label": "Gewässerzustand beobachten",
+        "level": "hoch",
+        "rationale": "Nährstoffe, Temperatur, Sauerstoff, Chlorophyll, Artenzusammensetzung und gegebenenfalls Cyanotoxine müssen gemeinsam und wiederholt beobachtet werden."
+      },
+      {
+        "id": "algae_harvesting",
+        "label": "Phytoplankton ernten",
+        "level": "pilot",
+        "rationale": "Die Versuche zeigten technische Machbarkeit, aber geringe Erträge und hohe Sensitivität gegenüber Technik, Energiebedarf und Biomassekonzentration."
+      },
+      {
+        "id": "biomass_cascade_use",
+        "label": "Biomasse sicher nutzen",
+        "level": "prüfen",
+        "rationale": "Eine Nutzung kann die Umweltbilanz verbessern, setzt aber geeignete Qualität, Schadstoff- und Toxinprüfung sowie eine vorsichtige Bilanzierung von Gutschriften voraus."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Welche lokale Messreihe eignet sich als belastbarer Zustandsanker für die Lübecker Stadtgewässer?",
+    "Unter welchen hydrologischen und biologischen Bedingungen ist eine Phytoplanktonernte technisch sinnvoll?",
+    "Welche Wirkung kann die Biomasseentnahme gegenüber der Reduktion externer Nährstoffeinträge realistisch leisten?",
+    "Welche ökologischen Nebenwirkungen einer selektiven oder unspezifischen Phytoplanktonentnahme müssen überwacht werden?"
+  ],
+  "sources": [
+    {
+      "id": "src_biorem_final_report_2024",
+      "title": "BIOREM – Bioremediation von Stillgewässern durch die Entnahme von Mikroalgen aus städtischen Gewässern in Lübeck",
+      "authors": "Technische Hochschule Lübeck, Projektteam BIOREM",
+      "publisher": "Technische Hochschule Lübeck / Gesellschaft für Energie und Klimaschutz Schleswig-Holstein",
+      "year": 2024,
+      "type": "project_final_report",
+      "url": "https://www.th-luebeck.de/fileadmin/media/04_Forschung-Dienstleistung/01_Forschung/Kompetenzbereiche/Umwelt_und_Klimaschutz/Berichte/BIOREM_Abschlussbericht.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_thl_freshwater_projects",
+      "title": "Fachgruppe Umwelt- und Klimaschutz – Stadtgewässer Lübeck und BIOREM",
+      "authors": "Technische Hochschule Lübeck",
+      "publisher": "Technische Hochschule Lübeck",
+      "year": 2026,
+      "type": "official_project_overview",
+      "url": "https://www.th-luebeck.de/forschung-und-transfer/kompetenzen/fachgruppen/umwelt-und-klimaschutz/projekte/",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Süßwasser",
+    "parentItem": "Blaues Wasser",
+    "item": "Stadtgewässer Lübeck · BIOREM",
+    "classification": "regional_study"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Der Abschlussbericht dokumentiert eine Projektlaufzeit und einzelne Ernteversuche, aber keine konsistente, wiederholte Zustandsmessreihe mit vergleichbarer Methode und zeitlicher Auflösung.",
+    "projectPeriod": "07/2023–12/2024",
+    "documentedTrialDates": [
+      "2023-08-17",
+      "2023-08-24",
+      "2023-08-25",
+      "2023-08-29",
+      "2024-07-15",
+      "2024-07-16"
+    ],
+    "panelRule": "Keinen Zeitregler anzeigen. Versuchstermine ausschließlich als Studiendesign und nicht als Trendpunkte darstellen."
+  },
+  "presentation": {
+    "compactKnowledgeView": true,
+    "hidePrimaryMeasurementInKnowledgeView": false,
+    "regionalStudy": true,
+    "interventionPathwayIds": [
+      "path_biorem_intervention"
+    ]
+  }
+}

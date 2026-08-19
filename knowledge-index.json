@@ -29,6 +29,19 @@
           ]
         },
         {
+          "id": "freshwater_change",
+          "label": "Süßwasser",
+          "items": [
+            {
+              "id": "freshwater_biorem_luebeck",
+              "label": "Stadtgewässer Lübeck · BIOREM",
+              "type": "study",
+              "parentId": "blue-water-streamflow",
+              "source": "data/knowledge/gwl_freshwater_biorem_luebeck_v0.1.json"
+            }
+          ]
+        },
+        {
           "id": "land_system_change",
           "label": "Land-System-Wandel",
           "items": [
