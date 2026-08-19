@@ -1052,23 +1052,17 @@ function syncKnowledgeNavigationFromIndex() {
       let indexedItems = (group.items || []).map(item => ({
         id: normalizeKnowledgeId(item.id),
         scope: "all",
-        label: (
-          boundary.id === "land" &&
-          /waldtransition/i.test(String(item.label || ""))
-            ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
-            : item.label
-        ),
+        label: item.type === "study"
+          ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
+          : item.label,
         enabled: true,
         knowledgeSource: item.source,
         knowledgeItemId: item.id,
         knowledgeGroupId: group.id,
         knowledgeBoundaryId: indexBoundary.id,
-        depthOf: item.depthOf || (
-          boundary.id === "land" &&
-          /waldtransition/i.test(String(item.label || ""))
-            ? "globaler-waldzustand"
-            : null
-        )
+        menuType: item.type || "control",
+        parentId: item.parentId || null,
+        depthOf: item.parentId || item.depthOf || null
       }));
       if (!indexedItems.length) continue;
 

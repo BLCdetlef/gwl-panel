@@ -33,15 +33,11 @@
           "label": "Land-System-Wandel",
           "items": [
             {
-              "id": "global_forest_cover",
-              "label": "Globaler Waldzustand",
-              "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json"
-            },
-            {
               "id": "forest_transition_state",
               "label": "Waldtransition und Waldzustand",
               "source": "data/knowledge/gwl_land_system_lippe_pilot_v0.1.json",
-              "depthOf": "global_forest_cover"
+              "type": "study",
+              "parentId": "global_forest_status"
             }
           ]
         },
