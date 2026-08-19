@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.24 · B07";
+const GWL_BUILD_VERSION = "0.9.24 · B08";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -1636,7 +1636,29 @@ function renderKnowledgeTime(network) {
 
   dataWindowButton.classList.toggle("active", timeWindow === "data");
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
-  timeMarkers.innerHTML = "";
+  
+function thinTimeAxisLabels() {
+  if (!timeMarkers) return;
+  const labels = Array.from(timeMarkers.children);
+  const total = labels.length;
+  labels.forEach((label, index) => {
+    label.style.visibility = shouldShowTimeAxisLabel(index, total) ? "visible" : "hidden";
+  });
+}
+
+
+function shouldShowTimeAxisLabel(index, total) {
+  if (total <= 1) return true;
+  if (index === 0 || index === total - 1) return true;
+
+  // Aim for roughly 7–9 readable labels, independent of how many
+  // actual 5-year data points are available.
+  const maxVisibleLabels = 8;
+  const step = Math.max(1, Math.ceil((total - 1) / (maxVisibleLabels - 1)));
+  return index % step === 0;
+}
+
+timeMarkers.innerHTML = "";
 
   if (!series || !points.length) {
     timeSlider.disabled = true;
@@ -2572,6 +2594,13 @@ causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
 causeButtonLife.addEventListener("click", () => openCauseOverlay("life"));
 document.querySelectorAll("[data-close-cause]").forEach(button => button.addEventListener("click", () => closeCauseOverlay(button.dataset.closeCause)));
 async function initPanel() {
+
+  if (timeMarkers && !timeMarkers.dataset.labelThinningObserver) {
+    timeMarkers.dataset.labelThinningObserver = "1";
+    new MutationObserver(thinTimeAxisLabels).observe(timeMarkers, { childList: true });
+    requestAnimationFrame(thinTimeAxisLabels);
+  }
+
   try {
     await loadBodymapConfig();
   await loadHealthContributionPrototype();
