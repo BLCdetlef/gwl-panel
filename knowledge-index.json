@@ -79,6 +79,18 @@
               "source": "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json"
             }
           ]
+        },
+        {
+          "id": "novel_entities",
+          "label": "Neue Substanzen",
+          "items": [
+            {
+              "id": "facade_biocides_burkhardt",
+              "label": "Fassadenbiozide · Burkhardt",
+              "type": "component",
+              "source": "data/knowledge/gwl_novel_entities_facade_biocides_burkhardt_v0.1.json"
+            }
+          ]
         }
       ]
     },

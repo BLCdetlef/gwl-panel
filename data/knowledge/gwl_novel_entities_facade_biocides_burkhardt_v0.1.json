@@ -1,0 +1,462 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Neue Substanzen / Fassadenbiozide / Auswaschung durch Schlagregen",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "Fassadenbiozide · Arbeiten von Michael Burkhardt",
+    "effectFocus": "Wie Biozide aus Fassadenbeschichtungen durch Regen freigesetzt werden, über urbanes Niederschlagswasser in Böden und Gewässer gelangen und durch Produktgestaltung, Konstruktion und Regenwassermanagement vermindert werden können"
+  },
+  "researcherConnection": {
+    "researcher": "Prof. Dr. Michael Burkhardt",
+    "institution": "OST – Ostschweizer Fachhochschule, Institut für Umwelt- und Verfahrenstechnik (UMTEC)",
+    "fitToGwlQuestion": "hoch",
+    "fitExplanation": "Die Arbeiten verbinden ein alltägliches technisches Produkt mit messbarer Freisetzung, einem konkreten Wasserpfad, ökotoxikologischen Wirkungen und mehreren technischen sowie planerischen Handlungsmöglichkeiten.",
+    "importantLimitation": "Fassadenbiozide sind ein konkreter Stoff- und Anwendungspfad innerhalb der planetaren Grenze Neue Substanzen, aber keine eigene planetare Kontrollvariable."
+  },
+  "corePrinciples": [
+    "Biozide schützen organische Farben und Putze gegen Algen und Pilze, können aber durch Schlagregen aus der Fassade freigesetzt werden.",
+    "Freisetzung, Umwelttransport und Wirkung müssen getrennt bewertet werden; eine hohe Konzentration im Fassadenabfluss allein beschreibt noch nicht die Belastung eines Gewässers.",
+    "Wirkstoff, Rezeptur, Fassadenalter, Exposition, Schlagregenmenge und Regenwassermanagement bestimmen gemeinsam die Umweltbelastung.",
+    "Laborversuche, Feldmessungen und Modellierungen werden als unterschiedliche Evidenztypen gekennzeichnet.",
+    "Ökotoxikologische Wirkungen auf Wasserorganismen begründen keine direkte menschliche Organwirkung."
+  ],
+  "nodes": [
+    { "id": "pb_novel_entities", "type": "domain_component", "label": "Neue Substanzen" },
+    { "id": "component_facade_biocides", "type": "domain_component", "label": "Biozide in Fassadenfarben und -putzen" },
+    { "id": "activity_facade_protection", "type": "human_activity", "label": "Chemischer Schutz von Fassaden gegen Algen und Pilze" },
+    { "id": "pressure_wind_driven_rain", "type": "environmental_pressure", "label": "Schlagregen und Fassadenabfluss" },
+    { "id": "mechanism_leaching", "type": "mechanism", "label": "Auswaschung von Wirkstoffen und Transformationsprodukten" },
+    { "id": "medium_stormwater", "type": "environmental_medium", "label": "Urbanes Niederschlagswasser" },
+    { "id": "medium_soil", "type": "environmental_medium", "label": "Boden und Versickerungsanlagen" },
+    { "id": "medium_surfacewater", "type": "environmental_medium", "label": "Oberflächengewässer" },
+    { "id": "effect_aquatic_organisms", "type": "biological_effect", "label": "Ökotoxikologische Wirkungen auf Wasserorganismen" },
+    { "id": "intervention_biocide_free", "type": "intervention", "label": "Biozidfreie Materialien und konstruktiver Witterungsschutz" },
+    { "id": "intervention_encapsulation", "type": "intervention", "label": "Verkapselung und auswaschoptimierte Rezepturen" },
+    { "id": "intervention_stormwater", "type": "intervention", "label": "Dezentrales Regenwassermanagement und Behandlung" },
+    { "id": "pb_link_freshwater", "type": "planetary_boundary", "label": "Süßwasser" }
+  ],
+  "edges": [
+    { "from": "pb_novel_entities", "to": "component_facade_biocides", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "activity_facade_protection", "to": "component_facade_biocides", "relationType": "uses", "evidenceStatus": "strong" },
+    { "from": "pressure_wind_driven_rain", "to": "mechanism_leaching", "relationType": "drives", "evidenceStatus": "strong" },
+    { "from": "component_facade_biocides", "to": "mechanism_leaching", "relationType": "can_release_via", "evidenceStatus": "strong" },
+    { "from": "mechanism_leaching", "to": "medium_stormwater", "relationType": "enters", "evidenceStatus": "strong" },
+    { "from": "medium_stormwater", "to": "medium_soil", "relationType": "can_enter", "evidenceStatus": "strong" },
+    { "from": "medium_stormwater", "to": "medium_surfacewater", "relationType": "can_enter", "evidenceStatus": "strong" },
+    { "from": "medium_surfacewater", "to": "effect_aquatic_organisms", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "medium_surfacewater", "to": "pb_link_freshwater", "relationType": "boundary_link", "evidenceStatus": "strong" },
+    { "from": "intervention_biocide_free", "to": "component_facade_biocides", "relationType": "avoids", "evidenceStatus": "strong" },
+    { "from": "intervention_encapsulation", "to": "mechanism_leaching", "relationType": "reduces", "evidenceStatus": "strong" },
+    { "from": "intervention_stormwater", "to": "medium_surfacewater", "relationType": "reduces_input_to", "evidenceStatus": "moderate" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "burkhardt_dietschweiler_2013_quantities",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013", "src_bafu_facades"],
+      "design": "Markterhebung zur Situation 2011 mit zielgruppenspezifischen Befragungen von Biozidherstellern, Formulierern, Verbänden und Anwendern, Experteninterviews sowie Plausibilitätsprüfung anhand deutscher Vergleichsdaten; Rücklauf mindestens 50 % je Produktart.",
+      "finding": "Für Filmschutzmittel in Bautenfarben und -putzen wurden in der Schweiz 10–30 t Wirkstoffe pro Jahr ermittelt. Die Angaben wurden über Endproduktmengen und typische Dosierungen plausibilisiert; der Bericht stuft die Abschätzung für diese Produktart als sehr zuverlässig ein.",
+      "relationType": "market_and_mass_flow_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "burkhardt_2009_lab_risk",
+      "sourceRefs": ["src_burkhardt_2009"],
+      "design": "Ökotoxikologische Bewertung von acht Bioziden; Laborbewitterung eines Fassadenputzes mit vier Wirkstoffen über 80 Beregnungsintervalle in 28 Tagen; dynamische Modellierung des Transports in Oberflächengewässer.",
+      "finding": "Die Auswaschung war zu Beginn hoch und nahm exponentiell ab. Je nach Wirkstoff gingen unter den Versuchsbedingungen insgesamt 7–29 % verloren; kleine Oberflächengewässer können besonders empfindlich sein.",
+      "relationType": "laboratory_and_model_assessment",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "burkhardt_2012_natural_weathering",
+      "sourceRefs": ["src_burkhardt_2012"],
+      "design": "Feldstudie mit vier Fassadenbeschichtungssystemen unter natürlicher Bewitterung; Messung verbreiteter organischer Biozide im Fassadenabfluss und Verknüpfung mit Schlagregen.",
+      "finding": "Biozide wurden im Abfluss natürlich bewitterter Fassaden nachgewiesen. Neue Fassaden zeigten besonders hohe Anfangskonzentrationen; Freisetzung und zeitlicher Verlauf waren stark stoff-, produkt- und expositionsabhängig.",
+      "relationType": "field_observation",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "burkhardt_2021_mitigation_synthesis",
+      "sourceRefs": ["src_burkhardt_2021"],
+      "design": "Fachliche Synthese eigener Labor- und Feldarbeiten sowie weiterer Studien zu Feuchte, Auswaschung, Verkapselung, Rezepturoptimierung und konstruktivem Schutz.",
+      "finding": "Verkapselung, geeignete Rezepturen, Top-Coats und konstruktiver Witterungsschutz können Emissionen vermindern; biozidfreie Materialien vermeiden den Stoffpfad an der Quelle.",
+      "relationType": "evidence_synthesis",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "wicke_burkhardt_2022_building_materials",
+      "sourceRefs": ["src_wicke_burkhardt_2022"],
+      "design": "Übersicht und Messprogramm zu organischen Additiven aus Baumaterialien im urbanen Niederschlagsabfluss und in Oberflächengewässern.",
+      "finding": "Baumaterialien sind als relevante urbane Quelle organischer Mikroverunreinigungen in Regenwasser- und Gewässerbewertungen einzubeziehen.",
+      "relationType": "urban_source_assessment",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "facade_biocide_active_mass_switzerland_2011",
+      "node": "activity_facade_protection",
+      "geography": "Schweiz",
+      "period": "2011",
+      "metric": "Jährlicher Verbrauch biozider Wirkstoffe als Filmschutzmittel in Bautenfarben und -putzen für Außenanwendungen",
+      "valueMin": 10,
+      "valueMax": 30,
+      "unit": "t Wirkstoff/Jahr",
+      "display": "10–30 t Wirkstoffe pro Jahr",
+      "uncertainty": "Historische Markterhebung für 2011, keine aktuelle Jahreszahl. Die Spannweite beruht auf Herstellerangaben und wurde über Endproduktmengen, Dosierungen und deutsche Vergleichsdaten plausibilisiert.",
+      "interpretation": "Die Erhebung quantifiziert erstmals den jährlichen Stoffeinsatz des betrachteten Anwendungspfads und ergänzt die Auswaschungs- und Wirkungsdaten um eine Bestandsgröße.",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013", "src_bafu_facades"],
+      "displayType": "market_quantity"
+    },
+    {
+      "id": "facade_coating_products_switzerland_2011",
+      "node": "activity_facade_protection",
+      "geography": "Schweiz",
+      "period": "2011",
+      "metric": "Jährlich verarbeitete organische Außenfarben und Außenputze",
+      "value": 26000,
+      "unit": "t Endprodukt/Jahr",
+      "display": "26.000 t Farben und Putze pro Jahr",
+      "uncertainty": "Summe aus 4.000 t organischen Außenfarben und 22.000 t organischen Außenputzen in der Markterhebung für 2011; Endproduktmenge ist nicht mit Wirkstoffmenge gleichzusetzen.",
+      "interpretation": "Die Endproduktmenge bildet die Bezugsgröße, mit der die direkt erhobenen Wirkstoffmengen über typische Dosierungen plausibilisiert wurden.",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013"],
+      "displayType": "market_quantity"
+    },
+    {
+      "id": "facade_area_switzerland_2011",
+      "node": "activity_facade_protection",
+      "geography": "Schweiz",
+      "period": "2011",
+      "metric": "Aus den Endproduktmengen rechnerisch abgeleitete jährlich gestrichene und verputzte Fassadenfläche",
+      "value": 20,
+      "unit": "Mio. m²/Jahr",
+      "display": "rund 20 Mio. m² Fassadenfläche pro Jahr",
+      "uncertainty": "Abgeleitete Größe aus rund 13 Mio. m² gestrichener und 7 Mio. m² verputzter Fläche bei angenommenen mittleren Verarbeitungsmengen von 0,3 kg/m² Farbe und 3 kg/m² Putz.",
+      "interpretation": "Die Flächengröße ermöglicht später eine räumliche Emissionsmodellierung, ist aber selbst noch keine Umweltfracht.",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013"],
+      "displayType": "derived_market_quantity"
+    },
+    {
+      "id": "facade_biocide_active_mass_germany_2011",
+      "node": "activity_facade_protection",
+      "geography": "Deutschland",
+      "period": "2011",
+      "metric": "Direkt ermittelter Jahresverbrauch biozider Wirkstoffe in Bautenfarben und -putzen",
+      "valueMin": 250,
+      "valueMax": 400,
+      "unit": "t Wirkstoff/Jahr",
+      "display": "250–400 t Wirkstoffe pro Jahr",
+      "uncertainty": "Im Schweizer Bericht zitierte unabhängige deutsche Befragung für 2011; die Primärerhebung war zum Berichtszeitpunkt noch in Vorbereitung und wurde hier nicht separat ausgewertet. Historische, nicht auf 2026 fortgeschriebene Zahl.",
+      "interpretation": "Die deutsche Größenordnung stützt die Schweizer Plausibilisierung und zeigt die mengenmäßige Relevanz des Anwendungspfads, darf aber nicht als aktuelle Marktzahl verwendet werden.",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013"],
+      "displayType": "secondary_reported_market_quantity"
+    },
+    {
+      "id": "facade_products_germany_2011",
+      "node": "activity_facade_protection",
+      "geography": "Deutschland",
+      "period": "2011",
+      "metric": "Inlandsverbrauch von Fassadenfarbe und Kunstharzputzen",
+      "value": 248000,
+      "unit": "t Endprodukt/Jahr",
+      "display": "248.000 t Fassadenfarben und Kunstharzputze",
+      "uncertainty": "Historische Branchenstatistik des VdL, im BAFU-Bericht wiedergegeben. Endproduktmenge umfasst nicht ausschließlich biozidhaltige Produkte und ist keine Wirkstoff- oder Emissionsmenge.",
+      "interpretation": "Die Marktmenge ist eine mögliche Bezugsgröße, benötigt für eine aktuelle Stoffstromrechnung aber den Anteil biozidhaltiger Produkte und heutige Wirkstoffdosierungen.",
+      "sourceRefs": ["src_burkhardt_dietschweiler_2013"],
+      "displayType": "market_quantity"
+    },
+    {
+      "id": "facade_biocide_total_lab_loss",
+      "node": "mechanism_leaching",
+      "geography": "Laborversuch",
+      "period": "80 Beregnungsintervalle in 28 Tagen",
+      "metric": "Gesamtverlust von vier untersuchten Fassadenbioziden",
+      "valueMin": 7,
+      "valueMax": 29,
+      "unit": "% der eingesetzten Wirkstoffmenge",
+      "display": "7–29 % Gesamtverlust",
+      "uncertainty": "Wirkstoffabhängige Laborwerte für Diuron, Terbutryn, Cybutryn und Carbendazim unter definierten Versuchsbedingungen; nicht direkt auf jede reale Fassade übertragbar.",
+      "interpretation": "Ein relevanter Anteil eingesetzter Wirkstoffe kann aus Fassadenputz ausgewaschen werden; die Größenordnung unterscheidet sich deutlich zwischen den Stoffen.",
+      "sourceRefs": ["src_burkhardt_2009"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "facade_biocide_first_flush",
+      "node": "mechanism_leaching",
+      "geography": "Laborversuch",
+      "period": "je 60-minütiger Beregnungszyklus",
+      "metric": "Anteil des Stoffverlusts in der frühen Abflussphase",
+      "value": 50,
+      "operator": ">",
+      "unit": "% des Verlusts",
+      "display": ">50 % innerhalb der ersten 15 Minuten",
+      "uncertainty": "Ergebnis des definierten Labor-Beregnungsversuchs; reale Abflussdynamik hängt von Schlagregen, Fassadengeometrie, Produkt und Alter ab.",
+      "interpretation": "Die frühe Abflussphase kann überproportional zur Stofffracht beitragen und ist für Behandlung und Risikobewertung besonders relevant.",
+      "sourceRefs": ["src_burkhardt_2009"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "facade_biocide_young_facade_concentration",
+      "node": "medium_stormwater",
+      "geography": "Feldmessungen an jungen Fassaden",
+      "period": "erste sechs Monate nach Verputzen beziehungsweise Anstrich",
+      "metric": "Gemessene Biozidkonzentrationen im Fassadenabfluss",
+      "value": 1000,
+      "operator": ">",
+      "unit": "µg/L",
+      "display": ">1.000 µg/L in der Anfangsphase möglich",
+      "uncertainty": "Konzentrationen allein sind keine Stofffracht und kein Gewässerzustand. Die abfließende Wassermenge ist häufig klein; eine Bewertung muss objekt-, produkt- und entwässerungsspezifisch erfolgen.",
+      "interpretation": "Neue Fassaden können zeitlich begrenzte hohe Konzentrationsspitzen im ablaufenden Schlagregenwasser erzeugen.",
+      "sourceRefs": ["src_burkhardt_2021", "src_burkhardt_2012"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "facade_biocide_encapsulation_reduction",
+      "node": "intervention_encapsulation",
+      "geography": "Labor- und Feldversuche",
+      "period": "Synthese 2021",
+      "metric": "Minderung der Wirkstoffkonzentration durch Verkapselung",
+      "valueMin": 2,
+      "valueMax": 10,
+      "unit": "Faktor",
+      "display": "Faktor 2–10 geringere Konzentrationen",
+      "uncertainty": "Die Minderungswirkung hängt von Wirkstoff, Kapseltechnologie, Schichtdicke und Gesamtformulierung ab. Verkapselung verhindert die Freisetzung nicht vollständig.",
+      "interpretation": "Verkapselung kann insbesondere kritische Anfangsspitzen reduzieren und Wirkstoffe länger im Material halten.",
+      "sourceRefs": ["src_burkhardt_2021", "src_burkhardt_vonbank_2011"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "facade_biocide_formulation_reduction",
+      "node": "intervention_encapsulation",
+      "geography": "Produktvergleich",
+      "period": "Synthese 2021",
+      "metric": "Reduktionspotenzial durch Bindemittel und Pigment-Volumen-Konzentration",
+      "valueMin": 2,
+      "valueMax": 5,
+      "unit": "Faktor",
+      "display": "Faktor 2–5 durch Rezepturoptimierung",
+      "uncertainty": "Produktabhängiges Potenzial bei gleicher Wirkstoffmenge; keine pauschale Garantie für jede Rezeptur oder reale Exposition.",
+      "interpretation": "Neben der Wirkstoffwahl beeinflusst die gesamte Produktformulierung die Auswaschung erheblich.",
+      "sourceRefs": ["src_burkhardt_2021", "src_wicke_burkhardt_2022"],
+      "displayType": "study_value"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_facade_surfacewater",
+      "label": "Biozidhaltige Fassade → Schlagregen → Auswaschung → urbanes Niederschlagswasser → Oberflächengewässer → Wirkung auf Wasserorganismen",
+      "nodes": ["component_facade_biocides", "pressure_wind_driven_rain", "mechanism_leaching", "medium_stormwater", "medium_surfacewater", "effect_aquatic_organisms"],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_facade_soil",
+      "label": "Biozidhaltige Fassade → Fassadenabfluss → Versickerung → Rückhalt, Abbau oder Verlagerung im Boden",
+      "nodes": ["component_facade_biocides", "mechanism_leaching", "medium_stormwater", "medium_soil"],
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "path_source_control",
+      "label": "Biozidfreie Planung oder emissionsarme Produktgestaltung → geringere Freisetzung → geringere Belastung von Regenwasser, Boden und Gewässern",
+      "nodes": ["intervention_biocide_free", "intervention_encapsulation", "mechanism_leaching", "medium_stormwater", "medium_surfacewater"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "boundary": "Süßwasser",
+      "relation": "Fassadenbiozide und Transformationsprodukte können über Regenabfluss in Oberflächengewässer und über Versickerung in Böden beziehungsweise Grundwasser gelangen."
+    },
+    {
+      "boundary": "Biosphärenintegrität",
+      "relation": "Bestimmte Biozide besitzen ein hohes ökotoxikologisches Wirkungspotenzial gegenüber aquatischen Organismen."
+    },
+    {
+      "boundary": "Land-System-Wandel",
+      "relation": "Siedlungsstruktur, Fassadenfläche, Versiegelung und dezentrale Versickerung bestimmen Transport und Rückhalt im urbanen Raum."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_yet",
+    "systemImpacts": [],
+    "bodymapRule": "Keine Organmarker aktivieren. Die hier ausgewerteten Arbeiten belegen primär Freisetzung und ökologische Risiken für Boden und Gewässer; ein menschlicher Gesundheitsbezug benötigt einen konkreten Expositionspfad und eigene Evidenz."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_current_market_quantities",
+      "question": "Wie haben sich Wirkstoffmengen, Endproduktmengen, biozidhaltige Marktanteile und Wirkstoffspektrum seit dem Bezugsjahr 2011 in Deutschland und der Schweiz entwickelt?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_current_products",
+      "question": "Welche Wirkstoffe, Konzentrationen und Verkapselungssysteme werden heute in welchen Fassadenprodukten tatsächlich eingesetzt?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_real_catchment",
+      "question": "Wie groß ist der Beitrag von Fassadenbioziden zur aktuellen Belastung konkreter urbaner Gewässer und Grundwasserkörper gegenüber anderen Quellen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_transformation_products",
+      "question": "Welche Transformationsprodukte entstehen an der Fassade und in der Umwelt, und wie sind Persistenz und Wirkung zu bewerten?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_service_life_tradeoff",
+      "question": "Wie lassen sich Schutzdauer, Sanierungsaufwand, Materiallebensdauer und Umweltfreisetzung über den gesamten Lebenszyklus vergleichen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "methodNote": "Die wirksamsten Hebel liegen an der Quelle und in der Planung des Wasserpfads. Minderungsfaktoren sind produkt- und versuchsspezifisch und dürfen nicht pauschal multipliziert werden.",
+    "dimensions": [
+      {
+        "id": "avoidance",
+        "label": "Biozide vermeiden",
+        "level": "hoch",
+        "rationale": "Biozidfreie mineralische oder konstruktiv geschützte Systeme verhindern den Stoffpfad an der Quelle."
+      },
+      {
+        "id": "product_design",
+        "label": "Freisetzung im Produkt mindern",
+        "level": "hoch",
+        "rationale": "Verkapselung, Wirkstoffwahl, Bindemittel, Pigment-Volumen-Konzentration und Top-Coat beeinflussen die Auswaschung."
+      },
+      {
+        "id": "building_design",
+        "label": "Fassaden trocken halten",
+        "level": "hoch",
+        "rationale": "Dachüberstände, Detailplanung, Exposition und rasche Abtrocknung reduzieren Bewuchsrisiko und Schlagregenbelastung."
+      },
+      {
+        "id": "stormwater_management",
+        "label": "Regenwasserpfad gestalten",
+        "level": "hoch",
+        "rationale": "Versickerung, Bodenpassage und technische Behandlung können direkte Einträge in kleine Oberflächengewässer vermindern, müssen aber Stoffrückhalt und Langzeitverhalten berücksichtigen."
+      },
+      {
+        "id": "information",
+        "label": "Produkte transparent bewerten",
+        "level": "hoch",
+        "rationale": "Auswaschcharakteristika und Emissionsklassen sollten für Planung, Verarbeitung und Beschaffung zugänglich sein."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Sind die für 2011 ermittelten 10–30 t Wirkstoffe in der Schweiz beziehungsweise 250–400 t in Deutschland heute noch größenordnungsmäßig plausibel, und gibt es neuere Auswertungen der Mengenmeldungen?",
+    "Welcher Anteil der eingesetzten Wirkstoffmasse wird über die Nutzungsdauer tatsächlich aus Fassaden freigesetzt, und lässt sich daraus eine nationale oder regionale Jahresfracht ableiten?",
+    "Welches Ergebnis Ihrer Fassadenarbeiten beschreibt den Zustand unserer urbanen Wasserumwelt heute am besten?",
+    "Welche der älteren Messwerte sind auf heutige Produkte und Bauweisen noch übertragbar, und wo hat sich der Stand der Technik verändert?",
+    "Wann ist Verkapselung eine tragfähige Minderungsmaßnahme und wann ist eine biozidfreie Lösung vorzuziehen?",
+    "Wie sollte eine Kommune den Pfad Fassade → Regenwasser → Boden/Grundwasser/Oberflächengewässer praktisch bewerten?",
+    "Welche Messreihe oder Fallstudie würden Sie für eine verständliche zeitliche Darstellung im GWL-Panel empfehlen?"
+  ],
+  "sources": [
+    {
+      "id": "src_burkhardt_dietschweiler_2013",
+      "title": "Mengenabschätzung von Bioziden in Schutzmitteln in der Schweiz: Bautenfarben und -putze (PA 7), Holz (PA 8), Mauerwerk (PA 10) und Antifouling (PA 21)",
+      "authors": "Burkhardt, M.; Dietschweiler, C.",
+      "publisher": "Bundesamt für Umwelt BAFU",
+      "year": 2013,
+      "type": "commissioned_market_and_mass_flow_report",
+      "url": "https://www.bafu.admin.ch/dam/de/sd-web/jTrMBR23Gzt-/mengenabschaetzungvonbiozideninschutzmittelninderschweiz.pdf",
+      "access": "open_full_text",
+      "dataYear": 2011
+    },
+    {
+      "id": "src_bafu_facades",
+      "title": "Verputzte Fassaden",
+      "authors": "Bundesamt für Umwelt BAFU",
+      "publisher": "Bundesamt für Umwelt BAFU",
+      "year": 2025,
+      "type": "official_guidance_and_current_summary",
+      "url": "https://www.bafu.admin.ch/de/verputzte-fassaden",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_burkhardt_2009",
+      "title": "Biozide in Gebäudefassaden – Ökotoxikologische Effekte, Auswaschung und Belastungsabschätzung für Gewässer",
+      "authors": "Burkhardt, M.; Junghans, M.; Zuleeg, S.; Schoknecht, U.; Lamani, X.; Bester, K.; Vonbank, R.; Simmler, H.; Boller, M.",
+      "publisher": "Umweltwissenschaften und Schadstoff-Forschung",
+      "year": 2009,
+      "type": "peer_reviewed_laboratory_and_model_study",
+      "url": "https://doi.org/10.1007/s12302-008-0033-1",
+      "doi": "10.1007/s12302-008-0033-1",
+      "access": "abstract_and_metadata"
+    },
+    {
+      "id": "src_burkhardt_vonbank_2011",
+      "title": "Auswaschung von verkapselten Bioziden aus Fassaden",
+      "authors": "Burkhardt, M.; Vonbank, R.",
+      "publisher": "Bundesamt für Umwelt BAFU",
+      "year": 2011,
+      "type": "technical_report",
+      "url": "https://doi.org/10.13140/RG.2.1.2900.8486",
+      "doi": "10.13140/RG.2.1.2900.8486",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_burkhardt_2012",
+      "title": "Leaching of Biocides from Façades under Natural Weather Conditions",
+      "authors": "Burkhardt, M.; Zuleeg, S.; Vonbank, R.; Bester, K.; Carmeliet, J.; Boller, M.; Wangler, T.",
+      "publisher": "Environmental Science & Technology",
+      "year": 2012,
+      "type": "peer_reviewed_field_study",
+      "url": "https://doi.org/10.1021/es2040009",
+      "doi": "10.1021/es2040009",
+      "access": "article"
+    },
+    {
+      "id": "src_burkhardt_2021",
+      "title": "Algen an Fassaden: Biozide folgenlos für Umwelt durch Verkapselung?",
+      "authors": "Burkhardt, M.",
+      "publisher": "Aachener Bausachverständigentage 2021",
+      "year": 2021,
+      "type": "technical_evidence_synthesis",
+      "url": "https://www.ost.ch/fileadmin/dateiliste/3_forschung_dienstleistung/institute/umtec/fachartikel/2021/21-04_algen_an_fassaden-_biozide_folgenlos_fuer_umwelt_durch_verkapselung.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_wicke_burkhardt_2022",
+      "title": "Emissions from Building Materials—A Threat to the Environment?",
+      "authors": "Wicke, D.; Tatis-Muvdi, R.; Rouault, P.; Zerball-van Baar, P.; Dünnbier, U.; Rohr, M.; Burkhardt, M.",
+      "publisher": "Water",
+      "year": 2022,
+      "type": "peer_reviewed_urban_emission_study",
+      "url": "https://doi.org/10.3390/w14030303",
+      "doi": "10.3390/w14030303",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_burkhardt_profile",
+      "title": "Prof. Dr. Michael Burkhardt – Projekte und Profil",
+      "authors": "OST – Ostschweizer Fachhochschule",
+      "publisher": "OST",
+      "year": 2026,
+      "type": "official_researcher_profile",
+      "url": "https://www.ost.ch/de/person/michael-burkhardt-1638",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Neue Substanzen",
+    "item": "Fassadenbiozide · Burkhardt",
+    "classification": "research_deep_dive"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Die Arbeiten enthalten Laborzyklen, Feldverläufe und Modellierungen, aber die bislang ausgewerteten Quellen liefern keine harmonisierte Zustands-Zeitreihe für einen gemeinsamen Panel-Regler.",
+    "panelRule": "Keinen Zeitregler anzeigen. Versuchsdauer und Fassadenalter nur als Studienkontext darstellen."
+  },
+  "presentation": {
+    "compactKnowledgeView": true,
+    "hidePrimaryMeasurementInKnowledgeView": false,
+    "researchDeepDive": true,
+    "interventionPathwayIds": ["path_source_control"]
+  }
+}
