@@ -1,0 +1,315 @@
+{
+  "format": "gwl-gbd-environmental-risk-catalog-v0.1",
+  "version": "0.1-pilot",
+  "status": "screened_not_yet_visualized",
+  "title": "Kuratierter GBD-Katalog globaler anthropogener Umwelt- und Gesundheitsrisiken",
+  "basis": {
+    "study": "Global burden and strength of evidence for 88 risk factors in 204 countries and 811 subnational locations, 1990–2021",
+    "gbdRelease": "GBD 2021",
+    "period": "1990–2021",
+    "doi": "10.1016/S0140-6736(24)00933-4",
+    "hierarchyNote": "Die 88 GBD-Risikofaktoren umfassen Einzelrisiken und übergeordnete Sammelkategorien auf mehreren Hierarchieebenen. Sammelkategorien werden im GWL-Katalog nicht zusätzlich zu ihren Einzelrisiken als sichtbare Knoten geführt.",
+    "updateNote": "Vor der Übernahme konkreter Gesundheitszeitreihen ist zu prüfen, ob die entsprechenden GBD-2023-Daten für 1990–2023 offen und reproduzierbar verfügbar sind. Die GBD-2021-Hierarchie bleibt die dokumentierte Screening-Grundlage."
+  },
+  "scope": {
+    "purpose": "Kleine, kontrollierte Brücke zwischen globalen menschengemachten Umweltveränderungen, quantifizierter Exposition, globaler Krankheitslast und den Organen des GWL-Panels.",
+    "notPurpose": [
+      "keine vollständige Wiedergabe aller GBD-Risiken",
+      "keine Gleichsetzung von GBD-Risiken mit planetaren Kontrollvariablen",
+      "keine automatische Erzeugung von Wirkungspfaden",
+      "keine Addition überlappender Krankheitslasten",
+      "keine Ableitung lokaler Kausalität aus globalen Schätzungen"
+    ]
+  },
+  "selectionPolicy": {
+    "maximumCoreRisks": 6,
+    "maximumContextRisks": 2,
+    "maximumDisplayedHealthEndpointsPerRisk": 5,
+    "maximumDisplayedOrganSystemsPerRisk": 3,
+    "maximumVisiblePathTransitions": 4,
+    "required": [
+      "offizieller spezifischer GBD-Risikofaktor statt übergeordneter Sammelkategorie",
+      "wesentlich menschengemachte Umweltbelastung oder menschengemachte Veränderung einer natürlichen Lebensgrundlage",
+      "globale quantitative Expositions- und Krankheitslastschätzung",
+      "jährliche GBD-Schätzungen für einen mehrjährigen Zeitraum",
+      "mindestens ein von GBD bewertetes Risiko–Krankheits-Paar",
+      "in einem kurzen Satz verständlicher Umwelt–Exposition–Gesundheitspfad"
+    ],
+    "displayRules": [
+      "Ein Risikofaktor erhält genau eine stabile ID.",
+      "Ein Faktor erhält höchstens einen primären Bezug zu einer planetaren Grenze; weitere Bezüge sind nur Querverweise.",
+      "Studien sind Quellen oder Messreihen und keine zusätzlichen sichtbaren Knoten.",
+      "Krankheiten und Organe werden erst nach Prüfung konkreter GBD-Risiko–Krankheits-Paare freigeschaltet.",
+      "Beobachtete Werte, modellierte Schätzungen und Projektionen werden sichtbar getrennt.",
+      "Organfarben bleiben an die Regeln in health-contributions.json gebunden."
+    ]
+  },
+  "coreRisks": [
+    {
+      "id": "gbd_unsafe_water_source",
+      "gbdLabel": "Unsafe water source",
+      "label": "Unsichere Trinkwasserquelle",
+      "gbdLevel": 3,
+      "primaryBoundaryId": "freshwater",
+      "relationToBoundary": "health_exposure_not_planetary_control_variable",
+      "exposureFamily": "water",
+      "anthropogenicPath": "Wasserentnahme, Verschmutzung und unzureichere Versorgung → mikrobiologisch oder chemisch unsicheres Trinkwasser → gesundheitliche Belastung",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "Nicht mit der planetaren Kontrollvariable für blaues oder grünes Wasser gleichsetzen.",
+        "Unsichere Sanitärversorgung und fehlende Handwaschmöglichkeit bleiben getrennte GBD-Faktoren und werden nicht automatisch mitgerechnet."
+      ]
+    },
+    {
+      "id": "gbd_ambient_pm25",
+      "gbdLabel": "Ambient particulate matter pollution",
+      "label": "Feinstaubbelastung der Außenluft",
+      "gbdLevel": 4,
+      "primaryBoundaryId": "aerosols",
+      "relationToBoundary": "regional_health_exposure_not_global_aod_control_variable",
+      "exposureFamily": "air",
+      "anthropogenicPath": "Verbrennung, Industrie, Verkehr und weitere Quellen → bodennahe PM2,5-Exposition → globale Krankheitslast",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "Nicht aus der interhemisphärischen AOD-Differenz ableiten.",
+        "Nicht zusätzlich zur GBD-Sammelkategorie Particulate matter pollution summieren."
+      ]
+    },
+    {
+      "id": "gbd_ambient_ozone",
+      "gbdLabel": "Ambient ozone pollution",
+      "label": "Bodennahes Ozon",
+      "gbdLevel": 3,
+      "primaryBoundaryId": null,
+      "relatedBoundaryIds": ["climate", "aerosols"],
+      "relationToBoundary": "cross_boundary_air_pollution_exposure",
+      "exposureFamily": "air",
+      "anthropogenicPath": "Vorläuferemissionen und atmosphärische Chemie → bodennahes Ozon → gesundheitliche Belastung",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "Bodennahes Ozon ist nicht die planetare Grenze des stratosphärischen Ozons.",
+        "Nur GBD-bewertete Gesundheitsendpunkte verwenden."
+      ]
+    },
+    {
+      "id": "gbd_nitrogen_dioxide",
+      "gbdLabel": "Nitrogen dioxide pollution",
+      "label": "Stickstoffdioxidbelastung",
+      "gbdLevel": 3,
+      "primaryBoundaryId": null,
+      "relatedBoundaryIds": ["climate", "nutrients", "aerosols"],
+      "relationToBoundary": "cross_boundary_air_pollution_exposure",
+      "exposureFamily": "air",
+      "anthropogenicPath": "Verkehr und Verbrennungsprozesse → bodennahe NO₂-Exposition → gesundheitliche Belastung",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "NO₂ wurde in GBD 2021 neu als Risikofaktor berichtet.",
+        "Nicht mit dem planetaren Stickstoffkreislauf oder dessen Kontrollvariable gleichsetzen."
+      ]
+    },
+    {
+      "id": "gbd_high_temperature",
+      "gbdLabel": "High temperature",
+      "label": "Hohe Umgebungstemperatur",
+      "gbdLevel": 3,
+      "primaryBoundaryId": "climate",
+      "relationToBoundary": "health_exposure_linked_to_climate_change",
+      "exposureFamily": "temperature",
+      "anthropogenicPath": "Anthropogene Erwärmung → häufigere oder stärkere Hitzeexposition → globale Krankheitslast",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "GBD-attributable Krankheitslast ist nicht vollständig identisch mit dem allein anthropogen verursachten Anteil.",
+        "Niedrige Temperatur bleibt getrennt und wird nicht als anthropogene Umweltverschlechterung aktiviert."
+      ]
+    },
+    {
+      "id": "gbd_lead_exposure",
+      "gbdLabel": "Lead exposure",
+      "label": "Bleiexposition",
+      "gbdLevel": 3,
+      "primaryBoundaryId": "novel",
+      "relationToBoundary": "health_exposure_example_not_planetary_control_variable",
+      "exposureFamily": "chemicals",
+      "anthropogenicPath": "Bergbau, Produkte, Emissionen und Altlasten → Blei in Umwelt und Lebensmitteln → globale gesundheitliche Belastung",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "selected_pending_measurement_and_outcome_review",
+      "cautions": [
+        "Blei ist ein konkretes Beispiel für neue Substanzen und keine Kontrollvariable der planetaren Grenze.",
+        "Direkte und über vermittelte Risiken zugerechnete Krankheitslasten dürfen nicht doppelt gezählt werden."
+      ]
+    }
+  ],
+  "contextRisks": [
+    {
+      "id": "gbd_household_air_pollution_solid_fuels",
+      "gbdLabel": "Household air pollution from solid fuels",
+      "label": "Luftverschmutzung in Haushalten durch feste Brennstoffe",
+      "gbdLevel": 4,
+      "primaryBoundaryId": null,
+      "relatedBoundaryIds": ["climate", "aerosols"],
+      "relationToBoundary": "global_anthropogenic_exposure_but_not_environmental_state",
+      "exposureFamily": "air",
+      "anthropogenicPath": "Kochen und Heizen mit festen Brennstoffen → PM2,5-Exposition im Haushalt → globale Krankheitslast",
+      "timeCoverage": "1990–2021",
+      "activationStatus": "context_only",
+      "reasonNotCore": "Global sehr relevant, beschreibt aber primär eine Energie-, Armuts- und Innenraumexposition und keinen eigenständigen globalen Zustand einer natürlichen Lebensgrundlage."
+    }
+  ],
+  "excludedGroups": [
+    {
+      "reasonCode": "aggregate_duplicate",
+      "reason": "Übergeordnete GBD-Sammelkategorie; würde neben ausgewählten Einzelrisiken Doppelzählung und doppelte Knoten erzeugen.",
+      "risks": [
+        "All risk factors",
+        "Environmental/occupational risks",
+        "Unsafe water, sanitation, and handwashing",
+        "Air pollution",
+        "Particulate matter pollution",
+        "Non-optimal temperature",
+        "Other environmental risks",
+        "Occupational risks",
+        "Occupational carcinogens",
+        "Behavioral risks",
+        "Child and maternal malnutrition",
+        "Suboptimal breastfeeding",
+        "Child growth failure",
+        "Low birth weight and short gestation",
+        "Tobacco",
+        "Dietary risks",
+        "Childhood sexual abuse and bullying",
+        "Metabolic risks"
+      ]
+    },
+    {
+      "reasonCode": "infrastructure_or_hygiene_not_environmental_change",
+      "reason": "Wichtiger Gesundheitsfaktor, aber überwiegend Versorgungs-, Infrastruktur- oder Hygienedefizit statt Messgröße einer globalen menschengemachten Umweltveränderung.",
+      "risks": [
+        "Unsafe sanitation",
+        "No access to handwashing facility"
+      ]
+    },
+    {
+      "reasonCode": "predominantly_natural_exposure",
+      "reason": "Gesundheitlich relevant, aber im GBD-Faktor überwiegend keine globale menschengemachte Umweltveränderung abgebildet.",
+      "risks": [
+        "Low temperature",
+        "Residential radon"
+      ]
+    },
+    {
+      "reasonCode": "occupational_or_localised",
+      "reason": "Arbeitsplatz- oder tätigkeitsspezifische Exposition; nicht als globaler Zustand der Lebensgrundlagen in das erste Anschauungsmodell übernehmen.",
+      "risks": [
+        "Occupational exposure to asbestos",
+        "Occupational exposure to arsenic",
+        "Occupational exposure to benzene",
+        "Occupational exposure to beryllium",
+        "Occupational exposure to cadmium",
+        "Occupational exposure to chromium",
+        "Occupational exposure to diesel engine exhaust",
+        "Occupational exposure to formaldehyde",
+        "Occupational exposure to nickel",
+        "Occupational exposure to polycyclic aromatic hydrocarbons",
+        "Occupational exposure to silica",
+        "Occupational exposure to sulfuric acid",
+        "Occupational exposure to trichloroethylene",
+        "Occupational asthmagens",
+        "Occupational particulate matter, gases, and fumes",
+        "Occupational noise",
+        "Occupational injuries",
+        "Occupational ergonomic factors"
+      ]
+    },
+    {
+      "reasonCode": "behavioural_or_social",
+      "reason": "Primär individuelles, soziales oder versorgungsbezogenes Risiko; ein möglicher Umweltbezug ist zu mittelbar für den Kernkatalog.",
+      "risks": [
+        "Non-exclusive breastfeeding",
+        "Discontinued breastfeeding",
+        "Child underweight",
+        "Child wasting",
+        "Child stunting",
+        "Short gestation",
+        "Low birth weight",
+        "Iron deficiency",
+        "Vitamin A deficiency",
+        "Zinc deficiency",
+        "Smoking",
+        "Chewing tobacco",
+        "Secondhand smoke",
+        "High alcohol use",
+        "Drug use",
+        "Intimate partner violence",
+        "Childhood sexual abuse",
+        "Bullying victimization",
+        "Unsafe sex",
+        "Low physical activity"
+      ]
+    },
+    {
+      "reasonCode": "diet_is_multicausal_mediator",
+      "reason": "Ernährung ist für Landnutzung und Gesundheit bedeutsam, bildet in GBD aber Konsumverhalten ab und nicht unmittelbar den Zustand einer Lebensgrundlage. Eine spätere, eigene Nahrungssystem-Vertiefung ist möglich.",
+      "risks": [
+        "Diet low in fruits",
+        "Diet low in vegetables",
+        "Diet low in legumes",
+        "Diet low in whole grains",
+        "Diet low in nuts and seeds",
+        "Diet low in milk",
+        "Diet high in red meat",
+        "Diet high in processed meat",
+        "Diet high in sugar-sweetened beverages",
+        "Diet low in fiber",
+        "Diet low in calcium",
+        "Diet low in seafood omega-3 fatty acids",
+        "Diet low in omega-6 polyunsaturated fatty acids",
+        "Diet high in trans fatty acids",
+        "Diet high in sodium"
+      ]
+    },
+    {
+      "reasonCode": "metabolic_state_not_environmental_exposure",
+      "reason": "Körperlicher oder metabolischer Zwischenzustand statt äußerer Umweltbelastung; darf nicht als zusätzlicher Umweltknoten erscheinen.",
+      "risks": [
+        "High fasting plasma glucose",
+        "High LDL cholesterol",
+        "High systolic blood pressure",
+        "High body-mass index",
+        "Low bone mineral density",
+        "Kidney dysfunction"
+      ]
+    }
+  ],
+  "healthStudyGate": {
+    "rule": "Eine Gesundheitsstudie darf im ersten Modell nur an einen coreRisk oder contextRisk anknüpfen. Neue Risikofaktoren benötigen eine erneute Screening-Entscheidung.",
+    "requiredStudySchema": "data/schema/health-study-v0.1-draft.json",
+    "allowedScopes": ["global", "multi_region", "national_context", "local_context"],
+    "primaryDisplayScopes": ["global", "multi_region"],
+    "localRule": "Lokale Daten dürfen globale Aussagen veranschaulichen oder Partner einbinden, aber weder den globalen Zustand bestimmen noch einen globalen Wirkungspfad beweisen."
+  },
+  "sources": [
+    {
+      "id": "src_gbd_2021_risk_factors",
+      "title": "Global burden and strength of evidence for 88 risk factors in 204 countries and 811 subnational locations, 1990–2021",
+      "publisher": "The Lancet / GBD 2021 Risk Factors Collaborators",
+      "year": 2024,
+      "doi": "10.1016/S0140-6736(24)00933-4",
+      "url": "https://doi.org/10.1016/S0140-6736(24)00933-4",
+      "role": "hierarchy_and_comparative_risk_assessment"
+    },
+    {
+      "id": "src_gbd_2021_ghdx",
+      "title": "GBD 2021 Burden and Strength of Evidence by Risk Factor 1990–2021",
+      "publisher": "Institute for Health Metrics and Evaluation",
+      "year": 2024,
+      "doi": "10.6069/GD60-D685",
+      "url": "https://ghdx.healthdata.org/record/ihme-data/gbd-2021-burden-by-risk-1990-2021",
+      "role": "annual_estimates_and_metadata"
+    }
+  ]
+}

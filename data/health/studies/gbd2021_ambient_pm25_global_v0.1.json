@@ -1,0 +1,137 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2021_ambient_pm25_global",
+  "status": "reviewed",
+  "title": "GBD 2021 – globale Krankheitslast durch Feinstaub in der Außenluft",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "204 Länder und Territorien",
+    "population": "Gesamtbevölkerung, beide Geschlechter und alle von GBD berücksichtigten Altersgruppen"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": [
+    "gbd_ambient_pm25"
+  ],
+  "measurements": [
+    {
+      "id": "ambient_pm25_deaths_2021",
+      "kind": "deaths",
+      "metric": "Todesfälle, die der Feinstaubbelastung der Außenluft zugerechnet werden",
+      "valueType": "count",
+      "value": 4.72,
+      "lower": 3.48,
+      "upper": 5.8,
+      "unit": "Millionen Todesfälle",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": [
+        "src_ihme_pm25_factsheet_2021"
+      ]
+    },
+    {
+      "id": "ambient_pm25_dalys_2021",
+      "kind": "dalys",
+      "metric": "DALYs, die der Feinstaubbelastung der Außenluft zugerechnet werden",
+      "valueType": "count",
+      "value": 120,
+      "lower": 86.6,
+      "upper": 150,
+      "unit": "Millionen DALYs",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": [
+        "src_ihme_pm25_factsheet_2021"
+      ]
+    }
+  ],
+  "healthEndpoints": [
+    {
+      "id": "pm25_ischemic_heart_disease",
+      "label": "Ischämische Herzkrankheit",
+      "riskRef": "gbd_ambient_pm25",
+      "organIds": ["heart"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_air_pollution_methods"]
+    },
+    {
+      "id": "pm25_stroke",
+      "label": "Schlaganfall",
+      "riskRef": "gbd_ambient_pm25",
+      "organIds": ["brain", "heart"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_air_pollution_methods"]
+    },
+    {
+      "id": "pm25_copd",
+      "label": "Chronisch obstruktive Lungenerkrankung (COPD)",
+      "riskRef": "gbd_ambient_pm25",
+      "organIds": ["lungs"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_air_pollution_methods"]
+    },
+    {
+      "id": "pm25_lung_cancer",
+      "label": "Luftröhren-, Bronchial- und Lungenkrebs",
+      "riskRef": "gbd_ambient_pm25",
+      "organIds": ["lungs"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_air_pollution_methods"]
+    },
+    {
+      "id": "pm25_lower_respiratory_infections",
+      "label": "Infektionen der unteren Atemwege",
+      "riskRef": "gbd_ambient_pm25",
+      "organIds": ["lungs"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_air_pollution_methods"]
+    }
+  ],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_ihme_pm25_factsheet_2021",
+      "title": "Ambient particulate matter pollution – Level 4 risk",
+      "publisher": "Institute for Health Metrics and Evaluation / The Lancet",
+      "year": 2024,
+      "url": "https://www.healthdata.org/sites/default/files/disease_and_injury/gbd_2021/topic_pdf/risk/86.pdf",
+      "sourceType": "authoritative_dataset"
+    },
+    {
+      "id": "src_gbd2021_air_pollution_methods",
+      "title": "GBD 2021 air pollution risk methods and risk–outcome pairs",
+      "publisher": "Institute for Health Metrics and Evaluation",
+      "year": 2024,
+      "url": "https://ghdx.healthdata.org/record/ihme-data/gbd-2021-air-pollution-exposure-estimates-1990-2021",
+      "sourceType": "authoritative_dataset"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": true,
+    "doubleCountingChecked": true,
+    "organMappingChecked": true,
+    "plainLanguagePath": "Verbrennung und weitere Quellen → PM2,5 in der Außenluft → langfristige Exposition → Herz-, Gefäß- und Lungenerkrankungen",
+    "decision": "include",
+    "notes": "Die fünf sichtbaren Endpunkte sind eine begrenzte Auswahl aus den acht GBD-2021-PM2,5-Endpunkten. Typ-2-Diabetes und nachteilige Geburtsfolgen bleiben zunächst verborgen. PM2,5 nicht mit Haushaltsluftverschmutzung oder der Sammelkategorie Particulate matter pollution addieren."
+  }
+}

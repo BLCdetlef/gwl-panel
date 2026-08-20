@@ -1,0 +1,27 @@
+{
+  "format": "gwl-health-study-index-v0.1",
+  "version": "0.1-pilot",
+  "status": "active_import_structure",
+  "catalogSource": "data/health/gbd-environmental-risk-catalog-v0.1.json",
+  "schemaSource": "data/schema/health-study-v0.1-draft.json",
+  "importPolicy": {
+    "acceptedFormats": ["gwl-health-study-v0.1"],
+    "acceptedDecisions": ["include", "context_only"],
+    "primaryDisplayScopes": ["global", "multi_region"],
+    "contextDisplayScopes": ["national_context", "local_context"],
+    "maximumStudiesPerRiskAndScope": 3,
+    "maximumVisibleEndpointsPerStudy": 5,
+    "requireKnownRiskReference": true,
+    "requireReviewedOrganMappingForMarkers": true,
+    "neverDeriveLocalValuesFromParentScope": true,
+    "neverAddOverlappingBurdenAutomatically": true
+  },
+  "studies": [
+    { "id": "gbd2021_ambient_pm25_global", "source": "data/health/studies/gbd2021_ambient_pm25_global_v0.1.json", "enabled": true },
+    { "id": "gbd2021_ambient_ozone_global", "source": "data/health/studies/gbd2021_ambient_ozone_global_v0.1.json", "enabled": true },
+    { "id": "gbd2021_no2_asthma_global", "source": "data/health/studies/gbd2021_no2_asthma_global_v0.1.json", "enabled": true },
+    { "id": "who_unicef_drinking_water_global", "source": "data/health/studies/who_unicef_drinking_water_global_v0.1.json", "enabled": true },
+    { "id": "gbd2021_high_temperature_global", "source": "data/health/studies/gbd2021_high_temperature_global_v0.1.json", "enabled": true },
+    { "id": "gbd2021_lead_global", "source": "data/health/studies/gbd2021_lead_global_v0.1.json", "enabled": true }
+  ]
+}

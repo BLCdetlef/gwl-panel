@@ -1,9 +1,11 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.24 · B07";
+const GWL_BUILD_VERSION = "0.9.29 · B12";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
 const regionPath = document.getElementById("regionPath");
+const locationInfoButton = document.getElementById("locationInfoButton");
+const locationInfo = document.getElementById("locationInfo");
 const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
@@ -34,6 +36,10 @@ const organOverlayContent = document.getElementById("organOverlayContent");
 const organOverlayNoteHomeParent = organOverlayNote?.parentElement || null;
 const organOverlayNoteHomeNextSibling = organOverlayNote?.nextSibling || null;
 const closeOverlayButton = document.getElementById("closeOverlayButton");
+const healthPathOverlay = document.getElementById("healthPathOverlay");
+const healthPathTitle = document.getElementById("healthPathTitle");
+const healthPathContent = document.getElementById("healthPathContent");
+const closeHealthPathButton = document.getElementById("closeHealthPathButton");
 const causeButtonGround = document.getElementById("causeButtonGround");
 const causeButtonEffect = document.getElementById("causeButtonEffect");
 const causeButtonLife = document.getElementById("causeButtonLife");
@@ -63,6 +69,88 @@ let ORGAN_MEDIA = {};
 let LIFE_PROTOTYPE_MODE = true;
 let LIFE_HEALTH_DATA = null;
 let LIFE_PROTOTYPE_CONTRIBUTIONS = [];
+let HEALTH_STUDY_IMPORT = {
+  catalog: null,
+  index: null,
+  studies: [],
+  rejected: []
+};
+
+const HEALTH_STUDY_INDEX_SOURCE = "data/health/health-study-index-v0.1.json";
+
+function validateHealthStudyForImport(study, entry, knownRiskIds, policy) {
+  const reasons = [];
+  if (!policy.acceptedFormats.includes(study?.format)) reasons.push("format_not_accepted");
+  if (study?.id !== entry?.id) reasons.push("index_id_mismatch");
+  if (!policy.acceptedDecisions.includes(study?.review?.decision)) reasons.push("review_decision_not_accepted");
+  if (!Array.isArray(study?.riskRefs) || !study.riskRefs.length) reasons.push("risk_reference_missing");
+  if (policy.requireKnownRiskReference && study?.riskRefs?.some(id => !knownRiskIds.has(id))) reasons.push("unknown_risk_reference");
+  if (!Array.isArray(study?.measurements) || !study.measurements.length) reasons.push("measurement_missing");
+  if (!study?.scope?.level) reasons.push("spatial_scope_missing");
+  if ((study?.healthEndpoints || []).length > policy.maximumVisibleEndpointsPerStudy) reasons.push("endpoint_limit_exceeded");
+  return reasons;
+}
+
+function prepareHealthStudyForPanel(study, policy) {
+  const scopeLevel = study.scope.level;
+  const displayRole = policy.primaryDisplayScopes.includes(scopeLevel)
+    ? "global_reference"
+    : "spatial_context";
+  const organMarkersEligible = study.review.organMappingChecked === true;
+
+  return {
+    ...study,
+    panelImport: {
+      displayRole,
+      organMarkersEligible,
+      organColorEligible: false,
+      localTransferAllowed: false
+    }
+  };
+}
+
+async function loadHealthStudyImport() {
+  const indexResponse = await fetch(HEALTH_STUDY_INDEX_SOURCE, { cache: "no-store" });
+  if (!indexResponse.ok) throw new Error(`${HEALTH_STUDY_INDEX_SOURCE}: ${indexResponse.status}`);
+  const index = await indexResponse.json();
+
+  const catalogResponse = await fetch(index.catalogSource, { cache: "no-store" });
+  if (!catalogResponse.ok) throw new Error(`${index.catalogSource}: ${catalogResponse.status}`);
+  const catalog = await catalogResponse.json();
+  const knownRiskIds = new Set([
+    ...(catalog.coreRisks || []),
+    ...(catalog.contextRisks || [])
+  ].map(risk => risk.id));
+
+  const enabledEntries = (index.studies || []).filter(entry => entry.enabled === true);
+  const loaded = await Promise.all(enabledEntries.map(async entry => {
+    try {
+      const response = await fetch(entry.source, { cache: "no-store" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const study = await response.json();
+      const reasons = validateHealthStudyForImport(study, entry, knownRiskIds, index.importPolicy);
+      return reasons.length ? { entry, reasons } : { entry, study };
+    } catch (error) {
+      return { entry, reasons: [`load_error: ${error.message}`] };
+    }
+  }));
+
+  HEALTH_STUDY_IMPORT = {
+    catalog,
+    index,
+    studies: loaded
+      .filter(item => item.study)
+      .map(item => prepareHealthStudyForPanel(item.study, index.importPolicy)),
+    rejected: loaded.filter(item => !item.study)
+  };
+
+  // Bewusste Schnittstelle für die spätere, datengetriebene Gesundheitsansicht.
+  // Der Import allein aktiviert noch keine Organfarbe und keine lokale Aussage.
+  window.GWL_HEALTH_IMPORT = HEALTH_STUDY_IMPORT;
+  if (HEALTH_STUDY_IMPORT.rejected.length) {
+    console.warn("Gesundheitsstudien beim Import zurückgewiesen:", HEALTH_STUDY_IMPORT.rejected);
+  }
+}
 
 async function loadHealthContributionPrototype() {
   if (!LIFE_PROTOTYPE_MODE) return;
@@ -89,7 +177,82 @@ function findHotspotIdByLabels(labels = []) {
 }
 
 function getHealthSourceById(id) {
-  return (LIFE_HEALTH_DATA?.sources || []).find(source => source.id === id) || null;
+  const prototypeSource = (LIFE_HEALTH_DATA?.sources || []).find(source => source.id === id);
+  if (prototypeSource) return prototypeSource;
+  for (const study of HEALTH_STUDY_IMPORT.studies || []) {
+    const studySource = (study.sources || []).find(source => source.id === id);
+    if (studySource) return studySource;
+  }
+  return null;
+}
+
+function displayHealthMeasurement(measurement) {
+  if (!measurement || measurement.value === null || measurement.value === undefined) return "";
+  return `${String(measurement.value).replace(".", ",")} ${measurement.unit || ""}`.trim();
+}
+
+function getImportedHealthContributionsByOrgan() {
+  const endpointCards = new Map();
+
+  for (const study of HEALTH_STUDY_IMPORT.studies || []) {
+    if (!study.panelImport?.organMarkersEligible) continue;
+    const risk = [
+      ...(HEALTH_STUDY_IMPORT.catalog?.coreRisks || []),
+      ...(HEALTH_STUDY_IMPORT.catalog?.contextRisks || [])
+    ].find(candidate => candidate.id === study.riskRefs?.[0]);
+    for (const endpoint of study.healthEndpoints || []) {
+      for (const organId of endpoint.organIds || []) {
+        const normalizedEndpoint = endpoint.label.trim().toLocaleLowerCase("de-DE");
+        const cardKey = `${organId}::${normalizedEndpoint}`;
+        if (!endpointCards.has(cardKey)) {
+          endpointCards.set(cardKey, {
+            id: `health_endpoint_${organId}_${endpoint.id}`,
+            organId,
+            label: endpoint.label,
+            healthEndpoint: endpoint.label,
+            evidenceLevel: endpoint.attributionStatus === "attributable_burden" ? "A" : "B",
+            burden: null,
+            affectsOrganColor: false,
+            colorStatus: "multiple_exposures_not_separately_weighted",
+            whyNoColor: "Mehrere Expositionen können zu diesem Gesundheitsendpunkt beitragen. Ihre Anteile werden nur gewichtet oder addiert, wenn überschneidungsfreie, vergleichbare Daten vorliegen.",
+            globalHealthReference: study.panelImport.displayRole === "global_reference",
+            pathways: []
+          });
+        }
+
+        const foundationIds = risk?.primaryBoundaryId
+          ? [risk.primaryBoundaryId]
+          : (risk?.relatedBoundaryIds || []);
+        const measurements = (study.measurements || [])
+          .filter(item => item.value !== null && item.value !== undefined)
+          .slice(0, 2);
+        endpointCards.get(cardKey).pathways.push({
+          id: `${study.id}_${endpoint.id}`,
+          foundationIds,
+          foundations: foundationIds.map(id => getBoundary(id)?.label || id),
+          exposure: risk?.label || study.title,
+          outcome: endpoint.label,
+          organ: HOTSPOTS[organId]?.label || organId,
+          measurements: measurements.map(item => ({
+            label: item.metric,
+            display: displayHealthMeasurement(item),
+            period: item.period,
+            geography: item.geography
+          })),
+          sourceRef: study.sources?.[0]?.id || "",
+          spatialContext: `${study.scope.geography} · ${study.period.startYear}–${study.period.endYear}`,
+          weightingStatus: "not_separately_quantified"
+        });
+      }
+    }
+  }
+
+  const byOrgan = new Map();
+  for (const card of endpointCards.values()) {
+    if (!byOrgan.has(card.organId)) byOrgan.set(card.organId, []);
+    byOrgan.get(card.organId).push(card);
+  }
+  return byOrgan;
 }
 
 function normalizedOrganBurdenScore(contributions = []) {
@@ -131,6 +294,22 @@ function getPrototypeAggregateHealth() {
       };
     })
     .filter(Boolean);
+
+  const importedByOrgan = getImportedHealthContributionsByOrgan();
+  for (const [organId, contributors] of importedByOrgan) {
+    const existing = impacts.find(impact => impact.organ === organId);
+    if (existing) {
+      existing.contributors.push(...contributors);
+    } else {
+      impacts.push({
+        organ: organId,
+        label: HOTSPOTS[organId]?.label || organId,
+        burdenScore: null,
+        contributors,
+        healthContributionView: true
+      });
+    }
+  }
 
   return impacts.length
     ? {
@@ -2338,6 +2517,133 @@ function createMediaNode(organId) {
   return block;
 }
 
+function renderGlobalEndpointCard(item) {
+  return `
+    <details class="organ-contribution-item is-global-reference health-endpoint-card" data-health-endpoint-id="${item.id}">
+      <summary class="organ-contribution-summary">
+        <span class="organ-contribution-icon" data-icon="${gwlHealthIconKey(item)}">${gwlHealthIconSvg(gwlHealthIconKey(item))}</span>
+        <span class="organ-contribution-summary-title">${item.label}</span>
+        <span class="organ-contribution-summary-meta">${item.pathways.length} ${item.pathways.length === 1 ? "belegter Expositionspfad" : "belegte Expositionspfade"}</span>
+      </summary>
+      <div class="organ-contribution-body">
+        <div class="health-pathway-list">
+          ${item.pathways.map(pathway => {
+            const primaryFoundationId = pathway.foundationIds[0] || "";
+            const primaryFoundation = pathway.foundations[0] || "Umweltbezug";
+            const relatedFoundations = pathway.foundations.slice(1);
+            const source = getHealthSourceById(pathway.sourceRef);
+            return `
+              <section class="health-pathway">
+                <div class="health-pathway-flow" aria-label="Wirkungspfad von der Grundlage zum Organ">
+                  <button type="button" class="health-pathway-node is-foundation" data-life-route-boundary="${primaryFoundationId}">${primaryFoundation}</button>
+                  <span class="health-pathway-arrow" aria-hidden="true">→</span>
+                  <span class="health-pathway-node">${pathway.exposure}</span>
+                  <span class="health-pathway-arrow" aria-hidden="true">→</span>
+                  <span class="health-pathway-node">${pathway.outcome}</span>
+                  <span class="health-pathway-arrow" aria-hidden="true">→</span>
+                  <span class="health-pathway-node is-organ">${pathway.organ}</span>
+                </div>
+                ${relatedFoundations.length ? `<small><strong>Weitere Bezüge:</strong> ${relatedFoundations.join(" · ")}</small>` : ""}
+                <small><strong>Gewichtung:</strong> Anteil dieses Pfades nicht getrennt quantifiziert.</small>
+                ${pathway.measurements.length ? `
+                  <div class="health-pathway-measurements">
+                    <strong>Risikoweite globale Krankheitslast:</strong>
+                    ${pathway.measurements.map(value => `<span>${value.display} · ${value.period} · ${value.geography}</span>`).join("")}
+                    <small>Nicht ausschließlich diesem einzelnen Gesundheitsendpunkt zugeordnet.</small>
+                  </div>` : ""}
+                ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+              </section>`;
+          }).join("")}
+        </div>
+        <small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>
+      </div>
+    </details>`;
+}
+
+function renderHealthPathDialog(item) {
+  return `
+    <p class="health-path-dialog-intro">Jeder belegte Expositionspfad bleibt getrennt. Fehlende Gewichte werden nicht ergänzt und risikoweite Krankheitslasten nicht dem einzelnen Endpunkt zugerechnet.</p>
+    <div class="health-path-dialog-list">
+      ${item.pathways.map(pathway => {
+        const primaryFoundationId = pathway.foundationIds[0] || "";
+        const primaryFoundation = pathway.foundations[0] || "Umweltbezug";
+        const relatedFoundations = pathway.foundations.slice(1);
+        const source = getHealthSourceById(pathway.sourceRef);
+        return `
+          <section class="health-path-dialog-path">
+            <div class="health-path-dialog-flow">
+              <button type="button" class="health-path-dialog-node is-foundation" data-life-route-boundary="${primaryFoundationId}">
+                <small>Grundlage</small><strong>${primaryFoundation}</strong>
+              </button>
+              <span class="health-path-dialog-arrow" aria-hidden="true">→</span>
+              <span class="health-path-dialog-node"><small>Exposition</small><strong>${pathway.exposure}</strong></span>
+              <span class="health-path-dialog-arrow" aria-hidden="true">→</span>
+              <span class="health-path-dialog-node"><small>Gesundheitslast</small><strong>${pathway.outcome}</strong></span>
+              <span class="health-path-dialog-arrow" aria-hidden="true">→</span>
+              <span class="health-path-dialog-node is-organ"><small>Organ</small><strong>${pathway.organ}</strong></span>
+            </div>
+            <div class="health-path-dialog-meta">
+              <span><strong>Gewichtung:</strong> Anteil dieses Pfades nicht getrennt quantifiziert.</span>
+              ${relatedFoundations.length ? `<span><strong>Weitere Bezüge:</strong> ${relatedFoundations.join(" · ")}</span>` : ""}
+              ${pathway.measurements.length ? `<span><strong>Risikoweite globale Krankheitslast:</strong> ${pathway.measurements.map(value => `${value.display} (${value.period})`).join(" · ")}</span>` : ""}
+              ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+            </div>
+          </section>`;
+      }).join("")}
+    </div>`;
+}
+
+function openHealthPathOverlay(item) {
+  if (!healthPathOverlay || !healthPathContent || !item?.pathways) return;
+  healthPathTitle.textContent = item.label;
+  healthPathContent.innerHTML = renderHealthPathDialog(item);
+  healthPathOverlay.hidden = false;
+  closeHealthPathButton?.focus();
+}
+
+function closeHealthPathOverlay() {
+  if (!healthPathOverlay) return;
+  healthPathOverlay.hidden = true;
+  healthPathContent.innerHTML = "";
+}
+
+function renderHealthContributionCards(items) {
+  return items.map(item => {
+    if (Array.isArray(item.pathways)) return renderGlobalEndpointCard(item);
+    const source = getHealthSourceById(item.sourceRefs?.[0]);
+    const burden = item.burden;
+    const routeBoundary = item.route?.boundaryId || "";
+    const routeItem = item.route?.itemId || "";
+    const burdenHtml = burden
+      ? `<span><strong>Krankheitslast:</strong> ${burden.display || ""}${burden.period ? ` · ${burden.period}` : ""}${burden.geography ? ` · ${burden.geography}` : ""}</span>
+         ${burden.secondary ? `<small>${burden.secondary}</small>` : ""}`
+      : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
+    const statusText = item.globalHealthReference
+      ? `Globale Referenz${item.spatialContext ? ` · ${item.spatialContext}` : ""}`
+      : `Evidenz ${item.evidenceLevel || "–"} · ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}`;
+
+    return `
+      <details class="organ-contribution-item${item.globalHealthReference ? " is-global-reference" : ""}">
+        <summary class="organ-contribution-summary">
+          <span class="organ-contribution-icon" data-icon="${gwlHealthIconKey(item)}">${gwlHealthIconSvg(gwlHealthIconKey(item))}</span>
+          <span class="organ-contribution-summary-title">${item.label}</span>
+          <span class="organ-contribution-summary-meta">${statusText}</span>
+        </summary>
+        <div class="organ-contribution-body">
+          ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
+          ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
+          ${burdenHtml}
+          ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
+          ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
+          ${routeBoundary ? `
+            <button type="button" data-life-route-boundary="${routeBoundary}" data-life-route-item="${routeItem}">
+              → Ursache im GWL-Panel öffnen
+            </button>` : ""}
+        </div>
+      </details>`;
+  }).join("");
+}
+
 function openOrganOverlay(organId, preserveHidden = false) {
   selectedOrganId = organId;
   const def = HOTSPOTS[organId];
@@ -2351,9 +2657,11 @@ function openOrganOverlay(organId, preserveHidden = false) {
     }
 
     const hasColor = typeof impact.burdenScore === "number";
+    const panelContributors = impact.contributors.filter(item => !item.globalHealthReference);
+    const globalContributors = impact.contributors.filter(item => item.globalHealthReference);
     organOverlayFinding.textContent = hasColor
       ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
-      : `${impact.contributors.length} gesundheitlich relevante Beiträge. Für die Organfarbe liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`;
+      : `${impact.contributors.length} gesundheitlich relevante Beiträge und globale Referenzen. Für die Organfarbe liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`;
 
     organOverlayNote.innerHTML = `
       <div class="organ-prototype-warning">
@@ -2363,43 +2671,38 @@ function openOrganOverlay(organId, preserveHidden = false) {
       <details class="organ-context-details" open>
         <summary>Beitragende Ursachen / Pfade</summary>
         <div class="organ-contribution-list">
-          ${impact.contributors.map(item => {
-            const source = getHealthSourceById(item.sourceRefs?.[0]);
-            const burden = item.burden;
-            const routeBoundary = item.route?.boundaryId || "";
-            const routeItem = item.route?.itemId || "";
-            const burdenHtml = burden
-              ? `<span><strong>Krankheitslast:</strong> ${burden.display || ""}${burden.period ? ` · ${burden.period}` : ""}${burden.geography ? ` · ${burden.geography}` : ""}</span>
-                 ${burden.secondary ? `<small>${burden.secondary}</small>` : ""}`
-              : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
-            return `
-              <details class="organ-contribution-item">
-                <summary class="organ-contribution-summary">
-                  <span class="organ-contribution-icon" data-icon="${gwlHealthIconKey(item)}">${gwlHealthIconSvg(gwlHealthIconKey(item))}</span>
-                  <span class="organ-contribution-summary-title">${item.label}</span>
-                  <span class="organ-contribution-summary-meta">
-                    Evidenz ${item.evidenceLevel || "–"} ·
-                    ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}
-                  </span>
-                </summary>
-                <div class="organ-contribution-body">
-                  ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
-                  ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
-                  ${burdenHtml}
-                  ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
-                  ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
-                  ${routeBoundary ? `
-                    <button
-                      type="button"
-                      data-life-route-boundary="${routeBoundary}"
-                      data-life-route-item="${routeItem}">
-                      → Ursache im GWL-Panel öffnen
-                    </button>` : ""}
-                </div>
-              </details>`;
-          }).join("")}
+          ${renderHealthContributionCards(panelContributors)}
         </div>
-      </details>`;
+      </details>
+      ${globalContributors.length ? `
+        <details class="organ-context-details global-health-reference" open>
+          <summary>
+            <span>Globale Gesundheitslast</span>
+            <button class="inline-info-button" type="button" aria-label="Information zur globalen Gesundheitslast" aria-expanded="false">i</button>
+          </summary>
+          <div class="inline-info-note" hidden>Diese Werte beschreiben globale, modellierte Krankheitslast. Sie sind kein lokaler Befund für den gewählten Ort und werden nicht mit anderen Belastungen addiert.</div>
+          <div class="organ-contribution-list">${renderHealthContributionCards(globalContributors)}</div>
+        </details>` : ""}`;
+
+    organOverlayNote.querySelectorAll(".inline-info-button").forEach(button => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const note = button.closest("details")?.querySelector(".inline-info-note");
+        if (!note) return;
+        note.hidden = !note.hidden;
+        button.setAttribute("aria-expanded", String(!note.hidden));
+      });
+    });
+    organOverlayNote.querySelectorAll(".health-endpoint-card > summary").forEach(summary => {
+      summary.addEventListener("click", event => {
+        if (!window.matchMedia("(min-width: 821px)").matches) return;
+        event.preventDefault();
+        const endpointId = summary.closest(".health-endpoint-card")?.dataset.healthEndpointId;
+        const endpoint = impact.contributors.find(item => item.id === endpointId);
+        if (endpoint?.pathways) openHealthPathOverlay(endpoint);
+      });
+    });
   } else {
     organOverlayContent.classList.remove("health-contribution-layout");
     if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
@@ -2430,6 +2733,17 @@ function closeOrganOverlay() {
   organOverlay.hidden = true;
   selectedOrganId = null;
   document.querySelectorAll('.hotspot-dot').forEach(dot => dot.classList.remove('is-selected'));
+}
+
+function followHealthRoute(routeButton) {
+  const boundaryId = routeButton?.dataset.lifeRouteBoundary;
+  const itemId = routeButton?.dataset.lifeRouteItem || "";
+  if (!boundaryId || !getBoundary(boundaryId)) return;
+  closeHealthPathOverlay();
+  closeOrganOverlay();
+  if (itemId) selectItem(boundaryId, itemId);
+  else selectBoundary(boundaryId);
+  document.querySelector(`[data-boundary="${boundaryId}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function selectBoundary(boundaryId) {
@@ -2549,6 +2863,33 @@ function chooseFirstItemForScope() {
 function resetPanel() { regionSelect.value = "global"; timeWindow = "data"; chooseFirstItemForScope(); }
 
 regionSelect.addEventListener("change", chooseFirstItemForScope);
+
+function setLocationInfoOpen(open) {
+  if (!locationInfoButton || !locationInfo) return;
+  locationInfo.hidden = !open;
+  locationInfoButton.setAttribute("aria-expanded", String(open));
+}
+
+locationInfoButton?.addEventListener("click", event => {
+  event.stopPropagation();
+  setLocationInfoOpen(locationInfoButton.getAttribute("aria-expanded") !== "true");
+});
+
+document.addEventListener("click", event => {
+  if (locationInfoButton?.getAttribute("aria-expanded") !== "true") return;
+  if (!event.target.closest(".location-control")) setLocationInfoOpen(false);
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && healthPathOverlay && !healthPathOverlay.hidden) {
+    closeHealthPathOverlay();
+    return;
+  }
+  if (event.key === "Escape" && locationInfoButton?.getAttribute("aria-expanded") === "true") {
+    setLocationInfoOpen(false);
+    locationInfoButton.focus();
+  }
+});
 resetButton.addEventListener("click", resetPanel);
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));
 blcWindowButton.addEventListener("click", () => setTimeWindow("blc"));
@@ -2567,14 +2908,29 @@ timeSlider.addEventListener("input", event => {
   selectYear(year);
 });
 closeOverlayButton.addEventListener("click", closeOrganOverlay);
+closeHealthPathButton?.addEventListener("click", closeHealthPathOverlay);
 causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
 causeButtonLife.addEventListener("click", () => openCauseOverlay("life"));
 document.querySelectorAll("[data-close-cause]").forEach(button => button.addEventListener("click", () => closeCauseOverlay(button.dataset.closeCause)));
+organOverlayContent?.addEventListener("click", event => {
+  const routeButton = event.target.closest("[data-life-route-boundary]");
+  if (!routeButton) return;
+  followHealthRoute(routeButton);
+});
+healthPathOverlay?.addEventListener("click", event => {
+  const routeButton = event.target.closest("[data-life-route-boundary]");
+  if (routeButton) {
+    followHealthRoute(routeButton);
+    return;
+  }
+  if (event.target === healthPathOverlay) closeHealthPathOverlay();
+});
 async function initPanel() {
   try {
     await loadBodymapConfig();
-  await loadHealthContributionPrototype();
+    await loadHealthContributionPrototype();
+    await loadHealthStudyImport();
     await loadKnowledgeNetworks();
     syncKnowledgeNavigationFromIndex();
     syncFreshwaterBlueGreenNavigation();
@@ -3163,4 +3519,3 @@ function gwlHealthIconSvg(key) {
 })();
 
 initPanel();
-

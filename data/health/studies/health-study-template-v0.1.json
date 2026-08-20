@@ -1,0 +1,66 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "replace_with_stable_study_id",
+  "status": "draft",
+  "title": "Titel der globalen Gesundheitsstudie",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "Global",
+    "population": "Beschreibung der untersuchten Bevölkerung"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": [
+    "gbd_replace_with_catalog_risk_id"
+  ],
+  "measurements": [
+    {
+      "id": "replace_with_measurement_id",
+      "kind": "dalys",
+      "metric": "Beschreibung der Messgröße",
+      "valueType": "count",
+      "value": null,
+      "lower": null,
+      "upper": null,
+      "unit": "DALYs",
+      "geography": "Global",
+      "period": "1990–2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": [
+        "src_replace_me"
+      ]
+    }
+  ],
+  "healthEndpoints": [],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_replace_me",
+      "title": "Titel der Primärquelle oder des Datensatzes",
+      "publisher": "Herausgeber",
+      "year": 2024,
+      "url": "https://example.org/replace-me",
+      "doi": "",
+      "sourceType": "peer_reviewed_study"
+    }
+  ],
+  "review": {
+    "globalRelevance": false,
+    "quantitative": false,
+    "riskOutcomePairsChecked": false,
+    "doubleCountingChecked": false,
+    "organMappingChecked": false,
+    "plainLanguagePath": "Umweltveränderung → Exposition → Gesundheitswirkung → Organ",
+    "decision": "pending",
+    "notes": "Vor einer Veröffentlichung alle Prüffelder belegen."
+  }
+}

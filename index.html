@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=0.9.29-b12">
 </head>
 <body>
   <main class="app-shell">
@@ -131,24 +131,29 @@
         </div>
 
         <div class="location-control top-card">
-          <label for="regionSelect">
-            <span class="eyebrow">Region / Ort</span>
-            <select id="regionSelect">
-              <option value="global">Global</option>
-              <optgroup label="Europa">
-                <option value="europe">Europa</option>
-                <option value="germany">Deutschland</option>
-                <option value="sh">Schleswig-Holstein</option>
-                <option value="luebeck">Lübeck</option>
-              </optgroup>
-              <optgroup label="Afrika">
-                <option value="africa">Afrika</option>
-                <option value="tanzania">Tansania</option>
-                <option value="tindigani">Tindigani · Hai District</option>
-              </optgroup>
-            </select>
-          </label>
+          <div class="location-label-row">
+            <label class="eyebrow" for="regionSelect">Region / Ort</label>
+            <button id="locationInfoButton" class="location-info-button" type="button" aria-label="Information zum Raumbezug der Daten" aria-expanded="false" aria-controls="locationInfo">i</button>
+          </div>
+          <select id="regionSelect">
+            <option value="global">Global</option>
+            <optgroup label="Europa">
+              <option value="europe">Europa</option>
+              <option value="germany">Deutschland</option>
+              <option value="sh">Schleswig-Holstein</option>
+              <option value="luebeck">Lübeck</option>
+            </optgroup>
+            <optgroup label="Afrika">
+              <option value="africa">Afrika</option>
+              <option value="tanzania">Tansania</option>
+              <option value="tindigani">Tindigani · Hai District</option>
+            </optgroup>
+          </select>
           <div id="regionPath" class="region-path">Global</div>
+          <div id="locationInfo" class="location-info" role="note" hidden>
+            <strong>So wird der Raumbezug verwendet</strong>
+            <p>Ein Wert gilt nur dann als lokal, wenn seine Untersuchung genau diesen Ort abdeckt. Daten einer übergeordneten Ebene erscheinen als regionaler oder nationaler Kontext. Globale Werte bleiben ein globaler Referenzkontext und werden nicht auf den gewählten Ort übertragen. Fehlen passende Daten, bleibt die Anzeige neutral.</p>
+          </div>
         </div>
 
         <div class="bodymap-panel">
@@ -202,9 +207,22 @@
           </div>
         </div>
       </section>
+
+      <div id="healthPathOverlay" class="health-path-overlay" hidden>
+        <section class="health-path-dialog" role="dialog" aria-modal="true" aria-labelledby="healthPathTitle">
+          <div class="health-path-dialog-head">
+            <div>
+              <span class="eyebrow">Umwelt → Exposition → Gesundheitslast → Organ</span>
+              <h3 id="healthPathTitle">Gesundheitspfad</h3>
+            </div>
+            <button id="closeHealthPathButton" class="overlay-close" type="button" aria-label="Gesundheitspfad schließen">×</button>
+          </div>
+          <div id="healthPathContent" class="health-path-dialog-content"></div>
+        </section>
+      </div>
     </section>
   </main>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="data.js?v=0.9.29-b12"></script>
+  <script src="app.js?v=0.9.29-b12"></script>
 </body>
 </html>

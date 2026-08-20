@@ -1,0 +1,96 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2021_no2_asthma_global",
+  "status": "reviewed",
+  "title": "GBD 2021 – globale Asthmalast durch Stickstoffdioxid",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "204 Länder und Territorien",
+    "population": "GBD-Altersgruppen mit NO₂-attributabler Asthmalast; Schwerpunkt Kinder und Jugendliche"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_nitrogen_dioxide"],
+  "measurements": [
+    {
+      "id": "no2_asthma_dalys_2021",
+      "kind": "dalys",
+      "metric": "Asthma-DALYs, die Stickstoffdioxid zugerechnet werden",
+      "valueType": "count",
+      "value": 176730,
+      "lower": null,
+      "upper": null,
+      "unit": "DALYs",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_bmj_no2_asthma_gbd2021"]
+    },
+    {
+      "id": "no2_asthma_asdr_2021",
+      "kind": "dalys",
+      "metric": "Altersstandardisierte Rate der NO₂-attributablen Asthma-DALYs",
+      "valueType": "rate",
+      "value": 2.48,
+      "lower": -2.26,
+      "upper": 10.3,
+      "unit": "DALYs je 100.000 Einwohner",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": true,
+      "timeSeries": [],
+      "sourceRefs": ["src_bmj_no2_asthma_gbd2021"]
+    }
+  ],
+  "healthEndpoints": [
+    {
+      "id": "no2_paediatric_asthma",
+      "label": "Asthma bei Kindern und Jugendlichen",
+      "riskRef": "gbd_nitrogen_dioxide",
+      "organIds": ["lungs"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_gbd2021_no2_methods", "src_bmj_no2_asthma_gbd2021"]
+    }
+  ],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_gbd2021_no2_methods",
+      "title": "Ambient nitrogen dioxide pollution – GBD 2021 methods",
+      "publisher": "Institute for Health Metrics and Evaluation",
+      "year": 2024,
+      "url": "https://www.healthdata.org/sites/default/files/methods_appendices/2021/wozniak_air_no2_writeup_GBD2021_030222_AC_updated030624.pdf",
+      "sourceType": "authoritative_dataset"
+    },
+    {
+      "id": "src_bmj_no2_asthma_gbd2021",
+      "title": "Global, regional and national burden of asthma attributable to NO₂ from 1990 to 2021",
+      "publisher": "BMJ Open",
+      "year": 2025,
+      "url": "https://bmjopen.bmj.com/content/15/2/e095210",
+      "doi": "10.1136/bmjopen-2024-095210",
+      "sourceType": "peer_reviewed_study"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": true,
+    "doubleCountingChecked": true,
+    "organMappingChecked": true,
+    "plainLanguagePath": "Verkehr und Verbrennung → NO₂ in der Außenluft → langfristige Exposition → kindliches Asthma → Lunge",
+    "decision": "include",
+    "notes": "GBD 2021 ordnet NO₂ nur pädiatrischem Asthma zu und berechnet dafür keine Todesfälle. Das negative untere Unsicherheitsintervall der altersstandardisierten DALY-Rate zeigt die hohe Modellunsicherheit und muss sichtbar bleiben."
+  }
+}

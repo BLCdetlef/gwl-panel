@@ -1,0 +1,87 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2021_ambient_ozone_global",
+  "status": "reviewed",
+  "title": "GBD 2021 – globale Krankheitslast durch bodennahes Ozon",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "204 Länder und Territorien",
+    "population": "Gesamtbevölkerung, beide Geschlechter und GBD-relevante Altersgruppen"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_ambient_ozone"],
+  "measurements": [
+    {
+      "id": "ambient_ozone_deaths_2021",
+      "kind": "deaths",
+      "metric": "COPD-Todesfälle, die bodennahem Ozon zugerechnet werden",
+      "valueType": "count",
+      "value": 490000,
+      "lower": 107000,
+      "upper": 837000,
+      "unit": "Todesfälle",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_ihme_ozone_factsheet_2021"]
+    },
+    {
+      "id": "ambient_ozone_dalys_2021",
+      "kind": "dalys",
+      "metric": "COPD-DALYs, die bodennahem Ozon zugerechnet werden",
+      "valueType": "count",
+      "value": 8.77,
+      "lower": 1.91,
+      "upper": 15,
+      "unit": "Millionen DALYs",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_ihme_ozone_factsheet_2021"]
+    }
+  ],
+  "healthEndpoints": [
+    {
+      "id": "ozone_copd",
+      "label": "Chronisch obstruktive Lungenerkrankung (COPD)",
+      "riskRef": "gbd_ambient_ozone",
+      "organIds": ["lungs"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_ihme_ozone_factsheet_2021"]
+    }
+  ],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_ihme_ozone_factsheet_2021",
+      "title": "Ambient ozone pollution – Level 3 risk",
+      "publisher": "Institute for Health Metrics and Evaluation / The Lancet",
+      "year": 2024,
+      "url": "https://www.healthdata.org/sites/default/files/disease_and_injury/gbd_2021/topic_pdf/risk/88.pdf",
+      "sourceType": "authoritative_dataset"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": true,
+    "doubleCountingChecked": true,
+    "organMappingChecked": true,
+    "plainLanguagePath": "Vorläuferemissionen und atmosphärische Chemie → bodennahes Ozon → langfristige Exposition → COPD → Lunge",
+    "decision": "include",
+    "notes": "GBD 2021 rechnet bodennahem Ozon nur COPD zu. Die große Unsicherheit wird vollständig mitgeführt. Bodennahes Ozon nicht mit stratosphärischem Ozon verwechseln."
+  }
+}

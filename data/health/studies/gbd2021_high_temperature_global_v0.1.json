@@ -1,0 +1,77 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2021_high_temperature_global",
+  "status": "reviewed",
+  "title": "GBD 2021 – globale Krankheitslast durch hohe Umgebungstemperaturen",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "204 Länder und Territorien",
+    "population": "Gesamtbevölkerung, beide Geschlechter und GBD-relevante Altersgruppen"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_high_temperature"],
+  "measurements": [
+    {
+      "id": "high_temperature_deaths_2021",
+      "kind": "deaths",
+      "metric": "Todesfälle, die Temperaturen oberhalb des ortsspezifischen Temperaturminimums der Sterblichkeit zugerechnet werden",
+      "valueType": "count",
+      "value": 442000,
+      "lower": 287000,
+      "upper": 617000,
+      "unit": "Todesfälle",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_ihme_high_temperature_factsheet_2021"]
+    },
+    {
+      "id": "high_temperature_dalys_2021",
+      "kind": "dalys",
+      "metric": "DALYs, die hohen Umgebungstemperaturen zugerechnet werden",
+      "valueType": "count",
+      "value": 14.1,
+      "lower": 9.85,
+      "upper": 18.4,
+      "unit": "Millionen DALYs",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_ihme_high_temperature_factsheet_2021"]
+    }
+  ],
+  "healthEndpoints": [],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_ihme_high_temperature_factsheet_2021",
+      "title": "High temperature – Level 3 risk",
+      "publisher": "Institute for Health Metrics and Evaluation / The Lancet",
+      "year": 2024,
+      "url": "https://www.healthdata.org/sites/default/files/disease_and_injury/gbd_2021/topic_pdf/risk/337.pdf",
+      "sourceType": "authoritative_dataset"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": false,
+    "doubleCountingChecked": true,
+    "organMappingChecked": false,
+    "plainLanguagePath": "Anthropogene Erwärmung → zunehmende Hitzeexposition → temperaturbedingte Krankheitslast",
+    "decision": "pending",
+    "notes": "Der globale GBD-Wert ist belastbar dokumentiert. Die zahlreichen und teilweise nicht organspezifischen Todesursachen werden vorerst nicht auf Körpermarker verdichtet. Außerdem ist nicht die gesamte hohe Temperatur anthropogen verursacht."
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2021_lead_global",
+  "status": "reviewed",
+  "title": "GBD 2021 – globale Exposition und Krankheitslast durch Blei",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "global",
+    "geography": "204 Länder und Territorien",
+    "population": "Gesamtbevölkerung, beide Geschlechter und GBD-relevante Altersgruppen"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2021,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2021,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_lead_exposure"],
+  "measurements": [
+    {
+      "id": "lead_sev_1990",
+      "kind": "exposure",
+      "metric": "Altersstandardisierter Summary Exposure Value für Bleiexposition",
+      "valueType": "summary_exposure_value",
+      "value": 46.7,
+      "lower": 0.01,
+      "upper": 55.43,
+      "unit": "SEV auf Skala 0–100",
+      "geography": "Global",
+      "period": "1990",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": true,
+      "timeSeries": [],
+      "sourceRefs": ["src_lead_ihd_gbd2021"]
+    },
+    {
+      "id": "lead_sev_2021",
+      "kind": "exposure",
+      "metric": "Altersstandardisierter Summary Exposure Value für Bleiexposition",
+      "valueType": "summary_exposure_value",
+      "value": 38.2,
+      "lower": 0,
+      "upper": 45.15,
+      "unit": "SEV auf Skala 0–100",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": true,
+      "timeSeries": [],
+      "sourceRefs": ["src_lead_ihd_gbd2021"]
+    },
+    {
+      "id": "lead_daly_rate_2021",
+      "kind": "dalys",
+      "metric": "Altersstandardisierte Rate der gesamten bleiattributablen Krankheitslast",
+      "valueType": "rate",
+      "value": 399.7,
+      "lower": -13.5,
+      "upper": 796.4,
+      "unit": "DALYs je 100.000 Einwohner",
+      "geography": "Global",
+      "period": "2021",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": true,
+      "timeSeries": [],
+      "sourceRefs": ["src_ihme_lead_factsheet_2021"]
+    }
+  ],
+  "healthEndpoints": [],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_ihme_lead_factsheet_2021",
+      "title": "Lead exposure – Level 3 risk",
+      "publisher": "Institute for Health Metrics and Evaluation / The Lancet",
+      "year": 2024,
+      "url": "https://www.healthdata.org/sites/default/files/disease_and_injury/gbd_2021/topic_pdf/risk/91.pdf",
+      "sourceType": "authoritative_dataset"
+    },
+    {
+      "id": "src_lead_ihd_gbd2021",
+      "title": "The burden and trend prediction of ischemic heart disease associated with lead exposure: Insights from the Global Burden of Disease study 2021",
+      "publisher": "Environmental Health",
+      "year": 2025,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12013041/",
+      "sourceType": "peer_reviewed_study"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": false,
+    "doubleCountingChecked": false,
+    "organMappingChecked": false,
+    "plainLanguagePath": "Bergbau, Produkte, Emissionen und Altlasten → Bleiexposition → neurologische, kardiovaskuläre und weitere Krankheitslast",
+    "decision": "pending",
+    "notes": "Der globale Expositionstrend ist interessant, die gesamte bleiattributable DALY-Rate hat jedoch ein extrem breites und bis unter null reichendes Unsicherheitsintervall. Herz-Kreislauf-Wirkungen werden teilweise über systolischen Blutdruck vermittelt. Vor Organaktivierung müssen direkte und vermittelte Zurechnungen getrennt und Doppelzählungen ausgeschlossen werden."
+  }
+}

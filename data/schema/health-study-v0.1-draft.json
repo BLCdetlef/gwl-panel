@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gwl-health-study-v0.1-draft",
+  "title": "GWL health study",
+  "description": "Kleines Eingabeformat für geprüfte globale Gesundheitsstudien und optionale regionale Kontexte. Es erzeugt keine automatischen Organ- oder Kausalitätszuordnungen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "id",
+    "status",
+    "title",
+    "studyDesign",
+    "scope",
+    "period",
+    "riskRefs",
+    "measurements",
+    "sources",
+    "review"
+  ],
+  "properties": {
+    "format": {
+      "const": "gwl-health-study-v0.1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_]*$"
+    },
+    "status": {
+      "enum": ["draft", "reviewed", "published", "rejected"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10
+    },
+    "studyDesign": {
+      "enum": [
+        "global_comparative_risk_assessment",
+        "systematic_review_meta_analysis",
+        "prospective_cohort",
+        "retrospective_cohort",
+        "repeated_cross_sectional",
+        "global_modelled_estimate",
+        "other"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "geography", "population"],
+      "properties": {
+        "level": {
+          "enum": ["global", "multi_region", "national_context", "local_context"]
+        },
+        "geography": {
+          "type": "string"
+        },
+        "population": {
+          "type": "string"
+        }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startYear", "endYear", "timeSeriesStatus", "dataImportStatus"],
+      "properties": {
+        "startYear": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2200
+        },
+        "endYear": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2200
+        },
+        "timeSeriesStatus": {
+          "enum": ["annual", "periodic", "single_estimate", "not_reproducible"]
+        },
+        "dataImportStatus": {
+          "enum": ["imported", "available_not_imported", "not_available"]
+        },
+        "observedThroughYear": {
+          "type": ["integer", "null"],
+          "minimum": 1800,
+          "maximum": 2200
+        },
+        "projectionStartsYear": {
+          "type": ["integer", "null"],
+          "minimum": 1800,
+          "maximum": 2200
+        }
+      }
+    },
+    "riskRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^gbd_[a-z0-9_]+$"
+      }
+    },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/measurement"
+      }
+    },
+    "healthEndpoints": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "$ref": "#/$defs/healthEndpoint"
+      }
+    },
+    "institutionalLinks": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["institution", "role", "evidence"],
+        "properties": {
+          "institution": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "globalRelevance",
+        "quantitative",
+        "riskOutcomePairsChecked",
+        "doubleCountingChecked",
+        "organMappingChecked",
+        "plainLanguagePath",
+        "decision"
+      ],
+      "properties": {
+        "globalRelevance": {
+          "type": "boolean"
+        },
+        "quantitative": {
+          "type": "boolean"
+        },
+        "riskOutcomePairsChecked": {
+          "type": "boolean"
+        },
+        "doubleCountingChecked": {
+          "type": "boolean"
+        },
+        "organMappingChecked": {
+          "type": "boolean"
+        },
+        "plainLanguagePath": {
+          "type": "string"
+        },
+        "decision": {
+          "enum": ["pending", "include", "context_only", "exclude"]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "metric",
+        "valueType",
+        "unit",
+        "geography",
+        "period",
+        "estimationType",
+        "sourceRefs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_]*$"
+        },
+        "kind": {
+          "enum": [
+            "exposure",
+            "deaths",
+            "dalys",
+            "ylls",
+            "ylds",
+            "incidence",
+            "prevalence",
+            "population_attributable_fraction"
+          ]
+        },
+        "metric": {
+          "type": "string"
+        },
+        "valueType": {
+          "enum": ["count", "rate", "percentage", "summary_exposure_value", "concentration"]
+        },
+        "value": {
+          "type": ["number", "null"]
+        },
+        "lower": {
+          "type": ["number", "null"]
+        },
+        "upper": {
+          "type": ["number", "null"]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "geography": {
+          "type": "string"
+        },
+        "period": {
+          "type": "string"
+        },
+        "estimationType": {
+          "enum": ["observed", "modelled_estimate", "projection", "mixed"]
+        },
+        "ageStandardized": {
+          "type": ["boolean", "null"]
+        },
+        "timeSeries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["year", "value"],
+            "properties": {
+              "year": {
+                "type": "integer",
+                "minimum": 1800,
+                "maximum": 2200
+              },
+              "value": {
+                "type": "number"
+              },
+              "lower": {
+                "type": ["number", "null"]
+              },
+              "upper": {
+                "type": ["number", "null"]
+              }
+            }
+          }
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "healthEndpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "riskRef",
+        "organIds",
+        "evidenceStatus",
+        "attributionStatus",
+        "sourceRefs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_]*$"
+        },
+        "label": {
+          "type": "string"
+        },
+        "riskRef": {
+          "type": "string",
+          "pattern": "^gbd_[a-z0-9_]+$"
+        },
+        "organIds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "brain",
+              "eye",
+              "ear",
+              "nose",
+              "teeth",
+              "tongue",
+              "lungs",
+              "heart",
+              "liver",
+              "kidneys",
+              "gut",
+              "urinary",
+              "femaleRepro",
+              "maleRepro",
+              "skeleton",
+              "musculoskeletal"
+            ]
+          }
+        },
+        "evidenceStatus": {
+          "enum": ["gbd_risk_outcome_pair", "external_quantified", "external_pathway_only"]
+        },
+        "attributionStatus": {
+          "enum": ["attributable_burden", "association", "context_only"]
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "publisher", "year", "url", "sourceType"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_]*$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2200
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "doi": {
+          "type": "string"
+        },
+        "sourceType": {
+          "enum": ["peer_reviewed_study", "authoritative_dataset", "institutional_metadata", "other"]
+        }
+      }
+    }
+  }
+}

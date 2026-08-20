@@ -1,0 +1,95 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "who_unicef_drinking_water_global",
+  "status": "reviewed",
+  "title": "WHO/UNICEF JMP – globale Entwicklung sicher gemanagter Trinkwasserversorgung",
+  "studyDesign": "repeated_cross_sectional",
+  "scope": {
+    "level": "global",
+    "geography": "Global; nationale Daten werden zu regionalen und globalen Schätzungen zusammengeführt",
+    "population": "Weltbevölkerung in Haushalten"
+  },
+  "period": {
+    "startYear": 2000,
+    "endYear": 2024,
+    "timeSeriesStatus": "periodic",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2024,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_unsafe_water_source"],
+  "measurements": [
+    {
+      "id": "people_gaining_safely_managed_water_2000_2024",
+      "kind": "exposure",
+      "metric": "Menschen, die zwischen 2000 und 2024 Zugang zu sicher gemanagtem Trinkwasser erhielten",
+      "valueType": "count",
+      "value": 2.2,
+      "lower": null,
+      "upper": null,
+      "unit": "Milliarden Menschen",
+      "geography": "Global",
+      "period": "2000–2024",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": null,
+      "timeSeries": [],
+      "sourceRefs": ["src_jmp_2025"]
+    },
+    {
+      "id": "global_population_2024",
+      "kind": "exposure",
+      "metric": "Globale Bevölkerung als Bezugsgröße der JMP-Versorgungsentwicklung",
+      "valueType": "count",
+      "value": 8.2,
+      "lower": null,
+      "upper": null,
+      "unit": "Milliarden Menschen",
+      "geography": "Global",
+      "period": "2024",
+      "estimationType": "observed",
+      "ageStandardized": null,
+      "timeSeries": [],
+      "sourceRefs": ["src_jmp_2025"]
+    }
+  ],
+  "healthEndpoints": [
+    {
+      "id": "unsafe_water_diarrhoeal_diseases",
+      "label": "Durchfallerkrankungen",
+      "riskRef": "gbd_unsafe_water_source",
+      "organIds": ["gut"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "context_only",
+      "sourceRefs": ["src_gbd2021_unsafe_water"]
+    }
+  ],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_jmp_2025",
+      "title": "Progress on household drinking-water, sanitation and hygiene 2000–2024: Special focus on inequalities",
+      "publisher": "World Health Organization and UNICEF Joint Monitoring Programme",
+      "year": 2025,
+      "url": "https://www.who.int/publications/i/item/9789240115149",
+      "sourceType": "authoritative_dataset"
+    },
+    {
+      "id": "src_gbd2021_unsafe_water",
+      "title": "GBD 2021 Unsafe Water Exposure Estimates 1990–2021",
+      "publisher": "Institute for Health Metrics and Evaluation",
+      "year": 2025,
+      "url": "https://ghdx.healthdata.org/record/ihme-data/gbd-2021-unsafe-water-exposure-estimates-1990-2021",
+      "sourceType": "authoritative_dataset"
+    }
+  ],
+  "review": {
+    "globalRelevance": true,
+    "quantitative": true,
+    "riskOutcomePairsChecked": true,
+    "doubleCountingChecked": true,
+    "organMappingChecked": true,
+    "plainLanguagePath": "Verschmutzung und unzureichende Versorgung → unsicheres Trinkwasser → Durchfallerkrankungen → Verdauungssystem",
+    "decision": "include",
+    "notes": "Die JMP-Servicegröße 'sicher gemanagtes Trinkwasser' ist nicht identisch mit der GBD-Expositionskategorie 'Unsafe water source'. Deshalb bleibt der Gesundheitsendpunkt hier Kontext und erhält noch keine Organfarbe. Für den Zeitregler soll später die originale JMP-Reihe importiert werden, nicht zwischen Einzelwerten interpoliert werden."
+  }
+}
