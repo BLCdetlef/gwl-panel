@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.29 · B12";
+const GWL_BUILD_VERSION = "0.9.35 · B18";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -241,6 +241,9 @@ function getImportedHealthContributionsByOrgan() {
           })),
           sourceRef: study.sources?.[0]?.id || "",
           spatialContext: `${study.scope.geography} · ${study.period.startYear}–${study.period.endYear}`,
+          foundationLinkEligible:
+            study.review.decision === "include" &&
+            endpoint.attributionStatus !== "context_only",
           weightingStatus: "not_separately_quantified"
         });
       }
@@ -1432,6 +1435,9 @@ function findDataBoundaryForIndexGroup(indexBoundary, group) {
   if (indexBoundary?.id === "eah_tech_social_environment") {
     return data.boundaries.find(item => item.id === "mental-load") || null;
   }
+  if (indexBoundary?.id === "eah_material_energy_flows") {
+    return data.boundaries.find(item => item.id === "materials-energy") || null;
+  }
 
   const groupId = normalizeKnowledgeId(group?.id);
   const aliasId = aliases[groupId];
@@ -1474,6 +1480,38 @@ function syncKnowledgeNavigationFromIndex() {
           knowledgeBoundaryId: indexBoundary.id
         }))
       ]);
+      continue;
+    }
+
+    if (indexBoundary.id === "eah_material_energy_flows") {
+      const boundary = data.boundaries.find(item => item.id === "materials-energy");
+      if (!boundary) continue;
+      const existing = (boundary.items || []).filter(item => !item.knowledgeSource);
+      const indexedGroups = (indexBoundary.groups || []).flatMap(group => [
+        {
+          id: normalizeKnowledgeId(group.id),
+          scope: "all",
+          label: group.label,
+          enabled: true,
+          groupOnly: true,
+          menuHeading: true,
+          knowledgeBoundaryId: indexBoundary.id,
+          knowledgeGroupId: group.id
+        },
+        ...(group.items || []).map(item => ({
+          id: normalizeKnowledgeId(item.id),
+          scope: "all",
+          label: `↳ ${item.label}`,
+          enabled: true,
+          knowledgeSource: item.source,
+          knowledgeItemId: item.id,
+          knowledgeGroupId: group.id,
+          knowledgeBoundaryId: indexBoundary.id,
+          menuType: item.type || "component"
+        }))
+      ]);
+      boundary.items = [...existing, ...indexedGroups];
+      boundary.enabled = true;
       continue;
     }
 
@@ -1757,8 +1795,12 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   const presentation = network?.presentation || {};
   const firstPathway = (network?.pathways || [])[0];
 
-  if (focusType) focusType.textContent = `PLANETARE GRENZE · ${activeBoundary?.label || ""}`;
-  if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${activeItem?.label || ""}`;
+  const frameworkLabel = activeBoundary?.framework === "eah_extension"
+    ? (activeBoundary.frameworkLabel || "Ergänzende Systemgrenze").toUpperCase()
+    : "PLANETARE GRENZE";
+  if (focusType) focusType.textContent = `${frameworkLabel} · ${activeBoundary?.label || ""}`;
+  const itemLabel = String(activeItem?.label || "").replace(/^↳\s*/, "");
+  if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${itemLabel}`;
   if (focusSummary) focusSummary.textContent =
     network?.entry?.effectFocus || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
 
@@ -2177,8 +2219,14 @@ function renderBoundaries() {
             ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
             : item.label;
           if (item.depthOf) itemButton.classList.add("submenu-depth");
-          if (item.id === selectedItemId) itemButton.classList.add("active");
-          itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
+          if (item.menuHeading) {
+            itemButton.classList.add("submenu-heading");
+            itemButton.disabled = true;
+            itemButton.setAttribute("aria-label", `${item.label}, Menügruppe`);
+          } else {
+            if (item.id === selectedItemId) itemButton.classList.add("active");
+            itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
+          }
           submenu.appendChild(itemButton);
         });
         row.appendChild(submenu);
@@ -2370,7 +2418,10 @@ function ensureHealthLegend() {
   healthLegend.className = "health-legend";
   healthLegend.setAttribute("aria-label", "Legende der Organgesundheit");
   healthLegend.innerHTML = `
-    <div class="health-legend-title">Organgesundheit · Graustufen</div>
+    <div class="health-legend-title-row">
+      <div class="health-legend-title">Organgesundheit · Marker</div>
+      <button class="inline-info-button health-legend-info-button" type="button" aria-label="Information zur Bedeutung von Außenring und Organfüllung" aria-expanded="false">i</button>
+    </div>
     <div class="health-legend-row">
       <span class="health-scale" aria-hidden="true">
         <span style="--legend-shade:#f2f2f2"></span>
@@ -2380,13 +2431,24 @@ function ensureHealthLegend() {
       </span>
       <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
     </div>
+    <div class="health-legend-row">
+      <span class="legend-foundation-link" aria-hidden="true"></span>
+      <span><strong>Außenring</strong> = Zur aktuellen Auswahl besteht ein geprüfter Organbezug durch Gewebenachweis oder Gesundheitsstudie.</span>
+    </div>
     <div class="health-legend-row health-legend-secondary">
       <span class="legend-hatched" aria-hidden="true"></span>
       <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
     </div>
-    <div class="health-legend-row health-legend-method">
-      <span><strong>Methodik:</strong> Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert werden kann.</span>
+    <div class="health-legend-method inline-info-note" hidden>
+      <strong>Zwei unabhängige Signale</strong>
+      <p>Der Außenring zeigt nur einen geprüften Organbezug. Das kann ein Gewebenachweis, eine klinische Assoziation oder ein geprüfter Gesundheitspfad sein; es beweist nicht automatisch einen ursächlichen Organschaden. Die Organfüllung bleibt ausschließlich quantifizierter, normierter und zurechenbarer Krankheitslast vorbehalten.</p>
     </div>`;
+  const infoButton = healthLegend.querySelector(".health-legend-info-button");
+  const infoNote = healthLegend.querySelector(".health-legend-method");
+  infoButton?.addEventListener("click", () => {
+    infoNote.hidden = !infoNote.hidden;
+    infoButton.setAttribute("aria-expanded", String(!infoNote.hidden));
+  });
   bodymapPanel.insertBefore(healthLegend, readout);
   return healthLegend;
 }
@@ -2437,10 +2499,44 @@ function renderHotspots() {
 
 function clearHotspotStates() {
   document.querySelectorAll(".hotspot-dot").forEach(dot => {
-    dot.classList.remove("is-selected", "is-unquantified", "is-quantified");
+    dot.classList.remove("is-selected", "is-unquantified", "is-quantified", "has-foundation-link");
     dot.classList.add("is-neutral");
     dot.style.removeProperty("--hotspot-fill");
+    const organId = dot.dataset.organ;
+    if (HOTSPOTS[organId]?.label) dot.setAttribute("aria-label", HOTSPOTS[organId].label);
   });
+}
+
+function impactLinksToSelectedFoundation(impact) {
+  return (impact?.contributors || []).some(item =>
+    item.route?.boundaryId === selectedBoundaryId ||
+    (item.pathways || []).some(pathway =>
+      pathway.foundationLinkEligible === true && pathway.foundationIds?.includes(selectedBoundaryId)
+    )
+  );
+}
+
+function applyFoundationLinkRings() {
+  const aggregate = getPrototypeAggregateHealth();
+  for (const impact of aggregate?.impacts || []) {
+    if (!impactLinksToSelectedFoundation(impact)) continue;
+    const organId = normalizeImpactOrgan(impact.organ);
+    const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
+    if (!dot) continue;
+    dot.classList.add("has-foundation-link");
+    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || impact.label}. Geprüfter Gesundheitspfad zur gewählten Grundlage vorhanden.`);
+  }
+}
+
+function applyKnowledgeOrganLinks() {
+  const network = getActiveKnowledgeContext()?.network;
+  for (const signal of network?.healthContext?.markerSignals || []) {
+    const organId = normalizeImpactOrgan(signal.organ);
+    const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
+    if (!dot) continue;
+    dot.classList.add("has-foundation-link");
+    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || signal.organ}. ${signal.label || "Geprüfter Organbezug vorhanden."} Keine Aussage über einen ursächlichen Organschaden.`);
+  }
 }
 
 function renderHealth(health) {
@@ -2450,6 +2546,8 @@ function renderHealth(health) {
 
   currentHealth = health;
   clearHotspotStates();
+  applyFoundationLinkRings();
+  applyKnowledgeOrganLinks();
   const impacts = health?.impacts || [];
   if (!impacts.length) {
     const systemImpacts = health?.systemImpacts || [];
@@ -2713,14 +2811,16 @@ function openOrganOverlay(organId, preserveHidden = false) {
       }
     }
 
-    // Der Befund im Organfenster ist absichtlich identisch mit dem aktuell
-    // im Feld WIRKUNG angezeigten Befund. Keine zweite Interpretationsebene.
-    organOverlayFinding.textContent = findingText.textContent || "–";
+    organOverlayFinding.textContent = impact
+      ? (findingText.textContent || "–")
+      : "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
 
     organOverlayNote.innerHTML = `
       <details class="organ-context-details">
         <summary>Einordnung</summary>
-        <p>Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>.</p>
+        <p>${impact
+          ? "Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>."
+          : "Der Marker ist Teil der Bodymap, bleibt aber neutral, bis ein konkreter Umwelt–Expositions–Gesundheitspfad geprüft und importiert wurde."}</p>
       </details>`;
   }
   document.querySelectorAll('.hotspot-dot').forEach(dot => dot.classList.toggle('is-selected', dot.dataset.organ === organId));
@@ -2897,7 +2997,8 @@ timeSlider.addEventListener("input", event => {
   let year = Number(event.target.value);
   const context = getActiveKnowledgeContext();
   const series = context?.network ? getKnowledgeSeries(context.network) : null;
-  if (timeWindow === "data" && series?.points?.length) {
+  const preserveMissingYears = context?.network?.timeNavigation?.preserveMissingYears === true;
+  if (timeWindow === "data" && series?.points?.length && !preserveMissingYears) {
     year = series.points
       .map(point => Number(point.year))
       .filter(Number.isFinite)

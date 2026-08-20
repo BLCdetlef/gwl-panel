@@ -1,0 +1,208 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Zement und Klinker / globale Materialmenge und Prozessemissionen",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Baustoffe",
+    "subComponent": "Zement und Klinker",
+    "effectFocus": "Wie globale Zementmenge, Klinkeranteil und Prozessemissionen als zusammengehörige quantitative Größen den Materialdurchsatz und den Beitrag zum Klimawandel beschreiben"
+  },
+  "corePrinciples": [
+    "Zementproduktion ist ein menschengemachter Materialstrom und keine Planetare Grenze.",
+    "Produktion, Klinker-Zement-Verhältnis und CO2-Prozessemissionen bleiben getrennte Messgrößen mit eigenem Bezugsjahr.",
+    "Die drei Messgrößen erscheinen in einer Vertiefung und erzeugen keine drei Menüpunkte.",
+    "Globale Produktion und globaler Verbrauch werden im ersten Piloten nicht doppelt geführt.",
+    "Aus der Produktionsmenge folgt keine direkte Organwirkung; Gesundheitsbezüge benötigen konkrete Emissions-, Expositions- und Krankheitslastdaten."
+  ],
+  "nodes": [
+    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Stoff- und Energieströme", "framework": "eah_extension" },
+    { "id": "component_construction_materials", "type": "domain_component", "label": "Baustoffe" },
+    { "id": "component_cement_clinker", "type": "domain_component", "label": "Zement und Klinker" },
+    { "id": "flow_global_cement_production", "type": "system_flow", "label": "Globale Zementproduktion" },
+    { "id": "flow_clinker_share", "type": "system_flow", "label": "Klinkeranteil im Zement" },
+    { "id": "mechanism_clinker_calcination", "type": "mechanism", "label": "Kalzinierung karbonathaltiger Rohstoffe und Hochtemperaturprozess" },
+    { "id": "pressure_cement_process_co2", "type": "pressure", "label": "CO₂-Prozessemissionen der Zementherstellung" },
+    { "id": "pb_climate", "type": "planetary_boundary", "label": "Klimawandel" },
+    { "id": "pressure_cement_air_pollutants", "type": "pressure", "label": "Standortabhängige Staub- und Luftschadstoffemissionen" },
+    { "id": "life_health_context", "type": "life_outcome", "label": "Gesundheitsbezug nur über konkrete Exposition" }
+  ],
+  "edges": [
+    { "from": "eah_material_energy_flows", "to": "component_construction_materials", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "component_construction_materials", "to": "component_cement_clinker", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "component_cement_clinker", "to": "flow_global_cement_production", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "flow_global_cement_production", "to": "flow_clinker_share", "relationType": "composition_described_by", "evidenceStatus": "strong" },
+    { "from": "flow_clinker_share", "to": "mechanism_clinker_calcination", "relationType": "indicates_scale_of", "evidenceStatus": "strong" },
+    { "from": "mechanism_clinker_calcination", "to": "pressure_cement_process_co2", "relationType": "causes", "evidenceStatus": "strong" },
+    { "from": "pressure_cement_process_co2", "to": "pb_climate", "relationType": "boundary_link", "direction": "driver_to_boundary", "evidenceStatus": "strong" },
+    { "from": "component_cement_clinker", "to": "pressure_cement_air_pollutants", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "pressure_cement_air_pollutants", "to": "life_health_context", "relationType": "requires_exposure_assessment", "evidenceStatus": "strong" }
+  ],
+  "studyEvidence": [
+    {
+      "id": "usgs_world_cement_2025",
+      "sourceRefs": ["src_usgs_mcs_2026_cement"],
+      "design": "Offizielle globale Produktionsschätzung des U.S. Geological Survey für 2025.",
+      "finding": "Die weltweite Zementproduktion wird für 2025 auf rund 3,8 Milliarden Tonnen geschätzt.",
+      "relationType": "global_material_flow_status",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "iea_cement_indicators_2022",
+      "sourceRefs": ["src_iea_cement_2023"],
+      "design": "IEA-Sektorindikatoren für Zementproduktion und Klinker-Zement-Verhältnis mit Basisjahr 2022.",
+      "finding": "Für 2022 weist die IEA 4.160 Mt Zementproduktion und ein Klinker-Zement-Verhältnis von 0,71 t/t aus.",
+      "relationType": "global_sector_indicator",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "wu_cement_process_emissions_2023",
+      "sourceRefs": ["src_wu_cement_carbon_2025"],
+      "design": "Peer-reviewte globale Rekonstruktion von Zement-Prozessemissionen und Carbonatisierungsaufnahme von 1928 bis 2023.",
+      "finding": "Die globalen Zement-Prozessemissionen erreichten 2023 rund 1,58 Gt CO₂ pro Jahr.",
+      "relationType": "global_process_emission_estimate",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "world_cement_production_2025_usgs",
+      "node": "flow_global_cement_production",
+      "geography": "Global",
+      "period": "2025",
+      "metric": "Globale Zementproduktion",
+      "value": 3.8,
+      "unit": "billion_tonnes_per_year",
+      "display": "3,8 Mrd. t/Jahr",
+      "estimationType": "official_estimate",
+      "interpretation": "Globale Durchsatzmessung. Kein planetarer oder gesundheitlicher Grenzwert.",
+      "sourceRefs": ["src_usgs_mcs_2026_cement"],
+      "displayType": "system_flow"
+    },
+    {
+      "id": "clinker_cement_ratio_2022_iea",
+      "node": "flow_clinker_share",
+      "geography": "Global",
+      "period": "2022",
+      "metric": "Klinker-Zement-Verhältnis",
+      "value": 0.71,
+      "unit": "tonne_clinker_per_tonne_cement",
+      "display": "0,71 t Klinker je t Zement",
+      "interpretation": "Zusammensetzungs- und Effizienzindikator. Ein geringerer Klinkeranteil kann Prozessemissionen je Tonne Zement reduzieren; er ersetzt keine vollständige Emissionsbilanz.",
+      "sourceRefs": ["src_iea_cement_2023"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "cement_process_co2_2023_wu",
+      "node": "pressure_cement_process_co2",
+      "geography": "Global",
+      "period": "2023",
+      "metric": "CO₂-Prozessemissionen der Zementproduktion",
+      "value": 1.58,
+      "unit": "GtCO2_per_year",
+      "display": "1,58 Gt CO₂/Jahr",
+      "interpretation": "Prozessemissionen, insbesondere aus der Kalzinierung. Energiebedingte Emissionen und zeitversetzte CO₂-Aufnahme durch Carbonatisierung sind davon methodisch zu unterscheiden.",
+      "sourceRefs": ["src_wu_cement_carbon_2025"],
+      "displayType": "study_value"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "world_cement_production_2025_usgs",
+    "hidePrimaryMeasurementInKnowledgeView": true,
+    "referenceLabel": "Kein Grenzwert · globaler Materialdurchsatz",
+    "finding": "Die weltweite Zementproduktion wird für 2025 auf rund 3,8 Milliarden Tonnen geschätzt. Der Wert beschreibt die Materialmenge, nicht unmittelbar deren Klima- oder Gesundheitswirkung.",
+    "effectPath": "Zementnachfrage → Zement- und Klinkerproduktion → Kalzinierung und Prozessenergie → CO₂-Emissionen → Beitrag zum Klimawandel",
+    "uncertainty": "Die drei Kennzahlen stammen aus unterschiedlichen Bezugsjahren und dürfen nicht zu einer scheinbar einheitlichen Jahresbilanz verrechnet werden. Eine durchgängige reproduzierbare Jahresreihe ist in diesem Piloten noch nicht importiert.",
+    "statusYear": 2025,
+    "statusLabel": "Globale Zementproduktion 2025"
+  },
+  "pathways": [
+    {
+      "id": "path_cement_climate",
+      "label": "Materialmenge → Zusammensetzung → Prozessemission → Klimawandel",
+      "chain": ["Globale Zementproduktion", "Klinkeranteil", "Kalzinierung und Prozessenergie", "CO₂-Prozessemissionen", "Klimawandel"],
+      "evidenceStatus": "strong",
+      "caution": "Die planetare CO₂-Kontrollvariable wird nicht aus der Zementmenge allein berechnet."
+    },
+    {
+      "id": "path_cement_health_context",
+      "label": "Standortbezogener Gesundheitskontext",
+      "chain": ["Zement- und Klinkerproduktion", "Staub- und Luftschadstoffemissionen", "konkrete Exposition", "mögliche Gesundheitswirkung"],
+      "evidenceStatus": "pathway_only",
+      "caution": "Keine Organmarker aus der globalen Produktionsmenge ableiten."
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "cement_to_climate",
+      "boundaries": ["Stoff- und Energieströme", "Klimawandel"],
+      "mechanism": "Kalzinierung karbonathaltiger Rohstoffe und die Bereitstellung hoher Prozesstemperaturen setzen CO₂ frei.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_material_flow",
+    "systemImpacts": [],
+    "bodymapRule": "Aus globaler Zementproduktion, Klinkeranteil oder Prozessemissionen keine Organmarker ableiten. Dafür sind konkrete Schadstoffemissionen, Expositionsverteilungen und Gesundheitsdaten erforderlich."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_cement_timeseries",
+      "question": "Welche offene, versionsstabile globale Jahresreihe für Zement- und Klinkerproduktion wird vollständig in den Zeitregler importiert?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_cement_emission_scope",
+      "question": "Wie werden Prozess-, Energie- und Carbonatisierungseffekte in einer gemeinsamen Darstellung getrennt, ohne sie zu saldieren?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_cement_consumption",
+      "question": "Ab welcher räumlichen Ebene wird apparent consumption statt Produktion für Nachfrageverantwortung benötigt?",
+      "priority": "medium"
+    }
+  ],
+  "sources": [
+    {
+      "id": "src_usgs_mcs_2026_cement",
+      "title": "Mineral Commodity Summaries 2026 – Cement",
+      "publisher": "U.S. Geological Survey",
+      "year": 2026,
+      "type": "official_global_mineral_statistics",
+      "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-cement.pdf",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_iea_cement_2023",
+      "title": "Cement – Tracking Clean Energy Progress",
+      "publisher": "International Energy Agency",
+      "year": 2023,
+      "type": "official_sector_analysis",
+      "url": "https://www.iea.org/reports/cement-3",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_wu_cement_carbon_2025",
+      "title": "Global and national CO₂ uptake by cement carbonation from 1928 to 2024",
+      "publisher": "Earth System Science Data",
+      "year": 2025,
+      "type": "peer_reviewed_global_dataset",
+      "url": "https://doi.org/10.5194/essd-17-2231-2025",
+      "doi": "10.5194/essd-17-2231-2025",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Baustoffe",
+    "item": "Zement und Klinker",
+    "type": "component"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "available_not_imported",
+    "reason": "Die Quellen belegen Statuswerte und enthalten weiterführende Zeitdaten, aber noch keine gemeinsam geprüfte, reproduzierbare Jahresreihe für alle drei Kennzahlen.",
+    "panelRule": "Keinen interpolierten Zeitverlauf anzeigen. Die drei belegten Werte mit ihrem jeweiligen Bezugsjahr darstellen."
+  }
+}

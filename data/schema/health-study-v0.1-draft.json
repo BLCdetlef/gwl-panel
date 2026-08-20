@@ -328,7 +328,11 @@
               "femaleRepro",
               "maleRepro",
               "skeleton",
-              "musculoskeletal"
+              "musculoskeletal",
+              "skin",
+              "immune",
+              "endocrine",
+              "bloodLymph"
             ]
           }
         },

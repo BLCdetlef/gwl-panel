@@ -150,6 +150,36 @@
       ]
     },
     {
+      "id": "eah_material_energy_flows",
+      "label": "Stoff- und Energieströme",
+      "groups": [
+        {
+          "id": "construction_materials",
+          "label": "Baustoffe",
+          "items": [
+            {
+              "id": "cement_clinker_global",
+              "label": "Zement und Klinker",
+              "type": "component",
+              "source": "data/knowledge/gwl_cement_clinker_global_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "chemical_feedstocks",
+          "label": "Chemische Grundstoffe",
+          "items": [
+            {
+              "id": "plastics_petrochemicals_global",
+              "label": "Kunststoffe & Petrochemie",
+              "type": "component",
+              "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "eah_tech_social_environment",
       "label": "Technologische & soziale Umwelt",
       "groups": [

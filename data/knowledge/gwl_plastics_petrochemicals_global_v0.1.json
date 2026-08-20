@@ -1,0 +1,370 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Kunststoffe und Petrochemie / globale Produktionsentwicklung seit 1950",
+  "status": "pilot",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Chemische Grundstoffe",
+    "subComponent": "Kunststoffe & Petrochemie",
+    "effectFocus": "Wie die globale Kunststoffproduktion seit Beginn der industriellen Massenproduktion gewachsen ist und über welche getrennten Wirkungspfade sie Klima und die planetare Grenze Neue Substanzen belastet"
+  },
+  "corePrinciples": [
+    "Die globale Kunststoffproduktion ist zunächst ein menschengemachter Stoffstrom und selbst keine Kontrollvariable der Planetaren Grenze Neue Substanzen.",
+    "Der Stoffstrom wird nur einmal geführt und über gerichtete Wirkungspfade mit mehreren Umweltbelastungen verbunden.",
+    "Kunststoffe gehören zum Druck auf Neue Substanzen, wenn ihre chemische Neuartigkeit, Persistenz, Freisetzung oder unzureichende Sicherheitsprüfung die gesellschaftliche Bewertungs- und Kontrollfähigkeit übersteigt.",
+    "Nicht jede produzierte Tonne besitzt dieselbe Gefährlichkeit; Masse, Stoffeigenschaft, Zusatzstoffe, Freisetzung und Exposition bleiben getrennte Ebenen.",
+    "Beobachtete beziehungsweise rekonstruierte historische Werte und modellierte Zukunftsszenarien dürfen nicht als eine durchgehende Messreihe erscheinen.",
+    "Aus der globalen Produktionsmenge allein werden keine Organmarker abgeleitet."
+  ],
+  "nodes": [
+    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Stoff- und Energieströme", "framework": "eah_extension" },
+    { "id": "component_chemical_feedstocks", "type": "domain_component", "label": "Chemische Grundstoffe" },
+    { "id": "component_plastics_petrochemicals", "type": "domain_component", "label": "Kunststoffe & Petrochemie" },
+    { "id": "flow_global_plastics_production", "type": "system_flow", "label": "Globale Kunststoffproduktion" },
+    { "id": "pressure_fossil_feedstock_energy", "type": "pressure", "label": "Fossile Rohstoffe und Prozessenergie" },
+    { "id": "pressure_plastic_chemical_release", "type": "pressure", "label": "Freisetzung von Polymeren, Mikroplastik und Zusatzstoffen" },
+    { "id": "pb_climate", "type": "planetary_boundary", "label": "Klimawandel" },
+    { "id": "pb_novel_entities", "type": "planetary_boundary", "label": "Neue Substanzen" },
+    { "id": "life_health_context", "type": "life_outcome", "label": "Gesundheitsbezug nur über konkrete Exposition und Krankheitslast" }
+  ],
+  "edges": [
+    { "from": "eah_material_energy_flows", "to": "component_chemical_feedstocks", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "component_chemical_feedstocks", "to": "component_plastics_petrochemicals", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "component_plastics_petrochemicals", "to": "flow_global_plastics_production", "relationType": "contains", "evidenceStatus": "strong" },
+    { "from": "flow_global_plastics_production", "to": "pressure_fossil_feedstock_energy", "relationType": "drives", "evidenceStatus": "strong" },
+    { "from": "pressure_fossil_feedstock_energy", "to": "pb_climate", "relationType": "boundary_link", "direction": "driver_to_boundary", "evidenceStatus": "strong" },
+    { "from": "flow_global_plastics_production", "to": "pressure_plastic_chemical_release", "relationType": "increases_potential_for", "evidenceStatus": "strong" },
+    { "from": "pressure_plastic_chemical_release", "to": "pb_novel_entities", "relationType": "boundary_link", "direction": "driver_to_boundary", "evidenceStatus": "strong" },
+    { "from": "pressure_plastic_chemical_release", "to": "life_health_context", "relationType": "requires_exposure_assessment", "evidenceStatus": "strong" }
+  ],
+  "measurements": [
+    {
+      "id": "global_plastics_production_2019",
+      "node": "flow_global_plastics_production",
+      "geography": "Global",
+      "period": "2019",
+      "metric": "Globale jährliche Kunststoffproduktion",
+      "value": 459.746,
+      "unit": "million_tonnes_per_year",
+      "display": "≈ 460 Mio. t/Jahr",
+      "estimationType": "reconstructed_global_estimate",
+      "interpretation": "Globaler Stoffdurchsatz. Kein Grenzwert und kein unmittelbares Maß für Toxizität oder Gesundheitslast.",
+      "sourceRefs": ["src_owid_plastics_series", "src_geyer_2017", "src_oecd_gpo_2022"],
+      "displayType": "system_flow"
+    },
+    {
+      "id": "human_tissue_detection_mnp_2024",
+      "node": "life_health_context",
+      "geography": "USA · postmortale Gewebeproben",
+      "period": "2016 und 2024",
+      "metric": "Mikro-/Nanoplastik in menschlichen Geweben",
+      "display": "Nachweis in Gehirn, Leber und Nieren",
+      "interpretation": "Der Befund belegt das Vorkommen von Mikro- und Nanoplastik in untersuchten menschlichen Geweben. Er belegt für sich allein weder eine Funktionsstörung noch einen ursächlichen Organschaden.",
+      "uncertainty": "Postmortale Stichprobe; keine bevölkerungsrepräsentative Prävalenz und keine kausale Prüfung gesundheitlicher Folgen.",
+      "sourceRefs": ["src_camp_enenkel_2025_brain"],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "carotid_mnp_events_2024",
+      "node": "life_health_context",
+      "geography": "Italien · Patientengruppe mit Karotis-Endarteriektomie",
+      "period": "mittlere Nachbeobachtung 33,7 Monate",
+      "metric": "Mikro-/Nanoplastik in Atheromen und kardiovaskuläre Ereignisse",
+      "display": "Assoziation mit höherem Ereignisrisiko",
+      "interpretation": "Bei Patienten mit nachgewiesenem Mikro-/Nanoplastik in entfernten Karotis-Plaques traten Herzinfarkt, Schlaganfall oder Tod häufiger auf. Die Beobachtungsstudie zeigt eine Assoziation, keine bewiesene Verursachung.",
+      "uncertainty": "Ausgewählte Hochrisikopopulation, beobachtendes Design und diskutierte Kontaminationsrisiken; nicht als globale Krankheitslast übertragbar.",
+      "sourceRefs": ["src_marfella_2024_atheroma", "src_nejm_2024_method_comment"],
+      "displayType": "study_evidence"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "global_plastics_production_2019",
+    "primaryTimeSeriesId": "global_plastics_production_1950_2019",
+    "hidePrimaryMeasurementInKnowledgeView": true,
+    "referenceLabel": "Kein globaler Mengengrenzwert",
+    "finding": "Die globale Kunststoffproduktion stieg von rund 2 Mio. Tonnen 1950 auf rund 460 Mio. Tonnen 2019 – etwa auf das 230-Fache.",
+    "effectPath": "Petrochemische Rohstoffe → Kunststoffproduktion → Nutzung, Zusatzstoffe und Abfall → Freisetzung und Persistenz → Beitrag zu Neue Substanzen; zusätzlich Energie- und Prozessemissionen → Klimawandel",
+    "uncertainty": "Die Reihe verbindet eine wissenschaftlich rekonstruierte historische Produktion mit harmonisierten OECD-Daten. Produktions- und Nutzungsbegriffe sind quellenabhängig nicht vollständig identisch. Für 1974 enthält die veröffentlichte Reihe keinen Messpunkt; es wird nicht interpoliert.",
+    "statusYear": 2019,
+    "statusLabel": "Globale Kunststoffproduktion 2019"
+  },
+  "pathways": [
+    {
+      "id": "path_plastics_novel_entities",
+      "label": "Stoffstrom → Freisetzung und Persistenz → Neue Substanzen",
+      "chain": ["Globale Kunststoffproduktion", "Polymere und chemische Zusatzstoffe", "Nutzung, Abrieb und Abfall", "Freisetzung und Persistenz", "Neue Substanzen"],
+      "evidenceStatus": "strong",
+      "caution": "Die Produktionsmenge zeigt die Größenordnung des Stoffstroms, ist aber nicht mit der Kontrollvariable der planetaren Grenze gleichzusetzen."
+    },
+    {
+      "id": "path_plastics_climate",
+      "label": "Fossile Rohstoffe und Prozessenergie → Klimawandel",
+      "chain": ["Erdöl und Erdgas als Rohstoff", "Petrochemische Verarbeitung", "Kunststoffproduktion und Lebenszyklus", "Treibhausgasemissionen", "Klimawandel"],
+      "evidenceStatus": "strong",
+      "caution": "Klimawirkungen müssen über eigene Emissionsdaten quantifiziert werden; sie werden nicht aus Tonnen Kunststoff pauschal berechnet."
+    },
+    {
+      "id": "path_microplastics_human_health",
+      "label": "Freisetzung → innere Exposition → möglicher Gesundheitseffekt",
+      "chain": ["Kunststoffnutzung und -abfall", "Mikro- und Nanoplastik", "Aufnahme über Luft, Nahrung oder Wasser", "Nachweis in menschlichen Geweben", "biologische Reaktion", "möglicher Organschaden"],
+      "evidenceStatus": "Gewebenachweis stark · klinische Assoziation vorhanden · allgemeine Kausalität offen",
+      "caution": "Nachweis, biologische Reaktion und klinischer Organschaden sind getrennte Evidenzstufen. Der letzte Schritt wird im Panel nicht als bewiesen dargestellt."
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "plastics_to_novel_entities",
+      "boundaries": ["Stoff- und Energieströme", "Neue Substanzen"],
+      "mechanism": "Wachsende Produktion vergrößert die potenzielle Menge und Vielfalt persistenter Polymere, Mikroplastikpartikel und Zusatzstoffe, die während Herstellung, Nutzung und Entsorgung freigesetzt werden können.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "plastics_to_climate",
+      "boundaries": ["Stoff- und Energieströme", "Klimawandel"],
+      "mechanism": "Fossile Rohstoffe, Prozessenergie und Behandlung am Lebensende verursachen Treibhausgasemissionen.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "pathway_without_quantified_attributable_burden",
+    "markerSignals": [
+      {
+        "organ": "brain",
+        "signalType": "tissue_detection",
+        "label": "Mikro-/Nanoplastik im untersuchten Gehirngewebe nachgewiesen",
+        "sourceRefs": ["src_camp_enenkel_2025_brain"]
+      },
+      {
+        "organ": "liver",
+        "signalType": "tissue_detection",
+        "label": "Mikro-/Nanoplastik im untersuchten Lebergewebe nachgewiesen",
+        "sourceRefs": ["src_camp_enenkel_2025_brain"]
+      },
+      {
+        "organ": "kidneys",
+        "signalType": "tissue_detection",
+        "label": "Mikro-/Nanoplastik im untersuchten Nierengewebe nachgewiesen",
+        "sourceRefs": ["src_camp_enenkel_2025_brain"]
+      },
+      {
+        "organ": "heart",
+        "signalType": "clinical_association",
+        "label": "Kardiovaskuläre Assoziation bei Mikro-/Nanoplastik in Karotis-Plaques beobachtet",
+        "sourceRefs": ["src_marfella_2024_atheroma", "src_nejm_2024_method_comment"]
+      }
+    ],
+    "systemImpacts": [
+      {
+        "id": "mnp_tissue_detection",
+        "label": "Mikro-/Nanoplastik: Gewebenachweis und kardiovaskuläres Warnsignal",
+        "evidence": "Nachweis in ausgewählten Geweben; beobachtete kardiovaskuläre Assoziation",
+        "note": "Keine bewiesene allgemeine Organursächlichkeit und keine globale zurechenbare Krankheitslast."
+      }
+    ],
+    "bodymapRule": "Der schwarze Außenring kennzeichnet nur den geprüften Organbezug: Gewebenachweis bei Gehirn, Leber und Nieren sowie eine klinische Assoziation bei Herz und Kreislauf. Keine graue Organfüllung und kein quantitativer Organstatus; die globale Produktionsmenge allein aktiviert keinen Marker."
+  },
+  "classificationRule": {
+    "materialFlow": {
+      "includes": ["Primäre und sekundäre Kunststoffe als produzierte Masse", "Petrochemische Rohstoff- und Energiemengen"],
+      "meaning": "Beschreibt, wie viel Material das menschliche System erzeugt und bewegt."
+    },
+    "novelEntitiesPressure": {
+      "includes": ["Persistente synthetische Polymere", "Mikro- und Nanoplastik", "Chemische Zusatzstoffe", "Freisetzungen entlang des Lebenszyklus", "unzureichend geprüfte oder kontrollierte Stoffvielfalt"],
+      "meaning": "Beschreibt Eigenschaften, Freisetzung und gesellschaftliche Kontrollfähigkeit – nicht bloß die produzierte Gesamtmasse."
+    },
+    "doNotCountTwice": "Eine Produktionsreihe bleibt ein Stoffstrom. Verbindungen zu Neue Substanzen und Klimawandel sind Wirkungspfade, keine zusätzlichen Produktionsmengen."
+  },
+  "sources": [
+    {
+      "id": "src_geyer_2017",
+      "title": "Production, use, and fate of all plastics ever made",
+      "authors": "Geyer, Jambeck & Law",
+      "publisher": "Science Advances",
+      "year": 2017,
+      "type": "peer_reviewed_global_material_flow_analysis",
+      "url": "https://doi.org/10.1126/sciadv.1700782",
+      "doi": "10.1126/sciadv.1700782",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_oecd_gpo_2022",
+      "title": "Global Plastics Outlook: Economic Drivers, Environmental Impacts and Policy Options",
+      "publisher": "OECD",
+      "year": 2022,
+      "type": "official_global_material_flow_database",
+      "url": "https://doi.org/10.1787/de747aef-en",
+      "doi": "10.1787/de747aef-en",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_owid_plastics_series",
+      "title": "Global plastics production",
+      "publisher": "Our World in Data",
+      "year": 2026,
+      "type": "processed_open_dataset",
+      "url": "https://ourworldindata.org/grapher/global-plastics-production",
+      "access": "open_full_text",
+      "provenance": "Aufbereitung der Originaldaten von Geyer et al. (2017) und OECD (2022)."
+    },
+    {
+      "id": "src_camp_enenkel_2025_brain",
+      "title": "Bioaccumulation of microplastics in decedent human brains",
+      "authors": "Campen et al.",
+      "publisher": "Nature Medicine",
+      "year": 2025,
+      "type": "peer_reviewed_human_tissue_study",
+      "url": "https://doi.org/10.1038/s41591-024-03453-1",
+      "doi": "10.1038/s41591-024-03453-1",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_marfella_2024_atheroma",
+      "title": "Microplastics and Nanoplastics in Atheromas and Cardiovascular Events",
+      "authors": "Marfella et al.",
+      "publisher": "New England Journal of Medicine",
+      "year": 2024,
+      "type": "peer_reviewed_prospective_observational_study",
+      "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2309822",
+      "doi": "10.1056/NEJMoa2309822",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_nejm_2024_method_comment",
+      "title": "Microplastics and Nanoplastics in Atheromas",
+      "publisher": "New England Journal of Medicine",
+      "year": 2024,
+      "type": "peer_reviewed_methodological_correspondence",
+      "url": "https://www.nejm.org/doi/full/10.1056/NEJMc2404154",
+      "doi": "10.1056/NEJMc2404154",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_oecd_scenarios_2060",
+      "title": "Global Plastics Outlook: Policy Scenarios to 2060",
+      "publisher": "OECD",
+      "year": 2022,
+      "type": "official_modelled_scenario",
+      "url": "https://doi.org/10.1787/aa1edf33-en",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Chemische Grundstoffe",
+    "item": "Kunststoffe & Petrochemie",
+    "type": "component"
+  },
+  "timeSeries": [
+    {
+      "id": "global_plastics_production_1950_2019",
+      "label": "Globale Kunststoffproduktion · historische Reihe",
+      "metric": "Globale jährliche Produktion von Polymerharzen und -fasern beziehungsweise harmonisierte globale Kunststoffproduktion",
+      "unit": "million_tonnes_per_year",
+      "period": "1950–2019",
+      "dataStartYear": 1950,
+      "dataEndYear": 2019,
+      "reference": {
+        "type": "no_global_quantity_boundary",
+        "display": "Kein globaler Mengengrenzwert"
+      },
+      "finding": "Seit Beginn der industriellen Massenproduktion stieg die jährliche globale Kunststoffproduktion in weniger als sieben Jahrzehnten ungefähr auf das 230-Fache.",
+      "uncertainty": "Historische Werte sind globale Rekonstruktionen und harmonisierte Schätzungen. Für 1974 fehlt ein publizierter Jahrespunkt; er wird nicht interpoliert. Die Reihe endet 2019 und enthält keine Zukunftsprojektion.",
+      "sourceRefs": ["src_owid_plastics_series", "src_geyer_2017", "src_oecd_gpo_2022"],
+      "points": [
+        { "year": 1950, "value": 2, "display": "1950: 2 Mio. t/Jahr" },
+        { "year": 1951, "value": 2, "display": "1951: 2 Mio. t/Jahr" },
+        { "year": 1952, "value": 2, "display": "1952: 2 Mio. t/Jahr" },
+        { "year": 1953, "value": 3, "display": "1953: 3 Mio. t/Jahr" },
+        { "year": 1954, "value": 3, "display": "1954: 3 Mio. t/Jahr" },
+        { "year": 1955, "value": 4, "display": "1955: 4 Mio. t/Jahr" },
+        { "year": 1956, "value": 5, "display": "1956: 5 Mio. t/Jahr" },
+        { "year": 1957, "value": 5, "display": "1957: 5 Mio. t/Jahr" },
+        { "year": 1958, "value": 6, "display": "1958: 6 Mio. t/Jahr" },
+        { "year": 1959, "value": 7, "display": "1959: 7 Mio. t/Jahr" },
+        { "year": 1960, "value": 8, "display": "1960: 8 Mio. t/Jahr" },
+        { "year": 1961, "value": 9, "display": "1961: 9 Mio. t/Jahr" },
+        { "year": 1962, "value": 11, "display": "1962: 11 Mio. t/Jahr" },
+        { "year": 1963, "value": 13, "display": "1963: 13 Mio. t/Jahr" },
+        { "year": 1964, "value": 15, "display": "1964: 15 Mio. t/Jahr" },
+        { "year": 1965, "value": 17, "display": "1965: 17 Mio. t/Jahr" },
+        { "year": 1966, "value": 20, "display": "1966: 20 Mio. t/Jahr" },
+        { "year": 1967, "value": 23, "display": "1967: 23 Mio. t/Jahr" },
+        { "year": 1968, "value": 27, "display": "1968: 27 Mio. t/Jahr" },
+        { "year": 1969, "value": 32, "display": "1969: 32 Mio. t/Jahr" },
+        { "year": 1970, "value": 35, "display": "1970: 35 Mio. t/Jahr" },
+        { "year": 1971, "value": 38, "display": "1971: 38 Mio. t/Jahr" },
+        { "year": 1972, "value": 44, "display": "1972: 44 Mio. t/Jahr" },
+        { "year": 1973, "value": 51, "display": "1973: 51 Mio. t/Jahr" },
+        { "year": 1975, "value": 46, "display": "1975: 46 Mio. t/Jahr" },
+        { "year": 1976, "value": 54, "display": "1976: 54 Mio. t/Jahr" },
+        { "year": 1977, "value": 59, "display": "1977: 59 Mio. t/Jahr" },
+        { "year": 1978, "value": 64, "display": "1978: 64 Mio. t/Jahr" },
+        { "year": 1979, "value": 71, "display": "1979: 71 Mio. t/Jahr" },
+        { "year": 1980, "value": 70, "display": "1980: 70 Mio. t/Jahr" },
+        { "year": 1981, "value": 72, "display": "1981: 72 Mio. t/Jahr" },
+        { "year": 1982, "value": 73, "display": "1982: 73 Mio. t/Jahr" },
+        { "year": 1983, "value": 80, "display": "1983: 80 Mio. t/Jahr" },
+        { "year": 1984, "value": 86, "display": "1984: 86 Mio. t/Jahr" },
+        { "year": 1985, "value": 90, "display": "1985: 90 Mio. t/Jahr" },
+        { "year": 1986, "value": 96, "display": "1986: 96 Mio. t/Jahr" },
+        { "year": 1987, "value": 104, "display": "1987: 104 Mio. t/Jahr" },
+        { "year": 1988, "value": 110, "display": "1988: 110 Mio. t/Jahr" },
+        { "year": 1989, "value": 114, "display": "1989: 114 Mio. t/Jahr" },
+        { "year": 1990, "value": 120, "display": "1990: 120 Mio. t/Jahr" },
+        { "year": 1991, "value": 124, "display": "1991: 124 Mio. t/Jahr" },
+        { "year": 1992, "value": 132, "display": "1992: 132 Mio. t/Jahr" },
+        { "year": 1993, "value": 137, "display": "1993: 137 Mio. t/Jahr" },
+        { "year": 1994, "value": 151, "display": "1994: 151 Mio. t/Jahr" },
+        { "year": 1995, "value": 156, "display": "1995: 156 Mio. t/Jahr" },
+        { "year": 1996, "value": 168, "display": "1996: 168 Mio. t/Jahr" },
+        { "year": 1997, "value": 180, "display": "1997: 180 Mio. t/Jahr" },
+        { "year": 1998, "value": 188, "display": "1998: 188 Mio. t/Jahr" },
+        { "year": 1999, "value": 202, "display": "1999: 202 Mio. t/Jahr" },
+        { "year": 2000, "value": 213, "display": "2000: 213 Mio. t/Jahr" },
+        { "year": 2001, "value": 218, "display": "2001: 218 Mio. t/Jahr" },
+        { "year": 2002, "value": 231, "display": "2002: 231 Mio. t/Jahr" },
+        { "year": 2003, "value": 241, "display": "2003: 241 Mio. t/Jahr" },
+        { "year": 2004, "value": 256, "display": "2004: 256 Mio. t/Jahr" },
+        { "year": 2005, "value": 263, "display": "2005: 263 Mio. t/Jahr" },
+        { "year": 2006, "value": 280, "display": "2006: 280 Mio. t/Jahr" },
+        { "year": 2007, "value": 295, "display": "2007: 295 Mio. t/Jahr" },
+        { "year": 2008, "value": 281, "display": "2008: 281 Mio. t/Jahr" },
+        { "year": 2009, "value": 288, "display": "2009: 288 Mio. t/Jahr" },
+        { "year": 2010, "value": 313, "display": "2010: 313 Mio. t/Jahr" },
+        { "year": 2011, "value": 325, "display": "2011: 325 Mio. t/Jahr" },
+        { "year": 2012, "value": 338, "display": "2012: 338 Mio. t/Jahr" },
+        { "year": 2013, "value": 352, "display": "2013: 352 Mio. t/Jahr" },
+        { "year": 2014, "value": 367, "display": "2014: 367 Mio. t/Jahr" },
+        { "year": 2015, "value": 381, "display": "2015: 381 Mio. t/Jahr" },
+        { "year": 2016, "value": 400.05, "display": "2016: 400,05 Mio. t/Jahr" },
+        { "year": 2017, "value": 420.052, "display": "2017: 420,052 Mio. t/Jahr" },
+        { "year": 2018, "value": 441.055, "display": "2018: 441,055 Mio. t/Jahr" },
+        { "year": 2019, "value": 459.746, "display": "2019: 459,746 Mio. t/Jahr" }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "id": "oecd_baseline_plastics_use_2060",
+      "status": "stored_not_shown_as_measurement",
+      "scenario": "OECD Baseline · keine zusätzlichen politischen Maßnahmen",
+      "baseYear": 2019,
+      "baseValue": 460,
+      "projectionYear": 2060,
+      "projectionValue": 1231,
+      "unit": "million_tonnes_per_year",
+      "metric": "Globale Kunststoffnutzung",
+      "sourceRefs": ["src_oecd_scenarios_2060"],
+      "panelRule": "Nicht mit der historischen Produktionsreihe verbinden. Nur in einer späteren, deutlich gekennzeichneten Szenarioansicht mit gestrichelter Darstellung und sichtbarer Trennlinie ab 2019 anzeigen."
+    }
+  ],
+  "timeNavigation": {
+    "status": "historical_series_available",
+    "observedRange": "1950–2019",
+    "missingYears": [1974],
+    "preserveMissingYears": true,
+    "projectionStatus": "stored_separately_not_rendered",
+    "panelRule": "Historische Reihe standardmäßig anzeigen. Bei 1974 'kein Messpunkt' zeigen. Zukunftsszenarien niemals als beobachtete Fortsetzung behandeln."
+  }
+}
