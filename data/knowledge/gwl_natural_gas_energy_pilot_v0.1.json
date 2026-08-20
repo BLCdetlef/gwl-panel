@@ -1,0 +1,803 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1-pilot",
+  "topic": "Erdgas / globale Gas- und Energieströme",
+  "status": "draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Energie",
+    "subComponent": "Erdgas",
+    "effectFocus": "Wie sich die globale Energieversorgung aus Erdgas seit 1965 entwickelt hat und über welche getrennten Pfade Förderung, Transport und Verbrennung Klima, Luft, Wasser und Land beeinflussen"
+  },
+  "corePrinciples": [
+    "Erdgas ist ein menschlicher Stoff- und Energiestrom, keine Planetare Grenze.",
+    "Die Reihe misst globale Energieversorgung in TWh pro Jahr; sie ist kein Grenzwert.",
+    "Energieversorgung, physisches Gasvolumen, CO₂-Emissionen und Methanemissionen bleiben getrennte Messgrößen.",
+    "Erdgas wird nur einmal als Knoten gespeichert; Wirkungen werden über belegte Pfade verknüpft."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_energy",
+      "type": "domain_component",
+      "label": "Energie"
+    },
+    {
+      "id": "component_natural_gas",
+      "type": "domain_component",
+      "label": "Erdgas"
+    },
+    {
+      "id": "flow_global_gas_supply",
+      "type": "system_flow",
+      "label": "Globale Energieversorgung aus Erdgas"
+    },
+    {
+      "id": "activity_gas_extraction",
+      "type": "human_activity",
+      "label": "Erdgasförderung"
+    },
+    {
+      "id": "activity_gas_transport",
+      "type": "human_activity",
+      "label": "Aufbereitung und Transport"
+    },
+    {
+      "id": "activity_gas_combustion",
+      "type": "human_activity",
+      "label": "Verbrennung von Erdgas"
+    },
+    {
+      "id": "pressure_gas_co2",
+      "type": "pressure",
+      "label": "CO₂-Emissionen aus Erdgasverbrennung"
+    },
+    {
+      "id": "pressure_gas_methane",
+      "type": "pressure",
+      "label": "Methanemissionen entlang der Lieferkette"
+    },
+    {
+      "id": "pressure_gas_land_water",
+      "type": "pressure",
+      "label": "Flächen- und Wasserbeanspruchung der Förderung"
+    },
+    {
+      "id": "pb_climate",
+      "type": "planetary_boundary",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "pb_freshwater",
+      "type": "planetary_boundary",
+      "label": "Süßwasser"
+    },
+    {
+      "id": "pb_land",
+      "type": "planetary_boundary",
+      "label": "Landnutzungsänderung"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_energy",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_energy",
+      "to": "component_natural_gas",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_natural_gas",
+      "to": "flow_global_gas_supply",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "flow_global_gas_supply",
+      "to": "activity_gas_extraction",
+      "relationType": "associated_with",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_extraction",
+      "to": "activity_gas_transport",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_transport",
+      "to": "activity_gas_combustion",
+      "relationType": "enables",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_combustion",
+      "to": "pressure_gas_co2",
+      "relationType": "causes",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_extraction",
+      "to": "pressure_gas_methane",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_transport",
+      "to": "pressure_gas_methane",
+      "relationType": "contributes_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_gas_co2",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_gas_methane",
+      "to": "pb_climate",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "activity_gas_extraction",
+      "to": "pressure_gas_land_water",
+      "relationType": "contributes_to",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "pressure_gas_land_water",
+      "to": "pb_freshwater",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "from": "pressure_gas_land_water",
+      "to": "pb_land",
+      "relationType": "boundary_link",
+      "direction": "driver_to_boundary",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "global_gas_tes_2025",
+      "metric": "Globale Energieversorgung aus Erdgas",
+      "value": 41860.348,
+      "unit": "TWh_per_year",
+      "display": "2025: 41.860 TWh/Jahr",
+      "period": "2025",
+      "geography": "Global",
+      "interpretation": "Statuswert der gemeinsamen historischen Energiereihe; kein planetarer Grenzwert.",
+      "uncertainty": "Historische Werte können in späteren Ausgaben durch Daten- oder Methodenrevisionen angepasst werden.",
+      "sourceRefs": [
+        "src_ei_2026_energy_by_source",
+        "src_owid_2026_energy_by_source"
+      ]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "gas_to_climate",
+      "label": "Erdgas → Klimawandel",
+      "chain": [
+        "Globale Erdgasversorgung",
+        "Förderung und Transport",
+        "Methanemissionen sowie CO₂ aus Verbrennung",
+        "Klimawandel"
+      ],
+      "evidenceStatus": "stark",
+      "caution": "Die Zeitreihe quantifiziert Energieversorgung, nicht automatisch die Höhe der Emissionen."
+    },
+    {
+      "id": "gas_to_water_land",
+      "label": "Erdgasförderung → Wasser und Land",
+      "chain": [
+        "Erdgasförderung",
+        "standort- und technikabhängige Flächen- und Wasserbeanspruchung",
+        "Süßwasser und Landnutzung"
+      ],
+      "evidenceStatus": "mittel",
+      "caution": "Diese Wirkungen dürfen nicht direkt aus der globalen TWh-Reihe berechnet werden."
+    }
+  ],
+  "boundaryInteractions": [
+    {
+      "id": "gas_to_climate",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Klimawandel"
+      ],
+      "mechanism": "CO₂ aus Verbrennung und Methanemissionen entlang der Lieferkette tragen zum Klimawandel bei.",
+      "evidenceStatus": "strong"
+    },
+    {
+      "id": "gas_to_freshwater",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Süßwasser"
+      ],
+      "mechanism": "Förderung und Aufbereitung können Wasser beanspruchen oder belasten; Stärke und Art sind regional und technologiespezifisch.",
+      "evidenceStatus": "moderate"
+    },
+    {
+      "id": "gas_to_land",
+      "boundaries": [
+        "Stoff- und Energieströme",
+        "Landnutzungsänderung"
+      ],
+      "mechanism": "Bohrplätze, Leitungen und Infrastruktur beanspruchen Flächen; die globale Energiereihe quantifiziert diesen Pfad nicht.",
+      "evidenceStatus": "moderate"
+    }
+  ],
+  "knowledgeGaps": [
+    {
+      "id": "gap_gas_methane",
+      "question": "Welche globale Methanreihe lässt sich methodisch sauber mit der Energieversorgung verknüpfen?",
+      "priority": "very_high"
+    },
+    {
+      "id": "gap_gas_volume_energy",
+      "question": "Wann benötigen wir neben TWh zusätzlich physische Gasvolumina?",
+      "priority": "high"
+    },
+    {
+      "id": "gap_gas_water_land",
+      "question": "Welche Förderwirkungen sind global aggregierbar und welche müssen regional bleiben?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "draft_orientation",
+    "methodNote": "Qualitative Orientierung; keine naturwissenschaftliche Messgröße.",
+    "dimensions": [
+      {
+        "id": "personal_demand",
+        "label": "Individuelle Nachfrage",
+        "level": "gering_bis_mittel",
+        "rationale": "Wärme-, Strom- und Konsumentscheidungen wirken indirekt innerhalb des vorhandenen Energiesystems."
+      },
+      {
+        "id": "individual_system_change",
+        "label": "Direkte Systemveränderung",
+        "level": "gering",
+        "rationale": "Förderung, Netze, Speicher und Kraftwerke sind überwiegend strukturell organisiert."
+      },
+      {
+        "id": "collective_leverage",
+        "label": "Kollektiver Hebel",
+        "level": "hoch",
+        "rationale": "Energie-, Gebäude-, Industrie- und Klimapolitik können Erdgasnachfrage und Lieferketten verändern."
+      }
+    ]
+  },
+  "reviewQuestionsForExperts": [
+    "Wie sollen Methanverluste der Lieferkette getrennt von CO₂ aus Verbrennung modelliert werden?",
+    "Welche physische Gasgröße ergänzt die gemeinsame Energiereihe sinnvoll?",
+    "Welche Wasser- und Flächenwirkungen sind global vergleichbar?"
+  ],
+  "sources": [
+    {
+      "id": "src_iea_weo_2025_annex_a",
+      "title": "World Energy Outlook 2025 · Annex A: Tables for scenario projections",
+      "publisher": "International Energy Agency",
+      "year": 2025,
+      "type": "official_global_energy_scenarios",
+      "url": "https://www.iea.org/reports/world-energy-outlook-2025",
+      "access": "open_full_text",
+      "licence": "CC BY-NC-SA 4.0",
+      "provenance": "Tabellen A.1a–A.1c, World energy supply; globale Szenarien CPS, STEPS und NZE."
+    }
+    ,
+    {
+      "id": "src_ei_2026_energy_by_source",
+      "title": "Statistical Review of World Energy 2026 – Consolidated Dataset",
+      "publisher": "Energy Institute",
+      "year": 2026,
+      "type": "official_global_energy_statistics",
+      "url": "https://www.energyinst.org/statistical-review/resources-and-data-downloads",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_owid_2026_energy_by_source",
+      "title": "Primary energy use by source",
+      "publisher": "Our World in Data",
+      "year": 2026,
+      "type": "processed_open_dataset",
+      "url": "https://ourworldindata.org/grapher/global-energy-consumption-source",
+      "access": "open_full_text",
+      "provenance": "Aufbereitung der Energy-Institute-Daten; Datenstand 30. Juni 2026."
+    }
+  ],
+  "presentation": {
+    "primaryTimeSeriesId": "global_gas_tes_1965_2025",
+    "referenceLabel": "Kein planetarer Grenzwert · gemeinsame Einheit TWh/Jahr",
+    "finding": "Die globale Energieversorgung aus Erdgas stieg von rund 6.304 TWh im Jahr 1965 auf rund 41.860 TWh im Jahr 2025.",
+    "effectPath": "Erdgasbereitstellung → Förderung, Transport und Verbrennung → Methan, CO₂ sowie standortabhängige Wasser- und Flächenwirkungen → Beiträge zu mehreren Planetaren Grenzen",
+    "uncertainty": "Die Reihe zeigt die globale Total Energy Supply nach der Energy-Institute-Methodik. Historische Werte können in späteren Ausgaben revidiert werden.",
+    "statusYear": 2025,
+    "statusLabel": "Globale Energieversorgung aus Erdgas 2025"
+  },
+  "navigationRule": {
+    "group": "Energie",
+    "item": "Erdgas",
+    "type": "component"
+  },
+  "timeSeries": [
+    {
+      "id": "global_gas_tes_1965_2025",
+      "label": "Globale Energieversorgung aus Erdgas · Energy Institute 2026",
+      "metric": "Globale Energieversorgung aus Erdgas",
+      "unit": "TWh_per_year",
+      "period": "1965–2025",
+      "dataStartYear": 1965,
+      "dataEndYear": 2025,
+      "reference": {
+        "type": "no_planetary_threshold",
+        "display": "Kein planetarer Grenzwert · globale Energieversorgung"
+      },
+      "finding": "Die globale Energieversorgung aus Erdgas stieg von rund 6.304 TWh im Jahr 1965 auf rund 41.860 TWh im Jahr 2025.",
+      "uncertainty": "Jährliche globale Total Energy Supply. Datenfassung: Energy Institute Statistical Review 2026; Aufbereitung durch Our World in Data, Stand 30. Juni 2026. Frühere Jahre können bei künftigen Ausgaben revidiert werden.",
+      "sourceRefs": [
+        "src_ei_2026_energy_by_source",
+        "src_owid_2026_energy_by_source"
+      ],
+      "points": [
+        {
+          "year": 1965,
+          "value": 6303.821,
+          "display": "1965: 6.304 TWh/Jahr"
+        },
+        {
+          "year": 1966,
+          "value": 6868.8145,
+          "display": "1966: 6.869 TWh/Jahr"
+        },
+        {
+          "year": 1967,
+          "value": 7374.058,
+          "display": "1967: 7.374 TWh/Jahr"
+        },
+        {
+          "year": 1968,
+          "value": 8044.3477,
+          "display": "1968: 8.044 TWh/Jahr"
+        },
+        {
+          "year": 1969,
+          "value": 8833.434,
+          "display": "1969: 8.833 TWh/Jahr"
+        },
+        {
+          "year": 1970,
+          "value": 9614.809,
+          "display": "1970: 9.615 TWh/Jahr"
+        },
+        {
+          "year": 1971,
+          "value": 10293.19,
+          "display": "1971: 10.293 TWh/Jahr"
+        },
+        {
+          "year": 1972,
+          "value": 10861.714,
+          "display": "1972: 10.862 TWh/Jahr"
+        },
+        {
+          "year": 1973,
+          "value": 11377.833,
+          "display": "1973: 11.378 TWh/Jahr"
+        },
+        {
+          "year": 1974,
+          "value": 11659.859,
+          "display": "1974: 11.660 TWh/Jahr"
+        },
+        {
+          "year": 1975,
+          "value": 11659.736,
+          "display": "1975: 11.660 TWh/Jahr"
+        },
+        {
+          "year": 1976,
+          "value": 12354.139,
+          "display": "1976: 12.354 TWh/Jahr"
+        },
+        {
+          "year": 1977,
+          "value": 12759.838,
+          "display": "1977: 12.760 TWh/Jahr"
+        },
+        {
+          "year": 1978,
+          "value": 13293.947,
+          "display": "1978: 13.294 TWh/Jahr"
+        },
+        {
+          "year": 1979,
+          "value": 14118.22,
+          "display": "1979: 14.118 TWh/Jahr"
+        },
+        {
+          "year": 1980,
+          "value": 14237.158,
+          "display": "1980: 14.237 TWh/Jahr"
+        },
+        {
+          "year": 1981,
+          "value": 14396.163,
+          "display": "1981: 14.396 TWh/Jahr"
+        },
+        {
+          "year": 1982,
+          "value": 14470.022,
+          "display": "1982: 14.470 TWh/Jahr"
+        },
+        {
+          "year": 1983,
+          "value": 14704.125,
+          "display": "1983: 14.704 TWh/Jahr"
+        },
+        {
+          "year": 1984,
+          "value": 15903.013,
+          "display": "1984: 15.903 TWh/Jahr"
+        },
+        {
+          "year": 1985,
+          "value": 16262.683,
+          "display": "1985: 16.263 TWh/Jahr"
+        },
+        {
+          "year": 1986,
+          "value": 16421.639,
+          "display": "1986: 16.422 TWh/Jahr"
+        },
+        {
+          "year": 1987,
+          "value": 17282.357,
+          "display": "1987: 17.282 TWh/Jahr"
+        },
+        {
+          "year": 1988,
+          "value": 18088.924,
+          "display": "1988: 18.089 TWh/Jahr"
+        },
+        {
+          "year": 1989,
+          "value": 18888.652,
+          "display": "1989: 18.889 TWh/Jahr"
+        },
+        {
+          "year": 1990,
+          "value": 19481.852,
+          "display": "1990: 19.482 TWh/Jahr"
+        },
+        {
+          "year": 1991,
+          "value": 19972.838,
+          "display": "1991: 19.973 TWh/Jahr"
+        },
+        {
+          "year": 1992,
+          "value": 20063.482,
+          "display": "1992: 20.063 TWh/Jahr"
+        },
+        {
+          "year": 1993,
+          "value": 20265.482,
+          "display": "1993: 20.265 TWh/Jahr"
+        },
+        {
+          "year": 1994,
+          "value": 20389.613,
+          "display": "1994: 20.390 TWh/Jahr"
+        },
+        {
+          "year": 1995,
+          "value": 21104.492,
+          "display": "1995: 21.104 TWh/Jahr"
+        },
+        {
+          "year": 1996,
+          "value": 22159.254,
+          "display": "1996: 22.159 TWh/Jahr"
+        },
+        {
+          "year": 1997,
+          "value": 22030.393,
+          "display": "1997: 22.030 TWh/Jahr"
+        },
+        {
+          "year": 1998,
+          "value": 22434,
+          "display": "1998: 22.434 TWh/Jahr"
+        },
+        {
+          "year": 1999,
+          "value": 23071.904,
+          "display": "1999: 23.072 TWh/Jahr"
+        },
+        {
+          "year": 2000,
+          "value": 23994.258,
+          "display": "2000: 23.994 TWh/Jahr"
+        },
+        {
+          "year": 2001,
+          "value": 24316.832,
+          "display": "2001: 24.317 TWh/Jahr"
+        },
+        {
+          "year": 2002,
+          "value": 25051.928,
+          "display": "2002: 25.052 TWh/Jahr"
+        },
+        {
+          "year": 2003,
+          "value": 25728.506,
+          "display": "2003: 25.729 TWh/Jahr"
+        },
+        {
+          "year": 2004,
+          "value": 26782.227,
+          "display": "2004: 26.782 TWh/Jahr"
+        },
+        {
+          "year": 2005,
+          "value": 27439.496,
+          "display": "2005: 27.439 TWh/Jahr"
+        },
+        {
+          "year": 2006,
+          "value": 28179.19,
+          "display": "2006: 28.179 TWh/Jahr"
+        },
+        {
+          "year": 2007,
+          "value": 29339.34,
+          "display": "2007: 29.339 TWh/Jahr"
+        },
+        {
+          "year": 2008,
+          "value": 30051.895,
+          "display": "2008: 30.052 TWh/Jahr"
+        },
+        {
+          "year": 2009,
+          "value": 29403.309,
+          "display": "2009: 29.403 TWh/Jahr"
+        },
+        {
+          "year": 2010,
+          "value": 31593.256,
+          "display": "2010: 31.593 TWh/Jahr"
+        },
+        {
+          "year": 2011,
+          "value": 32350.143,
+          "display": "2011: 32.350 TWh/Jahr"
+        },
+        {
+          "year": 2012,
+          "value": 33231.09,
+          "display": "2012: 33.231 TWh/Jahr"
+        },
+        {
+          "year": 2013,
+          "value": 33703.48,
+          "display": "2013: 33.703 TWh/Jahr"
+        },
+        {
+          "year": 2014,
+          "value": 33899.87,
+          "display": "2014: 33.900 TWh/Jahr"
+        },
+        {
+          "year": 2015,
+          "value": 34704.543,
+          "display": "2015: 34.705 TWh/Jahr"
+        },
+        {
+          "year": 2016,
+          "value": 35551.71,
+          "display": "2016: 35.552 TWh/Jahr"
+        },
+        {
+          "year": 2017,
+          "value": 36561.074,
+          "display": "2017: 36.561 TWh/Jahr"
+        },
+        {
+          "year": 2018,
+          "value": 38287.594,
+          "display": "2018: 38.288 TWh/Jahr"
+        },
+        {
+          "year": 2019,
+          "value": 39041.223,
+          "display": "2019: 39.041 TWh/Jahr"
+        },
+        {
+          "year": 2020,
+          "value": 38693.08,
+          "display": "2020: 38.693 TWh/Jahr"
+        },
+        {
+          "year": 2021,
+          "value": 40232.574,
+          "display": "2021: 40.233 TWh/Jahr"
+        },
+        {
+          "year": 2022,
+          "value": 40039.547,
+          "display": "2022: 40.040 TWh/Jahr"
+        },
+        {
+          "year": 2023,
+          "value": 40152.266,
+          "display": "2023: 40.152 TWh/Jahr"
+        },
+        {
+          "year": 2024,
+          "value": 41312.492,
+          "display": "2024: 41.312 TWh/Jahr"
+        },
+        {
+          "year": 2025,
+          "value": 41860.348,
+          "display": "2025: 41.860 TWh/Jahr"
+        }
+      ]
+    }
+  ],
+  "projectionSeries": [
+    {
+      "id": "global_natural_gas_tes_weo2025_cps",
+      "scenario": "CPS",
+      "scenarioLabel": "CPS · geltende Maßnahmen",
+      "label": "Globale Energieversorgung aus Erdgas · WEO 2025 · CPS",
+      "metric": "Globale Energieversorgung aus Erdgas",
+      "unit": "TWh_per_year",
+      "originalUnit": "EJ_per_year",
+      "period": "2035–2050",
+      "dataStartYear": 2035,
+      "dataEndYear": 2050,
+      "reference": {
+        "type": "scenario_not_threshold",
+        "display": "Szenario, kein Messwert und kein planetarer Grenzwert"
+      },
+      "finding": "Mögliche Entwicklung der globalen Energieversorgung aus Erdgas im CPS · geltende Maßnahmen.",
+      "uncertainty": "Modellierte WEO-2025-Stützjahre. Die veröffentlichte Annex-Tabelle rundet auf ganze EJ; die TWh-Werte sind deshalb als Näherungen gekennzeichnet. Zwischenwerte werden nicht interpoliert.",
+      "sourceRefs": [
+        "src_iea_weo_2025_annex_a"
+      ],
+      "points": [
+        {
+          "year": 2035,
+          "value": 48611,
+          "display": "2035: ≈ 48.611 TWh/Jahr · CPS",
+          "originalValueEJ": 175
+        },
+        {
+          "year": 2040,
+          "value": 50556,
+          "display": "2040: ≈ 50.556 TWh/Jahr · CPS",
+          "originalValueEJ": 182
+        },
+        {
+          "year": 2050,
+          "value": 53889,
+          "display": "2050: ≈ 53.889 TWh/Jahr · CPS",
+          "originalValueEJ": 194
+        }
+      ]
+    },
+    {
+      "id": "global_natural_gas_tes_weo2025_steps",
+      "scenario": "STEPS",
+      "scenarioLabel": "STEPS · angekündigte Maßnahmen",
+      "label": "Globale Energieversorgung aus Erdgas · WEO 2025 · STEPS",
+      "metric": "Globale Energieversorgung aus Erdgas",
+      "unit": "TWh_per_year",
+      "originalUnit": "EJ_per_year",
+      "period": "2035–2050",
+      "dataStartYear": 2035,
+      "dataEndYear": 2050,
+      "reference": {
+        "type": "scenario_not_threshold",
+        "display": "Szenario, kein Messwert und kein planetarer Grenzwert"
+      },
+      "finding": "Mögliche Entwicklung der globalen Energieversorgung aus Erdgas im STEPS · angekündigte Maßnahmen.",
+      "uncertainty": "Modellierte WEO-2025-Stützjahre. Die veröffentlichte Annex-Tabelle rundet auf ganze EJ; die TWh-Werte sind deshalb als Näherungen gekennzeichnet. Zwischenwerte werden nicht interpoliert.",
+      "sourceRefs": [
+        "src_iea_weo_2025_annex_a"
+      ],
+      "points": [
+        {
+          "year": 2035,
+          "value": 45833,
+          "display": "2035: ≈ 45.833 TWh/Jahr · STEPS",
+          "originalValueEJ": 165
+        },
+        {
+          "year": 2040,
+          "value": 45833,
+          "display": "2040: ≈ 45.833 TWh/Jahr · STEPS",
+          "originalValueEJ": 165
+        },
+        {
+          "year": 2050,
+          "value": 44722,
+          "display": "2050: ≈ 44.722 TWh/Jahr · STEPS",
+          "originalValueEJ": 161
+        }
+      ]
+    },
+    {
+      "id": "global_natural_gas_tes_weo2025_nze",
+      "scenario": "NZE",
+      "scenarioLabel": "NZE · Netto-Null 2050",
+      "label": "Globale Energieversorgung aus Erdgas · WEO 2025 · NZE",
+      "metric": "Globale Energieversorgung aus Erdgas",
+      "unit": "TWh_per_year",
+      "originalUnit": "EJ_per_year",
+      "period": "2035–2050",
+      "dataStartYear": 2035,
+      "dataEndYear": 2050,
+      "reference": {
+        "type": "scenario_not_threshold",
+        "display": "Szenario, kein Messwert und kein planetarer Grenzwert"
+      },
+      "finding": "Mögliche Entwicklung der globalen Energieversorgung aus Erdgas im NZE · Netto-Null 2050.",
+      "uncertainty": "Modellierte WEO-2025-Stützjahre. Die veröffentlichte Annex-Tabelle rundet auf ganze EJ; die TWh-Werte sind deshalb als Näherungen gekennzeichnet. Zwischenwerte werden nicht interpoliert.",
+      "sourceRefs": [
+        "src_iea_weo_2025_annex_a"
+      ],
+      "points": [
+        {
+          "year": 2035,
+          "value": 25278,
+          "display": "2035: ≈ 25.278 TWh/Jahr · NZE",
+          "originalValueEJ": 91
+        },
+        {
+          "year": 2040,
+          "value": 17222,
+          "display": "2040: ≈ 17.222 TWh/Jahr · NZE",
+          "originalValueEJ": 62
+        },
+        {
+          "year": 2050,
+          "value": 8333,
+          "display": "2050: ≈ 8.333 TWh/Jahr · NZE",
+          "originalValueEJ": 30
+        }
+      ]
+    }
+  ]
+  ,
+  "timeNavigation": {
+    "mode": "historical_series",
+    "defaultYear": 2025,
+    "missingYears": [],
+    "allowInterpolation": false,
+    "projectionYears": [],
+    "note": "Nur historische Jahreswerte 1965–2025; keine Prognosen und keine Interpolation."
+  }
+}

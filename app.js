@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.35 · B18";
+const GWL_BUILD_VERSION = "0.9.43 · B26";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -9,6 +9,7 @@ const locationInfo = document.getElementById("locationInfo");
 const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
+const metricLabel = document.getElementById("metricLabel");
 const metricValue = document.getElementById("metricValue");
 const referenceValue = document.getElementById("referenceValue");
 const periodValue = document.getElementById("periodValue");
@@ -24,7 +25,10 @@ const timeReadout = document.getElementById("timeReadout");
 const timeStatus = document.getElementById("timeStatus");
 const timeMarkers = document.getElementById("timeMarkers");
 const dataWindowButton = document.getElementById("dataWindowButton");
+const projectionWindowButton = document.getElementById("projectionWindowButton");
 const blcWindowButton = document.getElementById("blcWindowButton");
+const scenarioControls = document.getElementById("scenarioControls");
+const scenarioSelect = document.getElementById("scenarioSelect");
 const hotspotLayer = document.getElementById("hotspotLayer");
 let healthLegend = null;
 const organOverlay = document.getElementById("organOverlay");
@@ -58,6 +62,7 @@ let selectedDomainComponent = null;
 let selectedItemId = null;
 let selectedYear = null;
 let timeWindow = "data";
+let projectionScenario = "STEPS";
 let currentHealth = null;
 let selectedOrganId = null;
 let knowledgeNetworks = {};
@@ -1230,6 +1235,59 @@ function renderCoalEnergyMainView() {
     </div>`;
 }
 
+function renderNaturalGasEnergyMainView() {
+  const network = knowledgeNetworks.naturalGasEnergy;
+  if (!network) {
+    return `<div class="nutrient-choice-note"><strong>Erdgas-Pilotdatensatz nicht geladen.</strong></div>`;
+  }
+
+  const cards = (network.measurements || []).map(m => `
+    <article class="measurement-card oil-measurement-card">
+      <div class="measurement-card-label">${m.metric || m.id}</div>
+      <div class="measurement-card-value">${m.display || "–"}</div>
+      <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
+      <p>${m.interpretation || ""}</p>
+      ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+      ${sourceLinksHtml(network, m.sourceRefs)}
+    </article>`).join("");
+
+  const linkCards = (network.boundaryInteractions || []).map(x => `
+    <div class="oil-boundary-link">
+      <strong>↗ ${x.boundaries.slice(1).join(" / ")}</strong>
+      <p>${x.mechanism}</p>
+      <span>Evidenz: ${x.evidenceStatus || "–"}</span>
+    </div>`).join("");
+
+  const gaps = (network.knowledgeGaps || []).map(g =>
+    `<p><strong>${g.question}</strong>${g.reason ? `<br><span>${g.reason}</span>` : ""}</p>`
+  ).join("");
+  const action = network.actionScope || {};
+  const actionRows = (action.dimensions || []).map(d =>
+    `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_", " ")}</strong><br>${d.rationale}</p>`
+  ).join("");
+
+  return `
+    <div class="oil-pilot">
+      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <h2>Energie → Erdgas</h2>
+      <p class="oil-lead">
+        Erdgas wird als eigener globaler <strong>system_flow</strong> geführt.
+        Energieversorgung, physisches Gasvolumen, CO₂ aus Verbrennung und Methanemissionen
+        entlang der Lieferkette bleiben getrennte Größen.
+      </p>
+      <div class="oil-path">
+        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Erdgas</span>
+      </div>
+      <h3>MESSWERTE</h3>
+      <div class="measurement-grid">${cards}</div>
+      <h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3>
+      <div class="oil-boundary-links">${linkCards}</div>
+      <details><summary>Quellen · frei zugänglich</summary>${allOpenSourcesHtml(network)}</details>
+      <details><summary>Wissenslücken · ${(network.knowledgeGaps || []).length}</summary>${gaps}</details>
+      <details><summary>Handlungsspielraum</summary><p>${action.methodNote || ""}</p>${actionRows}</details>
+    </div>`;
+}
+
 
 function renderWindEnergyMainView() {
   const network = knowledgeNetworks.windEnergy;
@@ -1780,8 +1838,20 @@ function getKnowledgeSeries(network) {
   return (network?.timeSeries || [])[0] || null;
 }
 
+function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
+  return (network?.projectionSeries || []).find(series => series.scenario === scenario)
+    || (network?.projectionSeries || [])[0]
+    || null;
+}
+
+function getActiveKnowledgeSeries(network) {
+  return timeWindow === "projection"
+    ? getKnowledgeProjectionSeries(network)
+    : getKnowledgeSeries(network);
+}
+
 function getKnowledgeSeriesPoint(network, year) {
-  const series = getKnowledgeSeries(network);
+  const series = getActiveKnowledgeSeries(network);
   return (series?.points || []).find(point => Number(point.year) === Number(year)) || null;
 }
 
@@ -1791,7 +1861,7 @@ function getKnowledgePointSource(network, point, series) {
 }
 
 function setKnowledgePointDetails(network, activeBoundary, activeItem, point = null, noMeasurementYear = null) {
-  const series = getKnowledgeSeries(network);
+  const series = getActiveKnowledgeSeries(network);
   const presentation = network?.presentation || {};
   const firstPathway = (network?.pathways || [])[0];
 
@@ -1820,6 +1890,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
 
   if (point && series) {
     const source = getKnowledgePointSource(network, point, series);
+    metricLabel.textContent = timeWindow === "projection" ? "Szenariowert" : "Mess-/Zustandswert";
     metricValue.textContent = point.display || `${point.value ?? "–"} ${series.unit || ""}`.trim();
     referenceValue.textContent = series.reference?.display || presentation.referenceLabel || "–";
     periodValue.textContent = String(point.year);
@@ -1850,13 +1921,29 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   updateCauseButtons(null, null);
 }
 
+function appendTimeMarker(year, min, max, className = "", label = year) {
+  const marker = document.createElement("span");
+  marker.className = `time-marker ${className}`.trim();
+  marker.textContent = String(label);
+  marker.style.left = `${((year - min) / (max - min)) * 100}%`;
+  timeMarkers.appendChild(marker);
+}
+
 function renderKnowledgeTime(network) {
-  const series = getKnowledgeSeries(network);
+  const availableProjection = getKnowledgeProjectionSeries(network);
+  if (timeWindow === "projection" && !availableProjection?.points?.length) timeWindow = "data";
+  const series = getActiveKnowledgeSeries(network);
   const points = series?.points || [];
   const blc = data.timePresets.blc;
 
   dataWindowButton.classList.toggle("active", timeWindow === "data");
+  projectionWindowButton.hidden = !(network?.projectionSeries || []).length;
+  projectionWindowButton.classList.toggle("active", timeWindow === "projection");
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
+  scenarioControls.hidden = timeWindow !== "projection";
+  scenarioSelect.value = projectionScenario;
+  document.querySelector(".time-card")?.classList.toggle("projection-mode", timeWindow === "projection");
+  metricLabel.textContent = timeWindow === "projection" ? "Szenariowert" : "Mess-/Zustandswert";
   timeMarkers.innerHTML = "";
 
   if (!series || !points.length) {
@@ -1870,7 +1957,10 @@ function renderKnowledgeTime(network) {
   }
 
   let min, max;
-  if (timeWindow === "blc") {
+  if (timeWindow === "projection") {
+    min = Math.min(...points.map(point => Number(point.year)));
+    max = Math.max(...points.map(point => Number(point.year)));
+  } else if (timeWindow === "blc") {
     min = blc.min;
     max = blc.max;
   } else {
@@ -1892,21 +1982,22 @@ function renderKnowledgeTime(network) {
   timeSlider.value = String(selectedYear);
   timeReadout.textContent = String(selectedYear);
 
+  if (timeWindow === "blc") appendTimeMarker(blc.min, min, max, "time-boundary-marker");
+
   // Bei langen Jahresreihen nur ausgewählte Marker beschriften, damit die Anzeige lesbar bleibt.
   points.forEach((point, index) => {
     const year = Number(point.year);
     if (year < min || year > max) return;
     const showMarker = points.length <= 15 || index === 0 || index === points.length - 1 || year % 5 === 0;
     if (!showMarker) return;
-    const marker = document.createElement("span");
-    marker.className = "time-marker";
-    marker.textContent = String(year);
-    marker.style.left = `${((year - min) / (max - min)) * 100}%`;
-    timeMarkers.appendChild(marker);
+    appendTimeMarker(year, min, max, timeWindow === "blc" ? "time-data-tick" : "", timeWindow === "blc" ? "" : year);
   });
+  if (timeWindow === "blc") appendTimeMarker(blc.max, min, max, "time-boundary-marker");
 
   const exact = points.find(point => Number(point.year) === Number(selectedYear));
-  if (exact) {
+  if (exact && timeWindow === "projection") {
+    timeStatus.textContent = `${series.scenarioLabel || series.scenario || "Szenario"} · ${selectedYear} ist ein modellierter Stützpunkt, kein Messwert.`;
+  } else if (exact) {
     timeStatus.textContent = `${series.label || "Messreihe"} · ${selectedYear} ist als Messwert hinterlegt.`;
   } else if (timeWindow === "blc") {
     timeStatus.textContent = "BLC-Zeitfenster 1700–2100. Außerhalb der hinterlegten Messjahre werden keine Werte interpoliert oder projiziert.";
@@ -1927,7 +2018,7 @@ function getKnowledgeStatusLabel(network) {
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
 
-  const series = getKnowledgeSeries(network);
+  const series = getActiveKnowledgeSeries(network);
   if (series?.points?.length) {
     if (selectedYear === null) selectedYear = Number(series.points[series.points.length - 1].year);
     renderKnowledgeTime(network);
@@ -1953,7 +2044,9 @@ function renderKnowledgePanel() {
   // Generischer Index-Pfad: funktioniert für Planetare Grenzen und Ergänzungen.
   const activeBoundary = getBoundary(state.boundaryId);
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
-  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load") {
+  const usesSpecializedEnergyView = state.boundaryId === "materials-energy"
+    && ["oil", "coal", "natural-gas", "wind", "solar"].includes(activeItem?.id);
+  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load" && !usesSpecializedEnergyView) {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const rawNetwork = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
     const network = getKnowledgeNetworkForItem(rawNetwork, activeItem);
@@ -2014,7 +2107,14 @@ function renderKnowledgePanel() {
 
   if (state.boundaryId === "materials-energy") {
     if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME";
-    renderHealth(null);
+    const activeEnergyNetwork = activeItem?.knowledgeSource
+      ? getKnowledgeNetworkBySource(activeItem.knowledgeSource)
+      : null;
+    if (activeEnergyNetwork?.timeSeries?.length) {
+      applyKnowledgeToStandardEffect(activeEnergyNetwork, activeBoundary, activeItem);
+    } else {
+      renderHealth(null);
+    }
 
     if (state.componentId === "oil") {
       if (focusTitle) focusTitle.textContent = "Energie · Erdöl";
@@ -2024,6 +2124,10 @@ function renderKnowledgePanel() {
       if (focusTitle) focusTitle.textContent = "Energie · Kohle";
       if (focusSummary) focusSummary.textContent = "Globaler Kohlefluss mit Verbindungen zu Klimawandel, Aerosolen, Süßwasser und Landnutzungsänderung.";
       panel.innerHTML = renderCoalEnergyMainView();
+    } else if (state.componentId === "natural-gas") {
+      if (focusTitle) focusTitle.textContent = "Energie · Erdgas";
+      if (focusSummary) focusSummary.textContent = "Globaler Erdgasfluss mit getrennten Pfaden für CO₂, Methan sowie Förder-, Wasser- und Flächenwirkungen.";
+      panel.innerHTML = renderNaturalGasEnergyMainView();
     } else if (state.componentId === "wind") {
       if (focusTitle) focusTitle.textContent = "Energie · Wind";
       if (focusSummary) focusSummary.textContent = "Windstrom ohne Brennstoffdurchsatz: Kapazität, Ausbau, Erzeugung sowie Klima-, Flächen- und Biodiversitätspfade.";
@@ -2034,14 +2138,14 @@ function renderKnowledgePanel() {
       panel.innerHTML = renderSolarEnergyMainView();
     } else {
       if (focusTitle) focusTitle.textContent = "Energie";
-      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl, Kohle, Wind oder Solar.";
+      if (focusSummary) focusSummary.textContent = "Energieflüsse werden als messbare Durchsätze erfasst. Wähle Erdöl, Kohle, Erdgas, Wind oder Solar.";
       panel.innerHTML = `
         <div class="extension-intro">
           <div class="eyebrow">STOFF- UND ENERGIESTRÖME</div>
           <h2>Energie</h2>
           <p>Energie ist der erste Teilbereich dieser ergänzenden Systemgrenze.</p>
           <div class="extension-note">
-            Reale Piloten sind bereits für <strong>Erdöl</strong>, <strong>Kohle</strong>, <strong>Wind</strong> und <strong>Solar</strong> hinterlegt.
+            Reale Piloten sind bereits für <strong>Erdöl</strong>, <strong>Kohle</strong>, <strong>Erdgas</strong>, <strong>Wind</strong> und <strong>Solar</strong> hinterlegt.
           </div>
         </div>`;
     }
@@ -2188,7 +2292,26 @@ function renderBoundaries() {
     if (isEahExtension(boundary) && !extensionSectionInserted) {
       const divider = document.createElement("div");
       divider.className = "boundary-section-divider";
-      divider.textContent = "Ergänzende Systemgrenzen";
+      divider.innerHTML = `
+        <div class="boundary-info-title-row">
+          <span>Ergänzende Systemgrenzen</span>
+          <button class="inline-info-button boundary-context-info-button" type="button"
+            aria-label="Information zum Unterschied zwischen Planetaren Grenzen und ergänzenden Systemgrenzen"
+            aria-expanded="false" aria-controls="extensionBoundaryInfo">i</button>
+        </div>
+        <div id="extensionBoundaryInfo" class="boundary-context-info" role="note" hidden>
+          <strong>Zwei unterschiedliche Perspektiven</strong>
+          <p><strong>Planetare Grenzen</strong> zeigen den Zustand des Erdsystems sowie relevante Belastungen, Freisetzungen und Wirkungen.</p>
+          <p><strong>Ergänzende Systemgrenzen</strong> zeigen, was Menschen produzieren, verbrauchen und bewegen – beispielsweise Energie, Kunststoffe oder Baustoffe.</p>
+          <p>Ein Stoffstrom wird nur einmal erfasst und über Wirkungspfade mit den betroffenen Planetaren Grenzen verbunden.</p>
+          <p class="boundary-info-example">Beispiel: Kunststoffproduktion → Stoff- und Energieströme · Mikroplastik/Freisetzung → Neue Substanzen</p>
+        </div>`;
+      const dividerInfoButton = divider.querySelector(".boundary-context-info-button");
+      const dividerInfo = divider.querySelector(".boundary-context-info");
+      dividerInfoButton.addEventListener("click", event => {
+        event.stopPropagation();
+        toggleBoundaryContextInfo(dividerInfoButton, dividerInfo);
+      });
       boundaryList.appendChild(divider);
       extensionSectionInserted = true;
     }
@@ -2207,6 +2330,31 @@ function renderBoundaries() {
     if (boundary.enabled) button.addEventListener("click", () => selectBoundary(boundary.id));
     else button.disabled = true;
     row.appendChild(button);
+    if (boundary.id === "mental-load") {
+      row.classList.add("has-boundary-info");
+      const infoButton = document.createElement("button");
+      infoButton.type = "button";
+      infoButton.className = "inline-info-button boundary-row-info-button boundary-context-info-button";
+      infoButton.textContent = "i";
+      infoButton.setAttribute("aria-label", "Information zur Technologischen und sozialen Umwelt");
+      infoButton.setAttribute("aria-expanded", "false");
+      infoButton.setAttribute("aria-controls", "techSocialBoundaryInfo");
+      const info = document.createElement("div");
+      info.id = "techSocialBoundaryInfo";
+      info.className = "boundary-context-info boundary-row-context-info";
+      info.setAttribute("role", "note");
+      info.hidden = true;
+      info.innerHTML = `
+        <strong>Technologische & soziale Umwelt</strong>
+        <p>Hier werden menschengemachte Lebensbedingungen und Expositionen erfasst – etwa digitale Nutzung, Arbeitsbedingungen oder soziale Strukturen.</p>
+        <p>Der Bereich ist keine Planetare Grenze und kein reiner Stoffstrom. Gesundheitsbezüge entstehen erst über konkrete Expositions- und Wirkungspfade.</p>`;
+      infoButton.addEventListener("click", event => {
+        event.stopPropagation();
+        toggleBoundaryContextInfo(infoButton, info);
+      });
+      row.appendChild(infoButton);
+      row.appendChild(info);
+    }
     if (boundary.id === selectedBoundaryId) {
       const items = getVisibleItems(boundary);
       if (items.length) {
@@ -2234,6 +2382,40 @@ function renderBoundaries() {
     }
     boundaryList.appendChild(row);
   });
+}
+
+function positionBoundaryContextInfo(button, note) {
+  if (window.matchMedia("(max-width: 820px)").matches) return;
+  const panel = document.querySelector(".panel-left");
+  const shell = document.querySelector(".app-shell");
+  if (!panel || !shell) return;
+  const buttonRect = button.getBoundingClientRect();
+  const panelRect = panel.getBoundingClientRect();
+  const shellRect = shell.getBoundingClientRect();
+  const left = panelRect.left + 12;
+  const availableWidth = shellRect.right - left - 12;
+  const width = Math.min(Math.max(panelRect.width * 1.45, 380), availableWidth);
+  note.style.left = `${left}px`;
+  note.style.top = `${buttonRect.bottom + 7}px`;
+  note.style.width = `${width}px`;
+  note.style.maxHeight = `${Math.max(180, window.innerHeight - buttonRect.bottom - 24)}px`;
+}
+
+function toggleBoundaryContextInfo(button, note) {
+  const willOpen = note.hidden;
+  closeBoundaryContextInfos();
+  if (!willOpen) return;
+  note.hidden = false;
+  button.setAttribute("aria-expanded", "true");
+  positionBoundaryContextInfo(button, note);
+}
+
+function closeBoundaryContextInfos() {
+  document.querySelectorAll(".boundary-context-info").forEach(note => {
+    note.hidden = true;
+    note.removeAttribute("style");
+  });
+  document.querySelectorAll(".boundary-context-info-button").forEach(button => button.setAttribute("aria-expanded", "false"));
 }
 
 function mergeItemAndPoint(item, point) { return point ? { ...item, ...point, health: point.health || item.health } : item; }
@@ -2292,7 +2474,12 @@ function renderTime(item) {
   const points = getTimePoints(item);
   const blc = data.timePresets.blc;
   dataWindowButton.classList.toggle("active", timeWindow === "data");
+  projectionWindowButton.hidden = true;
+  projectionWindowButton.classList.remove("active");
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
+  scenarioControls.hidden = true;
+  document.querySelector(".time-card")?.classList.remove("projection-mode");
+  metricLabel.textContent = "Mess-/Zustandswert";
   timeMarkers.innerHTML = "";
   if (!item || !points.length) {
     timeSlider.disabled = true; timeSlider.min = "0"; timeSlider.max = "1"; timeSlider.value = "0";
@@ -2308,10 +2495,11 @@ function renderTime(item) {
   const fallbackYear = points[points.length - 1].year;
   if (selectedYear === null) selectedYear = fallbackYear;
   selectedYear = Math.min(max, Math.max(min, selectedYear)); timeSlider.value = String(selectedYear); timeReadout.textContent = String(selectedYear);
+  if (timeWindow === "blc") appendTimeMarker(blc.min, min, max, "time-boundary-marker");
   points.filter(point => point.year >= min && point.year <= max).forEach(point => {
-    const marker = document.createElement("span"); marker.className = "time-marker"; marker.textContent = String(point.year);
-    marker.style.left = `${((point.year - min) / (max - min)) * 100}%`; timeMarkers.appendChild(marker);
+    appendTimeMarker(point.year, min, max, timeWindow === "blc" ? "time-data-tick" : "", timeWindow === "blc" ? "" : point.year);
   });
+  if (timeWindow === "blc") appendTimeMarker(blc.max, min, max, "time-boundary-marker");
   const exact = points.find(point => point.year === selectedYear);
   if (exact) timeStatus.textContent = `${exact.label || "Messpunkt"}. Markierte Jahre sind tatsächlich hinterlegte Messzeitpunkte.`;
   else if (timeWindow === "blc") timeStatus.textContent = "BLC-Zeitfenster 1700–2100. Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
@@ -2917,7 +3105,7 @@ renderBoundaries();
 
 function selectYear(year) {
   const knowledge = getActiveKnowledgeContext();
-  if (knowledge?.network && getKnowledgeSeries(knowledge.network)?.points?.length) {
+  if (knowledge?.network && getActiveKnowledgeSeries(knowledge.network)?.points?.length) {
     selectedYear = year;
     timeReadout.textContent = String(year);
     const point = getKnowledgeSeriesPoint(knowledge.network, year);
@@ -2943,7 +3131,8 @@ function setTimeWindow(nextWindow) {
   const knowledge = getActiveKnowledgeContext();
   if (knowledge?.network && getKnowledgeSeries(knowledge.network)?.points?.length) {
     timeWindow = nextWindow;
-    const points = getKnowledgeSeries(knowledge.network).points;
+    if (!getActiveKnowledgeSeries(knowledge.network)?.points?.length) timeWindow = "data";
+    const points = getActiveKnowledgeSeries(knowledge.network).points;
     selectedYear = Number(points[points.length - 1].year);
     renderKnowledgeTime(knowledge.network);
     selectYear(selectedYear);
@@ -2980,6 +3169,10 @@ document.addEventListener("click", event => {
   if (!event.target.closest(".location-control")) setLocationInfoOpen(false);
 });
 
+document.addEventListener("click", event => {
+  if (!event.target.closest(".boundary-context-info")) closeBoundaryContextInfos();
+});
+
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && healthPathOverlay && !healthPathOverlay.hidden) {
     closeHealthPathOverlay();
@@ -2988,18 +3181,27 @@ document.addEventListener("keydown", event => {
   if (event.key === "Escape" && locationInfoButton?.getAttribute("aria-expanded") === "true") {
     setLocationInfoOpen(false);
     locationInfoButton.focus();
+    return;
+  }
+  if (event.key === "Escape" && document.querySelector(".boundary-context-info:not([hidden])")) {
+    closeBoundaryContextInfos();
   }
 });
 resetButton.addEventListener("click", resetPanel);
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));
+projectionWindowButton.addEventListener("click", () => setTimeWindow("projection"));
 blcWindowButton.addEventListener("click", () => setTimeWindow("blc"));
+scenarioSelect.addEventListener("change", event => {
+  projectionScenario = event.target.value;
+  setTimeWindow("projection");
+});
 timeSlider.addEventListener("input", event => {
   let year = Number(event.target.value);
   const context = getActiveKnowledgeContext();
   const series = context?.network ? getKnowledgeSeries(context.network) : null;
   const preserveMissingYears = context?.network?.timeNavigation?.preserveMissingYears === true;
-  if (timeWindow === "data" && series?.points?.length && !preserveMissingYears) {
-    year = series.points
+  if ((timeWindow === "data" || timeWindow === "projection") && getActiveKnowledgeSeries(context?.network)?.points?.length && !preserveMissingYears) {
+    year = getActiveKnowledgeSeries(context.network).points
       .map(point => Number(point.year))
       .filter(Number.isFinite)
       .reduce((nearest, candidate) =>

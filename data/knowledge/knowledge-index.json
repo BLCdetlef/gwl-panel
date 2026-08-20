@@ -141,7 +141,7 @@
           "items": [
             {
               "id": "facade_biocides_burkhardt",
-              "label": "Fassadenbiozide · Burkhardt",
+              "label": "Fassadenbiozide · Auswaschung",
               "type": "component",
               "source": "data/knowledge/gwl_novel_entities_facade_biocides_burkhardt_v0.1.json"
             }
@@ -153,6 +153,42 @@
       "id": "eah_material_energy_flows",
       "label": "Stoff- und Energieströme",
       "groups": [
+        {
+          "id": "energy",
+          "label": "Energie",
+          "items": [
+            {
+              "id": "oil",
+              "label": "Erdöl",
+              "type": "component",
+              "source": "data/knowledge/gwl_oil_energy_pilot_v0.1b.json"
+            },
+            {
+              "id": "coal",
+              "label": "Kohle",
+              "type": "component",
+              "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json"
+            },
+            {
+              "id": "natural-gas",
+              "label": "Erdgas",
+              "type": "component",
+              "source": "data/knowledge/gwl_natural_gas_energy_pilot_v0.1.json"
+            },
+            {
+              "id": "wind",
+              "label": "Wind",
+              "type": "component",
+              "source": "data/knowledge/gwl_wind_energy_pilot_v0.1.json"
+            },
+            {
+              "id": "solar",
+              "label": "Solar",
+              "type": "component",
+              "source": "data/knowledge/gwl_solar_energy_pilot_v0.1.json"
+            }
+          ]
+        },
         {
           "id": "construction_materials",
           "label": "Baustoffe",

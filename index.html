@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.35-b18">
+  <link rel="stylesheet" href="style.css?v=0.9.43-b26">
 </head>
 <body>
   <main class="app-shell">
@@ -55,8 +55,17 @@
             </div>
             <div class="time-presets" aria-label="Zeitfenster">
               <button id="dataWindowButton" class="time-preset active" type="button">Datenbereich</button>
+              <button id="projectionWindowButton" class="time-preset projection-preset" type="button" hidden>Szenarien</button>
               <button id="blcWindowButton" class="time-preset" type="button">BLC 1700–2100</button>
             </div>
+          </div>
+          <div id="scenarioControls" class="scenario-controls" hidden>
+            <label for="scenarioSelect">Zukunftspfad</label>
+            <select id="scenarioSelect">
+              <option value="CPS">CPS · geltende Maßnahmen</option>
+              <option value="STEPS" selected>STEPS · angekündigte Maßnahmen</option>
+              <option value="NZE">NZE · Netto-Null 2050</option>
+            </select>
           </div>
           <div class="slider-wrap">
             <input id="timeSlider" type="range" min="0" max="1" value="0" step="1" aria-label="Jahr">
@@ -73,7 +82,7 @@
 
         <div class="metrics">
           <div class="metric">
-            <span>Mess-/Zustandswert</span>
+            <span id="metricLabel">Mess-/Zustandswert</span>
             <strong id="metricValue">–</strong>
           </div>
           <div class="metric">
@@ -222,7 +231,7 @@
       </div>
     </section>
   </main>
-  <script src="data.js?v=0.9.35-b18"></script>
-  <script src="app.js?v=0.9.35-b18"></script>
+  <script src="data.js?v=0.9.43-b26"></script>
+  <script src="app.js?v=0.9.43-b26"></script>
 </body>
 </html>
