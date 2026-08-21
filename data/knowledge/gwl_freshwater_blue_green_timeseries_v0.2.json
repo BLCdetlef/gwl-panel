@@ -374,6 +374,90 @@
       }
     }
   ],
+  "regionalPilot": {
+    "status": "probeimport",
+    "purpose": "Prüfung einer regionalen Darstellung mit zwei HydroBASINS-Gebieten; keine vollständige Übernahme aller Regionen.",
+    "period": "2010–2019",
+    "aggregation": "Mittel der jüngsten zehn im Quelldatensatz verfügbaren Jahre",
+    "unit": "% der regionalen Landfläche mit trockenen oder nassen lokalen Abweichungen",
+    "referenceType": "regionsspezifisches oberes Ende der baseline-ähnlichen Variabilität",
+    "referenceWarning": "Die regionalen Referenzwerte sind keine eigenständigen planetaren Grenzwerte und dürfen nicht mit der globalen Grenze verglichen oder zwischen Regionen ausgetauscht werden.",
+    "regions": [
+      {
+        "id": "hybas3-172-nile",
+        "label": "Nil-Gebiet · HydroBASINS L3",
+        "spatialUnitType": "HydroBASINS level 3",
+        "spatialUnitId": 172,
+        "spatialUnitField": "PFAF_ID",
+        "geographicLabelMethod": "Redaktionelle Kurzbezeichnung nach räumlicher Prüfung der publizierten Polygongeometrie; die Geometrie enthält den Nil-Hauptlauf bei Kairo und Khartum. HydroBASINS selbst führt in dieser Datei keinen Gebietsnamensschlüssel.",
+        "components": [
+          {
+            "id": "blue_water_streamflow",
+            "variable": "dis",
+            "value": 29.25,
+            "referenceUpperEnd": 20.66,
+            "sourceValue": 0.292538606385706,
+            "sourceReferenceUpperEnd": 0.206584820779315,
+            "comparison": "oberhalb der regionsspezifischen Referenz",
+            "role": "regionaler Zustand"
+          },
+          {
+            "id": "green_water_rootzone_soil_moisture",
+            "variable": "rootmoist",
+            "value": 22.39,
+            "referenceUpperEnd": 23.06,
+            "sourceValue": 0.223937285885311,
+            "sourceReferenceUpperEnd": 0.230581365134445,
+            "comparison": "unterhalb der regionsspezifischen Referenz",
+            "role": "regionaler Zustand"
+          }
+        ]
+      },
+      {
+        "id": "hybas3-456-indus",
+        "label": "Indus-Gebiet · HydroBASINS L3",
+        "spatialUnitType": "HydroBASINS level 3",
+        "spatialUnitId": 456,
+        "spatialUnitField": "PFAF_ID",
+        "geographicLabelMethod": "Redaktionelle Kurzbezeichnung nach räumlicher Prüfung der publizierten Polygongeometrie; die Geometrie enthält den Indus-Hauptlauf bei Hyderabad und Multan. HydroBASINS selbst führt in dieser Datei keinen Gebietsnamensschlüssel.",
+        "components": [
+          {
+            "id": "blue_water_streamflow",
+            "variable": "dis",
+            "value": 33.15,
+            "referenceUpperEnd": 17.0,
+            "sourceValue": 0.331452424724347,
+            "sourceReferenceUpperEnd": 0.170026731194973,
+            "comparison": "oberhalb der regionsspezifischen Referenz",
+            "role": "regionaler Zustand"
+          },
+          {
+            "id": "green_water_rootzone_soil_moisture",
+            "variable": "rootmoist",
+            "value": 30.62,
+            "referenceUpperEnd": 18.3,
+            "sourceValue": 0.306189245916831,
+            "sourceReferenceUpperEnd": 0.182950615904961,
+            "comparison": "oberhalb der regionsspezifischen Referenz",
+            "role": "regionaler Zustand"
+          }
+        ]
+      }
+    ],
+    "provenance": {
+      "blueWaterFile": "PHC_dis_summed_deviations_hybas3_latest_10yr_means.csv",
+      "greenWaterFile": "PHC_rootmoist_summed_deviations_hybas3_latest_10yr_means.csv",
+      "valueColumn": "mean_latest_10yr",
+      "referenceColumn": "boundary_upper_end",
+      "sourceUnit": "Anteil zwischen 0 und 1",
+      "conversion": "Multiplikation mit 100 und Rundung auf zwei Dezimalstellen für die Anzeige; unveränderte Quellwerte bleiben zusätzlich gespeichert.",
+      "datasetConceptDoi": "10.5281/zenodo.19663530",
+      "datasetVersionDoi": "10.5281/zenodo.19663531",
+      "spatialDataset": "HydroBASINS level 3",
+      "spatialDatasetUrl": "https://www.hydrosheds.org/products/hydrobasins",
+      "spatialGeometrySource": "https://github.com/vvirkki/pb-fw-drivers/blob/main/Data/ardiv/hybas3.gpkg"
+    }
+  },
   "methodNote": "Die Anzeige verwendet exakte Jahreswerte aus den bereitgestellten PHC/Virkki-Datendateien. Für die Panel-Zeitachse werden 5-Jahres-Punkte von 1905 bis 2015 sowie der letzte verfügbare Wert 2019 gezeigt; es wird nicht aus einer Abbildung geschätzt.",
   "source": {
     "dataset": "Data for “Regionally divergent drivers behind transgressions of the freshwater change planetary boundary”",
@@ -382,6 +466,7 @@
     "publication": "Virkki et al. (2026), Regionally divergent drivers behind transgressions of the freshwater change planetary boundary, Nature Communications 17, 5132",
     "publicationDoi": "10.1038/s41467-026-73051-x",
     "persistentIdentifiers": {
+      "datasetConceptDOI": "10.5281/zenodo.19663530",
       "datasetDOI": "10.5281/zenodo.19663531",
       "publicationDOI": "10.1038/s41467-026-73051-x"
     },

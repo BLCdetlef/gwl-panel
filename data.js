@@ -297,7 +297,7 @@ window.GWL_DATA = {
       label: "Stoff- und Energieströme",
       enabled: true,
       framework: "eah_extension",
-      frameworkLabel: "Ergänzende Systemgrenze",
+      frameworkLabel: "Ergänzender Einflussbereich",
       summary: "Rohstoffentnahme, Materialdurchsatz und Energieverbrauch wirken häufig indirekt über Umweltveränderungen, Infrastruktur und Versorgungssysteme auf LEBEN.",
       items: []
     },
@@ -306,7 +306,7 @@ window.GWL_DATA = {
       label: "Technologische & soziale Umwelt",
       enabled: true,
       framework: "eah_extension",
-      frameworkLabel: "Ergänzende Systemgrenze",
+      frameworkLabel: "Ergänzender Einflussbereich",
       summary: "Technologische und soziale Veränderungen prägen Informationsumwelt, Kommunikation, Arbeit, Freizeit und Verhalten. Gesundheitswirkungen werden erst in den nachgelagerten Wirkungspfaden und unter LEBEN eingeordnet.",
       items: [
         { id: "digital-environment", scope: "all", label: "Digitale Umwelt", enabled: true, groupOnly: true },

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Systemgrenzen-Recherche"
+  short_description: "Prüft Beiträge für die elf Systemgrenzen"
+  default_prompt: "Nutze $systemgrenzen-recherche, um diesen möglichen Beitrag nachvollziehbar zu recherchieren und zu bewerten."
+
+policy:
+  allow_implicit_invocation: true

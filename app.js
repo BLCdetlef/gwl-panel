@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.56 · B39";
+const GWL_BUILD_VERSION = "0.9.62 · B45";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -10,12 +10,14 @@ const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
 const metricLabel = document.getElementById("metricLabel");
+const referenceLabel = document.getElementById("referenceLabel");
 const metricValue = document.getElementById("metricValue");
 const referenceValue = document.getElementById("referenceValue");
 const periodValue = document.getElementById("periodValue");
 const uncertaintyValue = document.getElementById("uncertaintyValue");
 const sourceLink = document.getElementById("sourceLink");
 const findingText = document.getElementById("findingText");
+const findingSummary = document.getElementById("findingSummary");
 const effectPath = document.getElementById("effectPath");
 const lifeNote = document.getElementById("lifeNote");
 const organReadout = document.getElementById("organReadout");
@@ -61,6 +63,7 @@ const causeBodyEffect = document.getElementById("causeBodyEffect");
 const causeBodyLife = document.getElementById("causeBodyLife");
 
 let selectedBoundaryId = "freshwater";
+let expandedBoundaryId = null;
 let selectedDomainComponent = null;
 let selectedItemId = null;
 let selectedYear = null;
@@ -1130,7 +1133,7 @@ function renderOilEnergyMainView() {
 
   return `
     <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME</div>
       <h2>Energie → Erdöl</h2>
       <p class="oil-lead">
         Dieser Pilot misst menschlichen Stoff- und Energiedurchsatz. Produktion,
@@ -1212,7 +1215,7 @@ function renderCoalEnergyMainView() {
 
   return `
     <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME</div>
       <h2>Energie → Kohle</h2>
       <p class="oil-lead">
         Der Kohle-Pilot nutzt dieselbe <strong>system_flow</strong>-Logik wie Erdöl.
@@ -1276,7 +1279,7 @@ function renderNaturalGasEnergyMainView() {
 
   return `
     <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME</div>
       <h2>Energie → Erdgas</h2>
       <p class="oil-lead">
         Erdgas wird als eigener globaler <strong>system_flow</strong> geführt.
@@ -1337,7 +1340,7 @@ function renderWindEnergyMainView() {
 
   return `
     <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME</div>
       <h2>Energie → Wind</h2>
       <p class="oil-lead">
         Wind besitzt keinen Brennstoffdurchsatz. Deshalb stehen hier installierte Leistung,
@@ -1410,7 +1413,7 @@ function renderSolarEnergyMainView() {
 
   return `
     <div class="oil-pilot">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME</div>
       <h2>Energie → Solar</h2>
       <p class="oil-lead">
         Solar besitzt keinen Brennstoffdurchsatz. Installierte Leistung, Ausbau und
@@ -1812,7 +1815,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
       <div class="knowledge-panel-collapsible-content">` : ""}
     <div class="oil-pilot generic-knowledge-view">
       ${compactKnowledgeView ? "" : `
-        <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
+        <div class="eyebrow">${isExtension ? "ERGÄNZENDER EINFLUSSBEREICH" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
         <h2>${groupLabel} → ${itemLabel}</h2>
         <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
         <div class="oil-path">
@@ -1824,7 +1827,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
       ${values.length ? `${compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
-      ${genericTimeSeriesCards(network)}
+      ${getSelectedFreshwaterRegion(network) ? "" : genericTimeSeriesCards(network)}
 
       <h3>WIRKUNGSPFADE</h3>
       <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
@@ -1959,19 +1962,60 @@ function getKnowledgePointSource(network, point, series) {
   return (network?.sources || []).find(source => ids.includes(source.id)) || null;
 }
 
+function getSelectedFreshwaterRegion(network, activeItem = getCurrentItem()) {
+  const region = (network?.regionalPilot?.regions || []).find(entry => entry.id === getSelectedScope());
+  if (!region) return null;
+  const seriesId = activeItem?.knowledgeTimeSeriesId || network?.presentation?.primaryTimeSeriesId;
+  const component = (region.components || []).find(entry => entry.id === seriesId);
+  return component ? { pilot: network.regionalPilot, region, component } : null;
+}
+
+function formatRegionalPercent(value) {
+  return Number.isFinite(Number(value))
+    ? `${Number(value).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`
+    : "–";
+}
+
 function setKnowledgePointDetails(network, activeBoundary, activeItem, point = null, noMeasurementYear = null) {
   const series = getActiveKnowledgeSeries(network);
   const presentation = network?.presentation || {};
   const firstPathway = (network?.pathways || [])[0];
+  const regional = getSelectedFreshwaterRegion(network, activeItem);
 
   const frameworkLabel = activeBoundary?.framework === "eah_extension"
-    ? (activeBoundary.frameworkLabel || "Ergänzende Systemgrenze").toUpperCase()
+    ? (activeBoundary.frameworkLabel || "Ergänzender Einflussbereich").toUpperCase()
     : "PLANETARE GRENZE";
   if (focusType) focusType.textContent = `${frameworkLabel} · ${activeBoundary?.label || ""}`;
   const itemLabel = String(activeItem?.label || "").replace(/^↳\s*/, "");
   if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${itemLabel}`;
   if (focusSummary) focusSummary.textContent =
     network?.entry?.effectFocus || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
+
+  if (regional) {
+    const { pilot, region, component } = regional;
+    const source = (network?.sources || [])[0];
+    const subject = component.variable === "dis"
+      ? "ungewöhnlich hoher oder niedriger Abfluss"
+      : "ungewöhnlich hohe oder niedrige Bodenfeuchte";
+    metricLabel.textContent = "Ungewöhnlich veränderte Fläche";
+    if (referenceLabel) referenceLabel.textContent = "Üblicher Vergleichsbereich";
+    if (findingSummary) findingSummary.textContent = "Einordnung";
+    metricValue.textContent = formatRegionalPercent(component.value);
+    referenceValue.textContent = `Im Vergleichszeitraum üblich: bis ${formatRegionalPercent(component.referenceUpperEnd)}`;
+    periodValue.textContent = pilot.period || "2010–2019";
+    findingText.textContent = `Auf ${formatRegionalPercent(component.value)} des untersuchten ${region.label.replace(" · HydroBASINS L3", "s")} zeigte sich ${subject}. Im Vergleichszeitraum waren bis zu ${formatRegionalPercent(component.referenceUpperEnd)} üblich. Die Abweichungen waren damit ${component.value > component.referenceUpperEnd ? "räumlich weiter" : "räumlich weniger weit"} verbreitet als üblich.`;
+    effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
+    uncertaintyValue.textContent = `${pilot.referenceWarning || "Die regionale Referenz ist kein planetarer Grenzwert."} ${region.geographicLabelMethod || ""}`.trim();
+    lifeNote.textContent = genericHealthReadout(network);
+    if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
+    else setLink("–", null);
+    renderHealth(null);
+    updateCauseButtons(null, null);
+    return;
+  }
+
+  if (referenceLabel) referenceLabel.textContent = "Referenz / Grenze";
+  if (findingSummary) findingSummary.textContent = "Befund";
 
   if (noMeasurementYear !== null) {
     metricValue.textContent = "kein Messpunkt";
@@ -2045,6 +2089,20 @@ function renderKnowledgeTime(network) {
   document.querySelector(".time-card")?.classList.toggle("projection-mode", timeWindow === "projection");
   metricLabel.textContent = timeWindow === "projection" ? "Szenariowert" : "Mess-/Zustandswert";
   timeMarkers.innerHTML = "";
+
+  const regional = getSelectedFreshwaterRegion(network);
+  dataWindowButton.disabled = Boolean(regional);
+  blcWindowButton.disabled = Boolean(regional);
+  projectionWindowButton.disabled = Boolean(regional);
+  if (regional) {
+    timeSlider.disabled = true;
+    timeSlider.min = "0";
+    timeSlider.max = "1";
+    timeSlider.value = "0";
+    timeReadout.textContent = regional.pilot.period || "2010–2019";
+    timeStatus.textContent = `${regional.region.label} · Zehnjahresmittel eines modellierten Flusseinzugsgebiets; regionale Referenz, kein planetarer Grenzwert.`;
+    return;
+  }
 
   if (!series || !points.length) {
     timeSlider.disabled = true;
@@ -2122,6 +2180,14 @@ function getKnowledgeStatusLabel(network) {
 
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
+
+  if (getSelectedFreshwaterRegion(network, activeItem)) {
+    selectedYear = null;
+    timeWindow = "data";
+    renderKnowledgeTime(network);
+    setKnowledgePointDetails(network, activeBoundary, activeItem);
+    return;
+  }
 
   const series = getActiveKnowledgeSeries(network);
   if (series?.points?.length) {
@@ -2211,7 +2277,7 @@ function renderKnowledgePanel() {
   }
 
   if (state.boundaryId === "materials-energy") {
-    if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · STOFF- UND ENERGIESTRÖME";
+    if (focusType) focusType.textContent = "ERGÄNZENDER EINFLUSSBEREICH · STOFF- UND ENERGIESTRÖME";
     const activeEnergyNetwork = activeItem?.knowledgeSource
       ? getKnowledgeNetworkBySource(activeItem.knowledgeSource)
       : null;
@@ -2260,7 +2326,7 @@ function renderKnowledgePanel() {
   }
 
   if (state.boundaryId === "mental-load") {
-    if (focusType) focusType.textContent = "ERGÄNZENDE SYSTEMGRENZE · TECHNOLOGISCHE & SOZIALE UMWELT";
+    if (focusType) focusType.textContent = "ERGÄNZENDER EINFLUSSBEREICH · TECHNOLOGISCHE & SOZIALE UMWELT";
     renderHealth(null);
 
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.componentId);
@@ -2284,7 +2350,7 @@ function renderKnowledgePanel() {
       if (focusSummary) focusSummary.textContent = "Menschengemachte technische, digitale, informationelle und soziale Veränderungen werden über konkrete Umwelt- und Wirkungspfade erschlossen.";
       panel.innerHTML = `
         <div class="extension-intro">
-          <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE</div>
+          <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH</div>
           <h2>Technologische & soziale Umwelt</h2>
           <p>Die Navigation trennt Umweltbereiche von ihren gesundheitlichen Wirkungen.</p>
           <div class="extension-note">${groups}</div>
@@ -2437,7 +2503,7 @@ function isEahExtension(boundary) {
 function renderExtensionView(boundary) {
   setStandardEffectBlocksVisible(false);
 
-  if (focusType) focusType.textContent = "EAH-MIRROR · ERGÄNZENDE SYSTEMGRENZE";
+  if (focusType) focusType.textContent = "EAH-MIRROR · ERGÄNZENDER EINFLUSSBEREICH";
   if (focusTitle) focusTitle.textContent = boundary.label;
   if (focusSummary) focusSummary.textContent = boundary.summary || "";
 
@@ -2446,7 +2512,7 @@ function renderExtensionView(boundary) {
   const panel = ensureKnowledgePanel();
   panel.innerHTML = `
     <div class="extension-intro">
-      <div class="eyebrow">ERGÄNZENDE SYSTEMGRENZE</div>
+      <div class="eyebrow">ERGÄNZENDER EINFLUSSBEREICH</div>
       <h2>${boundary.label}</h2>
       <p>${boundary.summary || ""}</p>
       <div class="extension-note">
@@ -2470,15 +2536,16 @@ function renderBoundaries() {
       divider.className = "boundary-section-divider";
       divider.innerHTML = `
         <div class="boundary-info-title-row">
-          <span>Ergänzende Systemgrenzen</span>
+          <span>Ergänzende Einflussbereiche</span>
           <button class="inline-info-button boundary-context-info-button" type="button"
-            aria-label="Information zum Unterschied zwischen Planetaren Grenzen und ergänzenden Systemgrenzen"
+            aria-label="Information zum Unterschied zwischen Planetaren Grenzen und ergänzenden Einflussbereichen"
             aria-expanded="false" aria-controls="extensionBoundaryInfo">i</button>
         </div>
         <div id="extensionBoundaryInfo" class="boundary-context-info" role="note" hidden>
           <strong>Zwei unterschiedliche Perspektiven</strong>
           <p><strong>Planetare Grenzen</strong> zeigen den Zustand des Erdsystems sowie relevante Belastungen, Freisetzungen und Wirkungen.</p>
-          <p><strong>Ergänzende Systemgrenzen</strong> zeigen, was Menschen produzieren, verbrauchen und bewegen – beispielsweise Energie, Kunststoffe oder Baustoffe.</p>
+          <p><strong>Ergänzende Einflussbereiche</strong> erweitern den Blick um menschengemachte Stoffströme, Technologien und soziale Lebensbedingungen.</p>
+          <p>Sie sind keine wissenschaftlich festgelegten Grenzen. Relevant werden sie durch belegte Wirkungen auf Lebensgrundlagen, Planetare Grenzen oder die menschliche Gesundheit.</p>
           <p>Ein Stoffstrom wird nur einmal erfasst und über Wirkungspfade mit den betroffenen Planetaren Grenzen verbunden.</p>
           <p class="boundary-info-example">Beispiel: Kunststoffproduktion → Stoff- und Energieströme · Mikroplastik/Freisetzung → Neue Substanzen</p>
         </div>`;
@@ -2498,12 +2565,20 @@ function renderBoundaries() {
     button.className = "boundary-button";
     if (isEahExtension(boundary)) {
       button.classList.add("extension-boundary");
-      button.title = "Ergänzende Systemgrenze";
+      button.title = "Ergänzender Einflussbereich";
     }
     if (!boundary.enabled) button.classList.add("disabled");
     if (boundary.id === selectedBoundaryId) button.classList.add("active");
     button.innerHTML = `<span>${boundary.label}</span><span>${boundary.enabled ? "›" : ""}</span>`;
-    if (boundary.enabled) button.addEventListener("click", () => selectBoundary(boundary.id));
+    if (boundary.enabled) button.addEventListener("click", () => {
+      if (boundary.id === selectedBoundaryId && expandedBoundaryId === boundary.id) {
+        expandedBoundaryId = null;
+        renderBoundaries();
+        return;
+      }
+      expandedBoundaryId = boundary.id;
+      selectBoundary(boundary.id);
+    });
     else button.disabled = true;
     row.appendChild(button);
     if (boundary.id === "mental-load") {
@@ -2531,7 +2606,7 @@ function renderBoundaries() {
       row.appendChild(infoButton);
       row.appendChild(info);
     }
-    if (boundary.id === selectedBoundaryId) {
+    if (boundary.id === expandedBoundaryId) {
       const items = getVisibleItems(boundary);
       if (items.length) {
         const submenu = document.createElement("div");
@@ -3398,7 +3473,7 @@ function selectItem(boundaryId, itemId) {
   renderHealth(point?.health || item.health || null);
   updateCauseButtons(item, point);
   const foundationText = Array.from(document.querySelectorAll(".panel p, .column p, p")).find(p => p.textContent.includes("Planetare Grenzen und dazu passende Messreihen"));
-if (foundationText) foundationText.textContent = "Neun Planetare Grenzen bilden den wissenschaftlichen Ausgangspunkt. Ergänzende Systemgrenzen erweitern den Blick auf Lebensgrundlagen und menschliche Gesundheit.";
+if (foundationText) foundationText.textContent = "Neun Planetare Grenzen bilden den wissenschaftlichen Ausgangspunkt. Ergänzende Einflussbereiche erweitern den Blick auf Lebensgrundlagen und menschliche Gesundheit.";
 renderBoundaries();
   renderKnowledgePanel();
 }
