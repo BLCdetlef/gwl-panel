@@ -1,0 +1,75 @@
+{
+  "format": "gwl-knowledge-network-v1.1",
+  "version": "0.1",
+  "topic": "NO₂ · Quellen & Exposition",
+  "status": "reviewed",
+  "entry": {
+    "planetaryBoundary": "Technologische & soziale Umwelt",
+    "domainComponent": "Luftverschmutzung",
+    "subComponent": "NO₂ · Quellen & Exposition"
+  },
+  "corePrinciples": [
+    "NO₂ entsteht vor allem aus menschlicher Brennstoffverbrennung in Verkehr, Kraftwerken und Industrie.",
+    "EDGAR bilanziert NOₓ-Emissionsmengen; GBD/State of Global Air modelliert die populationsgewichtete NO₂-Außenluftkonzentration. Menge und Exposition sind nicht dasselbe.",
+    "Der nachgelagerte gesundheitliche Wirkungseintrag ist Asthma bei Kindern."
+  ],
+  "nodes": [
+    {"id":"activity_combustion","type":"human_activity","label":"Verkehr, Kraftwerke und Industrie"},
+    {"id":"pressure_nox","type":"pressure","label":"NOₓ-Emissionen"},
+    {"id":"exposure_no2","type":"exposure","label":"NO₂ in der Außenluft"}
+  ],
+  "edges": [
+    {"from":"activity_combustion","to":"pressure_nox","relationType":"emits","evidenceStatus":"strong"},
+    {"from":"pressure_nox","to":"exposure_no2","relationType":"contributes_to","evidenceStatus":"modeled"}
+  ],
+  "measurements": [
+    {
+      "id":"global_nox_emissions_2022","node":"pressure_nox","geography":"Global","period":"2022",
+      "metric":"Anthropogene NOₓ-Emissionen im EDGAR-Inventar","result":"≈ 109,6 Mio. t NOₓ/Jahr","display":"≈ 109,6 Mio. t NOₓ/Jahr",
+      "interpretation":"Summe der Länderwerte einschließlich internationaler Luft- und Schifffahrt. NOₓ umfasst NO und NO₂; großflächige Biomassebrände und LULUCF sind ausgeschlossen.",
+      "uncertainty":"Emissionsinventar aus Aktivitätsdaten und Emissionsfaktoren; keine direkte Messung der eingeatmeten NO₂-Konzentration.","sourceRefs":["src_edgar_nox_v81"]
+    },
+    {
+      "id":"global_no2_exposure_2023","node":"exposure_no2","geography":"Global","period":"2023",
+      "metric":"Populationsgewichtete jährliche NO₂-Exposition","result":"13,8 µg/m³","display":"13,8 µg/m³",
+      "interpretation":"Globaler populationsgewichteter Mittelwert der GBD-2023-Expositionsmodellierung.",
+      "uncertainty":"Modellierte Außenluftkonzentration; kein individueller Messwert und keine Körperdosis.","sourceRefs":["src_soga_no2_2025"]
+    }
+  ],
+  "timeSeries": [
+    {
+      "id":"global_nox_emissions_edgar_annual","label":"Globale NOₓ-Emissionen · EDGAR","metric":"Anthropogene Emissionen von Stickoxiden; Länder sowie internationale Luft- und Schifffahrt","unit":"Mio. t NOₓ/Jahr","period":"1970–2022","dataStartYear":1970,"dataEndYear":2022,
+      "finding":"Die Emissionen stiegen von 70,9 Mio. t im Jahr 1970 auf 109,6 Mio. t im Jahr 2022; seit dem Höchststand um 2011 sind sie leicht gesunken.",
+      "uncertainty":"NOₓ umfasst NO und NO₂. Großflächige Biomassebrände und LULUCF sind ausgeschlossen; keine Konzentrationsmessung.","sourceRefs":["src_edgar_nox_v81"],
+      "points":[
+        {"year":1970,"value":70.881769},{"year":1971,"value":71.190137},{"year":1972,"value":74.720874},{"year":1973,"value":79.019529},{"year":1974,"value":78.487084},{"year":1975,"value":78.799756},{"year":1976,"value":82.30746},{"year":1977,"value":85.047958},{"year":1978,"value":87.471898},{"year":1979,"value":89.382637},{"year":1980,"value":89.014205},{"year":1981,"value":87.679495},{"year":1982,"value":86.223496},{"year":1983,"value":86.299978},{"year":1984,"value":88.127336},{"year":1985,"value":88.983141},{"year":1986,"value":91.216234},{"year":1987,"value":93.843744},{"year":1988,"value":96.940184},{"year":1989,"value":98.44422},{"year":1990,"value":100.16333},{"year":1991,"value":100.252175},{"year":1992,"value":100.916815},{"year":1993,"value":100.144885},{"year":1994,"value":100.464112},{"year":1995,"value":101.770593},{"year":1996,"value":103.499998},{"year":1997,"value":103.268237},{"year":1998,"value":103.268711},{"year":1999,"value":102.657776},{"year":2000,"value":103.078054},{"year":2001,"value":101.533823},{"year":2002,"value":101.090713},{"year":2003,"value":102.816411},{"year":2004,"value":106.786016},{"year":2005,"value":108.015057},{"year":2006,"value":109.702592},{"year":2007,"value":112.397079},{"year":2008,"value":111.065727},{"year":2009,"value":108.517174},{"year":2010,"value":112.555702},{"year":2011,"value":113.955749},{"year":2012,"value":112.703559},{"year":2013,"value":111.817349},{"year":2014,"value":111.14066},{"year":2015,"value":109.49773},{"year":2016,"value":107.785452},{"year":2017,"value":108.414521},{"year":2018,"value":109.727409},{"year":2019,"value":108.569181},{"year":2020,"value":100.775297},{"year":2021,"value":106.347831},{"year":2022,"value":109.596342,"display":"109,6 Mio. t"}
+      ]
+    },
+    {
+      "id":"global_no2_exposure_soga_annual","label":"Populationsgewichtete NO₂-Exposition · GBD/SoGA","metric":"Globaler populationsgewichteter Jahresmittelwert der NO₂-Außenluftkonzentration","unit":"µg/m³","period":"1990–2023","dataStartYear":1990,"dataEndYear":2023,
+      "finding":"Der globale populationsgewichtete Mittelwert sank von 18,0 µg/m³ im Jahr 1990 auf 13,8 µg/m³ im Jahr 2023.",
+      "uncertainty":"GBD-Modellschätzung; 1990–2005 liegen Fünfjahresschritte, ab 2005 Jahreswerte vor.","sourceRefs":["src_soga_no2_2025","src_ihme_gbd2023_no2_methods"],
+      "points":[
+        {"year":1990,"value":18.0},{"year":1995,"value":17.7},{"year":2000,"value":17.2},{"year":2005,"value":17.1},{"year":2006,"value":17.3},{"year":2007,"value":17.3},{"year":2008,"value":17.3},{"year":2009,"value":17.3},{"year":2010,"value":17.8},{"year":2011,"value":18.6},{"year":2012,"value":17.8},{"year":2013,"value":17.1},{"year":2014,"value":16.6},{"year":2015,"value":16.2},{"year":2016,"value":15.9},{"year":2017,"value":15.7},{"year":2018,"value":15.2},{"year":2019,"value":14.6},{"year":2020,"value":13.7},{"year":2021,"value":14.4},{"year":2022,"value":13.8},{"year":2023,"value":13.8,"display":"13,8 µg/m³"}
+      ]
+    }
+  ],
+  "pathways":[
+    {"label":"Quellen- und Expositionspfad","chain":["Brennstoffverbrennung","NOₓ-Emissionen","atmosphärische Umwandlung und Verteilung","NO₂-Außenluftkonzentration","Einatmung"],"evidenceStatus":"modeled","caution":"Globale Emissionen lassen sich nicht eins zu eins in eine lokale oder individuelle Dosis übersetzen."}
+  ],
+  "healthContext":{"systemImpacts":[],"note":"Der konkrete Organ- und Altersbezug wird im untergeordneten Eintrag Asthma bei Kindern dargestellt."},
+  "presentation":{"primaryMeasurementId":"global_nox_emissions_2022","primaryTimeSeriesId":"global_nox_emissions_edgar_annual"},
+  "projectionPolicy":{"included":true,"method":"Nur die EDGAR-Emissionsreihe wird anhand des jüngeren Trends 2012–2022 fortgeschrieben. Für die NO₂-Konzentration wird wegen Luftreinhaltepolitik, atmosphärischer Chemie und Bevölkerungsverteilung keine einfache Projektion gezeigt."},
+  "projectionAssessment":{"status":"trend_extrapolation","label":"rechnerische Trendfortschreibung der NOₓ-Emissionen"},
+  "projectionSeries":[
+    {"id":"global_nox_emissions_recent_trend","scenario":"TREND","scenarioLabel":"Jüngerer Trend 2012–2022","metric":"Fortschreibung der globalen anthropogenen NOₓ-Emissionen","unit":"Mio. t NOₓ/Jahr","method":"Konstante durchschnittliche jährliche Änderungsrate (CAGR) der EDGAR-Werte 2012–2022; Basisjahr 2022.","trendWindow":"2012–2022","annualChangePercent":-0.2792,"baseYear":2022,"sourceRefs":["src_edgar_nox_v81"],"uncertainty":"Rechnerische Fortschreibung; keine EDGAR-Prognose und keine Projektion der NO₂-Exposition.","points":[{"year":2030,"value":107.172362,"display":"≈ 107,2 Mio. t"},{"year":2040,"value":104.217639,"display":"≈ 104,2 Mio. t"},{"year":2050,"value":101.344377,"display":"≈ 101,3 Mio. t"}]}
+  ],
+  "knowledgeGaps":[{"id":"gap_nox_to_no2","question":"Wie verändern regionale Chemie, Wetter, Siedlungsstruktur und Luftreinhaltepolitik die Übertragung von Emissionen auf Exposition?","priority":"high"}],
+  "actionScope":{"status":"not_assessed","methodNote":"Dieser Eintrag trennt Quellenmenge und Exposition; Maßnahmen werden noch nicht eigenständig bewertet.","dimensions":[]},
+  "sources":[
+    {"id":"src_edgar_nox_v81","title":"EDGAR v8.1 Global Air Pollutant Emissions – NOₓ time series 1970–2022","type":"official_emission_inventory","publisher":"European Commission Joint Research Centre","access":"open_data","year":2024,"url":"https://edgar.jrc.ec.europa.eu/dataset_ap81"},
+    {"id":"src_soga_no2_2025","title":"State of Global Air 2025 – population-weighted NO₂ exposure data","type":"official_data_portal","publisher":"Health Effects Institute","access":"open_data","year":2025,"url":"https://www.stateofglobalair.org/data"},
+    {"id":"src_ihme_gbd2023_no2_methods","title":"GBD 2023 air-pollution exposure estimates and NO₂ methods","type":"comparative_risk_assessment_dataset","publisher":"Institute for Health Metrics and Evaluation","access":"data_use_terms_apply","year":2025,"url":"https://www.healthdata.org/research-analysis/gbd"}
+  ],
+  "navigationRule":{"group":"Technologische & soziale Umwelt","subgroup":"Luftverschmutzung","item":"NO₂ · Quellen & Exposition"}
+}

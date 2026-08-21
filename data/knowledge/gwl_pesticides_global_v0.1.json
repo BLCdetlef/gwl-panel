@@ -1,0 +1,216 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Pestizide · globaler Einsatz in der Landwirtschaft",
+  "status": "reviewed_data_draft",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "Pestizide · globaler Einsatz",
+    "effectFocus": "Wie sich die weltweit in der Landwirtschaft eingesetzte Pestizid-Wirkstoffmenge entwickelt und über Böden, Gewässer und Nichtzielorganismen auf Ökosysteme und Menschen wirken kann"
+  },
+  "corePrinciples": [
+    "Die FAO-Reihe misst landwirtschaftlich eingesetzte Wirkstoffmengen; sie ist nicht mit Tonnen formulierter Handelsprodukte gleichzusetzen.",
+    "Wirkstoffmasse ist ein Belastungsindikator, aber kein vollständiges Risikomaß: Toxizität, Persistenz, Exposition und räumliche Verteilung unterscheiden sich.",
+    "Beobachtete Werte und rechnerische Projektionen werden im Panel getrennt dargestellt.",
+    "Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben."
+  ],
+  "nodes": [
+    { "id": "pb_novel_entities", "type": "domain_component", "label": "Neue Substanzen" },
+    { "id": "activity_pesticide_use", "type": "human_activity", "label": "Landwirtschaftlicher Pestizideinsatz" },
+    { "id": "pressure_active_ingredients", "type": "environmental_pressure", "label": "Eintrag biologisch wirksamer Stoffe" },
+    { "id": "medium_soil_water", "type": "environmental_medium", "label": "Böden und Gewässer" },
+    { "id": "effect_non_target", "type": "biological_effect", "label": "Wirkungen auf Nichtzielorganismen und Biodiversität" },
+    { "id": "effect_human_exposure", "type": "health_effect", "label": "Berufliche und sonstige menschliche Exposition" }
+  ],
+  "edges": [
+    { "from": "activity_pesticide_use", "to": "pressure_active_ingredients", "relationType": "releases", "evidenceStatus": "strong" },
+    { "from": "pressure_active_ingredients", "to": "medium_soil_water", "relationType": "enters", "evidenceStatus": "strong" },
+    { "from": "medium_soil_water", "to": "effect_non_target", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "activity_pesticide_use", "to": "effect_human_exposure", "relationType": "can_expose", "evidenceStatus": "strong" }
+  ],
+  "measurements": [
+    {
+      "id": "global_pesticide_use_2023",
+      "node": "activity_pesticide_use",
+      "geography": "Global",
+      "period": "2023",
+      "metric": "Landwirtschaftlicher Pestizideinsatz als Masse aktiver Wirkstoffe",
+      "value": 3.728427,
+      "unit": "Mio. t Wirkstoff/Jahr",
+      "display": "3,73 Mio. t Wirkstoff/Jahr",
+      "uncertainty": "FAOSTAT kombiniert nationale Meldungen mit ergänzten beziehungsweise imputierten Werten. Die globale Reihe ist für Größenordnung und Trend geeignet; einzelne Länderwerte können unsicherer sein.",
+      "interpretation": "Der globale Einsatz lag 2023 etwa doppelt so hoch wie 1990 und 14 % über dem Wert von 2013.",
+      "sourceRefs": ["src_fao_pesticides_2025"]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_pesticides_environment",
+      "label": "Pestizideinsatz → Eintrag aktiver Wirkstoffe → Boden und Wasser → Exposition von Nichtzielorganismen → mögliche Beeinträchtigung von Ökosystemen und Biodiversität",
+      "nodes": ["activity_pesticide_use", "pressure_active_ingredients", "medium_soil_water", "effect_non_target"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "boundaryInteractions": [
+    { "boundary": "Biosphärenintegrität", "relation": "Pestizide können Nichtzielorganismen schädigen und zur Belastung biologischer Vielfalt beitragen." },
+    { "boundary": "Süßwasser", "relation": "Abdrift, Abschwemmung und Versickerung können Wirkstoffe und Abbauprodukte in Oberflächengewässer und Grundwasser eintragen." },
+    { "boundary": "Land-System-Wandel", "relation": "Kulturarten, Anbauintensität und landwirtschaftliche Flächennutzung beeinflussen Einsatzmenge und Exposition." }
+  ],
+  "healthContext": {
+    "bodymapStatus": "separate_health_pathway",
+    "systemImpacts": [],
+    "bodymapRule": "Die globale FAO-Wirkstoffmenge aktiviert keinen Organmarker. Der geprüfte Parkinson-Bezug ist als eigener Unterpunkt hinterlegt."
+  },
+  "sources": [
+    {
+      "id": "src_fao_pesticides_2025",
+      "title": "Pesticides use and trade. 1990–2023",
+      "authors": "Food and Agriculture Organization of the United Nations",
+      "publisher": "FAO",
+      "year": 2025,
+      "type": "official_statistical_release",
+      "url": "https://www.fao.org/statistics/highlights-archive/highlights-detail/pesticides-use-and-trade-1990-2023/en",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_faostat_pesticides_use",
+      "title": "FAOSTAT Pesticides Use",
+      "authors": "Food and Agriculture Organization of the United Nations",
+      "publisher": "FAO",
+      "year": 2025,
+      "type": "official_statistical_dataset",
+      "url": "https://data.fao.org/catalog/dataset/cf6432f8-c3b8-404e-897f-5b2c45709ca7",
+      "access": "open_data"
+    },
+    {
+      "id": "src_who_pesticides",
+      "title": "Pesticide residues in food",
+      "authors": "World Health Organization",
+      "publisher": "WHO",
+      "year": 2022,
+      "type": "official_health_fact_sheet",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/pesticide-residues-in-food",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_bmas_bk1322",
+      "title": "Siebte Verordnung zur Änderung der Berufskrankheiten-Verordnung",
+      "authors": "Bundesministerium für Arbeit und Soziales",
+      "publisher": "BMAS",
+      "year": 2026,
+      "type": "official_regulation_information",
+      "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/siebte-verordnung-zur-aenderung-der-berufskrankheiten-verordnung.html",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_baua_parkinson_pesticides",
+      "title": "Wissenschaftliche Empfehlung: Parkinson-Syndrom durch langjährig, häufig und selbst angewendete Pestizide",
+      "authors": "Ärztlicher Sachverständigenbeirat Berufskrankheiten",
+      "publisher": "BAuA / BMAS",
+      "year": 2025,
+      "type": "official_scientific_assessment",
+      "url": "https://www.baua.de/DE/Themen/Praevention/Koerperliche-Gesundheit/Berufskrankheiten/pdf/Empfehlung-Parkinson-Pestizide.pdf?__blob=publicationFile&v=5",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Neue Substanzen",
+    "item": "Pestizide · globaler Einsatz",
+    "classification": "global_pressure_timeseries"
+  },
+  "presentation": {
+    "primaryMeasurementId": "global_pesticide_use_2023",
+    "primaryTimeSeriesId": "global_pesticide_use_fao_annual",
+    "referenceLabel": "Kein globaler Grenzwert in Tonnen",
+    "finding": "Der landwirtschaftliche Pestizideinsatz stieg von 1,81 Mio. t Wirkstoff im Jahr 1990 auf 3,73 Mio. t im Jahr 2023. Die reine Masse beschreibt den globalen Belastungsdruck, aber nicht die unterschiedliche Gefährlichkeit einzelner Wirkstoffe.",
+    "effectPath": "Pestizideinsatz → Umweltfreisetzung und Exposition → Wirkungen auf Ziel- und Nichtzielorganismen → mögliche Folgen für Ökosysteme und menschliche Gesundheit",
+    "uncertainty": "Globale Mengen beruhen teilweise auf imputierten Daten. Kilogramm unterschiedlicher Wirkstoffe sind hinsichtlich Risiko und Wirkung nicht gleichwertig."
+  },
+  "timeSeries": [
+    {
+      "id": "global_pesticide_use_fao_annual",
+      "label": "Globaler Pestizideinsatz · FAOSTAT",
+      "metric": "Landwirtschaftlicher Pestizideinsatz als Masse aktiver Wirkstoffe",
+      "unit": "Mio. t Wirkstoff/Jahr",
+      "period": "1990–2023",
+      "dataStartYear": 1990,
+      "dataEndYear": 2023,
+      "reference": { "type": "none", "display": "Kein globaler Grenzwert in Tonnen" },
+      "finding": "Die globale Wirkstoffmenge hat sich seit 1990 ungefähr verdoppelt.",
+      "uncertainty": "FAOSTAT-Werte können durch neue nationale Meldungen und Datenrevisionen nachträglich verändert werden.",
+      "sourceRefs": ["src_fao_pesticides_2025", "src_faostat_pesticides_use"],
+      "points": [
+        { "year": 1990, "value": 1.806688, "display": "1,81 Mio. t" },
+        { "year": 1991, "value": 1.793631, "display": "1,79 Mio. t" },
+        { "year": 1992, "value": 1.820597, "display": "1,82 Mio. t" },
+        { "year": 1993, "value": 1.836220, "display": "1,84 Mio. t" },
+        { "year": 1994, "value": 1.893783, "display": "1,89 Mio. t" },
+        { "year": 1995, "value": 1.958634, "display": "1,96 Mio. t" },
+        { "year": 1996, "value": 2.025364, "display": "2,03 Mio. t" },
+        { "year": 1997, "value": 2.093645, "display": "2,09 Mio. t" },
+        { "year": 1998, "value": 2.126962, "display": "2,13 Mio. t" },
+        { "year": 1999, "value": 2.165260, "display": "2,17 Mio. t" },
+        { "year": 2000, "value": 2.175911, "display": "2,18 Mio. t" },
+        { "year": 2001, "value": 2.180559, "display": "2,18 Mio. t" },
+        { "year": 2002, "value": 2.205711, "display": "2,21 Mio. t" },
+        { "year": 2003, "value": 2.311794, "display": "2,31 Mio. t" },
+        { "year": 2004, "value": 2.450447, "display": "2,45 Mio. t" },
+        { "year": 2005, "value": 2.535056, "display": "2,54 Mio. t" },
+        { "year": 2006, "value": 2.513376, "display": "2,51 Mio. t" },
+        { "year": 2007, "value": 2.771712, "display": "2,77 Mio. t" },
+        { "year": 2008, "value": 2.828069, "display": "2,83 Mio. t" },
+        { "year": 2009, "value": 2.730070, "display": "2,73 Mio. t" },
+        { "year": 2010, "value": 3.033413, "display": "3,03 Mio. t" },
+        { "year": 2011, "value": 3.079005, "display": "3,08 Mio. t" },
+        { "year": 2012, "value": 3.208576, "display": "3,21 Mio. t" },
+        { "year": 2013, "value": 3.267468, "display": "3,27 Mio. t" },
+        { "year": 2014, "value": 3.281344, "display": "3,28 Mio. t" },
+        { "year": 2015, "value": 3.320624, "display": "3,32 Mio. t" },
+        { "year": 2016, "value": 3.440886, "display": "3,44 Mio. t" },
+        { "year": 2017, "value": 3.356311, "display": "3,36 Mio. t" },
+        { "year": 2018, "value": 3.413628, "display": "3,41 Mio. t" },
+        { "year": 2019, "value": 3.486251, "display": "3,49 Mio. t" },
+        { "year": 2020, "value": 3.507246, "display": "3,51 Mio. t" },
+        { "year": 2021, "value": 3.769811, "display": "3,77 Mio. t" },
+        { "year": 2022, "value": 3.802160, "display": "3,80 Mio. t" },
+        { "year": 2023, "value": 3.728427, "display": "3,73 Mio. t" }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "status": "trend_extrapolation",
+    "label": "rechnerische Trendfortschreibung"
+  },
+  "projectionSeries": [
+    {
+      "id": "global_pesticide_use_recent_trend",
+      "scenario": "TREND",
+      "scenarioLabel": "Jüngerer Trend 2013–2023",
+      "metric": "Fortschreibung der landwirtschaftlich eingesetzten Wirkstoffmenge",
+      "unit": "Mio. t Wirkstoff/Jahr",
+      "method": "Konstante durchschnittliche jährliche Änderungsrate (CAGR) der FAOSTAT-Werte 2013–2023; Basisjahr 2023.",
+      "trendWindow": "2013–2023",
+      "annualChangePercent": 1.3285,
+      "baseYear": 2023,
+      "sourceRefs": ["src_fao_pesticides_2025", "src_faostat_pesticides_use"],
+      "uncertainty": "Rechnerische Trendfortschreibung ohne Modellierung künftiger Regulierung, Wirkstoffsubstitution, Preise, Anbauflächen, Klimaeffekte oder technischer Veränderungen. Keine FAO-Prognose.",
+      "assessment": { "status": "trend_extrapolation", "label": "rechnerische Trendfortschreibung" },
+      "points": [
+        { "year": 2030, "value": 4.089269, "display": "≈ 4,09 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2030 rechnerisch bei etwa 4,09 Mio. t Wirkstoff.", "uncertainty": "Trendfortschreibung aus 2013–2023; keine FAO-Prognose." },
+        { "year": 2040, "value": 4.666164, "display": "≈ 4,67 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2040 rechnerisch bei etwa 4,67 Mio. t Wirkstoff.", "uncertainty": "Mit wachsendem Zeithorizont nimmt die Unsicherheit der einfachen Trendfortschreibung zu." },
+        { "year": 2050, "value": 5.324444, "display": "≈ 5,32 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2050 rechnerisch bei etwa 5,32 Mio. t Wirkstoff.", "uncertainty": "Langfristige rechnerische Fortschreibung ohne präzisierende Einflussfaktoren; keine FAO-Prognose." }
+      ]
+    }
+  ],
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "methodNote": "Mengenreduktion und Risikoreduktion sind nicht identisch. Vorrang haben integrierter Pflanzenschutz, Ersatz besonders gefährlicher Wirkstoffe, präzisere Anwendung und belastbare Überwachung.",
+    "dimensions": [
+      { "id": "integrated_pest_management", "label": "Integrierten Pflanzenschutz stärken", "level": "hoch", "rationale": "Vorbeugung, Monitoring und nichtchemische Verfahren können die Abhängigkeit von chemischen Anwendungen vermindern." },
+      { "id": "hazardous_pesticides", "label": "Hochgefährliche Wirkstoffe ersetzen", "level": "hoch", "rationale": "Die reine Gesamtmasse muss um wirkstoffbezogene Gefährlichkeit und Exposition ergänzt werden." },
+      { "id": "monitoring", "label": "Einsatz und Umweltpfade messen", "level": "hoch", "rationale": "Bessere nationale Meldungen und Rückstandsmonitoring reduzieren Datenlücken und ermöglichen gezieltere Maßnahmen." }
+    ]
+  }
+}

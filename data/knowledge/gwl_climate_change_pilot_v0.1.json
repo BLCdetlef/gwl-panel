@@ -307,6 +307,16 @@
   ],
   "sources": [
     {
+      "id": "src_ipcc_ar6_wgi_annex_iii",
+      "title": "IPCC AR6 WGI Annex III: Tables of Historical and Projected Well-mixed Greenhouse Gas Mixing Ratios",
+      "authors": "IPCC",
+      "publisher": "Intergovernmental Panel on Climate Change",
+      "year": 2021,
+      "type": "official_assessment_dataset",
+      "url": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+      "access": "open_full_text"
+    },
+    {
       "id": "src_ipcc_ar6_syr_2023",
       "title": "AR6 Synthesis Report: Climate Change 2023",
       "authors": "IPCC",
@@ -832,6 +842,93 @@
             "src_noaa_global_co2_2026"
           ]
         }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "label": "tragfähig · szenarioabhängig",
+    "grade": "robust_scenario_projection",
+    "comparability": "qualified",
+    "rationale": "Messgröße, globale Ebene und Einheit stimmen mit der NOAA-Beobachtungsreihe überein. Die IPCC-Werte sind jedoch vorgeschriebene Konzentrationspfade aus SSP-Szenarien und keine Fortsetzung der NOAA-Messung.",
+    "rule": "Nur veröffentlichte IPCC-Stützjahre zeigen; Beobachtung und Szenario sichtbar trennen; nicht interpolieren."
+  },
+  "projectionSeries": [
+    {
+      "id": "global_co2_ipcc_ar6_ssp119",
+      "scenario": "SSP1-1.9",
+      "scenarioLabel": "SSP1-1.9 · sehr niedrige Emissionen",
+      "label": "Atmosphärisches CO₂ · IPCC AR6 · SSP1-1.9",
+      "metric": "Global gemittelte atmosphärische CO₂-Konzentration",
+      "unit": "ppm",
+      "period": "2030–2090",
+      "reference": { "type": "planetary_boundary", "value": 350, "unit": "ppm", "display": "Planetare Grenze: 350 ppm CO₂" },
+      "finding": "Möglicher CO₂-Konzentrationspfad bei sehr niedrigen Emissionen; auch 2090 liegt der Stützpunkt noch oberhalb der planetaren Grenze.",
+      "uncertainty": "IPCC-SSP-Konzentrationspfad, keine Prognose mit Eintrittswahrscheinlichkeit. Nur publizierte Dekadenwerte werden gezeigt.",
+      "sourceRefs": ["src_ipcc_ar6_wgi_annex_iii"],
+      "points": [
+        { "year": 2030, "value": 434, "display": "2030: 434 ppm CO₂ · SSP1-1.9" },
+        { "year": 2040, "value": 440, "display": "2040: 440 ppm CO₂ · SSP1-1.9" },
+        { "year": 2050, "value": 438, "display": "2050: 438 ppm CO₂ · SSP1-1.9" },
+        { "year": 2060, "value": 431, "display": "2060: 431 ppm CO₂ · SSP1-1.9" },
+        { "year": 2070, "value": 424, "display": "2070: 424 ppm CO₂ · SSP1-1.9" },
+        { "year": 2080, "value": 415, "display": "2080: 415 ppm CO₂ · SSP1-1.9" },
+        { "year": 2090, "value": 405, "display": "2090: 405 ppm CO₂ · SSP1-1.9" }
+      ]
+    },
+    {
+      "id": "global_co2_ipcc_ar6_ssp126",
+      "scenario": "SSP1-2.6",
+      "scenarioLabel": "SSP1-2.6 · niedrige Emissionen",
+      "label": "Atmosphärisches CO₂ · IPCC AR6 · SSP1-2.6",
+      "metric": "Global gemittelte atmosphärische CO₂-Konzentration", "unit": "ppm", "period": "2030–2090",
+      "reference": { "type": "planetary_boundary", "value": 350, "unit": "ppm", "display": "Planetare Grenze: 350 ppm CO₂" },
+      "finding": "Möglicher CO₂-Konzentrationspfad bei niedrigen Emissionen.",
+      "uncertainty": "IPCC-SSP-Konzentrationspfad, keine Prognose mit Eintrittswahrscheinlichkeit. Nur publizierte Dekadenwerte werden gezeigt.",
+      "sourceRefs": ["src_ipcc_ar6_wgi_annex_iii"],
+      "points": [
+        { "year": 2030, "value": 440, "display": "2030: 440 ppm CO₂ · SSP1-2.6" }, { "year": 2040, "value": 458, "display": "2040: 458 ppm CO₂ · SSP1-2.6" },
+        { "year": 2050, "value": 469, "display": "2050: 469 ppm CO₂ · SSP1-2.6" }, { "year": 2060, "value": 474, "display": "2060: 474 ppm CO₂ · SSP1-2.6" },
+        { "year": 2070, "value": 473, "display": "2070: 473 ppm CO₂ · SSP1-2.6" }, { "year": 2080, "value": 467, "display": "2080: 467 ppm CO₂ · SSP1-2.6" },
+        { "year": 2090, "value": 457, "display": "2090: 457 ppm CO₂ · SSP1-2.6" }
+      ]
+    },
+    {
+      "id": "global_co2_ipcc_ar6_ssp245",
+      "scenario": "SSP2-4.5",
+      "scenarioLabel": "SSP2-4.5 · mittlere Emissionen",
+      "label": "Atmosphärisches CO₂ · IPCC AR6 · SSP2-4.5",
+      "metric": "Global gemittelte atmosphärische CO₂-Konzentration", "unit": "ppm", "period": "2030–2090",
+      "reference": { "type": "planetary_boundary", "value": 350, "unit": "ppm", "display": "Planetare Grenze: 350 ppm CO₂" },
+      "finding": "Möglicher CO₂-Konzentrationspfad bei mittleren Emissionen.",
+      "uncertainty": "IPCC-SSP-Konzentrationspfad, keine Prognose mit Eintrittswahrscheinlichkeit. Nur publizierte Dekadenwerte werden gezeigt.",
+      "sourceRefs": ["src_ipcc_ar6_wgi_annex_iii"],
+      "points": [
+        { "year": 2030, "value": 444, "display": "2030: 444 ppm CO₂ · SSP2-4.5" }, { "year": 2040, "value": 475, "display": "2040: 475 ppm CO₂ · SSP2-4.5" },
+        { "year": 2050, "value": 507, "display": "2050: 507 ppm CO₂ · SSP2-4.5" }, { "year": 2060, "value": 537, "display": "2060: 537 ppm CO₂ · SSP2-4.5" },
+        { "year": 2070, "value": 564, "display": "2070: 564 ppm CO₂ · SSP2-4.5" }, { "year": 2080, "value": 585, "display": "2080: 585 ppm CO₂ · SSP2-4.5" },
+        { "year": 2090, "value": 598, "display": "2090: 598 ppm CO₂ · SSP2-4.5" }
+      ]
+    },
+    {
+      "id": "global_co2_ipcc_ar6_ssp370",
+      "scenario": "SSP3-7.0", "scenarioLabel": "SSP3-7.0 · hohe Emissionen", "label": "Atmosphärisches CO₂ · IPCC AR6 · SSP3-7.0",
+      "metric": "Global gemittelte atmosphärische CO₂-Konzentration", "unit": "ppm", "period": "2030–2090",
+      "reference": { "type": "planetary_boundary", "value": 350, "unit": "ppm", "display": "Planetare Grenze: 350 ppm CO₂" },
+      "finding": "Möglicher CO₂-Konzentrationspfad bei hohen Emissionen.", "uncertainty": "IPCC-SSP-Konzentrationspfad, keine Prognose mit Eintrittswahrscheinlichkeit. Nur publizierte Dekadenwerte werden gezeigt.", "sourceRefs": ["src_ipcc_ar6_wgi_annex_iii"],
+      "points": [
+        { "year": 2030, "value": 451, "display": "2030: 451 ppm CO₂ · SSP3-7.0" }, { "year": 2040, "value": 493, "display": "2040: 493 ppm CO₂ · SSP3-7.0" }, { "year": 2050, "value": 541, "display": "2050: 541 ppm CO₂ · SSP3-7.0" },
+        { "year": 2060, "value": 593, "display": "2060: 593 ppm CO₂ · SSP3-7.0" }, { "year": 2070, "value": 652, "display": "2070: 652 ppm CO₂ · SSP3-7.0" }, { "year": 2080, "value": 716, "display": "2080: 716 ppm CO₂ · SSP3-7.0" }, { "year": 2090, "value": 787, "display": "2090: 787 ppm CO₂ · SSP3-7.0" }
+      ]
+    },
+    {
+      "id": "global_co2_ipcc_ar6_ssp585",
+      "scenario": "SSP5-8.5", "scenarioLabel": "SSP5-8.5 · sehr hohe Emissionen", "label": "Atmosphärisches CO₂ · IPCC AR6 · SSP5-8.5",
+      "metric": "Global gemittelte atmosphärische CO₂-Konzentration", "unit": "ppm", "period": "2030–2090",
+      "reference": { "type": "planetary_boundary", "value": 350, "unit": "ppm", "display": "Planetare Grenze: 350 ppm CO₂" },
+      "finding": "Möglicher CO₂-Konzentrationspfad bei sehr hohen Emissionen.", "uncertainty": "IPCC-SSP-Konzentrationspfad, keine Prognose mit Eintrittswahrscheinlichkeit. Nur publizierte Dekadenwerte werden gezeigt.", "sourceRefs": ["src_ipcc_ar6_wgi_annex_iii"],
+      "points": [
+        { "year": 2030, "value": 452, "display": "2030: 452 ppm CO₂ · SSP5-8.5" }, { "year": 2040, "value": 500, "display": "2040: 500 ppm CO₂ · SSP5-8.5" }, { "year": 2050, "value": 563, "display": "2050: 563 ppm CO₂ · SSP5-8.5" },
+        { "year": 2060, "value": 643, "display": "2060: 643 ppm CO₂ · SSP5-8.5" }, { "year": 2070, "value": 744, "display": "2070: 744 ppm CO₂ · SSP5-8.5" }, { "year": 2080, "value": 864, "display": "2080: 864 ppm CO₂ · SSP5-8.5" }, { "year": 2090, "value": 998, "display": "2090: 998 ppm CO₂ · SSP5-8.5" }
       ]
     }
   ]

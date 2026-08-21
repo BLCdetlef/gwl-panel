@@ -344,6 +344,53 @@
       ]
     }
   ],
+  "projectionAssessment": {
+    "label": "bedingt tragfähig · nur separat",
+    "grade": "qualified_scenario_projection",
+    "comparability": "limited_metric_match",
+    "rationale": "Geografie, Größenordnung und Einheit passen, die historische Reihe beschreibt jedoch Produktion beziehungsweise harmonisierte Kunststoffproduktion, während die OECD-Szenarien Kunststoffnutzung modellieren.",
+    "rule": "Keine rechnerische Trendfortsetzung und keine direkte Änderungsrate gegenüber der Produktionsreihe ausweisen. Nur den publizierten 2060-Stützpunkt als eigene Szenarioansicht zeigen."
+  },
+  "projectionSeries": [
+    {
+      "id": "oecd_plastics_use_baseline_2060",
+      "scenario": "OECD_BASELINE",
+      "scenarioLabel": "OECD Baseline · heutige Politik",
+      "label": "Globale Kunststoffnutzung · OECD Baseline",
+      "metric": "Globale Kunststoffnutzung",
+      "unit": "million_tonnes_per_year",
+      "period": "2060",
+      "reference": { "type": "scenario_not_threshold", "display": "Szenario; bedingt mit der historischen Produktionsreihe vergleichbar" },
+      "finding": "Im OECD-Basisszenario steigt die globale Kunststoffnutzung bis 2060 auf 1.231 Mio. t/Jahr.",
+      "uncertainty": "Ergebnis des OECD-ENV-Linkages-Modells unter Baseline-Annahmen; keine Eintrittsprognose. Nutzung ist nicht identisch mit Produktion.",
+      "sourceRefs": ["src_oecd_scenarios_2060"],
+      "points": [{ "year": 2060, "value": 1231, "display": "2060: 1.231 Mio. t/Jahr · OECD Baseline" }]
+    },
+    {
+      "id": "oecd_plastics_use_regional_action_2060",
+      "scenario": "OECD_REGIONAL_ACTION",
+      "scenarioLabel": "OECD · regionale Maßnahmen",
+      "label": "Globale Kunststoffnutzung · OECD Regional Action",
+      "metric": "Globale Kunststoffnutzung", "unit": "million_tonnes_per_year", "period": "2060",
+      "reference": { "type": "scenario_not_threshold", "display": "Szenario; bedingt mit der historischen Produktionsreihe vergleichbar" },
+      "finding": "Mit regional unterschiedlich ambitionierten Maßnahmen modelliert die OECD für 2060 eine globale Kunststoffnutzung von 1.018 Mio. t/Jahr.",
+      "uncertainty": "Ergebnis des OECD-ENV-Linkages-Modells unter dem Regional-Action-Politikpaket; keine Eintrittsprognose. Nutzung ist nicht identisch mit Produktion.",
+      "sourceRefs": ["src_oecd_scenarios_2060"],
+      "points": [{ "year": 2060, "value": 1018, "display": "2060: 1.018 Mio. t/Jahr · regionale Maßnahmen" }]
+    },
+    {
+      "id": "oecd_plastics_use_global_ambition_2060",
+      "scenario": "OECD_GLOBAL_AMBITION",
+      "scenarioLabel": "OECD · globale Ambition",
+      "label": "Globale Kunststoffnutzung · OECD Global Ambition",
+      "metric": "Globale Kunststoffnutzung", "unit": "million_tonnes_per_year", "period": "2060",
+      "reference": { "type": "scenario_not_threshold", "display": "Szenario; bedingt mit der historischen Produktionsreihe vergleichbar" },
+      "finding": "Im global ambitionierten OECD-Politikpaket liegt die modellierte Kunststoffnutzung 2060 bei 827 Mio. t/Jahr.",
+      "uncertainty": "Ergebnis des OECD-ENV-Linkages-Modells unter einem weltweit koordinierten, sehr ambitionierten Politikpaket; keine Eintrittsprognose. Nutzung ist nicht identisch mit Produktion.",
+      "sourceRefs": ["src_oecd_scenarios_2060"],
+      "points": [{ "year": 2060, "value": 827, "display": "2060: 827 Mio. t/Jahr · globale Ambition" }]
+    }
+  ],
   "projections": [
     {
       "id": "oecd_baseline_plastics_use_2060",
@@ -364,7 +411,7 @@
     "observedRange": "1950–2019",
     "missingYears": [1974],
     "preserveMissingYears": true,
-    "projectionStatus": "stored_separately_not_rendered",
-    "panelRule": "Historische Reihe standardmäßig anzeigen. Bei 1974 'kein Messpunkt' zeigen. Zukunftsszenarien niemals als beobachtete Fortsetzung behandeln."
+    "projectionStatus": "scenario_view_available_with_limited_comparability",
+    "panelRule": "Historische Reihe standardmäßig anzeigen. Bei 1974 'kein Messpunkt' zeigen. Zukunftsszenarien niemals als beobachtete Fortsetzung behandeln; Produktion und Nutzung nicht rechnerisch gleichsetzen."
   }
 }

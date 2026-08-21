@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.43 · B26";
+const GWL_BUILD_VERSION = "0.9.46 · B29";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -19,6 +19,9 @@ const findingText = document.getElementById("findingText");
 const effectPath = document.getElementById("effectPath");
 const lifeNote = document.getElementById("lifeNote");
 const organReadout = document.getElementById("organReadout");
+const ageGroupButtons = Array.from(document.querySelectorAll("[data-age-group]"));
+const ageGroupStatus = document.getElementById("ageGroupStatus");
+const ageEffectDetail = document.getElementById("ageEffectDetail");
 const resetButton = document.getElementById("resetButton");
 const timeSlider = document.getElementById("timeSlider");
 const timeReadout = document.getElementById("timeReadout");
@@ -65,6 +68,7 @@ let timeWindow = "data";
 let projectionScenario = "STEPS";
 let currentHealth = null;
 let selectedOrganId = null;
+let selectedAgeGroup = "adults";
 let knowledgeNetworks = {};
 let knowledgePanel = null;
 
@@ -1705,6 +1709,47 @@ function genericHealthReadout(network) {
   return `${impacts.map(x => x.label || x.system).join(" · ")}: systemischer Gesundheitsbezug; kein Organmarker allein aufgrund des Oberthemas.`;
 }
 
+function genericTimeSeriesCards(network) {
+  if (network?.presentation?.hideTimeSeriesInKnowledgeView) return "";
+  const seriesList = network?.timeSeries || [];
+  if (!seriesList.length) return "";
+  const cards = seriesList.map(series => {
+    const points = (series.points || []).filter(point => Number.isFinite(point.year) && Number.isFinite(point.value));
+    if (!points.length) return "";
+    const width = 360, height = 92, pad = 8;
+    const years = points.map(point => point.year);
+    const values = points.map(point => point.value);
+    const minYear = Math.min(...years), maxYear = Math.max(...years);
+    const minValue = Math.min(...values), maxValue = Math.max(...values);
+    const spanYear = Math.max(1, maxYear - minYear);
+    const spanValue = Math.max(0.000001, maxValue - minValue);
+    const polyline = points.map(point => {
+      const x = pad + ((point.year - minYear) / spanYear) * (width - pad * 2);
+      const y = height - pad - ((point.value - minValue) / spanValue) * (height - pad * 2);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+    const first = points[0], latest = points[points.length - 1];
+    const formatValue = point => point.display || `${Number(point.value).toLocaleString("de-DE", { maximumFractionDigits: 2 })} ${series.unit || ""}`;
+    return `<div class="knowledge-series-card">
+      <strong>${series.label || series.metric || "Zeitreihe"}</strong>
+      <p>${series.metric || ""}</p>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${series.label || "Zeitreihe"}: ${minYear} bis ${maxYear}">
+        <polyline points="${polyline}" fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"></polyline>
+      </svg>
+      <div class="knowledge-series-values"><span>${first.year}: <b>${formatValue(first)}</b></span><span>${latest.year}: <b>${formatValue(latest)}</b></span></div>
+      <p><small>${series.finding || ""} ${series.uncertainty || ""}</small></p>
+    </div>`;
+  }).filter(Boolean).join("");
+  const projections = (network?.projectionSeries || []).map(series => `
+    <div class="knowledge-series-card knowledge-projection-card">
+      <strong>PROJEKTION · ${series.scenarioLabel || "Trend"}</strong>
+      <p>${series.method || ""}</p>
+      <div class="knowledge-projection-values">${(series.points || []).map(point => `<span>${point.year}: <b>${point.display || point.value}</b></span>`).join("")}</div>
+      <p><small>${series.uncertainty || ""}</small></p>
+    </div>`).join("");
+  return cards ? `<h3>MESS- UND ZEITREIHEN</h3><div class="knowledge-series-grid">${cards}</div>${projections ? `<h3>PROJEKTION</h3><div class="knowledge-series-grid">${projections}</div>` : ""}` : "";
+}
+
 function renderGenericKnowledgeView(network, indexEntry) {
   if (!network) {
     return `<div class="nutrient-choice-note"><strong>Knowledge-Datensatz nicht geladen.</strong></div>`;
@@ -1712,9 +1757,10 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
   const presentation = network.presentation || {};
   const primaryMeasurement = getPrimaryKnowledgeMeasurement(network);
-  const measurements = presentation.hidePrimaryMeasurementInKnowledgeView
+  const hiddenMeasurementIds = new Set(presentation.hiddenMeasurementIds || []);
+  const measurements = (presentation.hidePrimaryMeasurementInKnowledgeView
     ? (network.measurements || []).filter(m => m.id !== primaryMeasurement?.id)
-    : (network.measurements || []);
+    : (network.measurements || [])).filter(m => !hiddenMeasurementIds.has(m.id));
   const cards = measurements.map(m => genericStudyCard(network, m));
   const evidence = cards.filter(c => c.displayType === "study_evidence");
   const values = cards.filter(c => c.displayType !== "study_evidence");
@@ -1725,6 +1771,14 @@ function renderGenericKnowledgeView(network, indexEntry) {
       <p>${(p.chain || p.path || []).map(x => typeof x === "string" ? x : x.label).filter(Boolean).join(" → ")}</p>
       ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
       ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
+    </div>`).join("");
+
+  const boundaryInteractions = (network.boundaryInteractions || []).map(interaction => `
+    <div class="oil-boundary-link">
+      <strong>${interaction.boundary || (interaction.boundaries || []).join(" ↔ ") || "Verbindung"}</strong>
+      <p>${interaction.mechanism || interaction.relation || ""}</p>
+      ${interaction.evidenceStatus ? `<span>Evidenz: ${interaction.evidenceStatus}</span>` : ""}
+      ${interaction.accountingRule ? `<p><em>${interaction.accountingRule}</em></p>` : ""}
     </div>`).join("");
 
   const gaps = (network.knowledgeGaps || []).map(g => `
@@ -1758,8 +1812,12 @@ function renderGenericKnowledgeView(network, indexEntry) {
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
       ${values.length ? `${presentation.compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
+      ${genericTimeSeriesCards(network)}
+
       <h3>WIRKUNGSPFADE</h3>
       <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
+
+      ${boundaryInteractions ? `<h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3><div class="oil-boundary-links">${boundaryInteractions}</div>` : ""}
 
       ${network.sourcePolicy?.rule ? `<div class="extension-note"><strong>Quellenregel:</strong> ${network.sourcePolicy.rule}</div>` : ""}
 
@@ -1817,15 +1875,16 @@ function getPrimaryKnowledgeMeasurement(network) {
 function getActiveKnowledgeContext() {
   const state = getActiveViewState();
   const boundary = getBoundary(state.boundaryId);
-  const item = boundary?.items?.find(entry => entry.id === state.itemId);
-  if (!item?.knowledgeSource || state.boundaryId === "mental-load") return null;
+  const activeItemId = state.boundaryId === "mental-load" ? state.componentId : state.itemId;
+  const item = boundary?.items?.find(entry => entry.id === activeItemId);
+  if (!item?.knowledgeSource) return null;
   const rawNetwork = getKnowledgeNetworkBySource(item.knowledgeSource);
   return {
     state,
     boundary,
     item,
     network: getKnowledgeNetworkForItem(rawNetwork, item),
-    indexEntry: getKnowledgeIndexEntry(state.boundaryId, state.itemId)
+    indexEntry: getKnowledgeIndexEntry(state.boundaryId, activeItemId)
   };
 }
 
@@ -1842,6 +1901,33 @@ function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
   return (network?.projectionSeries || []).find(series => series.scenario === scenario)
     || (network?.projectionSeries || [])[0]
     || null;
+}
+
+function syncProjectionScenarioOptions(network) {
+  const series = network?.projectionSeries || [];
+  if (!scenarioSelect || !series.length) return;
+
+  const scenarios = series.filter((entry, index) =>
+    entry?.scenario && series.findIndex(candidate => candidate.scenario === entry.scenario) === index
+  );
+  if (!scenarios.some(entry => entry.scenario === projectionScenario)) {
+    projectionScenario = scenarios.find(entry => entry.scenario === "STEPS")?.scenario
+      || scenarios[0]?.scenario
+      || projectionScenario;
+  }
+
+  scenarioSelect.innerHTML = "";
+  scenarios.forEach(entry => {
+    const option = document.createElement("option");
+    option.value = entry.scenario;
+    option.textContent = entry.scenarioLabel || entry.scenario;
+    scenarioSelect.appendChild(option);
+  });
+  scenarioSelect.value = projectionScenario;
+}
+
+function getProjectionAssessment(network, series) {
+  return series?.assessment || network?.projectionAssessment || null;
 }
 
 function getActiveKnowledgeSeries(network) {
@@ -1925,11 +2011,12 @@ function appendTimeMarker(year, min, max, className = "", label = year) {
   const marker = document.createElement("span");
   marker.className = `time-marker ${className}`.trim();
   marker.textContent = String(label);
-  marker.style.left = `${((year - min) / (max - min)) * 100}%`;
+  marker.style.left = max === min ? "50%" : `${((year - min) / (max - min)) * 100}%`;
   timeMarkers.appendChild(marker);
 }
 
 function renderKnowledgeTime(network) {
+  syncProjectionScenarioOptions(network);
   const availableProjection = getKnowledgeProjectionSeries(network);
   if (timeWindow === "projection" && !availableProjection?.points?.length) timeWindow = "data";
   const series = getActiveKnowledgeSeries(network);
@@ -1996,7 +2083,12 @@ function renderKnowledgeTime(network) {
 
   const exact = points.find(point => Number(point.year) === Number(selectedYear));
   if (exact && timeWindow === "projection") {
-    timeStatus.textContent = `${series.scenarioLabel || series.scenario || "Szenario"} · ${selectedYear} ist ein modellierter Stützpunkt, kein Messwert.`;
+    const assessment = getProjectionAssessment(network, series);
+    const assessmentText = assessment?.label ? ` · Bewertung: ${assessment.label}` : "";
+    const projectionPointType = assessment?.status === "trend_extrapolation"
+      ? "ein rechnerisch fortgeschriebener Stützpunkt"
+      : "ein modellierter Stützpunkt";
+    timeStatus.textContent = `${series.scenarioLabel || series.scenario || "Szenario"} · ${selectedYear} ist ${projectionPointType}, kein Messwert${assessmentText}.`;
   } else if (exact) {
     timeStatus.textContent = `${series.label || "Messreihe"} · ${selectedYear} ist als Messwert hinterlegt.`;
   } else if (timeWindow === "blc") {
@@ -2242,6 +2334,63 @@ function renderKnowledgePanel() {
 }
 
 function getSelectedScope() { return regionSelect.value; }
+function getSelectedAgeGroup() { return selectedAgeGroup; }
+
+function ageGroupLabel(group = selectedAgeGroup) {
+  return ({ children: "Kinder · 0–17 Jahre", adults: "Erwachsene · 18–64 Jahre", older: "Ältere Menschen · ab 65 Jahren" })[group] || group;
+}
+
+function rangeOverlapsAgeGroup(range, group = selectedAgeGroup) {
+  if (!range || (!Number.isFinite(Number(range.min)) && !Number.isFinite(Number(range.max)))) return false;
+  const min = Number.isFinite(Number(range.min)) ? Number(range.min) : 0;
+  const max = Number.isFinite(Number(range.max)) ? Number(range.max) : 130;
+  const bounds = { children: [0, 17.999], adults: [18, 64.999], older: [65, 130] }[group];
+  return bounds ? max >= bounds[0] && min <= bounds[1] : false;
+}
+
+function getAgeEffect(entity, group = selectedAgeGroup) {
+  return entity?.ageEffects?.[group] || entity?.ageEffectByGroup?.[group] || null;
+}
+
+function hasAnyHigherAgeEffect(entity) {
+  const effects = entity?.ageEffects || entity?.ageEffectByGroup || {};
+  return Object.values(effects).some(effect => effect?.status === "higher_effect");
+}
+
+function appliesToSelectedAgeGroup(entity) {
+  return !Array.isArray(entity?.ageGroups) || !entity.ageGroups.length || entity.ageGroups.includes(selectedAgeGroup);
+}
+
+function getActiveAgeEvidence(network = getActiveKnowledgeContext()?.network) {
+  const explicit = network?.ageEvidence?.[selectedAgeGroup] || network?.populationEvidence?.ageGroups?.[selectedAgeGroup];
+  if (explicit) return explicit;
+  const ranges = (network?.measurements || []).map(item => item?.context?.ageRange).filter(range => rangeOverlapsAgeGroup(range));
+  if (ranges.length) {
+    const labels = ranges.map(range => `${String(range.min).replace(".", ",")}–${String(range.max).replace(".", ",")} Jahre`);
+    return { status: "group_included", detail: `Feinere Altersangabe der Studie: ${[...new Set(labels)].join(" · ")}.` };
+  }
+  return null;
+}
+
+function updateAgeGroupDisplay() {
+  ageGroupButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.ageGroup === selectedAgeGroup)));
+  const evidence = getActiveAgeEvidence();
+  const defaultText = selectedAgeGroup === "adults"
+    ? "Standardansicht · 18–64 Jahre"
+    : `${ageGroupLabel()} · altersbezogene Verstärkung nur bei Beleg`;
+  if (ageGroupStatus) ageGroupStatus.textContent = evidence?.status === "higher_effect"
+    ? `${ageGroupLabel()} · stärkerer Effekt belegt`
+    : evidence?.status === "no_difference"
+      ? `${ageGroupLabel()} · untersucht, kein Unterschied nachgewiesen`
+      : evidence?.status === "group_included"
+        ? `${ageGroupLabel()} · Gruppe enthalten`
+        : defaultText;
+  if (ageEffectDetail) {
+    ageEffectDetail.hidden = !evidence?.detail;
+    ageEffectDetail.textContent = evidence?.detail || "";
+  }
+}
+
 function getBoundary(id) { return data.boundaries.find(boundary => boundary.id === id); }
 function getCurrentItem() { const boundary = getBoundary(selectedBoundaryId); return boundary?.items?.find(item => item.id === selectedItemId) || null; }
 function getVisibleItems(boundary) {
@@ -2363,7 +2512,7 @@ function renderBoundaries() {
         items.forEach(item => {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
-          itemButton.textContent = item.menuType === "study"
+          itemButton.textContent = item.depthOf || item.menuType === "study"
             ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
             : item.label;
           if (item.depthOf) itemButton.classList.add("submenu-depth");
@@ -2608,28 +2757,31 @@ function ensureHealthLegend() {
   healthLegend.innerHTML = `
     <div class="health-legend-title-row">
       <div class="health-legend-title">Organgesundheit · Marker</div>
-      <button class="inline-info-button health-legend-info-button" type="button" aria-label="Information zur Bedeutung von Außenring und Organfüllung" aria-expanded="false">i</button>
+      <button class="inline-info-button health-legend-info-button" type="button" aria-label="Information zur Gesamtübersicht und Bedeutung der Organmarker" aria-expanded="false">i</button>
     </div>
-    <div class="health-legend-row">
-      <span class="health-scale" aria-hidden="true">
-        <span style="--legend-shade:#f2f2f2"></span>
-        <span style="--legend-shade:#bdbdbd"></span>
-        <span style="--legend-shade:#777"></span>
-        <span style="--legend-shade:#111"></span>
-      </span>
-      <span><strong>hell</strong> = niedriger · <strong>dunkel</strong> = höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
-    </div>
-    <div class="health-legend-row">
-      <span class="legend-foundation-link" aria-hidden="true"></span>
-      <span><strong>Außenring</strong> = Zur aktuellen Auswahl besteht ein geprüfter Organbezug durch Gewebenachweis oder Gesundheitsstudie.</span>
-    </div>
-    <div class="health-legend-row health-legend-secondary">
-      <span class="legend-hatched" aria-hidden="true"></span>
-      <span>Schraffiert = gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
-    </div>
+    <p class="health-legend-summary"><strong>Gesamtübersicht:</strong> Alle im Panel geprüften Organbezüge werden gleichzeitig angezeigt.</p>
     <div class="health-legend-method inline-info-note" hidden>
-      <strong>Zwei unabhängige Signale</strong>
-      <p>Der Außenring zeigt nur einen geprüften Organbezug. Das kann ein Gewebenachweis, eine klinische Assoziation oder ein geprüfter Gesundheitspfad sein; es beweist nicht automatisch einen ursächlichen Organschaden. Die Organfüllung bleibt ausschließlich quantifizierter, normierter und zurechenbarer Krankheitslast vorbehalten.</p>
+      <strong>Gesamtübersicht und aktuelle Auswahl</strong>
+      <p>Die Bodymap bündelt alle im Panel hinterlegten und geprüften Umwelt- und Expositionsbezüge. Die dauerhaft sichtbaren Markierungen gehören deshalb nicht nur zur aktuell ausgewählten Grundlage. Ein Organ kann angeklickt werden, um seine einzelnen Einflussfaktoren, Wirkungspfade und Quellen zu erkunden; das linke Menü erschließt dieselben Zusammenhänge vom Ausgangspunkt aus.</p>
+      <div class="health-legend-row">
+        <span class="health-scale" aria-hidden="true">
+          <span style="--legend-shade:#f2f2f2"></span><span style="--legend-shade:#bdbdbd"></span><span style="--legend-shade:#777"></span><span style="--legend-shade:#111"></span>
+        </span>
+        <span><strong>Hell bis dunkel:</strong> niedriger bis höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
+      </div>
+      <div class="health-legend-row">
+        <span class="legend-foundation-link" aria-hidden="true"></span>
+        <span><strong>Außenring:</strong> Mindestens ein geprüfter Organbezug durch Gewebenachweis oder Gesundheitsstudie ist irgendwo im Panel hinterlegt.</span>
+      </div>
+      <div class="health-legend-row">
+        <span class="legend-age-elevated" aria-hidden="true"></span>
+        <span><strong>Stärkerer Außenring:</strong> Für mindestens eine Altersgruppe ist irgendwo im Panel ein Mehr-Effekt belegt. Der Altersschalter zeigt, für welche Gruppe die Aussage gilt.</span>
+      </div>
+      <div class="health-legend-row health-legend-secondary">
+        <span class="legend-hatched" aria-hidden="true"></span>
+        <span><strong>Schraffur:</strong> Gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
+      </div>
+      <p>Außenring und Organfüllung sind unabhängige Signale. Ein Ring kann auch einen Gewebenachweis oder eine klinische Assoziation kennzeichnen und beweist nicht automatisch einen ursächlichen Organschaden.</p>
     </div>`;
   const infoButton = healthLegend.querySelector(".health-legend-info-button");
   const infoNote = healthLegend.querySelector(".health-legend-method");
@@ -2687,7 +2839,7 @@ function renderHotspots() {
 
 function clearHotspotStates() {
   document.querySelectorAll(".hotspot-dot").forEach(dot => {
-    dot.classList.remove("is-selected", "is-unquantified", "is-quantified", "has-foundation-link");
+    dot.classList.remove("is-selected", "is-unquantified", "is-quantified", "has-foundation-link", "is-age-elevated");
     dot.classList.add("is-neutral");
     dot.style.removeProperty("--hotspot-fill");
     const organId = dot.dataset.organ;
@@ -2707,24 +2859,60 @@ function impactLinksToSelectedFoundation(impact) {
 function applyFoundationLinkRings() {
   const aggregate = getPrototypeAggregateHealth();
   for (const impact of aggregate?.impacts || []) {
-    if (!impactLinksToSelectedFoundation(impact)) continue;
+    const hasVerifiedPath = (impact?.contributors || []).some(item =>
+      Boolean(item.route?.boundaryId) ||
+      (item.pathways || []).some(pathway => pathway.foundationLinkEligible === true)
+    );
+    if (!hasVerifiedPath) continue;
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) continue;
     dot.classList.add("has-foundation-link");
-    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || impact.label}. Geprüfter Gesundheitspfad zur gewählten Grundlage vorhanden.`);
+    if (hasAnyHigherAgeEffect(impact)) dot.classList.add("is-age-elevated");
+    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || impact.label}. Mindestens ein geprüfter Gesundheitspfad ist im Panel hinterlegt.`);
+  }
+
+  for (const network of Object.values(knowledgeNetworks || {})) {
+    for (const signal of network?.healthContext?.markerSignals || []) {
+      const organId = normalizeImpactOrgan(signal.organ);
+      const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
+      if (!dot) continue;
+      dot.classList.add("has-foundation-link");
+      if (hasAnyHigherAgeEffect(signal)) dot.classList.add("is-age-elevated");
+    }
   }
 }
 
 function applyKnowledgeOrganLinks() {
   const network = getActiveKnowledgeContext()?.network;
   for (const signal of network?.healthContext?.markerSignals || []) {
+    if (!appliesToSelectedAgeGroup(signal)) continue;
+    const scopes = signal.scopes || (signal.scope ? [signal.scope] : []);
+    if (scopes.length && !scopes.includes(getSelectedScope())) continue;
     const organId = normalizeImpactOrgan(signal.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) continue;
     dot.classList.add("has-foundation-link");
-    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || signal.organ}. ${signal.label || "Geprüfter Organbezug vorhanden."} Keine Aussage über einen ursächlichen Organschaden.`);
+    if (getAgeEffect(signal)?.status === "higher_effect") dot.classList.add("is-age-elevated");
+    if (signal.fillStatus === "unquantified_organ_effect") {
+      dot.classList.remove("is-neutral");
+      dot.classList.add("is-unquantified");
+    }
+    const limitation = signal.signalType === "recognized_occupational_disease"
+      ? "Organwirkung belegt; keine quantifizierte zurechenbare Krankheitslast."
+      : "Keine Aussage über einen ursächlichen Organschaden.";
+    dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || signal.organ}. ${signal.label || "Geprüfter Organbezug vorhanden."} ${limitation}`);
   }
+}
+
+function getActiveKnowledgeMarkerSignal(organId) {
+  const network = getActiveKnowledgeContext()?.network;
+  return (network?.healthContext?.markerSignals || []).find(signal => {
+    if (!appliesToSelectedAgeGroup(signal)) return false;
+    const scopes = signal.scopes || (signal.scope ? [signal.scope] : []);
+    return normalizeImpactOrgan(signal.organ) === normalizeImpactOrgan(organId)
+      && (!scopes.length || scopes.includes(getSelectedScope()));
+  }) || null;
 }
 
 function renderHealth(health) {
@@ -2736,6 +2924,7 @@ function renderHealth(health) {
   clearHotspotStates();
   applyFoundationLinkRings();
   applyKnowledgeOrganLinks();
+  updateAgeGroupDisplay();
   const impacts = health?.impacts || [];
   if (!impacts.length) {
     const systemImpacts = health?.systemImpacts || [];
@@ -2751,9 +2940,11 @@ function renderHealth(health) {
   }
   const texts = [];
   impacts.forEach(impact => {
+    if (!appliesToSelectedAgeGroup(impact)) return;
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) return;
+    if (getAgeEffect(impact)?.status === "higher_effect") dot.classList.add("is-age-elevated");
     if (impact.healthContributionView) {
       if (typeof impact.burdenScore === "number") {
         const score = Math.max(0, Math.min(100, impact.burdenScore));
@@ -2933,7 +3124,8 @@ function renderHealthContributionCards(items) {
 function openOrganOverlay(organId, preserveHidden = false) {
   selectedOrganId = organId;
   const def = HOTSPOTS[organId];
-  const impact = getImpactForOrgan(organId);
+  const activeKnowledgeSignal = getActiveKnowledgeMarkerSignal(organId);
+  const impact = activeKnowledgeSignal ? null : getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
   if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
@@ -2990,6 +3182,7 @@ function openOrganOverlay(organId, preserveHidden = false) {
       });
     });
   } else {
+    const knowledgeSignal = activeKnowledgeSignal;
     organOverlayContent.classList.remove("health-contribution-layout");
     if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
       if (organOverlayNoteHomeNextSibling && organOverlayNoteHomeNextSibling.parentNode === organOverlayNoteHomeParent) {
@@ -3001,14 +3194,16 @@ function openOrganOverlay(organId, preserveHidden = false) {
 
     organOverlayFinding.textContent = impact
       ? (findingText.textContent || "–")
-      : "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
+      : knowledgeSignal?.label || "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
 
     organOverlayNote.innerHTML = `
       <details class="organ-context-details">
         <summary>Einordnung</summary>
         <p>${impact
           ? "Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>."
-          : "Der Marker ist Teil der Bodymap, bleibt aber neutral, bis ein konkreter Umwelt–Expositions–Gesundheitspfad geprüft und importiert wurde."}</p>
+          : knowledgeSignal?.note || (knowledgeSignal
+            ? "Der Außenring kennzeichnet einen geprüften, aber nicht als Organstatus quantifizierten Gesundheitsbezug."
+            : "Der Marker ist Teil der Bodymap, bleibt aber neutral, bis ein konkreter Umwelt–Expositions–Gesundheitspfad geprüft und importiert wurde.")}</p>
       </details>`;
   }
   document.querySelectorAll('.hotspot-dot').forEach(dot => dot.classList.toggle('is-selected', dot.dataset.organ === organId));
@@ -3149,9 +3344,17 @@ function chooseFirstItemForScope() {
   selectedBoundaryId = "freshwater"; selectedItemId = items[0]?.id || null;
   if (selectedItemId) selectItem("freshwater", selectedItemId); else selectBoundary("freshwater");
 }
-function resetPanel() { regionSelect.value = "global"; timeWindow = "data"; chooseFirstItemForScope(); }
+function resetPanel() { regionSelect.value = "global"; selectedAgeGroup = "adults"; timeWindow = "data"; chooseFirstItemForScope(); updateAgeGroupDisplay(); }
 
 regionSelect.addEventListener("change", chooseFirstItemForScope);
+ageGroupButtons.forEach(button => button.addEventListener("click", () => {
+  const nextGroup = button.dataset.ageGroup;
+  if (!nextGroup || nextGroup === selectedAgeGroup) return;
+  selectedAgeGroup = nextGroup;
+  closeOrganOverlay();
+  renderHealth(currentHealth);
+  updateAgeGroupDisplay();
+}));
 
 function setLocationInfoOpen(open) {
   if (!locationInfoButton || !locationInfo) return;

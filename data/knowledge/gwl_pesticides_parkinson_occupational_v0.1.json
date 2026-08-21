@@ -1,0 +1,142 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Parkinson-Syndrom durch berufliche Pestizidexposition",
+  "status": "official_assessment",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "Parkinson · berufliche Exposition",
+    "effectFocus": "International untersuchter Zusammenhang zwischen langjähriger beruflicher Pestizidanwendung und primärem Parkinson-Syndrom; Deutschland hat den definierten Expositionspfad als Berufskrankheit anerkannt"
+  },
+  "corePrinciples": [
+    "Die biologische Wirkung ist nicht auf Deutschland beschränkt; die formale Anerkennung als Berufskrankheit gilt im deutschen Recht.",
+    "Der Eintrag betrifft langjährige, häufige und eigene berufliche Anwendung, nicht Pestizidkontakt im Allgemeinen.",
+    "Der Gesundheitspfad wird nicht aus der globalen FAO-Einsatzmenge abgeleitet.",
+    "Außenring und Schraffierung markieren gemeinsam den geprüften Organbezug und die belegte Organwirkung ohne quantifizierte zurechenbare Krankheitslast."
+  ],
+  "nodes": [
+    { "id": "component_pesticides", "type": "domain_component", "label": "Pestizide" },
+    { "id": "activity_occupational_application", "type": "human_activity", "label": "Langjährige, häufige eigene berufliche Anwendung" },
+    { "id": "exposure_pesticides", "type": "exposure", "label": "Berufliche Pestizidexposition" },
+    { "id": "effect_parkinson", "type": "health_effect", "label": "Primäres Parkinson-Syndrom" },
+    { "id": "organ_brain_nerves", "type": "organ_system", "label": "Gehirn & Nerven" }
+  ],
+  "edges": [
+    { "from": "component_pesticides", "to": "activity_occupational_application", "relationType": "used_in", "evidenceStatus": "strong" },
+    { "from": "activity_occupational_application", "to": "exposure_pesticides", "relationType": "causes_exposure", "evidenceStatus": "strong" },
+    { "from": "exposure_pesticides", "to": "effect_parkinson", "relationType": "can_contribute_to", "evidenceStatus": "strong" },
+    { "from": "effect_parkinson", "to": "organ_brain_nerves", "relationType": "affects", "evidenceStatus": "strong" }
+  ],
+  "measurements": [
+    {
+      "id": "germany_bk1322_2026",
+      "node": "effect_parkinson",
+      "geography": "Deutschland",
+      "period": "seit 1. August 2026",
+      "metric": "Anerkennung als Berufskrankheit",
+      "result": "BK Nr. 1322",
+      "display": "BK Nr. 1322",
+      "interpretation": "Parkinson-Syndrom durch langjährig, häufig und selbst angewendete Pestizide ist in Deutschland als Berufskrankheit anerkannt.",
+      "uncertainty": "Die Anerkennung erfolgt im Einzelfall. Maßgeblich sind Erkrankungsbild, versicherte Tätigkeit und das rekonstruierte berufliche Expositionsmaß.",
+      "sourceRefs": ["src_bmas_bk1322", "src_baua_parkinson_pesticides"],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "germany_bk1322_exposure_criterion",
+      "node": "exposure_pesticides",
+      "geography": "Deutschland",
+      "period": "wissenschaftliche Empfehlung 2025",
+      "metric": "Dosismaß für die besondere beruflich exponierte Personengruppe",
+      "result": "mindestens 100 gegebenenfalls trendkorrigierte Anwendungstage innerhalb einer Funktionsgruppe",
+      "display": "≥ 100 Anwendungstage",
+      "interpretation": "Herbizide, Fungizide und Insektizide werden jeweils getrennt bewertet; Anwendungstage verschiedener Funktionsgruppen werden nicht addiert.",
+      "uncertainty": "Das Dosismaß ist ein Anerkennungs- und Gruppenkriterium, kein allgemeiner biologischer Schwellenwert ohne Risiko unterhalb von 100 Tagen.",
+      "sourceRefs": ["src_baua_parkinson_pesticides"],
+      "displayType": "study_evidence"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_occupational_pesticides_parkinson",
+      "label": "Langjährige häufige eigene Pestizidanwendung → berufliche Exposition → primäres Parkinson-Syndrom → Gehirn & Nerven",
+      "nodes": ["activity_occupational_application", "exposure_pesticides", "effect_parkinson", "organ_brain_nerves"],
+      "evidenceStatus": "strong"
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "verified_pathway_without_quantified_attributable_burden",
+    "markerSignals": [
+      {
+        "organ": "brain",
+        "signalType": "recognized_occupational_disease",
+        "fillStatus": "unquantified_organ_effect",
+        "label": "Langjährige berufliche Pestizidanwendung ist als Ursache eines primären Parkinson-Syndroms unter definierten Voraussetzungen anerkannt.",
+        "note": "Der Zusammenhang ist international untersucht. Deutschland liefert mit BK Nr. 1322 einen klaren institutionellen Beleg und konkrete Anerkennungskriterien; diese Rechtswirkung gilt nicht automatisch in anderen Staaten. Keine quantifizierte zurechenbare Krankheitslast.",
+        "sourceRefs": ["src_bmas_bk1322", "src_baua_parkinson_pesticides"]
+      }
+    ],
+    "systemImpacts": [
+      {
+        "system": "brain",
+        "label": "Gehirn & Nerven",
+        "evidenceStatus": "strong",
+        "note": "Geprüfter beruflicher Expositionspfad zu primärem Parkinson-Syndrom."
+      }
+    ],
+    "bodymapRule": "Gehirn & Nerven erhält einen Außenring für den geprüften Expositionsbezug und eine schraffierte Füllung für die belegte Organwirkung. Eine quantifizierte zurechenbare Krankheitslast auf der gemeinsamen Panel-Skala liegt nicht vor."
+  },
+  "sources": [
+    {
+      "id": "src_bmas_bk1322",
+      "title": "Siebte Verordnung zur Änderung der Berufskrankheiten-Verordnung",
+      "authors": "Bundesministerium für Arbeit und Soziales",
+      "publisher": "BMAS",
+      "year": 2026,
+      "type": "official_regulation_information",
+      "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/siebte-verordnung-zur-aenderung-der-berufskrankheiten-verordnung.html",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_baua_parkinson_pesticides",
+      "title": "Wissenschaftliche Empfehlung: Parkinson-Syndrom durch langjährig, häufig und selbst angewendete Pestizide",
+      "authors": "Ärztlicher Sachverständigenbeirat Berufskrankheiten",
+      "publisher": "BAuA / BMAS",
+      "year": 2025,
+      "type": "official_scientific_assessment",
+      "url": "https://www.baua.de/DE/Themen/Praevention/Koerperliche-Gesundheit/Berufskrankheiten/pdf/Empfehlung-Parkinson-Pestizide.pdf?__blob=publicationFile&v=5",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_bmas_parkinson_2025",
+      "title": "Berufskrankheit Parkinson-Syndrom durch Pestizide",
+      "authors": "Bundesministerium für Arbeit und Soziales",
+      "publisher": "BMAS",
+      "year": 2025,
+      "type": "official_summary",
+      "url": "https://www.bmas.de/DE/Service/Presse/Meldungen/2025/berufskrankheit-parkinson-syndrom-durch-pestizide.html",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Neue Substanzen",
+    "item": "Parkinson · berufliche Exposition",
+    "parentId": "pesticides-global",
+    "classification": "health_pathway"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Die Anerkennung und das Expositionskriterium sind keine epidemiologische Jahresreihe. Eine mehrjährige Statistik zu BK Nr. 1322 kann erst nach mehreren Berichtsjahren entstehen.",
+    "panelRule": "Keinen künstlichen Zeitverlauf erzeugen. Inkrafttreten, Expositionsmaß und Wirkungspfad als belegte Kontextwerte zeigen."
+  },
+  "presentation": {
+    "primaryMeasurementId": "germany_bk1322_2026",
+    "referenceLabel": "Deutschland: BK Nr. 1322",
+    "finding": "Langjährige, häufige und eigene berufliche Pestizidanwendung kann unter definierten Voraussetzungen als Ursache eines primären Parkinson-Syndroms anerkannt werden.",
+    "effectPath": "Berufliche Pestizidanwendung → langjährige Exposition → primäres Parkinson-Syndrom → Gehirn & Nerven",
+    "uncertainty": "Der internationale biologische Zusammenhang und die deutsche rechtliche Anerkennung sind zu unterscheiden. Die Anerkennung gilt nicht für Pestizide insgesamt oder jede beliebige Exposition.",
+    "hidePrimaryMeasurementInKnowledgeView": false
+  }
+}

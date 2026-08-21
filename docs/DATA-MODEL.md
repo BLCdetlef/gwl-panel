@@ -35,9 +35,23 @@ Ein Item kann enthalten:
 
 `timePoints[]` überschreiben bei Bedarf Werte des übergeordneten Items. Es werden nur tatsächlich hinterlegte Messpunkte angezeigt; zwischen ihnen wird nicht automatisch interpoliert.
 
+## Projektionen
+
+Beobachtungen und Projektionen werden getrennt dargestellt. Ohne belastbare präzisierende Faktoren verwendet das Panel als Standard genau einen Projektionspfad: die Fortschreibung des jüngeren beobachteten Trends einer methodisch konsistenten Reihe. Trendfenster, jährliche Änderungsrate und Basisjahr müssen benannt werden. Geeignete veröffentlichte Fachszenarien oder belastbare Einflussfaktoren haben Vorrang; ein fachlich nicht fortschreibbarer Indikator erhält keine Projektion.
+
 ## Gesundheitsbezug
 
 `health.impacts[]` verknüpft einen konkreten Umwelt-/Expositionsbefund mit Organen oder Organsystemen. Beispiel:
+
+### Rechercheprinzip: Menge → Exposition/Dosis → Organwirkung
+
+Für weitere Recherchen wird nach Möglichkeit dieselbe Beweiskette aufgebaut:
+
+1. **Relevante Menge:** Produktion, Einsatz, Freisetzung oder Umweltkonzentration beschreibt den potenziellen Belastungsdruck.
+2. **Belegte Exposition oder Dosis:** Aufnahmeweg, exponierte Gruppe, Dauer und – sofern verfügbar – gemessene äußere oder innere Dosis. Eine globale Einsatz- oder Produktionsmenge wird nicht selbst als Dosis bezeichnet.
+3. **Nachgewiesene Organwirkung:** Ein konkreter, durch geeignete Studien oder anerkannte Bewertungen gestützter Zusammenhang mit einem Organ oder Organsystem.
+
+Eine Mengenreihe allein begründet keine Organwirkung. Die Bodymap wird nur verknüpft, wenn Expositionspfad und gesundheitlicher Befund belastbar belegt sind; räumliche Reichweite, Evidenzstärke und rechtliche Anerkennung bleiben dabei getrennte Angaben.
 
 ```js
 {
@@ -55,6 +69,12 @@ Ein Item kann enthalten:
 - `functionLoss: null` bedeutet: Ein gesundheitlicher Befund kann belegt sein, aber eine einheitliche 0–100-%-Funktionsminderung ist nicht belegt. Der Kuller wird dann schraffiert.
 - `prevalence` ist **nicht** automatisch `functionLoss`.
 - Fehlt ein belegter Gesundheitsbezug vollständig, bleibt der Kuller neutral hell.
+
+### Altersgruppen
+
+Die Bodymap bietet genau drei grobe Ansichten: `children` (0–17 Jahre), `adults` (18–64 Jahre, Standard) und `older` (ab 65 Jahren). Feinere Altersbereiche werden nicht als zusätzliche Schalter angelegt, sondern als Studienkontext unter WIRKUNG ausgegeben.
+
+Organbezüge oder Wirkungen können optional `ageGroups[]` sowie `ageEffects.<group>` tragen. Ein stärkerer Außenring ist nur bei `status: "higher_effect"` zulässig, wenn ein altersbezogener Mehr-Effekt gegenüber Erwachsenen fachlich oder statistisch belegt ist. Die bloße Auswahl einer Altersgruppe, ihre Aufnahme in die Stichprobe oder allgemeine Vulnerabilitätsannahmen verändern die Ringstärke nicht. Fehlende Altersauswertung wird nicht als fehlendes Risiko interpretiert.
 
 ## Bodymap-IDs und medizinische Bilder
 

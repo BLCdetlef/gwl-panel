@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.43-b26">
+  <link rel="stylesheet" href="style.css?v=0.9.46-b29">
 </head>
 <body>
   <main class="app-shell">
@@ -66,6 +66,7 @@
               <option value="STEPS" selected>STEPS · angekündigte Maßnahmen</option>
               <option value="NZE">NZE · Netto-Null 2050</option>
             </select>
+            <p class="projection-method-note">Projektionsmethode: Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben. Liegen geeignete Fachszenarien oder Einflussfaktoren vor, werden diese stattdessen verwendet und benannt.</p>
           </div>
           <div class="slider-wrap">
             <input id="timeSlider" type="range" min="0" max="1" value="0" step="1" aria-label="Jahr">
@@ -107,6 +108,7 @@
         <details class="accordion">
           <summary>Wirkungspfad</summary>
           <p id="effectPath">–</p>
+          <p id="ageEffectDetail" class="age-effect-detail" hidden></p>
         </details>
 
         <details class="accordion uncertainty-box">
@@ -162,6 +164,15 @@
           <div id="locationInfo" class="location-info" role="note" hidden>
             <strong>So wird der Raumbezug verwendet</strong>
             <p>Ein Wert gilt nur dann als lokal, wenn seine Untersuchung genau diesen Ort abdeckt. Daten einer übergeordneten Ebene erscheinen als regionaler oder nationaler Kontext. Globale Werte bleiben ein globaler Referenzkontext und werden nicht auf den gewählten Ort übertragen. Fehlen passende Daten, bleibt die Anzeige neutral.</p>
+          </div>
+          <div class="age-group-control" role="group" aria-label="Altersgruppe">
+            <span class="eyebrow">Altersgruppe</span>
+            <div class="age-group-options">
+              <button type="button" data-age-group="children" aria-pressed="false">Kinder</button>
+              <button type="button" data-age-group="adults" aria-pressed="true">Erwachsene</button>
+              <button type="button" data-age-group="older" aria-pressed="false">Ältere Menschen</button>
+            </div>
+            <p id="ageGroupStatus">Standardansicht · 18–64 Jahre</p>
           </div>
         </div>
 
@@ -231,7 +242,7 @@
       </div>
     </section>
   </main>
-  <script src="data.js?v=0.9.43-b26"></script>
-  <script src="app.js?v=0.9.43-b26"></script>
+  <script src="data.js?v=0.9.46-b29"></script>
+  <script src="app.js?v=0.9.46-b29"></script>
 </body>
 </html>

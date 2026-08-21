@@ -278,6 +278,13 @@ window.GWL_DATA = {
       summary: "Die Planetare Grenze Neue Substanzen umfasst menschengemachte Stoffe und Materialien, deren Produktion und Freisetzung die globale Bewertungs- und Überwachungskapazität überfordert.",
       items: [
         {
+          id: "pesticides-global",
+          scope: "global",
+          label: "Pestizide in der Landwirtschaft",
+          type: "Teilbereich",
+          summary: "Globaler landwirtschaftlicher Pestizideinsatz als Wirkstoffmenge; Beobachtungen und rechnerische Trendprojektion werden getrennt dargestellt."
+        },
+        {
           id: "pfas",
           scope: "all",
           label: "PFAS",

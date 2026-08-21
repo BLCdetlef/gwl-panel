@@ -1,0 +1,94 @@
+{
+  "format": "gwl-knowledge-network-v1.1",
+  "version": "0.1",
+  "topic": "Globale PFAS-Emissionen · POPE",
+  "status": "model_inventory",
+  "entry": {
+    "planetaryBoundary": "Neue Substanzen",
+    "domainComponent": "PFAS",
+    "subComponent": "Globale Emissionen · POPE"
+  },
+  "corePrinciples": [
+    "POPE bilanziert modellierte globale Emissionen ausgewählter PFAS in Luft und Wasser; es ist weder eine Produktionsstatistik noch eine Erfassung aller PFAS.",
+    "Die Modellspanne wird zusammen mit dem Best-Guess-Wert gezeigt.",
+    "Für das Inventar wird keine Projektion über 2020 hinaus ergänzt."
+  ],
+  "nodes": [
+    { "id": "component_pfas", "type": "domain_component", "label": "PFAS" },
+    { "id": "pressure_pfas_release", "type": "pressure", "label": "PFAS-Emissionen" },
+    { "id": "medium_air", "type": "environmental_medium", "label": "Luft" },
+    { "id": "medium_water", "type": "environmental_medium", "label": "Wasser" }
+  ],
+  "edges": [
+    { "from": "component_pfas", "to": "pressure_pfas_release", "relationType": "emitted_as", "evidenceStatus": "modeled" },
+    { "from": "pressure_pfas_release", "to": "medium_air", "relationType": "released_to", "evidenceStatus": "modeled" },
+    { "from": "pressure_pfas_release", "to": "medium_water", "relationType": "released_to", "evidenceStatus": "modeled" }
+  ],
+  "measurements": [
+    {
+      "id": "global_pfas_pope_inventory",
+      "node": "pressure_pfas_release",
+      "geography": "Global",
+      "period": "kumuliert 1950–2020",
+      "metric": "Modellierte Emissionen ausgewählter PFAS in Luft und Wasser",
+      "result": "≈ 279.649 t (Best Guess)",
+      "display": "≈ 279.649 t (Best Guess)",
+      "interpretation": "Die aktuelle POPE-v3.1.2-Summendatei weist 22 Stoffzeilen aus. Die aggregierte Modellspanne beträgt ≈ 38.923–404.381 t.",
+      "uncertainty": "Modellinventar auf Grundlage unterschiedlicher Emissionsdaten, räumlicher Proxys und Annahmen. Keine Produktionsmenge, keine direkte Messreihe und keine Erfassung sämtlicher PFAS.",
+      "calculation": "Summe aller Stoffzeilen der Szenarien Best Guess, Lower Bound und Upper Bound für air und water. ocean wird nicht zusätzlich addiert, weil es den Weitertransport eines Teils der Wasseremissionen beschreibt.",
+      "sourceRefs": ["src_pope_2026", "src_pope_zenodo_v312"]
+    }
+  ],
+  "pathways": [
+    {
+      "label": "Modellierter Emissionspfad",
+      "chain": ["Herstellung, Nutzung und Entsorgung", "PFAS-Emissionen", "Luft und Wasser", "globale Verteilung"],
+      "evidenceStatus": "modeled",
+      "caution": "Der Inventarwert ist ein Belastungsmaß und keine menschliche Dosis."
+    }
+  ],
+  "healthContext": {
+    "systemImpacts": [],
+    "note": "Aus der globalen Emissionssumme allein wird keine Organwirkung abgeleitet. Dafür ist ein konkreter Expositions- und Wirkungspfad erforderlich."
+  },
+  "presentation": {
+    "primaryMeasurementId": "global_pfas_pope_inventory"
+  },
+  "projectionPolicy": {
+    "included": false,
+    "reason": "POPE ist bereits ein modelliertes historisches Emissionsinventar. Eine Fortschreibung über 2020 würde zusätzliche, nicht durch präzisierende Faktoren gestützte Modellannahmen einführen."
+  },
+  "knowledgeGaps": [
+    {
+      "id": "gap_pope_coverage",
+      "question": "Wie lassen sich künftig weitere PFAS und aktualisierte Emissionsjahre methodisch konsistent ergänzen?",
+      "priority": "high"
+    }
+  ],
+  "actionScope": {
+    "status": "not_assessed",
+    "methodNote": "Für diesen Inventareintrag wird kein eigener Handlungsspielraum bewertet.",
+    "dimensions": []
+  },
+  "sources": [
+    {
+      "id": "src_pope_2026",
+      "title": "POPE: an annual global half degree emission inventory for PFAS 1950–2020",
+      "type": "peer_reviewed_model_inventory",
+      "authors": "Simon et al.",
+      "journal": "Earth System Science Data",
+      "access": "open_full_text",
+      "year": 2026,
+      "url": "https://doi.org/10.5194/essd-18-5713-2026"
+    },
+    {
+      "id": "src_pope_zenodo_v312",
+      "title": "POPE PFAS emission inventory v3.1.2 – summary_table_tons.csv",
+      "type": "research_dataset",
+      "publisher": "Zenodo",
+      "access": "open_full_text",
+      "year": 2026,
+      "url": "https://zenodo.org/records/20308182"
+    }
+  ]
+}

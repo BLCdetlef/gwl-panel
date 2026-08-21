@@ -666,6 +666,13 @@
       ]
     }
   ],
+  "projectionAssessment": {
+    "label": "tragfähig · quellenübergreifend",
+    "grade": "robust_scenario_projection",
+    "comparability": "qualified",
+    "rationale": "Historie und WEO-Szenarien beschreiben die globale Energieversorgung aus Erdgas in derselben harmonisierten Einheit. Beobachtung und Modell stammen jedoch aus unterschiedlichen Datensystemen; der Übergang wird deshalb nicht verbunden oder interpoliert.",
+    "rule": "Nur veröffentlichte WEO-2025-Stützjahre zeigen; CPS, STEPS und NZE nicht als Wahrscheinlichkeiten oder Rangfolge lesen."
+  },
   "projectionSeries": [
     {
       "id": "global_natural_gas_tes_weo2025_cps",
@@ -797,7 +804,8 @@
     "defaultYear": 2025,
     "missingYears": [],
     "allowInterpolation": false,
-    "projectionYears": [],
-    "note": "Nur historische Jahreswerte 1965–2025; keine Prognosen und keine Interpolation."
+    "projectionYears": [2035, 2040, 2050],
+    "projectionStatus": "scenario_view_available",
+    "note": "Historische Jahreswerte und veröffentlichte WEO-Szenariostützpunkte werden in getrennten Ansichten gezeigt; keine Interpolation."
   }
 }

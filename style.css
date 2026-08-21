@@ -41,6 +41,7 @@ a { color: inherit; }
 .submenu.open { display: grid; }
 .submenu button { border: 1px solid var(--line); background: var(--soft2); border-radius: 8px; padding: 8px 9px; text-align: left; cursor: pointer; line-height: 1.25; font-size: 12px; }
 .submenu button.active { background: #d7d7d2; }
+.submenu button.submenu-depth { margin-left: 12px; width: calc(100% - 12px); }
 .submenu button.submenu-heading { border-color: transparent; background: transparent; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: default; opacity: 1; }
 .state-card, .time-card, .metric, .accordion, .organ-readout, .location-control { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
 .state-card { padding: 14px; margin-bottom: 10px; }
@@ -60,6 +61,13 @@ a { color: inherit; }
 .scenario-controls select { min-width: 205px; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 5px 7px; font-size: 10px; }
 .time-card.projection-mode { background: #f1f4f6; border-color: #aeb9c3; }
 .time-card.projection-mode #timeSlider { accent-color: #394b5d; }
+.projection-method-note {
+  flex-basis: 100%;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
 .slider-wrap { position: relative; padding: 15px 4px 22px; }
 #timeSlider { width: 100%; accent-color: #222; cursor: pointer; }
 #timeSlider:disabled { cursor: default; opacity: .45; }
@@ -148,6 +156,12 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 .location-info[hidden] { display: none; }
 .location-info strong { display: block; margin-bottom: 4px; }
 .location-info p { margin: 0; }
+.age-group-control { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line); }
+.age-group-options { display: grid; grid-template-columns: .8fr 1fr 1.35fr; gap: 4px; margin-top: 5px; }
+.age-group-options button { min-width: 0; padding: 6px 4px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--text); font-size: 10px; cursor: pointer; }
+.age-group-options button[aria-pressed="true"] { background: var(--text); color: #fff; border-color: var(--text); }
+#ageGroupStatus { margin: 6px 0 0; color: var(--muted); font-size: 10px; line-height: 1.35; }
+.age-effect-detail { margin-top: 7px !important; padding-top: 7px; border-top: 1px solid var(--line); color: var(--muted); }
 .bodymap-panel { position: relative; }
 .bodymap-stage { position: relative; min-height: 630px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, #f7f7f5, #f1f1ed); overflow: hidden; }
 .bodymap-image { width: 100%; height: auto; display: block; }
@@ -160,6 +174,7 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 .hotspot-dot.is-quantified { background: var(--hotspot-fill, #444); }
 .hotspot-dot.is-unquantified { background: repeating-linear-gradient(135deg, #efefeb 0 7px, #9f9f9a 7px 14px); color: #222; }
 .hotspot-dot.has-foundation-link::after { content: ""; position: absolute; inset: -8px; border: 2px solid var(--text); border-radius: 50%; pointer-events: none; }
+.hotspot-dot.has-foundation-link.is-age-elevated::after { border-width: 5px; inset: -10px; }
 .hotspot-label { position: absolute; left: calc(100% - 4px); top: 50%; transform: translateY(-50%); margin-left: 6px; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); border-radius: 999px; padding: 3px 8px; font-size: 12px; white-space: nowrap; line-height: 1.2; color: #222; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
 .hotspot-group.left .hotspot-label { left: auto; right: calc(100% - 4px); margin-left: 0; margin-right: 6px; }
 .organ-readout { padding: 10px; background: #fff; margin-top: 9px; }
@@ -242,6 +257,7 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
   letter-spacing: .05em;
 }
 .health-legend-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.health-legend-summary { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.35; }
 .health-legend-title-row .inline-info-button { width: 18px; height: 18px; margin-left: 0; font-size: 11px; }
 .health-legend-row {
   display: flex;
@@ -264,6 +280,8 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 }
 .legend-foundation-link { position: relative; flex: 0 0 auto; width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; background: #ecece8; }
 .legend-foundation-link::after { content: ""; position: absolute; inset: -4px; border: 2px solid var(--text); border-radius: 50%; }
+.legend-age-elevated { position: relative; flex: 0 0 auto; width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; background: #ecece8; }
+.legend-age-elevated::after { content: ""; position: absolute; inset: -5px; border: 4px solid var(--text); border-radius: 50%; }
 .health-legend-method { margin-top: 8px; }
 .health-legend-method p { margin: 4px 0 0; }
 .health-legend strong { color: var(--text); }
@@ -991,6 +1009,13 @@ body.nutrient-mode .connections-panel {
   font-size: 9px;
 }
 .oil-boundary-links { display: grid; gap: 7px; }
+.knowledge-series-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+.knowledge-series-card { border: 1px solid var(--line); border-radius: 10px; padding: 11px; background: #fff; }
+.knowledge-series-card > p { margin: 5px 0; }
+.knowledge-series-card svg { display: block; width: 100%; height: 92px; margin: 8px 0; color: #385f55; background: linear-gradient(to bottom, transparent 49%, #e3e8e5 50%, transparent 51%); }
+.knowledge-series-values { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; }
+.knowledge-projection-card { border-style: dashed; background: #f7f9f7; }
+.knowledge-projection-values { display: flex; flex-wrap: wrap; gap: 7px 14px; font-size: 0.78rem; }
 .oil-boundary-link {
   padding: 9px 10px;
   border: 1px solid var(--line);

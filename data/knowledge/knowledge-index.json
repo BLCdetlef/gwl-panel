@@ -140,6 +140,26 @@
           "label": "Neue Substanzen",
           "items": [
             {
+              "id": "pfas-pope-global-emissions",
+              "label": "Globale Emissionen · POPE",
+              "type": "emission_inventory",
+              "parentId": "pfas",
+              "source": "data/knowledge/gwl_pfas_pope_global_v0.1.json"
+            },
+            {
+              "id": "pesticides-global",
+              "label": "Pestizide in der Landwirtschaft",
+              "type": "component",
+              "source": "data/knowledge/gwl_pesticides_global_v0.1.json"
+            },
+            {
+              "id": "pesticides-parkinson-occupational",
+              "label": "Parkinson · berufliche Exposition",
+              "type": "health_pathway",
+              "parentId": "pesticides-global",
+              "source": "data/knowledge/gwl_pesticides_parkinson_occupational_v0.1.json"
+            },
+            {
               "id": "facade_biocides_burkhardt",
               "label": "Fassadenbiozide · Auswaschung",
               "type": "component",
@@ -243,6 +263,25 @@
               "id": "disinformation",
               "label": "Desinformation",
               "source": "data/knowledge/gwl_disinformation_pilot_v0.1.json"
+            }
+          ]
+        },
+        {
+          "id": "air_pollution",
+          "label": "Luftverschmutzung",
+          "items": [
+            {
+              "id": "no2_sources_exposure",
+              "label": "NO₂ · Quellen & Exposition",
+              "source": "data/knowledge/gwl_no2_sources_exposure_global_v0.1.json",
+              "type": "component"
+            },
+            {
+              "id": "no2_child_asthma",
+              "label": "Asthma bei Kindern",
+              "source": "data/knowledge/gwl_no2_child_asthma_global_v0.1.json",
+              "parentId": "no2_sources_exposure",
+              "type": "component"
             }
           ]
         }
