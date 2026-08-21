@@ -65,10 +65,10 @@ Eine Mengenreihe allein begründet keine Organwirkung. Die Bodymap wird nur verk
 
 ### Darstellungsregel
 
-- `functionLoss` ist eine Zahl von `0` bis `100` **nur wenn eine belastbare fachliche Grundlage genau diese Skala trägt**. Daraus darf der Kuller als Graustufe berechnet werden.
-- `functionLoss: null` bedeutet: Ein gesundheitlicher Befund kann belegt sein, aber eine einheitliche 0–100-%-Funktionsminderung ist nicht belegt. Der Kuller wird dann schraffiert.
+- `functionLoss` ist eine Zahl von `0` bis `100` **nur wenn eine belastbare fachliche Grundlage genau diese Skala trägt**. Daraus darf der Marker als Graustufe berechnet werden.
+- `functionLoss: null` bedeutet: Ein gesundheitlicher Befund kann belegt sein, aber eine einheitliche 0–100-%-Funktionsminderung ist nicht belegt. Der Marker wird dann schraffiert.
 - `prevalence` ist **nicht** automatisch `functionLoss`.
-- Fehlt ein belegter Gesundheitsbezug vollständig, bleibt der Kuller neutral hell.
+- Fehlt ein belegter Gesundheitsbezug vollständig, bleibt der Marker neutral hell.
 
 ### Altersgruppen
 
@@ -78,7 +78,7 @@ Organbezüge oder Wirkungen können optional `ageGroups[]` sowie `ageEffects.<gr
 
 ## Bodymap-IDs und medizinische Bilder
 
-Die Bodymap arbeitet mit stabilen Organ-/System-IDs. `ORGAN_MEDIA` in `app.js` ordnet diesen IDs eine statische medizinische Bilddatei zu. Mehrere Kuller dürfen dasselbe Systembild verwenden, wenn es fachlich dieselbe Systemübersicht darstellt, z. B. `liver` und `gut` → `organ_digestive.jpg`.
+Die Bodymap arbeitet mit stabilen Organ-/System-IDs. `ORGAN_MEDIA` in `app.js` ordnet diesen IDs eine statische medizinische Bilddatei zu. Mehrere Marker dürfen dasselbe Systembild verwenden, wenn es fachlich dieselbe Systemübersicht darstellt, z. B. `liver` und `gut` → `organ_digestive.jpg`.
 
 Aktuell:
 
@@ -98,7 +98,7 @@ skeleton         -> organ_skeleton.jpg
 musculoskeletal  -> organ_skeleton.jpg
 ```
 
-Die beiden Geschlechtsorgane bleiben zwei getrennte Bodymap-Kuller und zwei getrennte Bilddateien.
+Die beiden Geschlechtsorgane bleiben zwei getrennte Bodymap-Marker und zwei getrennte Bilddateien.
 
 ## Organfenster: dynamischer Inhalt
 
@@ -122,7 +122,7 @@ Neue Felder sollen nur ergänzt werden, wenn sie eine fachliche Aussage tragen. 
 Jeder Eintrag unter `organs` besitzt:
 - `id`: stabile technische Organ-ID
 - `label`: sichtbare Beschriftung
-- `x`, `y`: Position des Kullers in Prozent der Bodymap
+- `x`, `y`: Position des Markers in Prozent der Bodymap
 - `side`: Seite der Beschriftung (`left` oder `right`)
 - `image`: Bilddatei des Organfensters
 - `layout`: Darstellungsmodus des Organbildes

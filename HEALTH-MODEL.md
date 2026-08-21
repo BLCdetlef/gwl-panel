@@ -83,7 +83,7 @@ Einheitlich verwenden:
 
 Nicht mehr verwenden:
 
-- „Kuller“
+- umgangssprachliche Bezeichnungen für die Organmarker
 - „Funktionsverlust“ als allgemeine Organfarb-Skala
 - frei erfundene 0–100-Gewichte
 

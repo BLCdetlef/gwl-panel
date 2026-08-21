@@ -163,6 +163,31 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 #ageGroupStatus { margin: 6px 0 0; color: var(--muted); font-size: 10px; line-height: 1.35; }
 .age-effect-detail { margin-top: 7px !important; padding-top: 7px; border-top: 1px solid var(--line); color: var(--muted); }
 .bodymap-panel { position: relative; }
+.life-filter-panel { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 7px 9px; margin-top: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft2); }
+.life-filter-panel .health-marker-controls, .life-filter-panel .location-control { min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.life-filter-panel .health-marker-filters { margin-top: 0; }
+.life-filter-panel .location-control { display: grid; grid-template-columns: 1fr; align-content: start; }
+.life-filter-panel select { box-sizing: border-box; height: 36px; padding: 6px 9px; font-size: 12px; line-height: 1.2; }
+.life-filter-panel > .age-group-control { grid-column: 1 / -1; margin-top: 1px; padding-top: 7px; border-top: 1px solid var(--line); }
+.marker-overlay-control { position: absolute; z-index: 8; top: 9px; left: 9px; display: flex; align-items: center; gap: 5px; }
+.marker-overlay-control .health-marker-switch { min-width: 88px; background: rgba(34,34,32,.92); box-shadow: 0 2px 8px rgba(0,0,0,.16); backdrop-filter: blur(4px); }
+.marker-overlay-info { width: 24px; height: 24px; padding: 0; border: 1px solid rgba(0,0,0,.18); border-radius: 50%; background: rgba(255,255,255,.94); color: var(--text); font-size: 11px; font-weight: 700; cursor: pointer; }
+.marker-overlay-note { position: absolute; top: 31px; left: 0; width: min(260px, calc(100vw - 70px)); padding: 8px 9px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.98); box-shadow: 0 7px 20px rgba(0,0,0,.15); font-size: 10px; line-height: 1.4; }
+.marker-overlay-note[hidden] { display: none; }
+.health-marker-controls { margin-bottom: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.health-marker-master-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.health-marker-master-row strong, .health-marker-master-row small { display: block; }
+.health-marker-master-row small { margin-top: 2px; color: var(--muted); font-size: 10px; }
+.health-marker-switch { display: inline-flex; align-items: center; gap: 6px; min-width: 64px; padding: 4px 8px 4px 5px; border: 1px solid var(--text); border-radius: 999px; background: var(--text); color: #fff; cursor: pointer; }
+.health-marker-switch span { width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.health-marker-switch b { font-size: 10px; }
+.health-marker-switch[aria-checked="false"] { flex-direction: row-reverse; border-color: var(--line); background: #e5e5e1; color: var(--text); }
+.health-marker-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+.health-marker-filters label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.health-marker-filters select { width: 100%; margin-top: 4px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--text); font-size: 11px; text-transform: none; letter-spacing: normal; }
+.health-marker-filter-note { margin: 7px 0 0; color: var(--muted); font-size: 9px; }
+.hotspot-layer.markers-disabled .hotspot-dot { background: #ecece8 !important; border-color: #fff; box-shadow: 0 0 0 2px rgba(34,57,82,.22), 0 3px 8px rgba(0,0,0,.18); }
+.hotspot-layer.markers-disabled .hotspot-dot::after { display: none !important; }
 .bodymap-stage { position: relative; min-height: 630px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, #f7f7f5, #f1f1ed); overflow: hidden; }
 .bodymap-image { width: 100%; height: auto; display: block; }
 .hotspot-layer { position: absolute; inset: 0; }
@@ -204,6 +229,7 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 @media (max-width: 1280px) { .bodymap-stage { min-height: 560px; } .hotspot-dot { width: 28px; height: 28px; } .hotspot-label { font-size: 11px; } }
 @media (max-width: 1120px) and (min-width: 821px) { body { padding: 6px; } .app-shell { min-height: calc(100vh - 12px); border-radius: 12px; } .panel { padding: 12px; } .metrics { grid-template-columns: 1fr; } .metric { min-height: 0; } .bodymap-stage { min-height: 500px; } }
 @media (max-width: 820px) { body { padding: 8px; } .app-shell { min-height: 0; border-radius: 12px; } .panel-grid { grid-template-columns: 1fr; } .panel + .panel { border-left: 0; border-top: 1px solid var(--line); } .organ-overlay { inset: 120px 6px 52px 6px; } .organ-overlay-card { width: 96%; } .organ-overlay-content.side-by-side { grid-template-columns: 1fr; } .bodymap-stage { min-height: 650px; } }
+@media (max-width: 480px) { .life-filter-panel { grid-template-columns: 1fr; } .life-filter-panel > .age-group-control { grid-column: 1; } }
 @media (max-width: 480px) {
   html { font-size: 18px; }
   .topbar { align-items: flex-start; }
@@ -239,7 +265,7 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 }
 
 
-/* v0.9: health state belongs in the organ kuller, not in the body illustration. */
+/* v0.9: health state belongs in the organ marker, not in the body illustration. */
 .health-legend {
   margin-top: 9px;
   padding: 9px 10px;
@@ -335,6 +361,15 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
   background: linear-gradient(180deg, #fbfdfc 0%, #f4f8f6 100%);
 }
 .knowledge-panel[hidden] { display: none !important; }
+.knowledge-panel:has(> .knowledge-panel-collapsible) { padding: 0; overflow: hidden; }
+.knowledge-panel-collapsible > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 12px; list-style: none; cursor: pointer; color: var(--text); }
+.knowledge-panel-collapsible > summary::-webkit-details-marker { display: none; }
+.knowledge-panel-collapsible > summary span { font-size: 10px; font-weight: 700; letter-spacing: .045em; }
+.knowledge-panel-collapsible > summary small { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 9px; white-space: nowrap; }
+.knowledge-panel-collapsible > summary small::after { content: "+"; display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 50%; color: var(--text); font-size: 14px; line-height: 1; }
+.knowledge-panel-collapsible[open] > summary small::after { content: "−"; }
+.knowledge-panel-collapsible[open] > summary { border-bottom: 1px solid #d8dfdc; }
+.knowledge-panel-collapsible-content { padding: 11px 12px 12px; }
 .knowledge-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .knowledge-head h3 { margin: 3px 0 2px; font-size: 17px; }
 .knowledge-head p { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.4; }

@@ -19,10 +19,7 @@ window.GWL_DATA = {
     europe: { label: "Europa", path: "Global → Europa" },
     germany: { label: "Deutschland", path: "Global → Europa → Deutschland" },
     sh: { label: "Schleswig-Holstein", path: "Global → Europa → Deutschland → Schleswig-Holstein" },
-    luebeck: { label: "Lübeck", path: "Global → Europa → Deutschland → Schleswig-Holstein → Lübeck" },
-    africa: { label: "Afrika", path: "Global → Afrika" },
-    tanzania: { label: "Tansania", path: "Global → Afrika → Tansania" },
-    tindigani: { label: "Tindigani · Hai District", path: "Global → Afrika → Tansania → Hai District → Tindigani" }
+    luebeck: { label: "Lübeck", path: "Global → Europa → Deutschland → Schleswig-Holstein → Lübeck" }
   },
   timePresets: {
     blc: { label: "BLC 1700–2100", min: 1700, max: 2100 }
@@ -128,6 +125,8 @@ window.GWL_DATA = {
         },
         {
           id: "fluoride-tindigani",
+          archived: true,
+          archiveReason: "Kein nachgewiesener Bezug zu einer menschengemachten Veränderung der im Panel geführten Systemgrenzen.",
           scope: "tindigani",
           label: "Trinkwasserfluorid · Fluorose",
           type: "Lokale Expositions- und Gesundheitsstudie",

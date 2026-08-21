@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.46 · B29";
+const GWL_BUILD_VERSION = "0.9.56 · B39";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -69,6 +69,10 @@ let projectionScenario = "STEPS";
 let currentHealth = null;
 let selectedOrganId = null;
 let selectedAgeGroup = "adults";
+let healthMarkersEnabled = true;
+let healthBoundaryFilter = "current";
+let healthOrganFilter = "all";
+let healthMarkerSwitch = null;
 let knowledgeNetworks = {};
 let knowledgePanel = null;
 
@@ -1796,10 +1800,18 @@ function renderGenericKnowledgeView(network, indexEntry) {
   const groupLabel = indexEntry?.group?.label || network.entry?.domainComponent || "Knowledge";
   const itemLabel = indexEntry?.item?.label || network.entry?.subComponent || network.topic || "Thema";
   const isExtension = indexEntry?.boundary?.id?.startsWith("eah_");
+  const compactKnowledgeView = presentation.compactKnowledgeView === true;
 
   return `
+    ${compactKnowledgeView ? `
+    <details class="knowledge-panel-collapsible">
+      <summary>
+        <span>ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE</span>
+        <small>Bei Bedarf anzeigen</small>
+      </summary>
+      <div class="knowledge-panel-collapsible-content">` : ""}
     <div class="oil-pilot generic-knowledge-view">
-      ${presentation.compactKnowledgeView ? `<div class="eyebrow">ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE</div>` : `
+      ${compactKnowledgeView ? "" : `
         <div class="eyebrow">${isExtension ? "ERGÄNZENDE SYSTEMGRENZE" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
         <h2>${groupLabel} → ${itemLabel}</h2>
         <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
@@ -1810,7 +1822,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
       `}
 
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
-      ${values.length ? `${presentation.compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
+      ${values.length ? `${compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
       ${genericTimeSeriesCards(network)}
 
@@ -1838,7 +1850,8 @@ function renderGenericKnowledgeView(network, indexEntry) {
         <p>${action.methodNote || ""}</p>
         ${actionRows}
       </details>
-    </div>`;
+    </div>
+    ${compactKnowledgeView ? "</div></details>" : ""}`;
 }
 
 function renderTechSocialGroupIntro(group) {
@@ -1986,7 +1999,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
     lifeNote.textContent = genericHealthReadout(network);
     if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
     else setLink("–", null);
-    // Globale Klimazustandswerte allein aktivieren bewusst keine Organkuller.
+    // Globale Klimazustandswerte allein aktivieren bewusst keine Organmarker.
     renderHealth(null);
     updateCauseButtons(null, null);
     return;
@@ -2374,20 +2387,29 @@ function getActiveAgeEvidence(network = getActiveKnowledgeContext()?.network) {
 
 function updateAgeGroupDisplay() {
   ageGroupButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.ageGroup === selectedAgeGroup)));
+  const activeNetwork = getActiveKnowledgeContext()?.network;
+  const activeMarkerSignals = activeNetwork?.healthContext?.markerSignals || [];
+  const markerExcludedByAge = activeMarkerSignals.length > 0
+    && !activeMarkerSignals.some(signal => appliesToSelectedAgeGroup(signal));
   const evidence = getActiveAgeEvidence();
   const defaultText = selectedAgeGroup === "adults"
     ? "Standardansicht · 18–64 Jahre"
     : `${ageGroupLabel()} · altersbezogene Verstärkung nur bei Beleg`;
-  if (ageGroupStatus) ageGroupStatus.textContent = evidence?.status === "higher_effect"
-    ? `${ageGroupLabel()} · stärkerer Effekt belegt`
-    : evidence?.status === "no_difference"
-      ? `${ageGroupLabel()} · untersucht, kein Unterschied nachgewiesen`
-      : evidence?.status === "group_included"
-        ? `${ageGroupLabel()} · Gruppe enthalten`
-        : defaultText;
+  if (ageGroupStatus) ageGroupStatus.textContent = markerExcludedByAge
+    ? `${ageGroupLabel()} · kein Organmarker aus dieser Studie`
+    : evidence?.status === "higher_effect"
+      ? `${ageGroupLabel()} · stärkerer Effekt belegt`
+      : evidence?.status === "no_difference"
+        ? `${ageGroupLabel()} · untersucht, kein Unterschied nachgewiesen`
+        : evidence?.status === "group_included"
+          ? `${ageGroupLabel()} · Gruppe enthalten`
+          : defaultText;
   if (ageEffectDetail) {
-    ageEffectDetail.hidden = !evidence?.detail;
-    ageEffectDetail.textContent = evidence?.detail || "";
+    const markerAgeHint = markerExcludedByAge
+      ? `Der Organmarker dieses Befunds gilt nur für ${[...new Set(activeMarkerSignals.flatMap(signal => signal.ageGroups || []))].map(ageGroupLabel).join(" und ")}.`
+      : "";
+    ageEffectDetail.hidden = !(markerAgeHint || evidence?.detail);
+    ageEffectDetail.textContent = markerAgeHint || evidence?.detail || "";
   }
 }
 
@@ -2396,11 +2418,16 @@ function getCurrentItem() { const boundary = getBoundary(selectedBoundaryId); re
 function getVisibleItems(boundary) {
   if (!boundary?.items) return [];
   return boundary.items.filter(item =>
-    item.scope === "all" || item.scope === getSelectedScope()
+    item.archived !== true && (item.scope === "all" || item.scope === getSelectedScope())
   );
 }
 function getTimePoints(item) { return item?.timePoints ? [...item.timePoints].sort((a,b)=>a.year-b.year) : []; }
-function renderRegionPath() { const scope = data.scopes[getSelectedScope()]; regionPath.textContent = scope?.path || scope?.label || "Global"; }
+function renderRegionPath() {
+  const selectedScope = getSelectedScope();
+  const scope = data.scopes[selectedScope];
+  regionPath.textContent = scope?.path || scope?.label || "";
+  regionPath.hidden = selectedScope === "global";
+}
 
 
 function isEahExtension(boundary) {
@@ -2748,13 +2775,42 @@ function getImpactForOrgan(organId) { const impacts = currentHealth?.impacts || 
 function ensureHealthLegend() {
   if (healthLegend?.isConnected) return healthLegend;
   const bodymapPanel = document.querySelector(".bodymap-panel");
+  const bodymapStage = bodymapPanel?.querySelector(".bodymap-stage");
+  const locationControl = document.querySelector(".location-control");
   const readout = document.getElementById("organReadout")?.closest(".organ-readout");
-  if (!bodymapPanel || !readout) return null;
+  if (!bodymapPanel || !bodymapStage || !readout) return null;
+
+  const markerOverlay = document.createElement("div");
+  markerOverlay.className = "marker-overlay-control";
+  markerOverlay.innerHTML = `
+    <button class="health-marker-switch" type="button" role="switch" aria-checked="true" aria-label="Marker-Füllungen und Außenringe"><span aria-hidden="true"></span><b>Marker an</b></button>
+    <button class="marker-overlay-info" type="button" aria-label="Information zum Marker-Schalter" aria-expanded="false">i</button>
+    <div class="marker-overlay-note" role="note" hidden>„Aus“ neutralisiert Füllungen und Außenringe. Sobald PG, Organ, Region oder Altersgruppe geändert werden, sind die Marker wieder aktiv.</div>`;
+  bodymapStage.appendChild(markerOverlay);
+  healthMarkerSwitch = markerOverlay.querySelector(".health-marker-switch");
+  const markerInfoButton = markerOverlay.querySelector(".marker-overlay-info");
+  const markerInfoNote = markerOverlay.querySelector(".marker-overlay-note");
+  healthMarkerSwitch.addEventListener("click", () => setHealthMarkersEnabled(!healthMarkersEnabled, { resetFilters: !healthMarkersEnabled }));
+  markerInfoButton.addEventListener("click", event => {
+    event.stopPropagation();
+    markerInfoNote.hidden = !markerInfoNote.hidden;
+    markerInfoButton.setAttribute("aria-expanded", String(!markerInfoNote.hidden));
+  });
 
   healthLegend = document.createElement("div");
   healthLegend.className = "health-legend";
   healthLegend.setAttribute("aria-label", "Legende der Organgesundheit");
   healthLegend.innerHTML = `
+    <div class="health-marker-controls" aria-label="Organmarkierungen filtern">
+      <div class="health-marker-filters">
+        <label>PG-Bezug
+          <select class="health-boundary-filter"><option value="current">Aktuelle PG</option><option value="all">Alle PGs</option></select>
+        </label>
+        <label>Organ
+          <select class="health-organ-filter"><option value="all">Alle Organe</option>${Object.entries(HOTSPOTS).map(([id, organ]) => `<option value="${id}">${organ.label}</option>`).join("")}</select>
+        </label>
+      </div>
+    </div>
     <div class="health-legend-title-row">
       <div class="health-legend-title">Organgesundheit · Marker</div>
       <button class="inline-info-button health-legend-info-button" type="button" aria-label="Information zur Gesamtübersicht und Bedeutung der Organmarker" aria-expanded="false">i</button>
@@ -2785,12 +2841,54 @@ function ensureHealthLegend() {
     </div>`;
   const infoButton = healthLegend.querySelector(".health-legend-info-button");
   const infoNote = healthLegend.querySelector(".health-legend-method");
+  const boundaryFilter = healthLegend.querySelector(".health-boundary-filter");
+  const organFilter = healthLegend.querySelector(".health-organ-filter");
+  // Browser können Formularwerte beim Neuladen wiederherstellen. Die Filter-
+  // anzeige muss dennoch immer denselben Zustand wie die Renderlogik zeigen.
+  if (boundaryFilter) boundaryFilter.value = healthBoundaryFilter;
+  if (organFilter) organFilter.value = healthOrganFilter;
+  boundaryFilter?.addEventListener("change", () => {
+    setHealthMarkersEnabled(true);
+    healthBoundaryFilter = boundaryFilter.value;
+    renderHealth(currentHealth);
+  });
+  organFilter?.addEventListener("change", () => {
+    setHealthMarkersEnabled(true);
+    healthOrganFilter = organFilter.value;
+    renderHealth(currentHealth);
+  });
   infoButton?.addEventListener("click", () => {
     infoNote.hidden = !infoNote.hidden;
     infoButton.setAttribute("aria-expanded", String(!infoNote.hidden));
   });
+  const filterPanel = document.createElement("div");
+  filterPanel.className = "life-filter-panel";
+  bodymapStage.insertAdjacentElement("afterend", filterPanel);
+  filterPanel.appendChild(healthLegend.querySelector(".health-marker-controls"));
+  if (locationControl) {
+    filterPanel.appendChild(locationControl);
+    const ageControl = locationControl.querySelector(".age-group-control");
+    if (ageControl) filterPanel.appendChild(ageControl);
+  }
   bodymapPanel.insertBefore(healthLegend, readout);
   return healthLegend;
+}
+
+function setHealthMarkersEnabled(enabled, { resetFilters = false } = {}) {
+  healthMarkersEnabled = enabled;
+  healthMarkerSwitch?.setAttribute("aria-checked", String(enabled));
+  const switchLabel = healthMarkerSwitch?.querySelector("b");
+  if (switchLabel) switchLabel.textContent = enabled ? "Marker an" : "Marker aus";
+  hotspotLayer.classList.toggle("markers-disabled", !enabled);
+  if (enabled && resetFilters) {
+    healthBoundaryFilter = "all";
+    healthOrganFilter = "all";
+    const boundaryFilter = document.querySelector(".health-boundary-filter");
+    const organFilter = document.querySelector(".health-organ-filter");
+    if (boundaryFilter) boundaryFilter.value = healthBoundaryFilter;
+    if (organFilter) organFilter.value = healthOrganFilter;
+    renderHealth(currentHealth);
+  }
 }
 
 function updatePrototypeVersion() {
@@ -2839,6 +2937,7 @@ function renderHotspots() {
 
 function clearHotspotStates() {
   document.querySelectorAll(".hotspot-dot").forEach(dot => {
+    dot.closest(".hotspot-group").hidden = healthOrganFilter !== "all" && dot.dataset.organ !== healthOrganFilter;
     dot.classList.remove("is-selected", "is-unquantified", "is-quantified", "has-foundation-link", "is-age-elevated");
     dot.classList.add("is-neutral");
     dot.style.removeProperty("--hotspot-fill");
@@ -2859,6 +2958,7 @@ function impactLinksToSelectedFoundation(impact) {
 function applyFoundationLinkRings() {
   const aggregate = getPrototypeAggregateHealth();
   for (const impact of aggregate?.impacts || []) {
+    if (healthBoundaryFilter === "current" && !impactLinksToSelectedFoundation(impact)) continue;
     const hasVerifiedPath = (impact?.contributors || []).some(item =>
       Boolean(item.route?.boundaryId) ||
       (item.pathways || []).some(pathway => pathway.foundationLinkEligible === true)
@@ -2872,6 +2972,10 @@ function applyFoundationLinkRings() {
     dot.setAttribute("aria-label", `${HOTSPOTS[organId]?.label || impact.label}. Mindestens ein geprüfter Gesundheitspfad ist im Panel hinterlegt.`);
   }
 
+  // In der Gesamtübersicht ergänzen wir Ringe aus allen Wissensnetzen. Bei
+  // „Aktuelle PG“ würde dieser Durchlauf den Filter wieder aufheben; die
+  // Marker des aktiven Netzes werden anschließend gezielt gesetzt.
+  if (healthBoundaryFilter === "current") return;
   for (const network of Object.values(knowledgeNetworks || {})) {
     for (const signal of network?.healthContext?.markerSignals || []) {
       const organId = normalizeImpactOrgan(signal.organ);
@@ -2941,6 +3045,7 @@ function renderHealth(health) {
   const texts = [];
   impacts.forEach(impact => {
     if (!appliesToSelectedAgeGroup(impact)) return;
+    if (healthBoundaryFilter === "current" && !impactLinksToSelectedFoundation(impact)) return;
     const organId = normalizeImpactOrgan(impact.organ);
     const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
     if (!dot) return;
@@ -3344,12 +3449,16 @@ function chooseFirstItemForScope() {
   selectedBoundaryId = "freshwater"; selectedItemId = items[0]?.id || null;
   if (selectedItemId) selectItem("freshwater", selectedItemId); else selectBoundary("freshwater");
 }
-function resetPanel() { regionSelect.value = "global"; selectedAgeGroup = "adults"; timeWindow = "data"; chooseFirstItemForScope(); updateAgeGroupDisplay(); }
+function resetPanel() { setHealthMarkersEnabled(true); regionSelect.value = "global"; selectedAgeGroup = "adults"; timeWindow = "data"; chooseFirstItemForScope(); updateAgeGroupDisplay(); }
 
-regionSelect.addEventListener("change", chooseFirstItemForScope);
+regionSelect.addEventListener("change", () => {
+  setHealthMarkersEnabled(true);
+  chooseFirstItemForScope();
+});
 ageGroupButtons.forEach(button => button.addEventListener("click", () => {
   const nextGroup = button.dataset.ageGroup;
   if (!nextGroup || nextGroup === selectedAgeGroup) return;
+  setHealthMarkersEnabled(true);
   selectedAgeGroup = nextGroup;
   closeOrganOverlay();
   renderHealth(currentHealth);
