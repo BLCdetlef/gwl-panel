@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.65-b48">
+  <link rel="stylesheet" href="style.css?v=0.9.73-b56">
 </head>
 <body>
   <main class="app-shell">
@@ -47,12 +47,15 @@
           </div>
         </div>
 
-        <section class="time-card top-card" aria-labelledby="timeTitle">
-          <div class="time-head">
-            <div>
-              <span class="eyebrow" id="timeTitle">Zeit</span>
-              <strong id="timeReadout">–</strong>
-            </div>
+        <div id="contributionRoleCard" class="contribution-role-card" role="status">
+          <span class="eyebrow">Beitragsrolle</span>
+          <strong>Gesamtübersicht</strong>
+          <p>Wähle einen Beitrag in der linken Navigation. Seine Rolle bestimmt, welche Angaben in dieser Spalte fachlich erwartet werden.</p>
+        </div>
+
+        <section class="time-card top-card" aria-label="Zeitreihe">
+          <div class="time-head" hidden>
+            <div><strong id="timeReadout" hidden>–</strong></div>
             <div class="time-presets" aria-label="Zeitfenster">
               <button id="dataWindowButton" class="time-preset active" type="button">Datenbereich</button>
               <button id="projectionWindowButton" class="time-preset projection-preset" type="button" hidden>Szenarien</button>
@@ -68,11 +71,17 @@
             </select>
             <p class="projection-method-note">Projektionsmethode: Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben. Liegen geeignete Fachszenarien oder Einflussfaktoren vor, werden diese stattdessen verwendet und benannt.</p>
           </div>
-          <div class="slider-wrap">
+          <p id="timeStatus" class="time-status">Für diese Messreihe ist noch keine Zeitnavigation hinterlegt.</p>
+          <div class="time-chart-wrap">
+            <svg id="timeChart" class="time-chart" viewBox="0 0 500 112" role="img" aria-labelledby="timeChartTitle timeChartDescription">
+              <title id="timeChartTitle">Zeitreihe von 1700 bis 2100</title>
+              <desc id="timeChartDescription">Noch keine numerische Zeitreihe hinterlegt.</desc>
+            </svg>
+          </div>
+          <div class="slider-wrap legacy-time-controls" aria-hidden="true">
             <input id="timeSlider" type="range" min="0" max="1" value="0" step="1" aria-label="Jahr">
             <div id="timeMarkers" class="time-markers" aria-hidden="true"></div>
           </div>
-          <p id="timeStatus" class="time-status">Für diese Messreihe ist noch keine Zeitnavigation hinterlegt.</p>
         </section>
 
         <div class="state-card">
@@ -137,6 +146,7 @@
           <div class="panel-heading-main">
             <h2 id="lebenTitle">LEBEN</h2>
             <button id="causeButtonLife" class="cause-chip" type="button" hidden>Ursachen</button>
+            <button id="organMatrixToggle" class="organ-matrix-toggle" type="button" aria-expanded="false" aria-controls="organMatrixPanel">Organ-Matrix</button>
           </div>
           <span class="mode-chip muted">Gesundheitsbezug</span>
         </div>
@@ -237,7 +247,7 @@
       </div>
     </section>
   </main>
-  <script src="data.js?v=0.9.65-b48"></script>
-  <script src="app.js?v=0.9.65-b48"></script>
+  <script src="data.js?v=0.9.73-b56"></script>
+  <script src="app.js?v=0.9.73-b56"></script>
 </body>
 </html>

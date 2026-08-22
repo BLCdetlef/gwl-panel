@@ -18,13 +18,13 @@
         "proxy": "Wurzelzonen-Bodenfeuchte (root-zone soil moisture)"
       }
     ],
-    "note": "Blaues und Grünes Wasser sind gleichrangige Kontrollvariablen; keine der beiden Reihen ist eine Vertiefungsstudie."
+    "note": "Beide Reihen zeigen den Anteil gestörter Fläche, nicht die Menge vorhandener Wasserreserven. Höhere Werte bedeuten: An mehr Orten ist es beim Abfluss oder bei der Bodenfeuchte ungewöhnlich trocken oder nass."
   },
   "timeSeries": [
     {
       "id": "blue_water_streamflow",
-      "title": "Blaues Wasser – Abfluss",
-      "measure": "Anteil der globalen eisfreien Landfläche mit lokalen Abweichungen von präindustriell-ähnlicher Variabilität",
+      "title": "Blaues Wasser – ungewöhnlicher Abfluss",
+      "measure": "Anteil der globalen eisfreien Landfläche mit ungewöhnlich hohem oder niedrigem Abfluss gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
       "period": "1901–2019",
       "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
@@ -199,8 +199,8 @@
     },
     {
       "id": "green_water_rootzone_soil_moisture",
-      "title": "Grünes Wasser – Bodenfeuchte",
-      "measure": "Anteil der globalen eisfreien Landfläche mit lokalen Abweichungen von präindustriell-ähnlicher Variabilität",
+      "title": "Grünes Wasser – ungewöhnliche Bodenfeuchte für Pflanzen",
+      "measure": "Anteil der globalen eisfreien Landfläche mit für Pflanzen ungewöhnlich trockener oder nasser Bodenfeuchte gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
       "period": "1901–2019",
       "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",

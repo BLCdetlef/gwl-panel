@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.65 · B48";
+const GWL_BUILD_VERSION = "0.9.73 · B56";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -29,6 +29,7 @@ const timeSlider = document.getElementById("timeSlider");
 const timeReadout = document.getElementById("timeReadout");
 const timeStatus = document.getElementById("timeStatus");
 const timeMarkers = document.getElementById("timeMarkers");
+const timeChart = document.getElementById("timeChart");
 const dataWindowButton = document.getElementById("dataWindowButton");
 const projectionWindowButton = document.getElementById("projectionWindowButton");
 const blcWindowButton = document.getElementById("blcWindowButton");
@@ -52,6 +53,7 @@ const closeHealthPathButton = document.getElementById("closeHealthPathButton");
 const causeButtonGround = document.getElementById("causeButtonGround");
 const causeButtonEffect = document.getElementById("causeButtonEffect");
 const causeButtonLife = document.getElementById("causeButtonLife");
+const organMatrixToggle = document.getElementById("organMatrixToggle");
 const causeOverlayGround = document.getElementById("causeOverlayGround");
 const causeOverlayEffect = document.getElementById("causeOverlayEffect");
 const causeOverlayLife = document.getElementById("causeOverlayLife");
@@ -61,6 +63,7 @@ const causeTitleLife = document.getElementById("causeTitleLife");
 const causeBodyGround = document.getElementById("causeBodyGround");
 const causeBodyEffect = document.getElementById("causeBodyEffect");
 const causeBodyLife = document.getElementById("causeBodyLife");
+const contributionRoleCard = document.getElementById("contributionRoleCard");
 
 // Die Startansicht ist bewusst eine Gesamtübersicht: Erst eine Auswahl im
 // Seitenmenü legt eine konkrete Planetare Grenze als Kontext fest.
@@ -78,6 +81,7 @@ let healthMarkersEnabled = true;
 let healthBoundaryFilter = "all";
 let healthOrganFilter = "all";
 let healthMarkerSwitch = null;
+let organMatrixPanel = null;
 let knowledgeNetworks = {};
 let knowledgePanel = null;
 
@@ -505,21 +509,21 @@ function syncFreshwaterBlueGreenNavigation() {
     {
       id: "blue-water-streamflow",
       scope: "all",
-      label: "Blaues Wasser · Abfluss",
+      label: "Blaues Wasser · ungewöhnlicher Abfluss",
       enabled: true,
       knowledgeSource: FRESHWATER_KNOWLEDGE_SOURCE,
       knowledgeTimeSeriesId: "blue_water_streamflow",
-      knowledgeEffectFocus: "Blaues Wasser: Abfluss (streamflow) als Kontrollvariable der Planetaren Grenze Süßwasser.",
+      knowledgeEffectFocus: "Blaues Wasser: Anteil der Landfläche mit ungewöhnlich hohem oder niedrigem Abfluss. Ein höherer Wert bedeutet mehr gestörte Fläche – nicht mehr Wasser.",
       menuType: "control"
     },
     {
       id: "green-water-rootzone-soil-moisture",
       scope: "all",
-      label: "Grünes Wasser · Bodenfeuchte",
+      label: "Grünes Wasser · ungewöhnliche Bodenfeuchte für Pflanzen",
       enabled: true,
       knowledgeSource: FRESHWATER_KNOWLEDGE_SOURCE,
       knowledgeTimeSeriesId: "green_water_rootzone_soil_moisture",
-      knowledgeEffectFocus: "Grünes Wasser: Wurzelzonen-Bodenfeuchte als Kontrollvariable der Planetaren Grenze Süßwasser.",
+      knowledgeEffectFocus: "Grünes Wasser: Anteil der Landfläche mit für Pflanzen ungewöhnlich trockener oder nasser Bodenfeuchte. Ein höherer Wert bedeutet mehr gestörte Fläche – nicht mehr Wasser.",
       menuType: "control"
     }
   ];
@@ -1906,6 +1910,104 @@ function getActiveKnowledgeContext() {
   };
 }
 
+const CONTRIBUTION_ROLES = {
+  pg_core: {
+    menu: "PG-Kernbeitrag",
+    title: "PG-Kernbeitrag · Zustand & Grenze",
+    note: "Dieser Beitrag beschreibt eine Kontrollvariable oder einen Zustandswert der Planetaren Grenze. Messwert, Referenz beziehungsweise Grenze, Zeitraum und Modell-/Raumbezug stehen im Vordergrund."
+  },
+  deepening_with_organ: {
+    menu: "Vertiefung · Organbezug",
+    title: "Vertiefung · belegter Organbezug",
+    note: "Dieser Beitrag vertieft einen konkreten Umwelt–Expositions–Gesundheitspfad. Er kann einen Organmarker nur bei geprüftem Pfad beeinflussen; ein planetarer Grenzwert ist nicht erforderlich."
+  },
+  deepening_without_organ: {
+    menu: "Vertiefung · ohne Organbezug",
+    title: "Vertiefung · ohne Organbezug",
+    note: "Dieser Beitrag vertieft einen Umwelt-, Stoff- oder Expositionszusammenhang. Ein belastbarer Organpfad ist derzeit nicht Gegenstand oder noch nicht belegt."
+  },
+  supplementary_context: {
+    menu: "Ergänzender Kontext",
+    title: "Ergänzender Einflussbereich · Kontext",
+    note: "Dieser Beitrag gehört nicht zum PG-Kernmodell. Er ordnet einen menschengemachten Einflussbereich, Stoffstrom oder eine Lebensbedingung ein."
+  }
+};
+
+function contributionRoleIcon(roleId) {
+  const icons = {
+    pg_core: `
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
+        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
+        <circle class="role-icon-solid" cx="23.1" cy="15.25" r="1.45"/>
+        <circle class="role-icon-anchor-ring" cx="23.1" cy="12.95" r="1.8"/>
+        <path class="role-icon-anchor" d="M23.1 14.65v13.05M19.05 15.2h8.1M18.3 19.05c0 5.02 1.93 7.55 4.8 8.65 2.87-1.1 4.8-3.63 4.8-8.65M18.3 19.05l-1.42 2.06m1.42-2.06 1.72 1.37m7.88-1.37 1.42 2.06m-1.42-2.06-1.72 1.37"/>
+      </svg>`,
+    deepening_with_organ: `
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
+        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
+        <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
+        <path class="role-icon-overlay" d="m25.9 25.4 3 3M18.7 21.5h1.2l.8-1.7 1.2 3.35.9-2.15.65 1.1h1.65"/>
+        <path class="role-icon-heart" d="M22 25.25s-3.4-2.1-3.4-4.05c0-.98.73-1.72 1.68-1.72.72 0 1.35.4 1.72 1.03.37-.63 1-1.03 1.72-1.03.95 0 1.68.74 1.68 1.72 0 1.95-3.4 4.05-3.4 4.05Z"/>
+      </svg>`,
+    deepening_without_organ: `
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
+        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
+        <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
+        <path class="role-icon-overlay" d="m25.9 25.4 3 3M18.7 21.5h1.2l.8-1.7 1.2 3.35.9-2.15.65 1.1h1.65"/>
+        <path class="role-icon-heart" d="M22 25.25s-3.4-2.1-3.4-4.05c0-.98.73-1.72 1.68-1.72.72 0 1.35.4 1.72 1.03.37-.63 1-1.03 1.72-1.03.95 0 1.68.74 1.68 1.72 0 1.95-3.4 4.05-3.4 4.05Z"/>
+      </svg>`,
+    supplementary_context: `
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <circle class="role-icon-marker role-icon-marker-dashed" cx="12.25" cy="12.25" r="8.8"/>
+        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
+        <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
+        <path class="role-icon-overlay" d="m25.9 25.4 3 3M22 24.1v-4.7M22 21.8c-1.8-.05-2.55-1.15-2.55-2.08 1.75 0 2.55.85 2.55 2.08Zm0-.85c.03-1.55.88-2.38 2.4-2.38 0 1.55-.87 2.38-2.4 2.38Z"/>
+      </svg>`
+  };
+  const wrapper = document.createElement("span");
+  wrapper.className = `contribution-role-icon is-${roleId}`;
+  wrapper.innerHTML = icons[roleId] || icons.pg_core;
+  return wrapper;
+}
+
+function contributionRoleFor(boundary, item) {
+  if (item?.contributionRole && CONTRIBUTION_ROLES[item.contributionRole]) return item.contributionRole;
+  const network = item?.knowledgeSource ? getKnowledgeNetworkBySource(item.knowledgeSource) : null;
+  if ((network?.healthContext?.markerSignals || []).length) return "deepening_with_organ";
+  if (isEahExtension(boundary)) return "supplementary_context";
+  if (item?.knowledgeSource && item.menuType !== "control") return "deepening_without_organ";
+  return "pg_core";
+}
+
+function updateContributionRole(boundary = null, item = null) {
+  if (!contributionRoleCard) return;
+  if (!boundary || !item) {
+    contributionRoleCard.innerHTML = `<span class="eyebrow">Beitragsrolle</span><strong>Gesamtübersicht</strong><p>Wähle einen Beitrag in der linken Navigation. Seine Rolle bestimmt, welche Angaben in dieser Spalte fachlich erwartet werden.</p>`;
+    document.querySelectorAll(".metrics .metric, .panel-center > .accordion").forEach(node => { node.hidden = false; });
+    return;
+  }
+  const roleId = contributionRoleFor(boundary, item);
+  const role = CONTRIBUTION_ROLES[roleId];
+  contributionRoleCard.innerHTML = `<span class="eyebrow">Beitragsrolle</span><strong>${role.title}</strong><p>${role.note}</p>`;
+  requestAnimationFrame(() => {
+    if (roleId === "pg_core") {
+      document.querySelectorAll(".metrics .metric, .panel-center > .accordion").forEach(node => { node.hidden = false; });
+      return;
+    }
+    document.querySelectorAll(".metrics .metric").forEach(card => {
+      const value = card.querySelector("strong, a")?.textContent?.trim();
+      card.hidden = !value || value === "–";
+    });
+    [findingText, effectPath, uncertaintyValue].forEach(node => {
+      const card = node?.closest("details");
+      if (card) card.hidden = !node.textContent.trim() || node.textContent.trim() === "–";
+    });
+  });
+}
+
 function getKnowledgeSeries(network) {
   const preferredId = network?.presentation?.primaryTimeSeriesId;
   if (preferredId) {
@@ -1919,6 +2021,95 @@ function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
   return (network?.projectionSeries || []).find(series => series.scenario === scenario)
     || (network?.projectionSeries || [])[0]
     || null;
+}
+
+function getQualifiedProjectionSeries(network) {
+  const qualifiedGrades = new Set(["robust_scenario_projection", "qualified_scenario_projection"]);
+  return (network?.projectionSeries || []).filter(series => {
+    const assessment = getProjectionAssessment(network, series);
+    return qualifiedGrades.has(assessment?.grade) && (series.points || []).some(point =>
+      Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value))
+    );
+  });
+}
+
+function renderTimeChart(observedSeries = null, projectionSeries = []) {
+  if (!timeChart) return;
+  const width = Math.max(320, Math.round(timeChart.clientWidth || 500));
+  const height = 112;
+  timeChart.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  const plot = { left: 10, right: 10, top: 8, bottom: 27 };
+  const xMin = 1700;
+  const xMax = 2100;
+  const observed = (observedSeries?.points || [])
+    .filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value)))
+    .map(point => ({ ...point, year: Number(point.year), value: Number(point.value) }))
+    .filter(point => point.year >= xMin && point.year <= xMax)
+    .sort((a, b) => a.year - b.year);
+  const projections = projectionSeries.map(series => ({
+    ...series,
+    points: (series.points || [])
+      .filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value)))
+      .map(point => ({ ...point, year: Number(point.year), value: Number(point.value) }))
+      .filter(point => point.year >= xMin && point.year <= xMax)
+      .sort((a, b) => a.year - b.year)
+  })).filter(series => series.points.length);
+
+  if (!observed.length) {
+    timeChart.innerHTML = `<title id="timeChartTitle">Zeitreihe von 1700 bis 2100</title><desc id="timeChartDescription">Keine numerische Zeitreihe hinterlegt.</desc><rect class="time-chart-empty" x="${plot.left}" y="${plot.top}" width="${width - plot.left - plot.right}" height="${height - plot.top - plot.bottom}"/><text class="time-chart-empty-label" x="${width / 2}" y="${height / 2}">Keine numerische Zeitreihe</text><text class="time-chart-axis-label" x="${plot.left}" y="${height - 9}">1700</text><text class="time-chart-axis-label time-chart-axis-label-end" x="${width - plot.right}" y="${height - 9}">2100</text>`;
+    return;
+  }
+
+  const allValues = [...observed, ...projections.flatMap(series => series.points)].map(point => point.value);
+  const observedMin = Math.min(...observed.map(point => point.value));
+  const observedMax = Math.max(...observed.map(point => point.value));
+  const range = Math.max(observedMax - observedMin, Math.abs(observedMax) * .1, 1);
+  const yMin = Math.min(observedMin, ...allValues);
+  const yMax = Math.max(observedMax, ...allValues);
+  const yRange = Math.max(yMax - yMin, 1);
+  const x = year => plot.left + ((year - xMin) / (xMax - xMin)) * (width - plot.left - plot.right);
+  const y = value => height - plot.bottom - ((value - yMin) / yRange) * (height - plot.top - plot.bottom);
+  const makePath = points => points.map((point, index) => `${index ? "L" : "M"}${x(point.year).toFixed(2)} ${y(point.value).toFixed(2)}`).join(" ");
+  const axisYears = [1700, 2100];
+  const colors = ["#4c718b", "#6f657e", "#8b6a43", "#3f7c6d", "#9a5555"];
+  const unit = observedSeries?.unit ? ` ${observedSeries.unit}` : "";
+  const currentYear = Math.min(xMax, Math.max(xMin, new Date().getFullYear()));
+  const extrema = [...observed, ...projections.flatMap(series => series.points)];
+  const minPoint = extrema.reduce((lowest, point) => point.value < lowest.value ? point : lowest, extrema[0]);
+  const maxPoint = extrema.reduce((highest, point) => point.value > highest.value ? point : highest, extrema[0]);
+  const projectionMarkup = projections.map((series, index) => `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`).join("");
+  const observationMarkup = observed.map((point, index) => {
+    const pointX = x(point.year);
+    const before = index ? (x(observed[index - 1].year) + pointX) / 2 : Math.max(plot.left, pointX - 3);
+    const after = index < observed.length - 1 ? (pointX + x(observed[index + 1].year)) / 2 : Math.min(width - plot.right, pointX + 3);
+    const label = `Messwert ${point.year}: ${point.display || `${point.value}${unit}`}`;
+    return `<rect class="time-chart-hit" data-time-chart-year="${point.year}" x="${before}" y="${plot.top}" width="${Math.max(1, after - before)}" height="${height - plot.top - plot.bottom}" tabindex="0" role="button" aria-label="${label}"/><circle class="time-chart-point${Number(selectedYear) === point.year ? " is-selected" : ""}" cx="${pointX}" cy="${y(point.value)}" r="3"/>`;
+  }).join("");
+
+  timeChart.innerHTML = `
+    <title id="timeChartTitle">${observedSeries?.label || "Messreihe"} von 1700 bis 2100</title>
+    <desc id="timeChartDescription">Durchgezogene Linie: Messwerte. ${projections.length ? "Gestrichelte Linien: wissenschaftlich qualifizierte Szenarien." : "Keine wissenschaftlich qualifizierte Projektion hinterlegt."}</desc>
+    <defs><marker id="timeChartArrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 6 3 0 6Z" fill="#71807a"/></marker></defs>
+    <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${width - plot.right}" y2="${height - plot.bottom}" marker-end="url(#timeChartArrow)"/>
+    <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${plot.left}" y2="${plot.top}" marker-end="url(#timeChartArrow)"/>
+    <text class="time-chart-value-label" x="${Math.min(width - plot.right, x(maxPoint.year) + 4)}" y="${Math.min(height - plot.bottom - 4, y(maxPoint.value) + 9)}">${maxPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    <text class="time-chart-value-label" x="${Math.min(width - plot.right, x(minPoint.year) + 4)}" y="${Math.max(plot.top + 10, y(minPoint.value) - 5)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    <path class="time-chart-observed" d="${makePath(observed)}"/>
+    ${projectionMarkup}
+    ${observationMarkup}
+    <line class="time-chart-current-year" x1="${x(currentYear)}" y1="${plot.top}" x2="${x(currentYear)}" y2="${height - plot.bottom}"/>
+    ${axisYears.map(year => `<text class="time-chart-axis-label${year === 1700 ? " time-chart-axis-label-start" : " time-chart-axis-label-end"}" x="${x(year)}" y="${height - 9}">${year}</text>`).join("")}
+    <text class="time-chart-axis-label" x="${x(currentYear)}" y="${height - 9}">${currentYear}</text>`;
+  timeChart.querySelectorAll("[data-time-chart-year]").forEach(button => button.addEventListener("click", () => {
+    timeWindow = "data";
+    selectYear(Number(button.dataset.timeChartYear));
+  }));
+  timeChart.querySelectorAll("[data-time-chart-year]").forEach(button => button.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    timeWindow = "data";
+    selectYear(Number(button.dataset.timeChartYear));
+  }));
 }
 
 function syncProjectionScenarioOptions(network) {
@@ -1979,6 +2170,7 @@ function formatRegionalPercent(value) {
 }
 
 function setKnowledgePointDetails(network, activeBoundary, activeItem, point = null, noMeasurementYear = null) {
+  updateContributionRole(activeBoundary, activeItem);
   const series = getActiveKnowledgeSeries(network);
   const presentation = network?.presentation || {};
   const firstPathway = (network?.pathways || [])[0];
@@ -2075,6 +2267,7 @@ function appendTimeMarker(year, min, max, className = "", label = year) {
 }
 
 function renderKnowledgeTime(network) {
+  timeWindow = "data";
   syncProjectionScenarioOptions(network);
   const availableProjection = getKnowledgeProjectionSeries(network);
   if (timeWindow === "projection" && !availableProjection?.points?.length) timeWindow = "data";
@@ -2103,6 +2296,7 @@ function renderKnowledgeTime(network) {
     timeSlider.value = "0";
     timeReadout.textContent = regional.pilot.period || "2010–2019";
     timeStatus.textContent = `${regional.region.label} · Zehnjahresmittel eines modellierten Flusseinzugsgebiets; regionale Referenz, kein planetarer Grenzwert.`;
+    renderTimeChart();
     return;
   }
 
@@ -2113,6 +2307,7 @@ function renderKnowledgeTime(network) {
     timeSlider.value = "0";
     timeReadout.textContent = "–";
     timeStatus.textContent = "Für diese Knowledge-Datei ist noch keine Zeitreihe hinterlegt.";
+    renderTimeChart();
     return;
   }
 
@@ -2169,6 +2364,7 @@ function renderKnowledgeTime(network) {
   } else {
     timeStatus.textContent = "Nur tatsächlich hinterlegte Messjahre werden angezeigt; keine Interpolation.";
   }
+  renderTimeChart(getKnowledgeSeries(network), getQualifiedProjectionSeries(network));
 }
 
 
@@ -2177,7 +2373,7 @@ function getKnowledgeStatusLabel(network) {
     || network?.statusYear
     || network?.presentation?.assessmentYear
     || network?.assessmentYear;
-  return year ? `Stand ${year}` : "Stand der Grundlagenstudie";
+  return year ? `Stand ${year}` : "Keine Zeitreihe";
 }
 
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
@@ -2207,7 +2403,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeSlider.value = "0";
   timeMarkers.innerHTML = "";
   timeReadout.textContent = getKnowledgeStatusLabel(network);
-  timeStatus.textContent = "Noch keine Zeitreihe hinterlegt. Angezeigt wird der Stand der Grundlagenstudie.";
+  timeStatus.textContent = "Noch keine numerische Zeitreihe hinterlegt.";
 }
 
 function renderKnowledgePanel() {
@@ -2489,6 +2685,30 @@ function getVisibleItems(boundary) {
     item.archived !== true && (item.scope === "all" || item.scope === getSelectedScope())
   );
 }
+
+function menuHierarchyLevel(item, items) {
+  if (!item || item.menuHeading || item.groupOnly) return 0;
+  const itemById = new Map();
+  items.forEach(candidate => {
+    itemById.set(String(candidate.id || ""), candidate);
+    itemById.set(normalizeKnowledgeId(candidate.id), candidate);
+  });
+  let level = 0;
+  let parentId = item.parentId || item.depthOf || null;
+  const visited = new Set([String(item.id || "")]);
+
+  while (parentId && !visited.has(String(parentId))) {
+    level += 1;
+    visited.add(String(parentId));
+    const parent = itemById.get(String(parentId)) || itemById.get(normalizeKnowledgeId(parentId));
+    parentId = parent?.parentId || parent?.depthOf || null;
+  }
+
+  // Ältere bzw. gruppierte Einträge tragen keine Parent-ID, markieren ihre
+  // untergeordnete Rolle aber mit dem vorhandenen Pfeil oder Typ.
+  if (!level && (item.menuType === "study" || /^\s*↳/.test(String(item.label || "")))) level = 1;
+  return level;
+}
 function getTimePoints(item) { return item?.timePoints ? [...item.timePoints].sort((a,b)=>a.year-b.year) : []; }
 function renderRegionPath() {
   const selectedScope = getSelectedScope();
@@ -2616,16 +2836,32 @@ function renderBoundaries() {
         items.forEach(item => {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
-          itemButton.textContent = item.depthOf || item.menuType === "study"
-            ? `↳ ${String(item.label || "").replace(/^↳\s*/, "")}`
+          const hierarchyLevel = menuHierarchyLevel(item, items);
+          const isSubmenuItem = hierarchyLevel > 0;
+          itemButton.textContent = isSubmenuItem
+            ? String(item.label || "").replace(/^↳\s*/, "")
             : item.label;
-          if (item.depthOf) itemButton.classList.add("submenu-depth");
+          itemButton.style.setProperty("--menu-hierarchy-indent", `${hierarchyLevel * 14}px`);
+          itemButton.dataset.menuLevel = String(hierarchyLevel);
+          if (isSubmenuItem) {
+            const submenuArrow = document.createElement("span");
+            submenuArrow.className = "submenu-arrow";
+            submenuArrow.setAttribute("aria-hidden", "true");
+            itemButton.prepend(submenuArrow);
+          }
           if (item.menuHeading) {
             itemButton.classList.add("submenu-heading");
             itemButton.disabled = true;
             itemButton.setAttribute("aria-label", `${item.label}, Menügruppe`);
           } else {
             if (item.id === selectedItemId) itemButton.classList.add("active");
+            const contributionRole = contributionRoleFor(boundary, item);
+            const role = CONTRIBUTION_ROLES[contributionRole];
+            if (role) {
+              const roleIcon = contributionRoleIcon(contributionRole);
+              itemButton.insertBefore(roleIcon, itemButton.querySelector(".submenu-arrow")?.nextSibling || itemButton.firstChild);
+              itemButton.setAttribute("aria-label", `${role.menu}: ${itemButton.textContent.trim()}`);
+            }
             itemButton.addEventListener("click", () => selectItem(boundary.id, item.id));
           }
           submenu.appendChild(itemButton);
@@ -2695,12 +2931,14 @@ function setNutrientPlaceholderState() {
 }
 function setDetails(item, point = null, noMeasurementYear = null) {
   if (!item) {
+    updateContributionRole();
     metricValue.textContent = referenceValue.textContent = periodValue.textContent = uncertaintyValue.textContent = "–";
     findingText.textContent = effectPath.textContent = "–";
     lifeNote.textContent = "Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.";
     setLink("–", null);
     return;
   }
+  updateContributionRole(getBoundary(selectedBoundaryId), item);
   if (noMeasurementYear !== null) {
     metricValue.textContent = "kein Messpunkt";
     referenceValue.textContent = item.reference || "–";
@@ -2736,7 +2974,7 @@ function renderTime(item) {
   timeMarkers.innerHTML = "";
   if (!item || !points.length) {
     timeSlider.disabled = true; timeSlider.min = "0"; timeSlider.max = "1"; timeSlider.value = "0";
-    timeReadout.textContent = item?.period || "–"; timeStatus.textContent = "Für diese Messreihe ist noch keine punktweise Zeitnavigation hinterlegt."; return;
+    timeReadout.textContent = item?.period || "–"; timeStatus.textContent = "Für diese Messreihe ist noch keine punktweise Zeitnavigation hinterlegt."; renderTimeChart(); return;
   }
   let min, max;
   if (timeWindow === "blc") { min = blc.min; max = blc.max; }
@@ -2757,6 +2995,7 @@ function renderTime(item) {
   if (exact) timeStatus.textContent = `${exact.label || "Messpunkt"}. Markierte Jahre sind tatsächlich hinterlegte Messzeitpunkte.`;
   else if (timeWindow === "blc") timeStatus.textContent = "BLC-Zeitfenster 1700–2100. Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
   else timeStatus.textContent = "Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
+  renderTimeChart({ points }, []);
 }
 
 
@@ -2974,6 +3213,102 @@ function setHealthMarkersEnabled(enabled, { resetFilters = false } = {}) {
     if (organFilter) organFilter.value = healthOrganFilter;
     renderHealth(currentHealth);
   }
+}
+
+function organMatrixRows() {
+  const aggregate = getPrototypeAggregateHealth();
+  const impactsByOrgan = new Map((aggregate?.impacts || []).map(impact => [normalizeImpactOrgan(impact.organ), impact]));
+  const signalsByOrgan = new Map();
+  for (const network of Object.values(knowledgeNetworks || {})) {
+    for (const signal of network?.healthContext?.markerSignals || []) {
+      const organId = normalizeImpactOrgan(signal.organ);
+      if (!signalsByOrgan.has(organId)) signalsByOrgan.set(organId, []);
+      signalsByOrgan.get(organId).push(signal);
+    }
+  }
+
+  return Object.entries(HOTSPOTS).map(([organId, organ]) => {
+    const impact = impactsByOrgan.get(organId);
+    const contributors = impact?.contributors || [];
+    const signals = signalsByOrgan.get(organId) || [];
+    const pathways = contributors.flatMap(item => item.pathways || []);
+    const themes = [...new Set([
+      ...pathways.map(pathway => pathway.exposure),
+      ...signals.map(signal => signal.label)
+    ].filter(Boolean))];
+    const hasQuantifiedBurden = typeof impact?.burdenScore === "number";
+    const evidence = hasQuantifiedBurden
+      ? "quantifizierte Belastung"
+      : contributors.length || signals.length
+        ? "geprüfter Organbezug"
+        : "noch nicht belegt";
+    const coverage = pathways.length || signals.length
+      ? `${pathways.length + signals.length} ${pathways.length + signals.length === 1 ? "Pfad / Hinweis" : "Pfade / Hinweise"}`
+      : "keine Einträge";
+    const researchNeed = hasQuantifiedBurden
+      ? "weiter vertiefen"
+      : contributors.length + signals.length > 1
+        ? "Lücken prüfen"
+        : "prioritär prüfen";
+    return { organId, label: organ.label, themes, evidence, coverage, researchNeed };
+  });
+}
+
+function renderOrganMatrix() {
+  if (!organMatrixPanel) return;
+  const rows = organMatrixRows();
+  organMatrixPanel.innerHTML = `
+    <section class="organ-matrix-card" role="dialog" aria-modal="false" aria-labelledby="organMatrixTitle">
+      <header class="organ-matrix-head">
+        <div>
+          <span class="eyebrow">Fachliche Übersicht</span>
+          <h2 id="organMatrixTitle">Organ-Matrix</h2>
+          <p>Evidenz, Panel-Abdeckung und Recherchebedarf zu Organen und Organsystemen. Die Matrix erzeugt keinen zusätzlichen Krankheitslastwert und aktiviert keine neuen Marker.</p>
+        </div>
+        <button class="overlay-close organ-matrix-close" type="button" aria-label="Organ-Matrix schließen">×</button>
+      </header>
+      <div class="organ-matrix-key">
+        <span><b>Geprüfter Organbezug</b> = mindestens ein im Panel hinterlegter Expositions- oder Wirkungspfad.</span>
+        <span><b>Prioritär prüfen</b> = noch keine oder nur sehr geringe Abdeckung; kein Urteil über tatsächliche gesundheitliche Relevanz.</span>
+      </div>
+      <div class="organ-matrix-table-wrap">
+        <table class="organ-matrix-table">
+          <thead><tr><th>Organ / System</th><th>Hinterlegte Expositions- und Wirkungsthemen</th><th>Evidenz im Panel</th><th>Abdeckung</th><th>Recherchebedarf</th></tr></thead>
+          <tbody>${rows.map(row => `
+            <tr>
+              <th scope="row"><button class="organ-matrix-organ" type="button" data-organ-matrix-organ="${row.organId}">${row.label}</button></th>
+              <td>${row.themes.length ? row.themes.slice(0, 3).map(theme => `<span class="organ-matrix-theme">${theme}</span>`).join("") : "–"}</td>
+              <td><span class="organ-matrix-status ${row.evidence === "noch nicht belegt" ? "is-empty" : ""}">${row.evidence}</span></td>
+              <td>${row.coverage}</td>
+              <td><span class="organ-matrix-need ${row.researchNeed === "prioritär prüfen" ? "is-priority" : ""}">${row.researchNeed}</span></td>
+            </tr>`).join("")}</tbody>
+        </table>
+      </div>
+    </section>`;
+  organMatrixPanel.querySelector(".organ-matrix-close")?.addEventListener("click", closeOrganMatrix);
+  organMatrixPanel.querySelectorAll("[data-organ-matrix-organ]").forEach(button => button.addEventListener("click", () => {
+    closeOrganMatrix();
+    openOrganOverlay(button.dataset.organMatrixOrgan);
+  }));
+}
+
+function openOrganMatrix() {
+  if (!organMatrixPanel) {
+    organMatrixPanel = document.createElement("div");
+    organMatrixPanel.id = "organMatrixPanel";
+    organMatrixPanel.className = "organ-matrix-panel";
+    document.querySelector(".panel-grid")?.appendChild(organMatrixPanel);
+  }
+  closeOrganOverlay();
+  renderOrganMatrix();
+  organMatrixPanel.hidden = false;
+  organMatrixToggle?.setAttribute("aria-expanded", "true");
+}
+
+function closeOrganMatrix() {
+  if (!organMatrixPanel) return;
+  organMatrixPanel.hidden = true;
+  organMatrixToggle?.setAttribute("aria-expanded", "false");
 }
 
 function updatePrototypeVersion() {
@@ -3665,7 +4000,24 @@ timeSlider.addEventListener("input", event => {
   }
   selectYear(year);
 });
+let timeChartResizeFrame = null;
+window.addEventListener("resize", () => {
+  if (!timeChart) return;
+  if (timeChartResizeFrame) cancelAnimationFrame(timeChartResizeFrame);
+  timeChartResizeFrame = requestAnimationFrame(() => {
+    const context = getActiveKnowledgeContext();
+    if (context?.network) {
+      renderTimeChart(getKnowledgeSeries(context.network), getQualifiedProjectionSeries(context.network));
+      return;
+    }
+    renderTimeChart({ points: getTimePoints(getCurrentItem()) });
+  });
+});
 closeOverlayButton.addEventListener("click", closeOrganOverlay);
+organMatrixToggle?.addEventListener("click", () => {
+  if (organMatrixPanel && !organMatrixPanel.hidden) closeOrganMatrix();
+  else openOrganMatrix();
+});
 closeHealthPathButton?.addEventListener("click", closeHealthPathOverlay);
 causeButtonGround.addEventListener("click", () => openCauseOverlay("ground"));
 causeButtonEffect.addEventListener("click", () => openCauseOverlay("effect"));
