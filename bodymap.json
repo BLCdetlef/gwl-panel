@@ -6,8 +6,8 @@
     {
       "id": "brain",
       "label": "Gehirn & Nerven",
-      "x": 63.0,
-      "y": 5.5,
+      "x": 57.5,
+      "y": 6.5,
       "side": "right",
       "image": "assets/health/organ_brain.jpg",
       "layout": "side"
@@ -15,8 +15,8 @@
     {
       "id": "eye",
       "label": "Auge",
-      "x": 64.0,
-      "y": 10.8,
+      "x": 57.5,
+      "y": 10.5,
       "side": "right",
       "image": "assets/health/organ_eye.jpg",
       "layout": "stack"
@@ -24,7 +24,7 @@
     {
       "id": "ear",
       "label": "Ohr",
-      "x": 35.0,
+      "x": 42.5,
       "y": 10.5,
       "side": "left",
       "image": "assets/health/organ_ear.jpg",
@@ -33,8 +33,8 @@
     {
       "id": "nose",
       "label": "Nase",
-      "x": 39.0,
-      "y": 14.0,
+      "x": 43.5,
+      "y": 13.5,
       "side": "left",
       "image": "assets/health/organ_nose.jpg",
       "layout": "stack"
@@ -42,8 +42,8 @@
     {
       "id": "teeth",
       "label": "Gebiss",
-      "x": 64.0,
-      "y": 16.2,
+      "x": 57.5,
+      "y": 16.0,
       "side": "right",
       "image": "assets/health/organ_teeth.jpg",
       "layout": "stack"
@@ -51,8 +51,8 @@
     {
       "id": "tongue",
       "label": "Zunge",
-      "x": 38.0,
-      "y": 18.8,
+      "x": 43.0,
+      "y": 18.5,
       "side": "left",
       "image": "assets/health/organ_tongue.jpg",
       "layout": "stack"
@@ -60,7 +60,7 @@
     {
       "id": "lungs",
       "label": "Lunge",
-      "x": 31.0,
+      "x": 37.0,
       "y": 28.0,
       "side": "left",
       "image": "assets/health/organ_respiratory.jpg",
@@ -69,7 +69,7 @@
     {
       "id": "heart",
       "label": "Herz & Kreislauf",
-      "x": 69.0,
+      "x": 62.0,
       "y": 31.0,
       "side": "right",
       "image": "assets/health/organ_circulatory.jpg",
@@ -78,7 +78,7 @@
     {
       "id": "liver",
       "label": "Leber",
-      "x": 30.0,
+      "x": 37.0,
       "y": 37.0,
       "side": "left",
       "image": "assets/health/organ_liver.jpg",
@@ -87,7 +87,7 @@
     {
       "id": "kidneys",
       "label": "Nieren",
-      "x": 30.0,
+      "x": 37.0,
       "y": 43.5,
       "side": "left",
       "image": "assets/health/organ_urinary.jpg",
@@ -96,7 +96,7 @@
     {
       "id": "gut",
       "label": "Verdauung",
-      "x": 70.0,
+      "x": 62.0,
       "y": 46.0,
       "side": "right",
       "image": "assets/health/organ_digestive.jpg",
@@ -105,7 +105,7 @@
     {
       "id": "urinary",
       "label": "Harnwege",
-      "x": 70.0,
+      "x": 61.0,
       "y": 51.0,
       "side": "right",
       "image": "assets/health/organ_urinary.jpg",
@@ -114,25 +114,25 @@
     {
       "id": "femaleRepro",
       "label": "weibliche Geschlechtsorgane",
-      "x": 70.0,
+      "x": 59.0,
       "y": 56.5,
-      "side": "left",
+      "side": "right",
       "image": "assets/health/organ_repro_female.jpg",
       "layout": "stack"
     },
     {
       "id": "maleRepro",
       "label": "männliche Geschlechtsorgane",
-      "x": 30.0,
-      "y": 61.5,
-      "side": "right",
+      "x": 45.0,
+      "y": 55.5,
+      "side": "left",
       "image": "assets/health/organ_repro_male.jpg",
       "layout": "stack"
     },
     {
       "id": "skeleton",
       "label": "Skelett",
-      "x": 76.0,
+      "x": 66.0,
       "y": 67.5,
       "side": "left",
       "image": "assets/health/organ_skeleton.jpg",
@@ -141,7 +141,7 @@
     {
       "id": "musculoskeletal",
       "label": "Bewegungsapparat",
-      "x": 24.0,
+      "x": 34.0,
       "y": 73.5,
       "side": "left",
       "image": "assets/health/organ_musculoskeletal.jpg",
@@ -151,7 +151,7 @@
       "id": "skin",
       "label": "Haut",
       "x": 20.0,
-      "y": 49.0,
+      "y": 45.5,
       "side": "left",
       "image": "assets/health/organ_skin.jpg",
       "layout": "side"
@@ -159,7 +159,7 @@
     {
       "id": "immune",
       "label": "Immunsystem",
-      "x": 70.0,
+      "x": 62.0,
       "y": 40.0,
       "side": "right",
       "image": "assets/health/organ_immune.jpg",
@@ -168,7 +168,7 @@
     {
       "id": "endocrine",
       "label": "Hormonsystem",
-      "x": 65.0,
+      "x": 60.0,
       "y": 21.5,
       "side": "right",
       "image": "assets/health/organ_endocrine.jpg",
@@ -177,7 +177,7 @@
     {
       "id": "bloodLymph",
       "label": "Blut & Lymphe",
-      "x": 76.0,
+      "x": 66.0,
       "y": 34.0,
       "side": "right",
       "image": "assets/health/organ_blood_lymph.jpg",

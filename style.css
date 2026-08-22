@@ -200,8 +200,15 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 .hotspot-dot.is-unquantified { background: repeating-linear-gradient(135deg, #efefeb 0 7px, #9f9f9a 7px 14px); color: #222; }
 .hotspot-dot.has-foundation-link::after { content: ""; position: absolute; inset: -8px; border: 2px solid var(--text); border-radius: 50%; pointer-events: none; }
 .hotspot-dot.has-foundation-link.is-age-elevated::after { border-width: 5px; inset: -10px; }
-.hotspot-label { position: absolute; left: calc(100% - 4px); top: 50%; transform: translateY(-50%); margin-left: 6px; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); border-radius: 999px; padding: 3px 8px; font-size: 12px; white-space: nowrap; line-height: 1.2; color: #222; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
-.hotspot-group.left .hotspot-label { left: auto; right: calc(100% - 4px); margin-left: 0; margin-right: 6px; }
+.exposure-influence-scale { position: absolute; z-index: 4; top: calc(100% + 10px); left: 50%; transform: translateX(-50%); display: inline-flex; gap: 2px; padding: 2px 3px; border: 1px solid rgba(34,34,32,.28); border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.exposure-influence-scale[hidden] { display: none !important; }
+.exposure-influence-scale i { display: block; width: 6px; height: 4px; border: 1px solid var(--text); border-radius: 2px; background: transparent; }
+.exposure-influence-scale i.filled { background: var(--text); }
+.exposure-influence-scale.is-unassessed { border-style: dashed; }
+.exposure-influence-scale.is-unassessed i { border-color: #777; background: transparent; }
+.hotspot-layer.markers-disabled .exposure-influence-scale { display: none !important; }
+.hotspot-label { position: absolute; left: calc(100% + 4px); top: 50%; transform: translateY(-50%); margin-left: 8px; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); border-radius: 999px; padding: 3px 8px; font-size: 12px; white-space: nowrap; line-height: 1.2; color: #222; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+.hotspot-group.left .hotspot-label { left: auto; right: calc(100% + 4px); margin-left: 0; margin-right: 8px; }
 .organ-readout { padding: 10px; background: #fff; margin-top: 9px; }
 .organ-readout p { margin-top: 5px; font-size: 11px; }
 .organ-overlay { position: absolute; inset: 136px 8px 58px 8px; display: grid; place-items: center; background: rgba(245,245,242,.52); backdrop-filter: blur(3px); border-radius: 16px; z-index: 20; }
@@ -308,6 +315,7 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
 .legend-foundation-link::after { content: ""; position: absolute; inset: -4px; border: 2px solid var(--text); border-radius: 50%; }
 .legend-age-elevated { position: relative; flex: 0 0 auto; width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; background: #ecece8; }
 .legend-age-elevated::after { content: ""; position: absolute; inset: -5px; border: 4px solid var(--text); border-radius: 50%; }
+.health-legend .exposure-influence-scale.legend-example { position: static; transform: none; flex: 0 0 auto; box-shadow: none; }
 .health-legend-method { margin-top: 8px; }
 .health-legend-method p { margin: 4px 0 0; }
 .health-legend strong { color: var(--text); }

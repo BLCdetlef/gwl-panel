@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.62 · B45";
+const GWL_BUILD_VERSION = "0.9.65 · B48";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -62,7 +62,9 @@ const causeBodyGround = document.getElementById("causeBodyGround");
 const causeBodyEffect = document.getElementById("causeBodyEffect");
 const causeBodyLife = document.getElementById("causeBodyLife");
 
-let selectedBoundaryId = "freshwater";
+// Die Startansicht ist bewusst eine Gesamtübersicht: Erst eine Auswahl im
+// Seitenmenü legt eine konkrete Planetare Grenze als Kontext fest.
+let selectedBoundaryId = null;
 let expandedBoundaryId = null;
 let selectedDomainComponent = null;
 let selectedItemId = null;
@@ -73,7 +75,7 @@ let currentHealth = null;
 let selectedOrganId = null;
 let selectedAgeGroup = "adults";
 let healthMarkersEnabled = true;
-let healthBoundaryFilter = "current";
+let healthBoundaryFilter = "all";
 let healthOrganFilter = "all";
 let healthMarkerSwitch = null;
 let knowledgeNetworks = {};
@@ -2865,7 +2867,7 @@ function ensureHealthLegend() {
   healthMarkerSwitch = markerOverlay.querySelector(".health-marker-switch");
   const markerInfoButton = markerOverlay.querySelector(".marker-overlay-info");
   const markerInfoNote = markerOverlay.querySelector(".marker-overlay-note");
-  healthMarkerSwitch.addEventListener("click", () => setHealthMarkersEnabled(!healthMarkersEnabled, { resetFilters: !healthMarkersEnabled }));
+  healthMarkerSwitch.addEventListener("click", () => setHealthMarkersEnabled(!healthMarkersEnabled));
   markerInfoButton.addEventListener("click", event => {
     event.stopPropagation();
     markerInfoNote.hidden = !markerInfoNote.hidden;
@@ -2911,6 +2913,14 @@ function ensureHealthLegend() {
       <div class="health-legend-row health-legend-secondary">
         <span class="legend-hatched" aria-hidden="true"></span>
         <span><strong>Schraffur:</strong> Gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
+      </div>
+      <div class="health-legend-row health-legend-secondary">
+        <span class="exposure-influence-scale legend-example" aria-hidden="true"><i class="filled"></i><i class="filled"></i><i></i></span>
+        <span><strong>Segmente unter dem Marker:</strong> geringer, mittlerer oder hoher eigener Einfluss auf die Exposition. Sie werden unter allen sichtbaren Organmarkern angezeigt.</span>
+      </div>
+      <div class="health-legend-row health-legend-secondary">
+        <span class="exposure-influence-scale legend-example is-unassessed" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>Drei leere Segmente:</strong> Einfluss auf die eigene Exposition noch nicht bewertet.</span>
       </div>
       <p>Außenring und Organfüllung sind unabhängige Signale. Ein Ring kann auch einen Gewebenachweis oder eine klinische Assoziation kennzeichnen und beweist nicht automatisch einen ursächlichen Organschaden.</p>
     </div>`;
@@ -3006,7 +3016,12 @@ function renderHotspots() {
     const btn = document.createElement("button"); btn.type = "button"; btn.className = "hotspot-dot is-neutral"; btn.dataset.organ = id; btn.setAttribute("aria-label", def.label);
     btn.addEventListener("click", () => openOrganOverlay(id));
     const label = document.createElement("span"); label.className = "hotspot-label"; label.textContent = def.label;
-    wrap.appendChild(btn); wrap.appendChild(label); hotspotLayer.appendChild(wrap);
+    const exposureScale = document.createElement("span");
+    exposureScale.className = "exposure-influence-scale";
+    exposureScale.hidden = true;
+    exposureScale.setAttribute("aria-hidden", "true");
+    exposureScale.innerHTML = "<i></i><i></i><i></i>";
+    wrap.appendChild(btn); wrap.appendChild(label); wrap.appendChild(exposureScale); hotspotLayer.appendChild(wrap);
   });
 }
 
@@ -3084,6 +3099,57 @@ function applyKnowledgeOrganLinks() {
   }
 }
 
+function exposureInfluenceForActiveContext() {
+  // Auch in der Gesamtübersicht bleibt die Skala sichtbar. Ohne eine
+  // konkrete PG-Bewertung ist sie bewusst als „nicht bewertet“ markiert.
+  if (healthBoundaryFilter !== "current") {
+    return { label: "Eigener Einfluss auf die Exposition", level: "nicht bewertet", score: 0, unassessed: true };
+  }
+  const action = getActiveKnowledgeContext()?.network?.actionScope;
+  const unassessed = { label: "Eigener Einfluss auf die Exposition", level: "nicht bewertet", score: 0, unassessed: true };
+  if (!action) return unassessed;
+  const dimension = (action?.dimensions || []).find(item =>
+    item.id === "personal_exposure" || /eigene exposition/i.test(item.label || "")
+  );
+  if (!dimension) return unassessed;
+
+  if (typeof dimension.score === "number") {
+    return { ...dimension, score: Math.max(0, Math.min(3, Math.round(dimension.score))) };
+  }
+
+  const level = String(dimension.level || "").toLocaleLowerCase("de-DE");
+  const score = level.includes("hoch")
+    ? 3
+    : level.includes("mittel")
+      ? 2
+      : (level.includes("gering") || level.includes("begrenzt"))
+        ? 1
+        : null;
+  return score === null ? null : { ...dimension, score };
+}
+
+function applyExposureInfluenceIndicators() {
+  const influence = exposureInfluenceForActiveContext();
+  document.querySelectorAll(".exposure-influence-scale:not(.legend-example)").forEach(scale => {
+    scale.hidden = true;
+    scale.classList.remove("is-unassessed");
+    scale.removeAttribute("title");
+    scale.querySelectorAll("i").forEach(segment => segment.classList.remove("filled"));
+  });
+  if (!influence) return;
+
+  document.querySelectorAll(".hotspot-dot").forEach(dot => {
+    const scale = dot.closest(".hotspot-group")?.querySelector(".exposure-influence-scale");
+    if (!scale) return;
+    scale.hidden = false;
+    scale.classList.toggle("is-unassessed", influence.unassessed === true);
+    scale.title = `${influence.label}: ${String(influence.level || `${influence.score} von 3`).replaceAll("_", " ")}`;
+    scale.querySelectorAll("i").forEach((segment, index) => {
+      segment.classList.toggle("filled", index < influence.score);
+    });
+  });
+}
+
 function getActiveKnowledgeMarkerSignal(organId) {
   const network = getActiveKnowledgeContext()?.network;
   return (network?.healthContext?.markerSignals || []).find(signal => {
@@ -3114,6 +3180,7 @@ function renderHealth(health) {
     } else {
       organReadout.textContent = "Keine lokal belegte Organwirkung für die aktuelle Auswahl.";
     }
+    applyExposureInfluenceIndicators();
     if (selectedOrganId) openOrganOverlay(selectedOrganId, true);
     return;
   }
@@ -3147,6 +3214,7 @@ function renderHealth(health) {
       dot.classList.remove("is-neutral"); dot.classList.add("is-unquantified"); texts.push(`${impact.label}: ${impact.prevalence || "Schädigung lokal belegt"}.`);
     }
   });
+  applyExposureInfluenceIndicators();
   organReadout.textContent = texts.join(" ");
   if (selectedOrganId) openOrganOverlay(selectedOrganId, true);
 }
@@ -3632,7 +3700,8 @@ async function initPanel() {
   renderHotspots();
   ensureHealthLegend();
   updatePrototypeVersion();
-  chooseFirstItemForScope();
+  renderBoundaries();
+  renderHealth(null);
 }
 
 
