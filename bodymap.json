@@ -28,6 +28,7 @@
       "y": 10.5,
       "side": "left",
       "image": "assets/health/organ_ear.jpg",
+      "systemLabel": "Sinnesorgane",
       "layout": "stack"
     },
     {

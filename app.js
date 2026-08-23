@@ -362,6 +362,7 @@ async function loadBodymapConfig() {
     ORGAN_MEDIA[organ.id] = {
       label: organ.label,
       img: organ.image,
+      systemLabel: organ.systemLabel || "",
       layout: organ.layout || "stack"
     };
   });
@@ -498,6 +499,8 @@ function syncFreshwaterBlueGreenNavigation() {
     const label = String(item.label || "").trim().toLowerCase();
 
     const isBlueGreenControl =
+      id === "blue-water-global" ||
+      id === "green-water-global" ||
       id === "blue-water-streamflow" ||
       id === "green-water-rootzone-soil-moisture" ||
       freshwaterControlLabels.has(label);
@@ -1956,8 +1959,7 @@ function contributionRoleIcon(roleId) {
         <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
         <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
         <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
-        <path class="role-icon-overlay" d="m25.9 25.4 3 3M18.7 21.5h1.2l.8-1.7 1.2 3.35.9-2.15.65 1.1h1.65"/>
-        <path class="role-icon-heart" d="M22 25.25s-3.4-2.1-3.4-4.05c0-.98.73-1.72 1.68-1.72.72 0 1.35.4 1.72 1.03.37-.63 1-1.03 1.72-1.03.95 0 1.68.74 1.68 1.72 0 1.95-3.4 4.05-3.4 4.05Z"/>
+        <path class="role-icon-overlay" d="m25.9 25.4 3 3"/>
       </svg>`,
     supplementary_context: `
       <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
@@ -1977,8 +1979,8 @@ function contributionRoleFor(boundary, item) {
   if (item?.contributionRole && CONTRIBUTION_ROLES[item.contributionRole]) return item.contributionRole;
   const network = item?.knowledgeSource ? getKnowledgeNetworkBySource(item.knowledgeSource) : null;
   if ((network?.healthContext?.markerSignals || []).length) return "deepening_with_organ";
-  if (isEahExtension(boundary)) return "supplementary_context";
   if (item?.knowledgeSource && item.menuType !== "control") return "deepening_without_organ";
+  if (isEahExtension(boundary)) return "supplementary_context";
   return "pg_core";
 }
 
@@ -2035,6 +2037,7 @@ function getQualifiedProjectionSeries(network) {
 
 function renderTimeChart(observedSeries = null, projectionSeries = []) {
   if (!timeChart) return;
+  const timeCard = timeChart.closest(".time-card");
   const width = Math.max(320, Math.round(timeChart.clientWidth || 500));
   const height = 112;
   timeChart.setAttribute("viewBox", `0 0 ${width} ${height}`);
@@ -2056,9 +2059,12 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   })).filter(series => series.points.length);
 
   if (!observed.length) {
-    timeChart.innerHTML = `<title id="timeChartTitle">Zeitreihe von 1700 bis 2100</title><desc id="timeChartDescription">Keine numerische Zeitreihe hinterlegt.</desc><rect class="time-chart-empty" x="${plot.left}" y="${plot.top}" width="${width - plot.left - plot.right}" height="${height - plot.top - plot.bottom}"/><text class="time-chart-empty-label" x="${width / 2}" y="${height / 2}">Keine numerische Zeitreihe</text><text class="time-chart-axis-label" x="${plot.left}" y="${height - 9}">1700</text><text class="time-chart-axis-label time-chart-axis-label-end" x="${width - plot.right}" y="${height - 9}">2100</text>`;
+    timeCard?.classList.add("no-time-series");
+    timeChart.innerHTML = `<title id="timeChartTitle">Keine numerische Zeitreihe</title><desc id="timeChartDescription">Für diesen Datensatz ist keine numerische Zeitreihe hinterlegt.</desc>`;
     return;
   }
+
+  timeCard?.classList.remove("no-time-series");
 
   const allValues = [...observed, ...projections.flatMap(series => series.points)].map(point => point.value);
   const observedMin = Math.min(...observed.map(point => point.value));
@@ -2070,7 +2076,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const x = year => plot.left + ((year - xMin) / (xMax - xMin)) * (width - plot.left - plot.right);
   const y = value => height - plot.bottom - ((value - yMin) / yRange) * (height - plot.top - plot.bottom);
   const makePath = points => points.map((point, index) => `${index ? "L" : "M"}${x(point.year).toFixed(2)} ${y(point.value).toFixed(2)}`).join(" ");
-  const axisYears = [1700, 2100];
+  const axisYears = [1700, 1800, 1900, 2000, 2100];
   const colors = ["#4c718b", "#6f657e", "#8b6a43", "#3f7c6d", "#9a5555"];
   const unit = observedSeries?.unit ? ` ${observedSeries.unit}` : "";
   const currentYear = Math.min(xMax, Math.max(xMin, new Date().getFullYear()));
@@ -2404,6 +2410,8 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeMarkers.innerHTML = "";
   timeReadout.textContent = getKnowledgeStatusLabel(network);
   timeStatus.textContent = "Noch keine numerische Zeitreihe hinterlegt.";
+  // Beim Wechsel darf kein Diagramm des zuvor ausgewählten Datensatzes stehen bleiben.
+  renderTimeChart();
 }
 
 function renderKnowledgePanel() {
@@ -3101,9 +3109,11 @@ function ensureHealthLegend() {
   markerOverlay.innerHTML = `
     <button class="health-marker-switch" type="button" role="switch" aria-checked="true" aria-label="Marker-Füllungen und Außenringe"><span aria-hidden="true"></span><b>Marker an</b></button>
     <button class="marker-overlay-info" type="button" aria-label="Information zum Marker-Schalter" aria-expanded="false">i</button>
+    <button class="bodymap-legend-button" type="button" aria-expanded="false">Legende</button>
     <div class="marker-overlay-note" role="note" hidden>„Aus“ neutralisiert Füllungen und Außenringe. Sobald PG, Organ, Region oder Altersgruppe geändert werden, sind die Marker wieder aktiv.</div>`;
   bodymapStage.appendChild(markerOverlay);
   healthMarkerSwitch = markerOverlay.querySelector(".health-marker-switch");
+  const bodymapLegendButton = markerOverlay.querySelector(".bodymap-legend-button");
   const markerInfoButton = markerOverlay.querySelector(".marker-overlay-info");
   const markerInfoNote = markerOverlay.querySelector(".marker-overlay-note");
   healthMarkerSwitch.addEventListener("click", () => setHealthMarkersEnabled(!healthMarkersEnabled));
@@ -3181,9 +3191,20 @@ function ensureHealthLegend() {
     healthOrganFilter = organFilter.value;
     renderHealth(currentHealth);
   });
-  infoButton?.addEventListener("click", () => {
+  infoNote.id = "bodymapMarkerLegend";
+  infoNote.classList.add("bodymap-legend-popup");
+  bodymapStage.appendChild(infoNote);
+  const toggleBodymapLegend = () => {
     infoNote.hidden = !infoNote.hidden;
     infoButton.setAttribute("aria-expanded", String(!infoNote.hidden));
+    bodymapLegendButton?.setAttribute("aria-expanded", String(!infoNote.hidden));
+  };
+  infoButton?.setAttribute("aria-controls", infoNote.id);
+  bodymapLegendButton?.setAttribute("aria-controls", infoNote.id);
+  infoButton?.addEventListener("click", toggleBodymapLegend);
+  bodymapLegendButton?.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleBodymapLegend();
   });
   const filterPanel = document.createElement("div");
   filterPanel.className = "life-filter-panel";
@@ -3403,10 +3424,17 @@ function applyFoundationLinkRings() {
   if (healthBoundaryFilter === "current") return;
   for (const network of Object.values(knowledgeNetworks || {})) {
     for (const signal of network?.healthContext?.markerSignals || []) {
+      if (!appliesToSelectedAgeGroup(signal)) continue;
+      const scopes = signal.scopes || (signal.scope ? [signal.scope] : []);
+      if (scopes.length && !scopes.includes(getSelectedScope())) continue;
       const organId = normalizeImpactOrgan(signal.organ);
       const dot = document.querySelector(`.hotspot-dot[data-organ="${organId}"]`);
       if (!dot) continue;
       dot.classList.add("has-foundation-link");
+      if (signal.fillStatus === "unquantified_organ_effect") {
+        dot.classList.remove("is-neutral");
+        dot.classList.add("is-unquantified");
+      }
       if (hasAnyHigherAgeEffect(signal)) dot.classList.add("is-age-elevated");
     }
   }
@@ -3495,6 +3523,28 @@ function getActiveKnowledgeMarkerSignal(organId) {
   }) || null;
 }
 
+function getKnowledgeMarkerContextsForOrgan(organId) {
+  const activeNetwork = getActiveKnowledgeContext()?.network;
+  const networks = healthBoundaryFilter === "current" && activeNetwork
+    ? [activeNetwork]
+    : Object.values(knowledgeNetworks || {});
+
+  return networks.flatMap(network => (network?.healthContext?.markerSignals || [])
+    .filter(signal => {
+      if (!appliesToSelectedAgeGroup(signal)) return false;
+      const scopes = signal.scopes || (signal.scope ? [signal.scope] : []);
+      return normalizeImpactOrgan(signal.organ) === normalizeImpactOrgan(organId) &&
+        (!scopes.length || scopes.includes(getSelectedScope()));
+    })
+    .map(signal => {
+      const navigation = data.boundaries.flatMap(boundary =>
+        (boundary.items || []).map(item => ({ boundary, item }))
+      ).find(entry => entry.item.knowledgeSource && getKnowledgeNetworkBySource(entry.item.knowledgeSource) === network);
+      return { network, signal, navigation };
+    })
+  );
+}
+
 function renderHealth(health) {
   if (!health && LIFE_PROTOTYPE_MODE) {
     health = getPrototypeAggregateHealth();
@@ -3556,13 +3606,19 @@ function renderHealth(health) {
 
 function createMediaNode(organId) {
   const media = ORGAN_MEDIA[organId] || { label: HOTSPOTS[organId]?.label || organId, layout: "stack" };
-  organOverlayContent.classList.toggle("side-by-side", media.layout === "side");
+  organOverlayContent.classList.remove("side-by-side");
 
   const block = document.createElement("div");
   block.className = "organ-system-block";
 
   const visual = document.createElement("div");
-  visual.className = "organ-system-visual";
+  visual.className = `organ-system-visual${media.systemLabel ? " has-system-label" : ""}`;
+  if (media.systemLabel) {
+    const title = document.createElement("strong");
+    title.className = "organ-system-title";
+    title.textContent = media.systemLabel;
+    visual.appendChild(title);
+  }
   if (media.img) {
     const img = document.createElement("img"); img.src = media.img; img.alt = media.label; visual.appendChild(img);
   } else if (media.svg) {
@@ -3707,8 +3763,9 @@ function renderHealthContributionCards(items) {
 function openOrganOverlay(organId, preserveHidden = false) {
   selectedOrganId = organId;
   const def = HOTSPOTS[organId];
+  const knowledgeMarkerContexts = getKnowledgeMarkerContextsForOrgan(organId);
   const activeKnowledgeSignal = getActiveKnowledgeMarkerSignal(organId);
-  const impact = activeKnowledgeSignal ? null : getImpactForOrgan(organId);
+  const impact = knowledgeMarkerContexts.length ? null : getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
   if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
@@ -3765,7 +3822,7 @@ function openOrganOverlay(organId, preserveHidden = false) {
       });
     });
   } else {
-    const knowledgeSignal = activeKnowledgeSignal;
+    const knowledgeSignal = activeKnowledgeSignal || knowledgeMarkerContexts[0]?.signal;
     organOverlayContent.classList.remove("health-contribution-layout");
     if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
       if (organOverlayNoteHomeNextSibling && organOverlayNoteHomeNextSibling.parentNode === organOverlayNoteHomeParent) {
@@ -3777,9 +3834,24 @@ function openOrganOverlay(organId, preserveHidden = false) {
 
     organOverlayFinding.textContent = impact
       ? (findingText.textContent || "–")
-      : knowledgeSignal?.label || "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
+      : knowledgeMarkerContexts.length > 1
+        ? `${knowledgeMarkerContexts.length} geprüfte Organbezüge sind in der Gesamtübersicht hinterlegt.`
+        : knowledgeSignal?.label || "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
 
     organOverlayNote.innerHTML = `
+      ${knowledgeMarkerContexts.length ? `
+        <details class="organ-context-details">
+          <summary>Geprüfte Beiträge</summary>
+          <div class="organ-contribution-list">
+            ${knowledgeMarkerContexts.map(({ network, signal, navigation }) => `
+              <article class="organ-contribution-item">
+                <strong class="knowledge-marker-contribution-title">${signal.label}</strong>
+                <small>${signal.note || "Geprüfter Organbezug; keine gemeinsame normierte Krankheitslast für die Organfarbe."}</small>
+                ${sourceLinksHtml(network, signal.sourceRefs)}
+                ${navigation ? `<button type="button" data-life-route-boundary="${navigation.boundary.id}" data-life-route-item="${navigation.item.id}" aria-label="${signal.label} im GWL-Panel öffnen">Zum Beitrag</button>` : ""}
+              </article>`).join("")}
+          </div>
+        </details>` : ""}
       <details class="organ-context-details">
         <summary>Einordnung</summary>
         <p>${impact
@@ -4170,9 +4242,9 @@ async function initPanel() {
   style.textContent = `
     #organOverlayContent.health-contribution-layout {
       display: grid !important;
-      grid-template-columns: minmax(250px, 40%) minmax(0, 1fr) !important;
+      grid-template-columns: 1fr !important;
       align-items: start !important;
-      gap: 14px 18px !important;
+      gap: 14px !important;
     }
 
     #organOverlayContent.health-contribution-layout > #organOverlayMedia,
@@ -4182,14 +4254,17 @@ async function initPanel() {
       min-width: 0;
     }
 
-    /* The existing text block remains beside the image for the short finding. */
+    /* Befund und Kontext folgen immer unterhalb des Organbilds. */
     #organOverlayContent.health-contribution-layout > :not(#organOverlayMedia):not(#organOverlayNote) {
+      grid-column: 1 !important;
+      grid-row: 2 !important;
       min-width: 0;
     }
 
     /* Method and all causes now use the complete width below image + finding. */
     #organOverlayContent.health-contribution-layout > #organOverlayNote {
-      grid-column: 1 / -1 !important;
+      grid-column: 1 !important;
+      grid-row: 3 !important;
       width: 100% !important;
       min-width: 0 !important;
       box-sizing: border-box;

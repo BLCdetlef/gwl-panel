@@ -1,0 +1,126 @@
+{
+  "format": "gwl-knowledge-network-v1.1",
+  "version": "0.1",
+  "topic": "Arbeitslärm und lärmbedingter Hörverlust",
+  "status": "reviewed",
+  "entry": {
+    "planetaryBoundary": "Technologische & soziale Umwelt",
+    "domainComponent": "Arbeitsumwelt",
+    "subComponent": "Arbeitslärm · Hörverlust"
+  },
+  "corePrinciples": [
+    "Wiederholter, technisch erzeugter Arbeitslärm ist eine menschengemachte Exposition.",
+    "Lärmbedingter Hörverlust betrifft die Strukturen des Innenohrs und wird über Audiometrie erfasst.",
+    "Der dargestellte Kohortenbefund betrifft erwachsene Männer in Norwegen und ist keine globale Prävalenzschätzung."
+  ],
+  "nodes": [
+    { "id": "pressure_occupational_noise", "type": "pressure", "label": "Technisch erzeugter Arbeitslärm" },
+    { "id": "exposure_repeated_noise", "type": "exposure", "label": "Wiederholte Lärmbelastung am Arbeitsplatz" },
+    { "id": "effect_hearing_decline", "type": "health_effect", "label": "Lärmbedingter Hörverlust" },
+    { "id": "organ_ear", "type": "organ", "label": "Ohr / Innenohr" }
+  ],
+  "edges": [
+    { "from": "pressure_occupational_noise", "to": "exposure_repeated_noise", "relationType": "exposes_via", "evidenceStatus": "strong" },
+    { "from": "exposure_repeated_noise", "to": "effect_hearing_decline", "relationType": "contributes_to", "evidenceStatus": "strong" },
+    { "from": "effect_hearing_decline", "to": "organ_ear", "relationType": "affects", "evidenceStatus": "strong" }
+  ],
+  "measurements": [
+    {
+      "id": "niosh_occupational_noise_rel",
+      "node": "exposure_repeated_noise",
+      "geography": "USA · Arbeitsschutzreferenz",
+      "period": "NIOSH-Empfehlung, abgerufen 2024",
+      "metric": "Empfohlene Expositionsgrenze für Arbeitslärm",
+      "value": 85,
+      "unit": "dBA über 8 Stunden",
+      "display": "85 dBA über 8 Stunden",
+      "interpretation": "NIOSH empfiehlt bei wiederholter Belastung ab dieser Höhe ein Programm zur Prävention von Hörverlust. Die Empfehlung ist kein individueller Grenzwert für eine Erkrankung.",
+      "uncertainty": "Die Referenz beschreibt berufliche Lärmexposition, nicht eine universelle Dosis-Wirkungs-Grenze für alle Personen und Geräuscharten.",
+      "sourceRefs": ["src_niosh_noise_exposure"],
+      "displayType": "study_value"
+    },
+    {
+      "id": "hunt_20y_hearing_decline_men",
+      "node": "effect_hearing_decline",
+      "geography": "Norwegen · HUNT-Kohorte",
+      "period": "1996–1998 bis 2017–2019",
+      "metric": "Zusätzlicher Hörverlust nach mindestens fünf Jahren Arbeitslärm ab 85 dB",
+      "value": 2.6,
+      "unit": "dB über 20 Jahre",
+      "display": "+2,6 dB Hörverlust über 20 Jahre",
+      "interpretation": "Bei Männern, die zu Beginn 30–39 Jahre alt waren, sagte eine mindestens fünfjährige Belastung ab 85 dB einen um 2,6 dB stärkeren Hörverlust voraus als keine Belastung ab 80 dB.",
+      "uncertainty": "95-%-KI: 0,2 bis 5,0 dB. Der Befund gilt für diese Kohorte und Alters-/Geschlechtsgruppe; er ist keine globale Prävalenz oder individuelle Prognose.",
+      "context": {
+        "lifeStage": ["adulthood"],
+        "ageRange": { "min": 30, "max": 39, "unit": "years", "sex": "male" },
+        "populationSize": 4448
+      },
+      "sourceRefs": ["src_molaug_hunt_2024"],
+      "displayType": "study_value"
+    }
+  ],
+  "pathways": [
+    {
+      "label": "Belegter Arbeitsumwelt- und Organpfad",
+      "chain": ["Technisch erzeugter Arbeitslärm", "wiederholte Lärmbelastung", "Hörverlust", "Ohr / Innenohr"],
+      "evidenceStatus": "strong",
+      "caution": "Die verfügbare quantitative Kohortenangabe ist auf erwachsene Männer in Norwegen begrenzt. Sie wird nicht auf andere Geschlechter, Altersgruppen oder Orte übertragen."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "verified_pathway_without_quantified_attributable_burden",
+    "markerSignals": [
+      {
+        "organ": "ear",
+        "signalType": "occupational_noise_exposure",
+        "fillStatus": "unquantified_organ_effect",
+        "label": "Wiederholter Arbeitslärm kann zu lärmbedingtem Hörverlust führen; die quantitative Kohortenangabe betrifft erwachsene Männer in Norwegen.",
+        "ageGroups": ["adults"],
+        "note": "Außenring und Schraffur kennzeichnen den geprüften Organpfad. Keine global quantifizierte, auf eine gemeinsame Organbezugsgröße normierte Krankheitslast ist hinterlegt.",
+        "sourceRefs": ["src_niosh_noise_exposure", "src_molaug_hunt_2024"]
+      }
+    ],
+    "systemImpacts": [
+      {
+        "system": "ear",
+        "label": "Ohr / Innenohr",
+        "evidenceStatus": "strong",
+        "note": "Präventabler arbeitsbezogener Expositions- und Wirkungspfad; keine globale Organlastkennzahl."
+      }
+    ],
+    "bodymapRule": "Bei Auswahl Erwachsener erhält das Ohr einen Außenring und eine Schraffur. Daraus folgt keine Aussage für Kinder, ältere Menschen, alle Geschlechter oder einen bestimmten Ort."
+  },
+  "actionScope": {
+    "status": "evidence_based_orientation",
+    "dimensions": [
+      { "id": "personal_exposure", "label": "Eigene Exposition", "level": "begrenzt", "rationale": "Gehörschutz und Verhalten können Exposition mindern, ersetzen aber keine Lärmreduktion an der Quelle." },
+      { "id": "individual_system_change", "label": "Direkte Veränderung der Arbeitsumwelt", "level": "begrenzt", "rationale": "Technische Lärmquellen und Arbeitsorganisation liegen überwiegend auf betrieblicher Ebene." },
+      { "id": "collective_leverage", "label": "Kollektiver Hebel", "level": "hoch", "rationale": "Technische Lärmminderung, Arbeitsgestaltung, Überwachung und Arbeitsschutzprogramme können die Exposition verringern." }
+    ]
+  },
+  "sources": [
+    {
+      "id": "src_niosh_noise_exposure",
+      "title": "Understand Noise Exposure",
+      "publisher": "National Institute for Occupational Safety and Health (NIOSH)",
+      "year": 2024,
+      "type": "official_occupational_health_guidance",
+      "url": "https://www.cdc.gov/niosh/noise/prevent/understand.html",
+      "access": "open_full_text"
+    },
+    {
+      "id": "src_molaug_hunt_2024",
+      "title": "Quantitative levels of noise exposure and 20-year hearing decline: findings from a prospective cohort study (the HUNT Study)",
+      "authors": "Molaug I et al.",
+      "journal": "International Journal of Audiology",
+      "year": 2024,
+      "type": "peer_reviewed_original_study",
+      "doi": "10.1080/14992027.2022.2143432",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36399098/",
+      "access": "open_full_text"
+    }
+  ],
+  "reviewQuestionsForExperts": [
+    "Welche offen zugängliche, räumlich eindeutig eingeordnete Berufslärm-Zeitreihe eignet sich für eine spätere Zeitdarstellung, ohne den norwegischen Kohortenbefund zu verallgemeinern?"
+  ]
+}

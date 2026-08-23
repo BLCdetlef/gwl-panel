@@ -267,6 +267,18 @@
           ]
         },
         {
+          "id": "work_environment",
+          "label": "Arbeitsumwelt",
+          "items": [
+            {
+              "id": "occupational_noise_hearing_loss",
+              "label": "Arbeitslärm · Hörverlust",
+              "source": "data/knowledge/gwl_occupational_noise_hearing_loss_v0.1.json",
+              "type": "health_pathway"
+            }
+          ]
+        },
+        {
           "id": "air_pollution",
           "label": "Luftverschmutzung",
           "items": [
