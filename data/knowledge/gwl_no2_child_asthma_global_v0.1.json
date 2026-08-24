@@ -193,6 +193,7 @@
   "projectionSeries": [
     {
       "id": "global_nox_emissions_recent_trend",
+      "observedSeriesId": "global_nox_emissions_edgar_annual",
       "scenario": "TREND",
       "scenarioLabel": "Jüngerer Trend 2012–2022",
       "metric": "Fortschreibung der globalen anthropogenen NOₓ-Emissionen",

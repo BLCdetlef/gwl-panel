@@ -10,11 +10,46 @@
   <main class="app-shell">
     <header class="topbar">
       <h1>GWL-PANEL</h1>
+      <div class="global-climate-indicators" aria-label="Globale Klimakenngrößen">
+        <div class="global-climate-indicator">
+          <span class="global-climate-label">CO₂ ↑</span>
+          <strong>42,2 <small>Gt/a</small></strong>
+          <span class="global-climate-meta">(2025)</span>
+        </div>
+        <div class="global-climate-indicator">
+          <span class="global-climate-label">ΔT</span>
+          <strong>+1,45 <small>°C</small></strong>
+          <span class="global-climate-meta">(12 M. · 1850–1900)</span>
+        </div>
+        <div class="global-climate-indicator">
+          <span class="global-climate-label">Wald ↓</span>
+          <strong>8,1 <small>Mio. ha/a</small></strong>
+          <span class="global-climate-meta">(2024)</span>
+        </div>
+        <div class="global-climate-indicator">
+          <span class="global-climate-label">Gletscher ↓</span>
+          <strong>450 <small>Gt/a</small></strong>
+          <span class="global-climate-meta">(2023/24)</span>
+        </div>
+        <div class="global-climate-info-wrap">
+          <button id="globalClimateInfoButton" class="global-climate-info-button" type="button" aria-label="Erläuterung zu globalen Emissionen und Temperatur" aria-expanded="false" aria-controls="globalClimateInfo">i</button>
+          <div id="globalClimateInfo" class="global-climate-info" role="note" hidden>
+            <strong>Wie sind diese Werte zu lesen?</strong>
+            <p><b>Emissionen</b> sind der aktuelle menschengemachte Treiber: 42,2 Gt CO₂ sind die für 2025 geschätzten globalen Emissionen aus fossilen Quellen und Landnutzungsänderungen.</p>
+            <p><b>Temperatur</b> ist ein beobachteter Zustand: Das rollierende 12-Monats-Mittel bis Juli 2026 lag 1,45 °C über dem geschätzten vorindustriellen Niveau. Es reagiert auf die über lange Zeit angesammelten Treibhausgase und natürliche Schwankungen – nicht unmittelbar auf die Emissionen eines einzelnen Jahres.</p>
+            <p><b>Wald</b> bezeichnet geschätzte dauerhafte globale Entwaldung, nicht jeden satellitengesehenen Baumkronenverlust. <b>Gletscher</b> zeigt den weltweit gemessenen Massenverlust; eine global vergleichbare km²-Flächenreihe ist für kurze Zeiträume noch zu unsicher.</p>
+            <p class="global-climate-sources"><b>Quellen:</b> <a href="https://essd.copernicus.org/articles/18/3211/2026/essd-18-3211-2026.html" target="_blank" rel="noopener noreferrer">Global Carbon Budget 2025</a> · <a href="https://climate.copernicus.eu/surface-air-temperature-july-2026" target="_blank" rel="noopener noreferrer">Copernicus ERA5</a> · <a href="https://forestdeclaration.org/assessment/" target="_blank" rel="noopener noreferrer">Forest Declaration Assessment 2025</a> · <a href="https://wmo.int/sites/default/files/2025-11/State%20of%20the%20Climate%202025%20Update%20COP30%20%2831%20oct%29.pdf" target="_blank" rel="noopener noreferrer">WMO/WGMS Gletscherbilanz</a></p>
+          </div>
+        </div>
+      </div>
       <span class="version">Prototyp 0.8.1</span>
     </header>
 
-    <section class="panel-grid">
-      <section class="panel panel-left" aria-labelledby="grundlageTitle">
+    <section class="panel-grid" data-mobile-view="life">
+      <button id="mobileGroundHandle" class="mobile-ground-handle" type="button" aria-controls="grundlagePanel" aria-expanded="false">
+        <span>GRUNDLAGE</span><b aria-hidden="true">›</b>
+      </button>
+      <section id="grundlagePanel" class="panel panel-left" aria-labelledby="grundlageTitle">
         <div class="panel-heading">
           <div class="panel-heading-main">
             <h2 id="grundlageTitle">GRUNDLAGE</h2>
@@ -45,6 +80,7 @@
             <h2 id="wirkungTitle">WIRKUNG</h2>
             <button id="causeButtonEffect" class="cause-chip" type="button" hidden>Ursachen</button>
           </div>
+          <button id="mobileLifeBack" class="mobile-panel-back" type="button">← LEBEN</button>
         </div>
 
         <div id="contributionRoleCard" class="contribution-role-card" role="status">

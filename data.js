@@ -287,6 +287,7 @@ window.GWL_DATA = {
           id: "pfas",
           scope: "all",
           label: "PFAS",
+          contributionRole: "deepening_with_organ",
           type: "Teilbereich",
           summary: "Persistente fluorierte Stoffe mit vielfältigen Anwendungen, Umweltpfaden und Expositionswegen."
         }

@@ -21,6 +21,7 @@
     { "id": "gbd2021_ambient_ozone_global", "source": "data/health/studies/gbd2021_ambient_ozone_global_v0.1.json", "enabled": true },
     { "id": "gbd2021_no2_asthma_global", "source": "data/health/studies/gbd2021_no2_asthma_global_v0.1.json", "enabled": true },
     { "id": "who_unicef_drinking_water_global", "source": "data/health/studies/who_unicef_drinking_water_global_v0.1.json", "enabled": true },
+    { "id": "gbd2019_india_unsafe_water_diarrhoea", "source": "data/health/studies/gbd2019_india_unsafe_water_diarrhoea_v0.1.json", "enabled": true },
     { "id": "gbd2021_high_temperature_global", "source": "data/health/studies/gbd2021_high_temperature_global_v0.1.json", "enabled": true },
     { "id": "gbd2021_lead_global", "source": "data/health/studies/gbd2021_lead_global_v0.1.json", "enabled": true }
   ]

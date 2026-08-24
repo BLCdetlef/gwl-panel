@@ -1,0 +1,72 @@
+{
+  "format": "gwl-health-study-v0.1",
+  "id": "gbd2019_india_unsafe_water_diarrhoea",
+  "status": "reviewed",
+  "title": "GBD 2019 – Durchfallsterblichkeit durch unsichere Trinkwasserquellen in Indien",
+  "studyDesign": "global_comparative_risk_assessment",
+  "scope": {
+    "level": "national_context",
+    "geography": "Indien",
+    "population": "Kinder unter fünf Jahren"
+  },
+  "period": {
+    "startYear": 1990,
+    "endYear": 2019,
+    "timeSeriesStatus": "annual",
+    "dataImportStatus": "available_not_imported",
+    "observedThroughYear": 2019,
+    "projectionStartsYear": null
+  },
+  "riskRefs": ["gbd_unsafe_water_source"],
+  "measurements": [
+    {
+      "id": "india_under5_diarrhoea_death_rate_unsafe_water_2019",
+      "kind": "deaths",
+      "metric": "Durchfallsterblichkeit durch unsichere Trinkwasserquelle",
+      "valueType": "rate",
+      "value": 38.6,
+      "lower": 26.01,
+      "upper": 53.43,
+      "unit": "Todesfälle je 100.000 Kinder unter 5 Jahren",
+      "geography": "Indien",
+      "period": "2019",
+      "estimationType": "modelled_estimate",
+      "ageStandardized": false,
+      "timeSeries": [],
+      "sourceRefs": ["src_india_gbd2019_diarrhoea"]
+    }
+  ],
+  "healthEndpoints": [
+    {
+      "id": "india_under5_diarrhoeal_disease_unsafe_water",
+      "label": "Durchfallerkrankungen bei Kindern unter 5 Jahren",
+      "riskRef": "gbd_unsafe_water_source",
+      "organIds": ["gut"],
+      "evidenceStatus": "gbd_risk_outcome_pair",
+      "attributionStatus": "attributable_burden",
+      "sourceRefs": ["src_india_gbd2019_diarrhoea"]
+    }
+  ],
+  "institutionalLinks": [],
+  "sources": [
+    {
+      "id": "src_india_gbd2019_diarrhoea",
+      "title": "The burden of diarrhea, etiologies, and risk factors in India from 1990 to 2019: evidence from the Global Burden of Disease study",
+      "publisher": "BMC Public Health",
+      "year": 2022,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8759196/",
+      "doi": "10.1186/s12889-022-12515-3",
+      "sourceType": "peer_reviewed_study"
+    }
+  ],
+  "review": {
+    "globalRelevance": false,
+    "quantitative": true,
+    "riskOutcomePairsChecked": true,
+    "doubleCountingChecked": true,
+    "organMappingChecked": true,
+    "plainLanguagePath": "Unsichere Trinkwasserquelle → fäkal-orale Erregerexposition → Durchfallerkrankung → Verdauungssystem",
+    "decision": "context_only",
+    "notes": "Nationaler Kontext für Indien, nicht auf andere Länder oder Orte übertragbar. Die ausgewiesene Rate beschreibt modellierte GBD-Attribution für unsichere Trinkwasserquellen und darf nicht mit unsicherer Sanitärversorgung oder fehlender Handwaschmöglichkeit addiert werden."
+  }
+}

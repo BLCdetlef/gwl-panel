@@ -39,6 +39,10 @@ Ein Item kann enthalten:
 
 Beobachtungen und Projektionen werden getrennt dargestellt. Ohne belastbare präzisierende Faktoren verwendet das Panel als Standard genau einen Projektionspfad: die Fortschreibung des jüngeren beobachteten Trends einer methodisch konsistenten Reihe. Trendfenster, jährliche Änderungsrate und Basisjahr müssen benannt werden. Geeignete veröffentlichte Fachszenarien oder belastbare Einflussfaktoren haben Vorrang; ein fachlich nicht fortschreibbarer Indikator erhält keine Projektion.
 
+Historische Vorgängerrekonstruktionen mit abweichender Methode werden nicht mit der Hauptreihe vermischt: Sie nutzen eine gestrichelte Linie. Ein `◇` auf der Zeitachse markiert den Methodenwechsel; seine Erklärung gehört in Einordnung, Methodennotiz oder zugängliche Diagrammbeschreibung. Projektionen bleiben gepunktet.
+
+Historische Rekonstruktion, Beobachtung und Projektion dürfen aus unterschiedlichen Quellen stammen und dennoch in einem Diagramm erscheinen, wenn Messgröße, Einheit, Raumbezug und methodischer Anschluss nachvollziehbar zusammenpassen. Die Zuordnung soll bevorzugt explizit über die ID der beobachteten Reihe erfolgen; eine automatische Zuordnung ist nur bei genau einer eindeutig passenden Einheit zulässig. Inkompatible Reihen werden nie auf eine gemeinsame Skala gezwungen. Eine einzelne Messreihe bleibt standardmäßig sichtbar; mehrere fachlich getrennte Reihen eines Beitrags werden jeweils in einem eigenen, zunächst geschlossenen Abschnitt gezeigt.
+
 ## Gesundheitsbezug
 
 `health.impacts[]` verknüpft einen konkreten Umwelt-/Expositionsbefund mit Organen oder Organsystemen. Beispiel:
@@ -75,6 +79,10 @@ Eine Mengenreihe allein begründet keine Organwirkung. Die Bodymap wird nur verk
 Die Bodymap bietet genau drei grobe Ansichten: `children` (0–17 Jahre), `adults` (18–64 Jahre, Standard) und `older` (ab 65 Jahren). Feinere Altersbereiche werden nicht als zusätzliche Schalter angelegt, sondern als Studienkontext unter WIRKUNG ausgegeben.
 
 Organbezüge oder Wirkungen können optional `ageGroups[]` sowie `ageEffects.<group>` tragen. Ein stärkerer Außenring ist nur bei `status: "higher_effect"` zulässig, wenn ein altersbezogener Mehr-Effekt gegenüber Erwachsenen fachlich oder statistisch belegt ist. Die bloße Auswahl einer Altersgruppe, ihre Aufnahme in die Stichprobe oder allgemeine Vulnerabilitätsannahmen verändern die Ringstärke nicht. Fehlende Altersauswertung wird nicht als fehlendes Risiko interpretiert.
+
+## Querverbindungen in Wirkungspfaden
+
+Querverweise auf eine im Panel vorhandene Systemgrenze erscheinen in WIRKUNG als klickbare Chips und öffnen diese Grenze. Sie sind als getrennte Kanten mit benanntem Mechanismus zu modellieren; ein Klick bedeutet keine Gleichsetzung von Messgrößen oder automatische Gesundheitswirkung. Hinweise ohne navigierbares Ziel bleiben als nicht klickbare Kontextchips sichtbar.
 
 ## Bodymap-IDs und medizinische Bilder
 

@@ -177,6 +177,26 @@
           "iqrMax": 31.44
         }
       ],
+      "historicalSeries": [
+        {
+          "id": "porkka_2024_historical_reconstruction",
+          "label": "Historische Vorgängerrekonstruktion",
+          "period": "1861–1900",
+          "sourceId": "src_freshwater_porkka_2024",
+          "values": [
+            { "year": 1861, "value": 12.27, "iqrMin": 9.33, "iqrMax": 22.26 },
+            { "year": 1865, "value": 12.26, "iqrMin": 9.73, "iqrMax": 17.47 },
+            { "year": 1870, "value": 10.07, "iqrMin": 8.81, "iqrMax": 13.86 },
+            { "year": 1875, "value": 11.21, "iqrMin": 8.91, "iqrMax": 13.11 },
+            { "year": 1880, "value": 9.58, "iqrMin": 8.82, "iqrMax": 11.32 },
+            { "year": 1885, "value": 9.61, "iqrMin": 8.65, "iqrMax": 10.61 },
+            { "year": 1890, "value": 10.18, "iqrMin": 9.06, "iqrMax": 11.08 },
+            { "year": 1895, "value": 10.40, "iqrMin": 8.88, "iqrMax": 10.74 },
+            { "year": 1900, "value": 10.02, "iqrMin": 9.07, "iqrMax": 10.83 }
+          ]
+        }
+      ],
+      "methodBreaks": [{ "year": 1901 }],
       "provenance": {
         "originalFile": "PHC_dis_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
         "variable": "dis",
@@ -353,6 +373,26 @@
           "iqrMax": 27.07
         }
       ],
+      "historicalSeries": [
+        {
+          "id": "porkka_2024_historical_reconstruction",
+          "label": "Historische Vorgängerrekonstruktion",
+          "period": "1861–1900",
+          "sourceId": "src_freshwater_porkka_2024",
+          "values": [
+            { "year": 1861, "value": 10.63, "iqrMin": 9.85, "iqrMax": 13.54 },
+            { "year": 1865, "value": 12.74, "iqrMin": 10.86, "iqrMax": 13.53 },
+            { "year": 1870, "value": 10.81, "iqrMin": 10.20, "iqrMax": 11.07 },
+            { "year": 1875, "value": 9.83, "iqrMin": 9.01, "iqrMax": 12.45 },
+            { "year": 1880, "value": 9.19, "iqrMin": 8.71, "iqrMax": 9.80 },
+            { "year": 1885, "value": 9.01, "iqrMin": 8.95, "iqrMax": 9.67 },
+            { "year": 1890, "value": 9.54, "iqrMin": 9.33, "iqrMax": 11.74 },
+            { "year": 1895, "value": 9.82, "iqrMin": 9.59, "iqrMax": 10.53 },
+            { "year": 1900, "value": 9.60, "iqrMin": 9.42, "iqrMax": 11.07 }
+          ]
+        }
+      ],
+      "methodBreaks": [{ "year": 1901 }],
       "provenance": {
         "originalFile": "PHC_rootmoist_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
         "variable": "rootmoist",
@@ -458,13 +498,26 @@
       "spatialGeometrySource": "https://github.com/vvirkki/pb-fw-drivers/blob/main/Data/ardiv/hybas3.gpkg"
     }
   },
-  "methodNote": "Die Anzeige verwendet exakte Jahreswerte aus den bereitgestellten PHC/Virkki-Datendateien. Für die Panel-Zeitachse werden 5-Jahres-Punkte von 1905 bis 2015 sowie der letzte verfügbare Wert 2019 gezeigt; es wird nicht aus einer Abbildung geschätzt.",
+  "methodNote": "Die gestrichelte Vorgängerrekonstruktion 1861–1900 stammt aus Porkka et al. (2024); die durchgezogene Hauptreihe 1901–2019 aus Virkki et al. (2026). Das ◇ auf der Zeitachse markiert den Methodenwechsel. Beide Abschnitte verwenden nur exakte Jahreswerte aus den bereitgestellten Quelldatendateien; es wird nicht aus einer Abbildung geschätzt.",
   "source": {
     "dataset": "Data for “Regionally divergent drivers behind transgressions of the freshwater change planetary boundary”",
     "datasetYear": 2026,
     "doi": "10.5281/zenodo.19663531",
     "publication": "Virkki et al. (2026), Regionally divergent drivers behind transgressions of the freshwater change planetary boundary, Nature Communications 17, 5132",
     "publicationDoi": "10.1038/s41467-026-73051-x",
+    "historicalPredecessor": {
+      "dataset": "Data for ‘Notable shifts beyond pre-industrial streamflow and soil moisture conditions transgress the planetary boundary for freshwater change’",
+      "datasetYear": 2024,
+      "datasetDoi": "10.5281/zenodo.10531807",
+      "publication": "Porkka et al. (2024), Nature Water",
+      "publicationDoi": "10.1038/s44221-024-00208-7",
+      "selectedFiles": [
+        "Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/streamflow/global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/soilmoisture/global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv"
+      ],
+      "class": "summed_deviations",
+      "panelSamplingRule": "Exact source values for 1861 and 1865, 1870, …, 1900; separate dashed historical segment, no interpolation."
+    },
     "persistentIdentifiers": {
       "datasetConceptDOI": "10.5281/zenodo.19663530",
       "datasetDOI": "10.5281/zenodo.19663531",

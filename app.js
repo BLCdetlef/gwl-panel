@@ -6,6 +6,8 @@ const regionSelect = document.getElementById("regionSelect");
 const regionPath = document.getElementById("regionPath");
 const locationInfoButton = document.getElementById("locationInfoButton");
 const locationInfo = document.getElementById("locationInfo");
+const globalClimateInfoButton = document.getElementById("globalClimateInfoButton");
+const globalClimateInfo = document.getElementById("globalClimateInfo");
 const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
@@ -25,6 +27,9 @@ const ageGroupButtons = Array.from(document.querySelectorAll("[data-age-group]")
 const ageGroupStatus = document.getElementById("ageGroupStatus");
 const ageEffectDetail = document.getElementById("ageEffectDetail");
 const resetButton = document.getElementById("resetButton");
+const panelGrid = document.querySelector(".panel-grid");
+const mobileGroundHandle = document.getElementById("mobileGroundHandle");
+const mobileLifeBack = document.getElementById("mobileLifeBack");
 const timeSlider = document.getElementById("timeSlider");
 const timeReadout = document.getElementById("timeReadout");
 const timeStatus = document.getElementById("timeStatus");
@@ -84,6 +89,50 @@ let healthMarkerSwitch = null;
 let organMatrixPanel = null;
 let knowledgeNetworks = {};
 let knowledgePanel = null;
+let mobilePanelView = "life";
+
+function isMobilePanelLayout() {
+  return window.matchMedia("(max-width: 820px)").matches;
+}
+
+function setMobilePanelView(view, options = {}) {
+  if (!panelGrid || !["ground", "effect", "life"].includes(view)) return;
+  mobilePanelView = view;
+  panelGrid.dataset.mobileView = view;
+  if (isMobilePanelLayout()) {
+    const visibleClass = view === "ground" ? "panel-left" : view === "effect" ? "panel-center" : "panel-right";
+    panelGrid.querySelectorAll(":scope > .panel").forEach(panel => panel.setAttribute("aria-hidden", String(!panel.classList.contains(visibleClass))));
+  } else {
+    panelGrid.querySelectorAll(":scope > .panel").forEach(panel => panel.removeAttribute("aria-hidden"));
+  }
+  const groundOpen = view === "ground";
+  mobileGroundHandle?.setAttribute("aria-expanded", String(groundOpen));
+  if (mobileGroundHandle) {
+    mobileGroundHandle.querySelector("b").textContent = groundOpen ? "‹" : "›";
+    mobileGroundHandle.setAttribute("aria-label", groundOpen ? "Grundlage schließen und zur Bodymap" : "Grundlage öffnen");
+  }
+  if (options.focus) {
+    const target = view === "ground"
+      ? document.querySelector(".panel-left .boundary-button.active, .panel-left .boundary-button")
+      : view === "effect"
+        ? document.querySelector(".panel-center .panel-heading")
+        : document.querySelector(".panel-right .panel-heading");
+    if (target) {
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }
+  }
+}
+
+mobileGroundHandle?.addEventListener("click", () => {
+  const openGround = mobilePanelView !== "ground";
+  setMobilePanelView(openGround ? "ground" : "life", { focus: openGround });
+});
+mobileLifeBack?.addEventListener("click", () => setMobilePanelView("life", { focus: true }));
+window.matchMedia("(max-width: 820px)").addEventListener("change", event => {
+  if (event.matches) setMobilePanelView("life");
+  else setMobilePanelView(mobilePanelView);
+});
 
 let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
@@ -242,9 +291,10 @@ function getImportedHealthContributionsByOrgan() {
           });
         }
 
-        const foundationIds = risk?.primaryBoundaryId
-          ? [risk.primaryBoundaryId]
-          : (risk?.relatedBoundaryIds || []);
+        const foundationIds = [...new Set([
+          risk?.primaryBoundaryId,
+          ...(risk?.relatedBoundaryIds || [])
+        ].filter(Boolean))];
         const measurements = (study.measurements || [])
           .filter(item => item.value !== null && item.value !== undefined)
           .slice(0, 2);
@@ -426,6 +476,19 @@ function normalizeFreshwaterBlueGreenKnowledge(payload) {
       methodNote: payload.methodNote || "",
       uncertainty: item.uncertainty || "Interquartilsbereich des Modellensembles (IQR).",
       provenance: item.provenance || {},
+      historicalSegments: (item.historicalSeries || []).map(segment => ({
+        ...segment,
+        points: (segment.values || []).map(point => ({
+          year: Number(point.year),
+          value: Number(point.value),
+          display: `≈ ${String(Number(point.value).toFixed(2)).replace(".", ",")} %`,
+          sourceRefs: [segment.sourceId || "src_freshwater_porkka_2024"],
+          uncertainty: Number.isFinite(Number(point.iqrMin)) && Number.isFinite(Number(point.iqrMax))
+            ? `Modellensemble IQR: ${String(Number(point.iqrMin).toFixed(2)).replace(".", ",")}–${String(Number(point.iqrMax).toFixed(2)).replace(".", ",")} %.`
+            : "Interquartilsbereich des Modellensembles."
+        }))
+      })),
+      methodBreaks: item.methodBreaks || [],
       points
     };
   });
@@ -583,6 +646,15 @@ function ensureKnowledgePanel() {
   knowledgePanel.id = "knowledgePanel";
   knowledgePanel.className = "knowledge-panel connections-panel";
   knowledgePanel.hidden = true;
+  knowledgePanel.addEventListener("click", event => {
+    const routeButton = event.target.closest("[data-life-route-boundary]");
+    if (routeButton) {
+      followHealthRoute(routeButton);
+      return;
+    }
+    const organButton = event.target.closest("[data-organ-route]");
+    if (organButton) openOrganOverlay(organButton.dataset.organRoute);
+  });
 
   // v0.9.6: Erst kommt der vollständige Zustand der ausgewählten
   // Planetaren Grenze (Messwert, Referenz, Befund, Wirkungspfad).
@@ -818,6 +890,16 @@ function renderMeasurementTile(item) {
 }
 
 function renderPathCard(title, subtitle, steps, crosslinks = []) {
+  const crosslinkHtml = crosslinks.map(crosslink => {
+    const label = typeof crosslink === "string" ? crosslink : crosslink.label;
+    const boundaryId = typeof crosslink === "string"
+      ? data.boundaries.find(boundary => boundary.label === label)?.id
+      : crosslink.boundaryId;
+    return boundaryId && getBoundary(boundaryId)
+      ? `<button type="button" class="path-crosslink" data-life-route-boundary="${boundaryId}">↗ ${label}</button>`
+      : `<span class="path-crosslink">↗ ${label}</span>`;
+  }).join("");
+
   return `
     <div class="nutrient-path-card">
       <div class="nutrient-path-head">
@@ -832,7 +914,7 @@ function renderPathCard(title, subtitle, steps, crosslinks = []) {
       </div>
       ${crosslinks.length ? `
         <div class="path-crosslinks">
-          ${crosslinks.map(link => `<span>↗ ${link}</span>`).join("")}
+          ${crosslinkHtml}
         </div>` : ""}
     </div>`;
 }
@@ -1537,7 +1619,7 @@ function syncKnowledgeNavigationFromIndex() {
       const boundary = data.boundaries.find(item => item.id === "mental-load");
       if (!boundary) continue;
       boundary.enabled = true;
-      boundary.items = (indexBoundary.groups || []).flatMap(group => [
+      const indexedItems = (indexBoundary.groups || []).flatMap(group => [
         {
           id: normalizeKnowledgeId(group.id),
           scope: "all",
@@ -1558,6 +1640,86 @@ function syncKnowledgeNavigationFromIndex() {
           knowledgeBoundaryId: indexBoundary.id
         }))
       ]);
+      const waterServiceItems = [
+        {
+          id: "water-sanitation-services",
+          scope: "all",
+          label: "Wasser- & Sanitärversorgung",
+          enabled: true,
+          groupOnly: true,
+          summary: "Technische und soziale Versorgungsbedingungen verbinden Wasserverfügbarkeit und -qualität mit konkreten gesundheitlichen Expositionen."
+        },
+        {
+          id: "drinking-water-health",
+          scope: "global",
+          label: "↳ Trinkwasserzugang · Gesundheit",
+          enabled: true,
+          contributionRole: "deepening_with_organ",
+          type: "Gesundheitsbezug",
+          metricLabel: "Zugang zu sicher gemanagtem Trinkwasser",
+          chartUnit: "%",
+          timePointPeriod: "global",
+          timeSeriesFinding: "JMP-Schätzung des globalen Anteils der Bevölkerung mit sicher gemanagtem Trinkwasser. Zugang und Gesundheitslast werden getrennt dargestellt.",
+          value: "73,7 %",
+          reference: "der Weltbevölkerung mit sicher gemanagtem Trinkwasser",
+          period: "2024 · global",
+          sourceLabel: "WHO/UNICEF JMP 2025",
+          sourceUrl: "https://data.unicef.org/resources/jmp-report-2025/",
+          summary: "Der Zugang zu sicherem Trinkwasser ist eine Versorgungs- und Expositionsfrage. Er gehört zur technologischen und sozialen Umwelt, nicht zur planetaren Kontrollvariable für blaues oder grünes Wasser.",
+          finding: "2024 hatten weltweit 2,1 Milliarden Menschen kein sicher gemanagtes Trinkwasser. 106 Millionen Menschen nutzten direkt Oberflächenwasser.",
+          effect: "Unsicheres Trinkwasser → fäkal-orale Erregerexposition → Durchfallerkrankungen → Verdauungssystem.",
+          uncertainty: "Die JMP-Schätzung umfasst Zugang, Verfügbarkeit und Kontaminationsfreiheit. Sie ist nicht identisch mit der GBD-Expositionskategorie „unsichere Trinkwasserquelle“ und keine direkte Krankheitsfallzahl.",
+          lifeNote: "Im Bereich LEBEN erscheint der belegte Pfad am Verdauungssystem. Der Indien-Wert ist ein nationaler Kontext und wird nicht auf andere Orte übertragen.",
+          timePoints: [
+            { year: 2000, value: 61.2482581100601, display: "61,2 %", label: "JMP-Schätzung 2000" },
+            { year: 2001, value: 61.4811114393704, display: "61,5 %", label: "JMP-Schätzung 2001" },
+            { year: 2002, value: 61.8023813703793, display: "61,8 %", label: "JMP-Schätzung 2002" },
+            { year: 2003, value: 62.1281324963474, display: "62,1 %", label: "JMP-Schätzung 2003" },
+            { year: 2004, value: 62.4557839969167, display: "62,5 %", label: "JMP-Schätzung 2004" },
+            { year: 2005, value: 62.8072334946997, display: "62,8 %", label: "JMP-Schätzung 2005" },
+            { year: 2006, value: 63.1316570759531, display: "63,1 %", label: "JMP-Schätzung 2006" },
+            { year: 2007, value: 63.4492647908181, display: "63,4 %", label: "JMP-Schätzung 2007" },
+            { year: 2008, value: 63.7620533556781, display: "63,8 %", label: "JMP-Schätzung 2008" },
+            { year: 2009, value: 64.2906505441352, display: "64,3 %", label: "JMP-Schätzung 2009" },
+            { year: 2010, value: 64.8164573458294, display: "64,8 %", label: "JMP-Schätzung 2010" },
+            { year: 2011, value: 65.3227715045301, display: "65,3 %", label: "JMP-Schätzung 2011" },
+            { year: 2012, value: 65.8869865001761, display: "65,9 %", label: "JMP-Schätzung 2012" },
+            { year: 2013, value: 66.4713029467872, display: "66,5 %", label: "JMP-Schätzung 2013" },
+            { year: 2014, value: 67.0612035289485, display: "67,1 %", label: "JMP-Schätzung 2014" },
+            { year: 2015, value: 67.6504377531236, display: "67,7 %", label: "JMP-Schätzung 2015" },
+            { year: 2016, value: 68.2411717345558, display: "68,2 %", label: "JMP-Schätzung 2016" },
+            { year: 2017, value: 68.818921544456, display: "68,8 %", label: "JMP-Schätzung 2017" },
+            { year: 2018, value: 69.3903638517939, display: "69,4 %", label: "JMP-Schätzung 2018" },
+            { year: 2019, value: 69.946037359687, display: "69,9 %", label: "JMP-Schätzung 2019" },
+            { year: 2020, value: 70.4784606380115, display: "70,5 %", label: "JMP-Schätzung 2020" },
+            { year: 2021, value: 70.9952769597765, display: "71,0 %", label: "JMP-Schätzung 2021" },
+            { year: 2022, value: 71.5080020640923, display: "71,5 %", label: "JMP-Schätzung 2022" },
+            { year: 2023, value: 71.9907403245118, display: "72,0 %", label: "JMP-Schätzung 2023" },
+            { year: 2024, value: 73.6686144265244, display: "73,7 %", label: "JMP-Schätzung 2024" }
+          ],
+          menuType: "health_context"
+        },
+        {
+          id: "india-unsafe-water-diarrhoea",
+          scope: "global",
+          label: "↳ Indien · Durchfallerkrankungen bei Kindern",
+          enabled: true,
+          contributionRole: "deepening_with_organ",
+          type: "Regionaler Gesundheitskontext",
+          value: "38,6",
+          reference: "Todesfälle je 100.000 Kinder unter 5 Jahren",
+          period: "2019 · Indien",
+          sourceLabel: "Behera & Mishra · BMC Public Health 2022",
+          sourceUrl: "https://doi.org/10.1186/s12889-022-12515-3",
+          summary: "Nationaler Kontext: modellierte GBD-Attribution von Durchfallsterblichkeit bei Kindern unter fünf Jahren zu unsicheren Trinkwasserquellen in Indien.",
+          finding: "Für 2019 wurden in Indien 38,6 Todesfälle je 100.000 Kinder unter fünf Jahren unsicheren Trinkwasserquellen zugerechnet (95-%-Unsicherheitsintervall: 26,01–53,43).",
+          effect: "Unsichere Trinkwasserquelle → fäkal-orale Erregerexposition → Durchfallerkrankungen → Verdauungssystem.",
+          uncertainty: "Modellierte GBD-Schätzung für Indien; keine direkte Zählung und nicht auf andere Orte übertragbar. Unsichere Sanitärversorgung und fehlende Handwaschmöglichkeit dürfen nicht hinzugerechnet werden.",
+          lifeNote: "Der Wert ist ein nationaler Kontext für Indien und keine globale oder lokale Schätzung.",
+          menuType: "health_context"
+        }
+      ];
+      boundary.items = [...indexedItems, ...waterServiceItems];
       continue;
     }
 
@@ -1729,41 +1891,88 @@ function genericTimeSeriesCards(network) {
   if (network?.presentation?.hideTimeSeriesInKnowledgeView) return "";
   const seriesList = network?.timeSeries || [];
   if (!seriesList.length) return "";
+  const projectionList = network?.projectionSeries || [];
+  const compatibleProjections = observed => projectionList.filter(projection => {
+    if (projection.observedSeriesId) return projection.observedSeriesId === observed.id;
+    const sameUnitSeries = seriesList.filter(series => series.unit && series.unit === projection.unit);
+    return sameUnitSeries.length === 1 && sameUnitSeries[0].id === observed.id;
+  });
   const cards = seriesList.map(series => {
     const points = (series.points || []).filter(point => Number.isFinite(point.year) && Number.isFinite(point.value));
-    if (!points.length) return "";
+    if (!points.length) return null;
+    const historicalSegments = (series.historicalSeries || []).map(segment => ({
+      ...segment,
+      points: (segment.points || segment.values || []).filter(point => Number.isFinite(point.year) && Number.isFinite(point.value))
+    })).filter(segment => segment.points.length);
+    const projections = compatibleProjections(series).filter(projection => (projection.points || []).some(point => Number.isFinite(point.year) && Number.isFinite(point.value)));
     const width = 360, height = 92, pad = 8;
-    const years = points.map(point => point.year);
-    const values = points.map(point => point.value);
+    const allPoints = [...historicalSegments.flatMap(segment => segment.points), ...points, ...projections.flatMap(projection => projection.points || [])];
+    const years = allPoints.map(point => point.year);
+    const values = allPoints.map(point => point.value);
     const minYear = Math.min(...years), maxYear = Math.max(...years);
     const minValue = Math.min(...values), maxValue = Math.max(...values);
     const spanYear = Math.max(1, maxYear - minYear);
     const spanValue = Math.max(0.000001, maxValue - minValue);
-    const polyline = points.map(point => {
+    const makePolyline = segmentPoints => segmentPoints.map(point => {
       const x = pad + ((point.year - minYear) / spanYear) * (width - pad * 2);
       const y = height - pad - ((point.value - minValue) / spanValue) * (height - pad * 2);
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(" ");
     const first = points[0], latest = points[points.length - 1];
     const formatValue = point => point.display || `${Number(point.value).toLocaleString("de-DE", { maximumFractionDigits: 2 })} ${series.unit || ""}`;
-    return `<div class="knowledge-series-card">
-      <strong>${series.label || series.metric || "Zeitreihe"}</strong>
+    const label = series.label || series.metric || "Zeitreihe";
+    return {
+      label,
+      period: `${minYear}–${maxYear}`,
+      html: `<div class="knowledge-series-card">
+      <strong>${label}</strong>
       <p>${series.metric || ""}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${series.label || "Zeitreihe"}: ${minYear} bis ${maxYear}">
-        <polyline points="${polyline}" fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"></polyline>
+        ${historicalSegments.map(segment => `<polyline class="knowledge-series-historical" points="${makePolyline(segment.points)}" vector-effect="non-scaling-stroke"></polyline>`).join("")}
+        <polyline class="knowledge-series-observed" points="${makePolyline(points)}" vector-effect="non-scaling-stroke"></polyline>
+        ${projections.map(projection => `<polyline class="knowledge-series-projection" points="${makePolyline(projection.points)}" vector-effect="non-scaling-stroke"></polyline>`).join("")}
       </svg>
       <div class="knowledge-series-values"><span>${first.year}: <b>${formatValue(first)}</b></span><span>${latest.year}: <b>${formatValue(latest)}</b></span></div>
+      ${(historicalSegments.length || projections.length) ? `<div class="knowledge-series-legend"><span class="is-observed">Beobachtung</span>${historicalSegments.length ? '<span class="is-historical">Historische Rekonstruktion</span>' : ""}${projections.length ? '<span class="is-projection">Projektion</span>' : ""}</div>` : ""}
+      ${projections.map(projection => `<p><small><strong>${projection.scenarioLabel || "Projektion"}:</strong> ${projection.method || ""} ${projection.uncertainty || ""}</small></p>`).join("")}
       <p><small>${series.finding || ""} ${series.uncertainty || ""}</small></p>
-    </div>`;
-  }).filter(Boolean).join("");
-  const projections = (network?.projectionSeries || []).map(series => `
+    </div>`
+    };
+  }).filter(Boolean);
+  const hasMultipleSeries = cards.length > 1;
+  const seriesHtml = hasMultipleSeries
+    ? `<div class="knowledge-series-collapsibles">${cards.map(card => `
+        <details class="knowledge-series-details">
+          <summary><strong>${card.label}</strong><span>${card.period}</span></summary>
+          ${card.html}
+        </details>`).join("")}</div>`
+    : `<div class="knowledge-series-grid">${cards.map(card => card.html).join("")}</div>`;
+  const assignedProjectionIds = new Set(seriesList.flatMap(series => compatibleProjections(series).map(projection => projection.id)));
+  const unmatchedProjections = projectionList.filter(projection => !assignedProjectionIds.has(projection.id)).map(series => `
     <div class="knowledge-series-card knowledge-projection-card">
       <strong>PROJEKTION · ${series.scenarioLabel || "Trend"}</strong>
       <p>${series.method || ""}</p>
       <div class="knowledge-projection-values">${(series.points || []).map(point => `<span>${point.year}: <b>${point.display || point.value}</b></span>`).join("")}</div>
       <p><small>${series.uncertainty || ""}</small></p>
     </div>`).join("");
-  return cards ? `<h3>MESS- UND ZEITREIHEN</h3><div class="knowledge-series-grid">${cards}</div>${projections ? `<h3>PROJEKTION</h3><div class="knowledge-series-grid">${projections}</div>` : ""}` : "";
+  const projectionHtml = unmatchedProjections
+    ? `<h3>NICHT ZUGEORDNETE PROJEKTION</h3><div class="knowledge-series-grid">${unmatchedProjections}</div>`
+    : "";
+  return cards.length ? `<h3>MESS- UND ZEITREIHEN</h3>${seriesHtml}${projectionHtml}` : "";
+}
+
+function renderGenericPathChain(pathway) {
+  const steps = (pathway.chain || pathway.path || [])
+    .map(step => typeof step === "string" ? step : step.label)
+    .filter(Boolean);
+
+  return steps.map((label, index) => {
+    const organMatch = Object.entries(HOTSPOTS).find(([, organ]) => organ.label === label);
+    const node = organMatch
+      ? `<button type="button" class="effect-path-link" data-organ-route="${organMatch[0]}">${label} ↗</button>`
+      : `<span>${label}</span>`;
+    return `${index ? '<span aria-hidden="true">→</span>' : ""}${node}`;
+  }).join("");
 }
 
 function renderGenericKnowledgeView(network, indexEntry) {
@@ -1783,8 +1992,8 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
   const pathways = deriveGenericPathways(network).map(p => `
     <div class="oil-boundary-link">
-      <strong>${p.label || "Wirkungspfad"}</strong>
-      <p>${(p.chain || p.path || []).map(x => typeof x === "string" ? x : x.label).filter(Boolean).join(" → ")}</p>
+      <strong>${p.label === "Expositions- und Wirkungspfad" ? "Gesundheitspfad" : (p.label || "Wirkungspfad")}</strong>
+      <p class="effect-path-flow">${renderGenericPathChain(p)}</p>
       ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
       ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
     </div>`).join("");
@@ -1808,10 +2017,6 @@ function renderGenericKnowledgeView(network, indexEntry) {
     `<p><strong>${d.label}: ${String(d.level || "").replaceAll("_", " ")}</strong><br>${d.rationale}</p>`
   ).join("");
 
-  const boundaryLabel = indexEntry?.boundary?.label || network.entry?.systemBoundary || "Knowledge";
-  const groupLabel = indexEntry?.group?.label || network.entry?.domainComponent || "Knowledge";
-  const itemLabel = indexEntry?.item?.label || network.entry?.subComponent || network.topic || "Thema";
-  const isExtension = indexEntry?.boundary?.id?.startsWith("eah_");
   const compactKnowledgeView = presentation.compactKnowledgeView === true;
 
   return `
@@ -1823,16 +2028,6 @@ function renderGenericKnowledgeView(network, indexEntry) {
       </summary>
       <div class="knowledge-panel-collapsible-content">` : ""}
     <div class="oil-pilot generic-knowledge-view">
-      ${compactKnowledgeView ? "" : `
-        <div class="eyebrow">${isExtension ? "ERGÄNZENDER EINFLUSSBEREICH" : "PLANETARE GRENZE"} · ${boundaryLabel}</div>
-        <h2>${groupLabel} → ${itemLabel}</h2>
-        <p class="oil-lead">${network.corePrinciples?.[0] || network.topic || ""}</p>
-        <div class="oil-path">
-          <span>${boundaryLabel}</span><b>→</b>
-          <span>${groupLabel}</span><b>→</b><span>${itemLabel}</span>
-        </div>
-      `}
-
       ${evidence.length ? `<h3>STUDIENBELEGE</h3><div class="measurement-grid">${evidence.map(c => c.html).join("")}</div>` : ""}
       ${values.length ? `${compactKnowledgeView ? "" : "<h3>STUDIENWERTE</h3>"}<div class="measurement-grid">${values.map(c => c.html).join("")}</div>` : ""}
 
@@ -1865,20 +2060,6 @@ function renderGenericKnowledgeView(network, indexEntry) {
     </div>
     ${compactKnowledgeView ? "</div></details>" : ""}`;
 }
-
-function renderTechSocialGroupIntro(group) {
-  return `
-    <div class="extension-intro">
-      <div class="eyebrow">TECHNOLOGISCHE & SOZIALE UMWELT</div>
-      <h2>${group?.label || "Bereich"}</h2>
-      <p>Dieser Bereich wird über konkrete Expositionen und Wirkungspfade erschlossen.</p>
-      <div class="extension-note">
-        <strong>Bereits hinterlegte Knowledge:</strong>
-        ${(group?.items || []).map(item => `<p>${item.label}</p>`).join("")}
-      </div>
-    </div>`;
-}
-
 
 function getKnowledgeSource(network, measurement) {
   const ids = measurement?.sourceRefs || [];
@@ -1937,41 +2118,22 @@ const CONTRIBUTION_ROLES = {
 };
 
 function contributionRoleIcon(roleId) {
-  const icons = {
-    pg_core: `
-      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
-        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
-        <circle class="role-icon-solid" cx="23.1" cy="15.25" r="1.45"/>
-        <circle class="role-icon-anchor-ring" cx="23.1" cy="12.95" r="1.8"/>
-        <path class="role-icon-anchor" d="M23.1 14.65v13.05M19.05 15.2h8.1M18.3 19.05c0 5.02 1.93 7.55 4.8 8.65 2.87-1.1 4.8-3.63 4.8-8.65M18.3 19.05l-1.42 2.06m1.42-2.06 1.72 1.37m7.88-1.37 1.42 2.06m-1.42-2.06-1.72 1.37"/>
-      </svg>`,
-    deepening_with_organ: `
+  const hasOrganReference = roleId === "deepening_with_organ";
+  const icon = hasOrganReference ? `
       <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
         <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
         <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
         <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
         <path class="role-icon-overlay" d="m25.9 25.4 3 3M18.7 21.5h1.2l.8-1.7 1.2 3.35.9-2.15.65 1.1h1.65"/>
         <path class="role-icon-heart" d="M22 25.25s-3.4-2.1-3.4-4.05c0-.98.73-1.72 1.68-1.72.72 0 1.35.4 1.72 1.03.37-.63 1-1.03 1.72-1.03.95 0 1.68.74 1.68 1.72 0 1.95-3.4 4.05-3.4 4.05Z"/>
-      </svg>`,
-    deepening_without_organ: `
+      </svg>` : `
       <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <circle class="role-icon-marker" cx="12.25" cy="12.25" r="8.8"/>
-        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
-        <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
-        <path class="role-icon-overlay" d="m25.9 25.4 3 3"/>
-      </svg>`,
-    supplementary_context: `
-      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <circle class="role-icon-marker role-icon-marker-dashed" cx="12.25" cy="12.25" r="8.8"/>
-        <circle class="role-icon-marker-inner" cx="12.25" cy="12.25" r="6.05"/>
-        <circle class="role-icon-loupe" cx="22" cy="21.5" r="5.45"/>
-        <path class="role-icon-overlay" d="m25.9 25.4 3 3M22 24.1v-4.7M22 21.8c-1.8-.05-2.55-1.15-2.55-2.08 1.75 0 2.55.85 2.55 2.08Zm0-.85c.03-1.55.88-2.38 2.4-2.38 0 1.55-.87 2.38-2.4 2.38Z"/>
-      </svg>`
-  };
+        <circle class="role-icon-loupe" cx="13.5" cy="13.5" r="8"/>
+        <path class="role-icon-overlay" d="m19.2 19.2 7.1 7.1"/>
+      </svg>`;
   const wrapper = document.createElement("span");
-  wrapper.className = `contribution-role-icon is-${roleId}`;
-  wrapper.innerHTML = icons[roleId] || icons.pg_core;
+  wrapper.className = `contribution-role-icon is-${roleId}${hasOrganReference ? " has-organ-reference" : " is-plain-loupe"}`;
+  wrapper.innerHTML = icon;
   return wrapper;
 }
 
@@ -2010,6 +2172,26 @@ function updateContributionRole(boundary = null, item = null) {
   });
 }
 
+function updateGroupOverviewRole() {
+  if (!contributionRoleCard) return;
+  contributionRoleCard.innerHTML = `<span class="eyebrow">Navigationsebene</span><strong>Bereichsübersicht</strong><p>Diese Auswahl bündelt untergeordnete Beiträge. Messwerte und Wirkungspfade erscheinen erst nach Auswahl eines konkreten Beitrags.</p>`;
+}
+
+function renderGroupOverview(boundary, item) {
+  updateGroupOverviewRole();
+  const frameworkLabel = isEahExtension(boundary)
+    ? "ERGÄNZENDER EINFLUSSBEREICH"
+    : "PLANETARE GRENZE";
+  if (focusType) focusType.textContent = `${frameworkLabel} · ${boundary?.label || ""}`;
+  if (focusTitle) focusTitle.textContent = item?.label || "Bereichsübersicht";
+  if (focusSummary) focusSummary.textContent = item?.summary || "Dieser Bereich bündelt untergeordnete Beiträge. Wähle einen konkreten Beitrag für Messwerte und Wirkungspfade.";
+  setStandardEffectBlocksVisible(false);
+  renderHealth(null);
+  const panel = ensureKnowledgePanel();
+  panel.innerHTML = "";
+  panel.hidden = true;
+}
+
 function getKnowledgeSeries(network) {
   const preferredId = network?.presentation?.primaryTimeSeriesId;
   if (preferredId) {
@@ -2035,6 +2217,57 @@ function getQualifiedProjectionSeries(network) {
   });
 }
 
+function positionTimeChartLabelNearPoint(label, pointX, pointY, plot, width, height) {
+  if (!label || typeof label.getBBox !== "function") return;
+  const candidates = [
+    { x: pointX + 8, y: pointY - 11, anchor: "start" },
+    { x: pointX - 8, y: pointY - 11, anchor: "end" },
+    { x: pointX + 8, y: pointY - 25, anchor: "start" },
+    { x: pointX - 8, y: pointY - 25, anchor: "end" },
+    { x: pointX + 11, y: pointY, anchor: "start" },
+    { x: pointX - 11, y: pointY, anchor: "end" }
+  ];
+  const curves = [...timeChart.querySelectorAll(".time-chart-historical, .time-chart-observed, .time-chart-projection")];
+
+  const scoreCandidate = candidate => {
+    label.setAttribute("x", candidate.x);
+    label.setAttribute("y", candidate.y);
+    label.setAttribute("text-anchor", candidate.anchor);
+    const box = label.getBBox();
+    const margin = 2;
+    const outside = box.x < plot.left || box.x + box.width > width - plot.right || box.y < plot.top || box.y + box.height > height - plot.bottom;
+    if (outside) return Number.POSITIVE_INFINITY;
+
+    let intersections = 0;
+    for (const curve of curves) {
+      const length = curve.getTotalLength();
+      const samples = Math.max(2, Math.ceil(length / 2));
+      for (let index = 0; index <= samples; index += 1) {
+        const point = curve.getPointAtLength(length * index / samples);
+        if (
+          point.x >= box.x - margin && point.x <= box.x + box.width + margin &&
+          point.y >= box.y - margin && point.y <= box.y + box.height + margin
+        ) intersections += 1;
+      }
+    }
+    return intersections;
+  };
+
+  let best = candidates[0];
+  let bestScore = Number.POSITIVE_INFINITY;
+  for (const candidate of candidates) {
+    const score = scoreCandidate(candidate);
+    if (score < bestScore) {
+      best = candidate;
+      bestScore = score;
+      if (score === 0) break;
+    }
+  }
+  label.setAttribute("x", best.x);
+  label.setAttribute("y", best.y);
+  label.setAttribute("text-anchor", best.anchor);
+}
+
 function renderTimeChart(observedSeries = null, projectionSeries = []) {
   if (!timeChart) return;
   const timeCard = timeChart.closest(".time-card");
@@ -2057,6 +2290,14 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
       .filter(point => point.year >= xMin && point.year <= xMax)
       .sort((a, b) => a.year - b.year)
   })).filter(series => series.points.length);
+  const historicalSegments = (observedSeries?.historicalSegments || []).map(segment => ({
+    ...segment,
+    points: (segment.points || [])
+      .filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value)))
+      .map(point => ({ ...point, year: Number(point.year), value: Number(point.value) }))
+      .filter(point => point.year >= xMin && point.year <= xMax)
+      .sort((a, b) => a.year - b.year)
+  })).filter(segment => segment.points.length);
 
   if (!observed.length) {
     timeCard?.classList.add("no-time-series");
@@ -2066,7 +2307,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
 
   timeCard?.classList.remove("no-time-series");
 
-  const allValues = [...observed, ...projections.flatMap(series => series.points)].map(point => point.value);
+  const allValues = [...observed, ...historicalSegments.flatMap(segment => segment.points), ...projections.flatMap(series => series.points)].map(point => point.value);
   const observedMin = Math.min(...observed.map(point => point.value));
   const observedMax = Math.max(...observed.map(point => point.value));
   const range = Math.max(observedMax - observedMin, Math.abs(observedMax) * .1, 1);
@@ -2080,10 +2321,15 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const colors = ["#4c718b", "#6f657e", "#8b6a43", "#3f7c6d", "#9a5555"];
   const unit = observedSeries?.unit ? ` ${observedSeries.unit}` : "";
   const currentYear = Math.min(xMax, Math.max(xMin, new Date().getFullYear()));
-  const extrema = [...observed, ...projections.flatMap(series => series.points)];
+  const extrema = [...observed, ...historicalSegments.flatMap(segment => segment.points), ...projections.flatMap(series => series.points)];
   const minPoint = extrema.reduce((lowest, point) => point.value < lowest.value ? point : lowest, extrema[0]);
   const maxPoint = extrema.reduce((highest, point) => point.value > highest.value ? point : highest, extrema[0]);
   const projectionMarkup = projections.map((series, index) => `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`).join("");
+  const historicalMarkup = historicalSegments.map(segment => `<path class="time-chart-historical" d="${makePath(segment.points)}"/>`).join("");
+  const methodBreakMarkup = (observedSeries?.methodBreaks || [])
+    .filter(marker => Number.isFinite(Number(marker.year)) && Number(marker.year) >= xMin && Number(marker.year) <= xMax)
+    .map(marker => `<text class="time-chart-method-break" x="${x(Number(marker.year))}" y="${height - plot.bottom}" aria-hidden="true">◇</text>`)
+    .join("");
   const observationMarkup = observed.map((point, index) => {
     const pointX = x(point.year);
     const before = index ? (x(observed[index - 1].year) + pointX) / 2 : Math.max(plot.left, pointX - 3);
@@ -2094,18 +2340,28 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
 
   timeChart.innerHTML = `
     <title id="timeChartTitle">${observedSeries?.label || "Messreihe"} von 1700 bis 2100</title>
-    <desc id="timeChartDescription">Durchgezogene Linie: Messwerte. ${projections.length ? "Gestrichelte Linien: wissenschaftlich qualifizierte Szenarien." : "Keine wissenschaftlich qualifizierte Projektion hinterlegt."}</desc>
+    <desc id="timeChartDescription">${historicalSegments.length ? "Gestrichelte Linie: historische Vorgängerrekonstruktion mit abweichender Methode. " : ""}Durchgezogene Linie: aktuelle Hauptreihe. ${methodBreakMarkup ? "Diamant auf der Zeitachse: Methodenwechsel. " : ""}${projections.length ? "Gepunktete Linien: wissenschaftlich qualifizierte Szenarien." : "Keine wissenschaftlich qualifizierte Projektion hinterlegt."}</desc>
     <defs><marker id="timeChartArrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 6 3 0 6Z" fill="#71807a"/></marker></defs>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${width - plot.right}" y2="${height - plot.bottom}" marker-end="url(#timeChartArrow)"/>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${plot.left}" y2="${plot.top}" marker-end="url(#timeChartArrow)"/>
     <text class="time-chart-value-label" x="${Math.min(width - plot.right, x(maxPoint.year) + 4)}" y="${Math.min(height - plot.bottom - 4, y(maxPoint.value) + 9)}">${maxPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
-    <text class="time-chart-value-label" x="${Math.min(width - plot.right, x(minPoint.year) + 4)}" y="${Math.max(plot.top + 10, y(minPoint.value) - 5)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    <text class="time-chart-value-label" data-extrema-label="minimum" x="${x(minPoint.year)}" y="${y(minPoint.value)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    ${historicalMarkup}
     <path class="time-chart-observed" d="${makePath(observed)}"/>
     ${projectionMarkup}
     ${observationMarkup}
     <line class="time-chart-current-year" x1="${x(currentYear)}" y1="${plot.top}" x2="${x(currentYear)}" y2="${height - plot.bottom}"/>
+    ${methodBreakMarkup}
     ${axisYears.map(year => `<text class="time-chart-axis-label${year === 1700 ? " time-chart-axis-label-start" : " time-chart-axis-label-end"}" x="${x(year)}" y="${height - 9}">${year}</text>`).join("")}
     <text class="time-chart-axis-label" x="${x(currentYear)}" y="${height - 9}">${currentYear}</text>`;
+  positionTimeChartLabelNearPoint(
+    timeChart.querySelector('[data-extrema-label="minimum"]'),
+    x(minPoint.year),
+    y(minPoint.value),
+    plot,
+    width,
+    height
+  );
   timeChart.querySelectorAll("[data-time-chart-year]").forEach(button => button.addEventListener("click", () => {
     timeWindow = "data";
     selectYear(Number(button.dataset.timeChartYear));
@@ -2189,7 +2445,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   const itemLabel = String(activeItem?.label || "").replace(/^↳\s*/, "");
   if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${itemLabel}`;
   if (focusSummary) focusSummary.textContent =
-    network?.entry?.effectFocus || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
+    network?.entry?.effectFocus || network?.corePrinciples?.[0] || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
 
   if (regional) {
     const { pilot, region, component } = regional;
@@ -2423,6 +2679,12 @@ function renderKnowledgePanel() {
   const activeItem = activeBoundary?.items?.find(item => item.id === state.itemId);
   const usesSpecializedEnergyView = state.boundaryId === "materials-energy"
     && ["oil", "coal", "natural-gas", "wind", "solar"].includes(activeItem?.id);
+  if (activeItem?.groupOnly && !activeItem.menuHeading) {
+    syncBoundaryModeClass();
+    setStandardFocusCardVisible(true);
+    renderGroupOverview(activeBoundary, activeItem);
+    return;
+  }
   if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load" && !usesSpecializedEnergyView) {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const rawNetwork = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
@@ -2448,7 +2710,13 @@ function renderKnowledgePanel() {
 
   syncBoundaryModeClass();
   setStandardFocusCardVisible(true);
-  setStandardEffectBlocksVisible(state.boundaryId !== "nutrients" && state.boundaryId !== "novel" && state.boundaryId !== "materials-energy" && state.boundaryId !== "mental-load");
+  const isWaterServiceHealthContext = state.boundaryId === "mental-load" && ["drinking-water-health", "india-unsafe-water-diarrhoea"].includes(state.componentId);
+  setStandardEffectBlocksVisible(
+    state.boundaryId !== "nutrients" &&
+    state.boundaryId !== "novel" &&
+    state.boundaryId !== "materials-energy" &&
+    (state.boundaryId !== "mental-load" || isWaterServiceHealthContext)
+  );
 
   const nitrate = knowledgeNetworks.nitrate;
   const phosphorus = knowledgeNetworks.phosphorus;
@@ -2537,16 +2805,28 @@ function renderKnowledgePanel() {
 
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.componentId);
 
-    if (indexEntry?.type === "item") {
+    if (isWaterServiceHealthContext) {
+      const isIndiaContext = state.componentId === "india-unsafe-water-diarrhoea";
+      if (focusTitle) focusTitle.textContent = isIndiaContext
+        ? "Indien · Durchfallerkrankungen bei Kindern"
+        : "Wasser- & Sanitärversorgung · Trinkwasserzugang";
+      if (focusSummary) focusSummary.textContent = isIndiaContext
+        ? "Nationaler Gesundheitskontext: modellierte Krankheitslast in Indien; nicht auf andere Orte übertragbar."
+        : "Zugang zu sicher gemanagtem Trinkwasser ist eine soziale und technische Versorgungsbedingung mit direktem Gesundheitsbezug.";
+      setDetails(activeItem);
+      renderTime(activeItem);
+      panel.innerHTML = `
+        <div class="extension-intro">
+          <div class="eyebrow">EINORDNUNG</div>
+          <h2>${isIndiaContext ? "Indien · Gesundheitskontext" : "Trinkwasserzugang & Gesundheit"}</h2>
+          <p>${isIndiaContext ? "Die angegebene Krankheitslast ist eine modellierte nationale GBD-Schätzung für Kinder unter fünf Jahren, keine lokale Messung." : "Der Wert beschreibt fehlenden Zugang zu sicher gemanagtem Trinkwasser. Er ist keine Kontrollvariable einer planetaren Grenze."}</p>
+        </div>`;
+    } else if (indexEntry?.type === "item") {
       const network = getKnowledgeNetworkBySource(indexEntry.item.source);
       if (focusTitle) focusTitle.textContent = `${indexEntry.group.label} · ${indexEntry.item.label}`;
-      if (focusSummary) focusSummary.textContent = network?.topic || "Konkreter menschengemachter Umwelt- und Wirkungspfad.";
+      if (focusSummary) focusSummary.textContent = network?.corePrinciples?.[0] || network?.topic || "Konkreter menschengemachter Umwelt- und Wirkungspfad.";
       panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
       if (organReadout) organReadout.textContent = genericHealthReadout(network);
-    } else if (indexEntry?.type === "group") {
-      if (focusTitle) focusTitle.textContent = indexEntry.group.label;
-      if (focusSummary) focusSummary.textContent = "Umwelt- und Expositionsbereich innerhalb der ergänzenden Systemgrenze.";
-      panel.innerHTML = renderTechSocialGroupIntro(indexEntry.group);
     } else {
       const groups = (getKnowledgeIndex()?.systemBoundaries?.find(item => item.id === "eah_tech_social_environment")?.groups || []).map(group =>
         `<p><strong>${group.label}</strong><br>${(group.items || []).map(item => item.label).join(" · ")}</p>`
@@ -2865,7 +3145,7 @@ function renderBoundaries() {
             if (item.id === selectedItemId) itemButton.classList.add("active");
             const contributionRole = contributionRoleFor(boundary, item);
             const role = CONTRIBUTION_ROLES[contributionRole];
-            if (role) {
+            if (role && !item.groupOnly) {
               const roleIcon = contributionRoleIcon(contributionRole);
               itemButton.insertBefore(roleIcon, itemButton.querySelector(".submenu-arrow")?.nextSibling || itemButton.firstChild);
               itemButton.setAttribute("aria-label", `${role.menu}: ${itemButton.textContent.trim()}`);
@@ -2918,6 +3198,34 @@ function closeBoundaryContextInfos() {
 function mergeItemAndPoint(item, point) { return point ? { ...item, ...point, health: point.health || item.health } : item; }
 function setLink(label, url) { sourceLink.textContent = label || "–"; if (url) { sourceLink.href = url; sourceLink.target = "_blank"; } else { sourceLink.removeAttribute("href"); sourceLink.removeAttribute("target"); } }
 
+function renderWaterServiceEffectPaths(item) {
+  if (!["drinking-water-health", "india-unsafe-water-diarrhoea"].includes(item?.id)) return false;
+
+  effectPath.innerHTML = `
+    <span class="effect-path-row">
+      <span class="effect-path-kind">Umwelt / Versorgung</span>
+      <span class="effect-path-flow">
+        <button type="button" class="effect-path-link" data-life-route-boundary="freshwater">Süßwasser ↗</button>
+        <span aria-hidden="true">→</span><span>Verfügbarkeit / Qualität</span>
+        <span aria-hidden="true">→</span><span>Trinkwasserversorgung</span>
+      </span>
+    </span>
+    <span class="effect-path-row">
+      <span class="effect-path-kind">Gesundheit</span>
+      <span class="effect-path-flow">
+        <span>Unsicheres Trinkwasser</span><span aria-hidden="true">→</span>
+        <span>fäkal-orale Erregerexposition</span><span aria-hidden="true">→</span>
+        <span>Durchfallerkrankungen</span><span aria-hidden="true">→</span>
+        <button type="button" class="effect-path-link" data-organ-route="gut">Verdauungssystem ↗</button>
+      </span>
+    </span>`;
+  return true;
+}
+
+function setEffectPath(item, text) {
+  if (!renderWaterServiceEffectPaths(item)) effectPath.textContent = text || "–";
+}
+
 
 function setNutrientPlaceholderState() {
   focusType.textContent = "PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE";
@@ -2952,19 +3260,19 @@ function setDetails(item, point = null, noMeasurementYear = null) {
     referenceValue.textContent = item.reference || "–";
     periodValue.textContent = String(noMeasurementYear);
     findingText.textContent = `Für ${noMeasurementYear} ist in dieser Messreihe kein Messpunkt hinterlegt. Es wird nichts interpoliert.`;
-    effectPath.textContent = item.effect || "–";
+    setEffectPath(item, item.effect);
     uncertaintyValue.textContent = "Keine Zwischenwerte werden erfunden. Wähle einen markierten Messzeitpunkt oder wechsle zurück in den Datenbereich.";
     lifeNote.textContent = item.lifeNote || "–";
     setLink(item.sourceLabel, item.sourceUrl);
     return;
   }
   const view = mergeItemAndPoint(item, point);
-  metricValue.textContent = view.value || "–";
+  metricValue.textContent = view.display || view.value || "–";
   referenceValue.textContent = view.reference || "–";
-  periodValue.textContent = view.period || "–";
+  periodValue.textContent = point && item.timePointPeriod ? `${point.year} · ${item.timePointPeriod}` : (view.period || "–");
   uncertaintyValue.textContent = view.uncertainty || "–";
-  findingText.textContent = view.finding || "–";
-  effectPath.textContent = view.effect || "–";
+  findingText.textContent = point?.finding || (point && item.timeSeriesFinding) || view.finding || "–";
+  setEffectPath(item, view.effect);
   lifeNote.textContent = view.lifeNote || "–";
   setLink(view.sourceLabel, view.sourceUrl);
 }
@@ -2978,7 +3286,7 @@ function renderTime(item) {
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
   scenarioControls.hidden = true;
   document.querySelector(".time-card")?.classList.remove("projection-mode");
-  metricLabel.textContent = "Mess-/Zustandswert";
+  metricLabel.textContent = item?.metricLabel || "Mess-/Zustandswert";
   timeMarkers.innerHTML = "";
   if (!item || !points.length) {
     timeSlider.disabled = true; timeSlider.min = "0"; timeSlider.max = "1"; timeSlider.value = "0";
@@ -3003,7 +3311,7 @@ function renderTime(item) {
   if (exact) timeStatus.textContent = `${exact.label || "Messpunkt"}. Markierte Jahre sind tatsächlich hinterlegte Messzeitpunkte.`;
   else if (timeWindow === "blc") timeStatus.textContent = "BLC-Zeitfenster 1700–2100. Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
   else timeStatus.textContent = "Nur markierte Jahre sind in dieser Messreihe belegt; Zwischenwerte werden nicht interpoliert.";
-  renderTimeChart({ points }, []);
+  renderTimeChart({ points, unit: item?.chartUnit || "" }, []);
 }
 
 
@@ -3736,7 +4044,7 @@ function renderHealthContributionCards(items) {
       : `<span><strong>Krankheitslast:</strong> noch nicht belastbar quantifiziert</span>`;
     const statusText = item.globalHealthReference
       ? `Globale Referenz${item.spatialContext ? ` · ${item.spatialContext}` : ""}`
-      : `Evidenz ${item.evidenceLevel || "–"} · ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}`;
+      : `${item.spatialContext ? `Regionaler Kontext · ${item.spatialContext} · ` : ""}Evidenz ${item.evidenceLevel || "–"} · ${burden ? (item.affectsOrganColor ? "Krankheitslast quantifiziert" : "Krankheitslast quantifiziert, noch nicht normiert") : "Krankheitslast noch nicht quantifiziert"}`;
 
     return `
       <details class="organ-contribution-item${item.globalHealthReference ? " is-global-reference" : ""}">
@@ -3881,6 +4189,7 @@ function followHealthRoute(routeButton) {
   closeOrganOverlay();
   if (itemId) selectItem(boundaryId, itemId);
   else selectBoundary(boundaryId);
+  if (isMobilePanelLayout()) setMobilePanelView("effect", { focus: true });
   document.querySelector(`[data-boundary="${boundaryId}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -3921,6 +4230,7 @@ function selectItem(boundaryId, itemId) {
   const boundary = getBoundary(boundaryId);
   const item = boundary?.items?.find(entry => entry.id === itemId);
   if (!item) return;
+  if (isMobilePanelLayout() && mobilePanelView === "ground") setMobilePanelView("effect", { focus: true });
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
   // Die Messdaten stammen aus dem Wissensnetz, nicht aus dem Standard-PG-Itemmodell.
@@ -4021,6 +4331,17 @@ function setLocationInfoOpen(open) {
   locationInfoButton.setAttribute("aria-expanded", String(open));
 }
 
+function setGlobalClimateInfoOpen(open) {
+  if (!globalClimateInfoButton || !globalClimateInfo) return;
+  globalClimateInfo.hidden = !open;
+  globalClimateInfoButton.setAttribute("aria-expanded", String(open));
+}
+
+globalClimateInfoButton?.addEventListener("click", event => {
+  event.stopPropagation();
+  setGlobalClimateInfoOpen(globalClimateInfoButton.getAttribute("aria-expanded") !== "true");
+});
+
 locationInfoButton?.addEventListener("click", event => {
   event.stopPropagation();
   setLocationInfoOpen(locationInfoButton.getAttribute("aria-expanded") !== "true");
@@ -4029,6 +4350,11 @@ locationInfoButton?.addEventListener("click", event => {
 document.addEventListener("click", event => {
   if (locationInfoButton?.getAttribute("aria-expanded") !== "true") return;
   if (!event.target.closest(".location-control")) setLocationInfoOpen(false);
+});
+
+document.addEventListener("click", event => {
+  if (globalClimateInfoButton?.getAttribute("aria-expanded") !== "true") return;
+  if (!event.target.closest(".global-climate-info-wrap")) setGlobalClimateInfoOpen(false);
 });
 
 document.addEventListener("click", event => {
@@ -4043,6 +4369,11 @@ document.addEventListener("keydown", event => {
   if (event.key === "Escape" && locationInfoButton?.getAttribute("aria-expanded") === "true") {
     setLocationInfoOpen(false);
     locationInfoButton.focus();
+    return;
+  }
+  if (event.key === "Escape" && globalClimateInfoButton?.getAttribute("aria-expanded") === "true") {
+    setGlobalClimateInfoOpen(false);
+    globalClimateInfoButton.focus();
     return;
   }
   if (event.key === "Escape" && document.querySelector(".boundary-context-info:not([hidden])")) {
@@ -4100,6 +4431,15 @@ organOverlayContent?.addEventListener("click", event => {
   if (!routeButton) return;
   followHealthRoute(routeButton);
 });
+effectPath?.addEventListener("click", event => {
+  const boundaryRoute = event.target.closest("[data-life-route-boundary]");
+  if (boundaryRoute) {
+    followHealthRoute(boundaryRoute);
+    return;
+  }
+  const organRoute = event.target.closest("[data-organ-route]");
+  if (organRoute) openOrganOverlay(organRoute.dataset.organRoute);
+});
 healthPathOverlay?.addEventListener("click", event => {
   const routeButton = event.target.closest("[data-life-route-boundary]");
   if (routeButton) {
@@ -4126,6 +4466,7 @@ async function initPanel() {
   updatePrototypeVersion();
   renderBoundaries();
   renderHealth(null);
+  if (isMobilePanelLayout()) setMobilePanelView("life");
 }
 
 
