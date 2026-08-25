@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gwl-bodymap-organ-v1",
+  "title": "GWL Bodymap Organ Registry",
+  "type": "object",
+  "required": ["format", "version", "image", "systems", "organs"],
+  "properties": {
+    "format": { "const": "gwl-bodymap-v1" },
+    "version": { "type": "string" },
+    "image": { "type": "string", "minLength": 1 },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "label": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "organs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "entityType", "primarySystemId", "aliases", "x", "y", "side", "image", "layout"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "entityType": { "enum": ["organ", "organ_group", "organ_system"] },
+          "primarySystemId": { "type": "string", "minLength": 1 },
+          "relatedSystemIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "legacyAliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "searchTerms": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "x": { "type": "number", "minimum": 0, "maximum": 100 },
+          "y": { "type": "number", "minimum": 0, "maximum": 100 },
+          "side": { "enum": ["left", "right"] },
+          "image": { "type": "string", "minLength": 1 },
+          "systemLabel": { "type": "string" },
+          "layout": { "enum": ["stack", "side"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

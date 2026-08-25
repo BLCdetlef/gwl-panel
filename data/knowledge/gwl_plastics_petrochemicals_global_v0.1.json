@@ -163,7 +163,7 @@
         "note": "Keine bewiesene allgemeine Organursächlichkeit und keine globale zurechenbare Krankheitslast."
       }
     ],
-    "bodymapRule": "Der schwarze Außenring kennzeichnet nur den geprüften Organbezug: Gewebenachweis bei Gehirn, Leber und Nieren sowie eine klinische Assoziation bei Herz und Kreislauf. Keine graue Organfüllung und kein quantitativer Organstatus; die globale Produktionsmenge allein aktiviert keinen Marker."
+    "bodymapRule": "Der schwarze Außenring kennzeichnet nur den geprüften Organbezug: Gewebenachweis bei Gehirn, Leber und Nieren sowie eine klinische Assoziation bei Herz und Kreislauf. Keine Graustufe der Markerfüllung und kein quantitativer Organstatus; die globale Produktionsmenge allein aktiviert keinen Marker."
   },
   "classificationRule": {
     "materialFlow": {

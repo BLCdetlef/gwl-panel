@@ -136,6 +136,10 @@ window.matchMedia("(max-width: 820px)").addEventListener("change", event => {
 
 let HOTSPOTS = {};
 let ORGAN_MEDIA = {};
+let ORGAN_SYSTEMS = {};
+let ORGAN_ALIAS_INDEX = new Map();
+let ORGAN_LEGACY_ALIAS_INDEX = new Map();
+let ORGAN_SEARCH_TERM_INDEX = new Map();
 
 let LIFE_PROTOTYPE_MODE = true;
 let LIFE_HEALTH_DATA = null;
@@ -216,7 +220,7 @@ async function loadHealthStudyImport() {
   };
 
   // Bewusste Schnittstelle für die spätere, datengetriebene Gesundheitsansicht.
-  // Der Import allein aktiviert noch keine Organfarbe und keine lokale Aussage.
+  // Der Import allein aktiviert noch keine abgestufte Markerfüllung und keine lokale Aussage.
   window.GWL_HEALTH_IMPORT = HEALTH_STUDY_IMPORT;
   if (HEALTH_STUDY_IMPORT.rejected.length) {
     console.warn("Gesundheitsstudien beim Import zurückgewiesen:", HEALTH_STUDY_IMPORT.rejected);
@@ -239,12 +243,31 @@ async function loadHealthContributionPrototype() {
 }
 
 function findHotspotIdByLabels(labels = []) {
-  const wanted = labels.map(x => String(x).toLowerCase());
-  for (const [id, def] of Object.entries(HOTSPOTS || {})) {
-    const hay = `${id} ${def?.label || ""}`.toLowerCase();
-    if (wanted.some(label => hay.includes(label))) return id;
-  }
-  return null;
+  return labels.map(resolveOrganId).find(Boolean) || null;
+}
+
+function normalizeOrganLookupKey(value) {
+  return String(value || "")
+    .trim()
+    .toLocaleLowerCase("de-DE")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " und ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function resolveOrganId(value) {
+  if (!value) return null;
+  if (HOTSPOTS[value]) return value;
+  const key = normalizeOrganLookupKey(value);
+  return ORGAN_ALIAS_INDEX.get(key) || ORGAN_LEGACY_ALIAS_INDEX.get(key) || null;
+}
+
+function resolveOrganSearchTargets(value) {
+  const directId = resolveOrganId(value);
+  if (directId) return [directId];
+  return [...(ORGAN_SEARCH_TERM_INDEX.get(normalizeOrganLookupKey(value)) || [])];
 }
 
 function getHealthSourceById(id) {
@@ -272,7 +295,9 @@ function getImportedHealthContributionsByOrgan() {
       ...(HEALTH_STUDY_IMPORT.catalog?.contextRisks || [])
     ].find(candidate => candidate.id === study.riskRefs?.[0]);
     for (const endpoint of study.healthEndpoints || []) {
-      for (const organId of endpoint.organIds || []) {
+      for (const rawOrganId of endpoint.organIds || []) {
+        const organId = resolveOrganId(rawOrganId);
+        if (!organId) continue;
         const normalizedEndpoint = endpoint.label.trim().toLocaleLowerCase("de-DE");
         const cardKey = `${organId}::${normalizedEndpoint}`;
         if (!endpointCards.has(cardKey)) {
@@ -402,19 +427,45 @@ async function loadBodymapConfig() {
 
   HOTSPOTS = {};
   ORGAN_MEDIA = {};
+  ORGAN_SYSTEMS = Object.fromEntries((config.systems || []).map(system => [system.id, system]));
+  ORGAN_ALIAS_INDEX = new Map();
+  ORGAN_LEGACY_ALIAS_INDEX = new Map();
+  ORGAN_SEARCH_TERM_INDEX = new Map();
   (config.organs || []).forEach(organ => {
     HOTSPOTS[organ.id] = {
       label: organ.label,
       x: organ.x,
       y: organ.y,
-      side: organ.side || "right"
+      side: organ.side || "right",
+      entityType: organ.entityType || "organ",
+      primarySystemId: organ.primarySystemId || "",
+      relatedSystemIds: organ.relatedSystemIds || [],
+      aliases: organ.aliases || [],
+      legacyAliases: organ.legacyAliases || [],
+      searchTerms: organ.searchTerms || []
     };
     ORGAN_MEDIA[organ.id] = {
       label: organ.label,
       img: organ.image,
-      systemLabel: organ.systemLabel || "",
+      systemLabel: organ.systemLabel || ORGAN_SYSTEMS[organ.primarySystemId]?.label || "",
       layout: organ.layout || "stack"
     };
+    [organ.id, organ.label, ...(organ.aliases || [])].forEach(alias => {
+      const key = normalizeOrganLookupKey(alias);
+      if (key && !ORGAN_ALIAS_INDEX.has(key)) ORGAN_ALIAS_INDEX.set(key, organ.id);
+    });
+    (organ.legacyAliases || []).forEach(alias => {
+      const key = normalizeOrganLookupKey(alias);
+      if (key && !ORGAN_ALIAS_INDEX.has(key) && !ORGAN_LEGACY_ALIAS_INDEX.has(key)) {
+        ORGAN_LEGACY_ALIAS_INDEX.set(key, organ.id);
+      }
+    });
+    (organ.searchTerms || []).forEach(term => {
+      const key = normalizeOrganLookupKey(term);
+      if (!key) return;
+      if (!ORGAN_SEARCH_TERM_INDEX.has(key)) ORGAN_SEARCH_TERM_INDEX.set(key, new Set());
+      ORGAN_SEARCH_TERM_INDEX.get(key).add(organ.id);
+    });
   });
 }
 
@@ -1967,9 +2018,9 @@ function renderGenericPathChain(pathway) {
     .filter(Boolean);
 
   return steps.map((label, index) => {
-    const organMatch = Object.entries(HOTSPOTS).find(([, organ]) => organ.label === label);
-    const node = organMatch
-      ? `<button type="button" class="effect-path-link" data-organ-route="${organMatch[0]}">${label} ↗</button>`
+    const organId = resolveOrganId(label);
+    const node = organId
+      ? `<button type="button" class="effect-path-link" data-organ-route="${organId}">${label} ↗</button>`
       : `<span>${label}</span>`;
     return `${index ? '<span aria-hidden="true">→</span>' : ""}${node}`;
   }).join("");
@@ -3382,25 +3433,14 @@ function getPfasHealthView() {
         system: "immune",
         label: "Immunsystem",
         evidence: `EFSA: ${critical}.`,
-        note: "Kein belastbarer 0–100-%-Krankheitslastwert und in der aktuellen Bodymap kein eigener Immunsystem-Organmarker."
+        note: "Kein belastbarer 0–100-%-Krankheitslastwert. Der vorhandene Immunsystem-Marker bleibt ohne geprüften, importierten Organpfad neutral."
       }
     ]
   };
 }
 
 function normalizeImpactOrgan(id) {
-  if (id === "reproduction") return "femaleRepro";
-  if (id === "eyes") return "eye";
-  if (id === "gut") return "gut";
-  return id;
-}
-function getImpactForOrgan(organId) { const impacts = currentHealth?.impacts || []; return impacts.find(impact => normalizeImpactOrgan(impact.organ) === organId) || null; }
-
-function normalizeImpactOrgan(id) {
-  if (id === "reproduction") return "femaleRepro";
-  if (id === "eyes") return "eye";
-  if (id === "gut") return "gut";
-  return id;
+  return resolveOrganId(id) || id;
 }
 function getImpactForOrgan(organId) { const impacts = currentHealth?.impacts || []; return impacts.find(impact => normalizeImpactOrgan(impact.organ) === organId) || null; }
 
@@ -3457,11 +3497,14 @@ function ensureHealthLegend() {
         <span class="health-scale" aria-hidden="true">
           <span style="--legend-shade:#f2f2f2"></span><span style="--legend-shade:#bdbdbd"></span><span style="--legend-shade:#777"></span><span style="--legend-shade:#111"></span>
         </span>
-        <span><strong>Hell bis dunkel:</strong> niedriger bis höherer Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
+        <span><strong>Graustufe der Markerfüllung:</strong> Hell bis dunkel steht für einen niedrigen bis höheren Statuswert. Eine Graustufe wird erst gesetzt, wenn zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist.</span>
       </div>
       <div class="health-legend-row">
         <span class="legend-foundation-link" aria-hidden="true"></span>
-        <span><strong>Außenring:</strong> Mindestens ein geprüfter Organbezug durch Gewebenachweis oder Gesundheitsstudie ist irgendwo im Panel hinterlegt.</span>
+        <span><strong>Außenring:</strong> Mindestens ein geprüfter Organbezug durch Gewebenachweis oder Gesundheitsstudie ist irgendwo im Panel hinterlegt. Der Außenring ist unabhängig von der Markerfüllung.</span>
+      </div>
+      <div class="health-legend-row health-legend-secondary">
+        <span><strong>Markerziel:</strong> Ein Marker kann ein einzelnes Organ, eine Organgruppe oder ein Organsystem repräsentieren. Alle Bezeichnungen und Synonyme führen auf dieselbe stabile Organ-ID; Links aus GRUNDLAGE und WIRKUNG bleiben getrennte Beiträge im Organfenster.</span>
       </div>
       <div class="health-legend-row">
         <span class="legend-age-elevated" aria-hidden="true"></span>
@@ -3469,7 +3512,7 @@ function ensureHealthLegend() {
       </div>
       <div class="health-legend-row health-legend-secondary">
         <span class="legend-hatched" aria-hidden="true"></span>
-        <span><strong>Schraffur:</strong> Gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
+        <span><strong>Schraffur der Markerfüllung:</strong> Gesundheitlicher Befund belegt, aber keine belastbare Quantifizierung der zurechenbaren Krankheitslast vorhanden.</span>
       </div>
       <div class="health-legend-row health-legend-secondary">
         <span class="exposure-influence-scale legend-example" aria-hidden="true"><i class="filled"></i><i class="filled"></i><i></i></span>
@@ -3479,7 +3522,7 @@ function ensureHealthLegend() {
         <span class="exposure-influence-scale legend-example is-unassessed" aria-hidden="true"><i></i><i></i><i></i></span>
         <span><strong>Drei leere Segmente:</strong> Einfluss auf die eigene Exposition noch nicht bewertet.</span>
       </div>
-      <p>Außenring und Organfüllung sind unabhängige Signale. Ein Ring kann auch einen Gewebenachweis oder eine klinische Assoziation kennzeichnen und beweist nicht automatisch einen ursächlichen Organschaden.</p>
+      <p><strong>Markerfüllung</strong> ist der Oberbegriff für neutral, schraffiert oder grau abgestuft. Markerfüllung und Außenring sind unabhängige Signale. Ein Ring kann auch einen Gewebenachweis oder eine klinische Assoziation kennzeichnen und beweist nicht automatisch einen ursächlichen Organschaden.</p>
     </div>`;
   const infoButton = healthLegend.querySelector(".health-legend-info-button");
   const infoNote = healthLegend.querySelector(".health-legend-method");
@@ -3561,25 +3604,51 @@ function organMatrixRows() {
     const contributors = impact?.contributors || [];
     const signals = signalsByOrgan.get(organId) || [];
     const pathways = contributors.flatMap(item => item.pathways || []);
-    const themes = [...new Set([
+    const themeCandidates = [
       ...pathways.map(pathway => pathway.exposure),
+      ...contributors.filter(item => !(item.pathways || []).length).map(item => item.exposure?.agent || item.label),
       ...signals.map(signal => signal.label)
-    ].filter(Boolean))];
+    ].filter(Boolean);
+    const themesByKey = new Map();
+    themeCandidates.forEach(theme => {
+      const normalizedTheme = normalizeOrganLookupKey(theme);
+      const key = /(^| )(no ?2|stickstoffdioxid)( |$)/.test(normalizedTheme)
+        ? "no2"
+        : /(^| )(pm ?2 ?5|feinstaub)( |$)/.test(normalizedTheme)
+          ? "pm25"
+          : /(^| )(ozon|o3)( |$)/.test(normalizedTheme)
+            ? "ozone"
+            : normalizedTheme;
+      if (key && !themesByKey.has(key)) themesByKey.set(key, theme);
+    });
+    const themes = [...themesByKey.values()];
     const hasQuantifiedBurden = typeof impact?.burdenScore === "number";
     const evidence = hasQuantifiedBurden
-      ? "quantifizierte Belastung"
+      ? "quantifizierte Krankheitslast"
       : contributors.length || signals.length
-        ? "geprüfter Organbezug"
-        : "noch nicht belegt";
-    const coverage = pathways.length || signals.length
-      ? `${pathways.length + signals.length} ${pathways.length + signals.length === 1 ? "Pfad / Hinweis" : "Pfade / Hinweise"}`
+        ? "geprüfter Organpfad"
+        : "kein direkter Organpfad";
+    const connectionCount = contributors.length + signals.length;
+    const coverage = themes.length
+      ? `${themes.length} ${themes.length === 1 ? "Thema" : "Themen"} · ${connectionCount} ${connectionCount === 1 ? "Eintrag" : "Einträge"}`
       : "keine Einträge";
     const researchNeed = hasQuantifiedBurden
-      ? "weiter vertiefen"
-      : contributors.length + signals.length > 1
-        ? "Lücken prüfen"
-        : "prioritär prüfen";
-    return { organId, label: organ.label, themes, evidence, coverage, researchNeed };
+      ? "Normierung weiter prüfen"
+      : themes.length > 1
+        ? "Abdeckung beobachten"
+        : themes.length === 1
+          ? "weitere Evidenz ergänzen"
+          : "nur bei konkretem Pfad ergänzen";
+    const entityType = {
+      organ: "Organ",
+      organ_group: "Organgruppe",
+      organ_system: "Organsystem"
+    }[organ.entityType] || "Organ";
+    const systemLabel = ORGAN_SYSTEMS[organ.primarySystemId]?.label || organ.primarySystemId || "–";
+    const relatedSystems = (organ.relatedSystemIds || [])
+      .map(systemId => ORGAN_SYSTEMS[systemId]?.label || systemId)
+      .filter(Boolean);
+    return { organId, label: organ.label, entityType, systemLabel, relatedSystems, themes, evidence, coverage, researchNeed };
   });
 }
 
@@ -3592,24 +3661,26 @@ function renderOrganMatrix() {
         <div>
           <span class="eyebrow">Fachliche Übersicht</span>
           <h2 id="organMatrixTitle">Organ-Matrix</h2>
-          <p>Evidenz, Panel-Abdeckung und Recherchebedarf zu Organen und Organsystemen. Die Matrix erzeugt keinen zusätzlichen Krankheitslastwert und aktiviert keine neuen Marker.</p>
+          <p>Grundschema, direkte Organpfade und thematische Panel-Abdeckung. Die Matrix erzeugt keinen zusätzlichen Krankheitslastwert und aktiviert keine neuen Marker.</p>
         </div>
         <button class="overlay-close organ-matrix-close" type="button" aria-label="Organ-Matrix schließen">×</button>
       </header>
       <div class="organ-matrix-key">
-        <span><b>Geprüfter Organbezug</b> = mindestens ein im Panel hinterlegter Expositions- oder Wirkungspfad.</span>
-        <span><b>Prioritär prüfen</b> = noch keine oder nur sehr geringe Abdeckung; kein Urteil über tatsächliche gesundheitliche Relevanz.</span>
+        <span><b>Ebene</b> unterscheidet Organ, Organgruppe und Organsystem.</span>
+        <span><b>Geprüfter Organpfad</b> = mindestens ein im Panel hinterlegter Expositions- oder Wirkungspfad.</span>
+        <span><b>Kein direkter Organpfad</b> ist kein Urteil über die medizinische Relevanz.</span>
       </div>
       <div class="organ-matrix-table-wrap">
         <table class="organ-matrix-table">
-          <thead><tr><th>Organ / System</th><th>Hinterlegte Expositions- und Wirkungsthemen</th><th>Evidenz im Panel</th><th>Abdeckung</th><th>Recherchebedarf</th></tr></thead>
+          <thead><tr><th>Marker</th><th>Ebene &amp; System</th><th>Hinterlegte Expositions- und Wirkungsthemen</th><th>Status im Panel</th><th>Abdeckung</th><th>Nächster Bedarf</th></tr></thead>
           <tbody>${rows.map(row => `
             <tr>
               <th scope="row"><button class="organ-matrix-organ" type="button" data-organ-matrix-organ="${row.organId}">${row.label}</button></th>
-              <td>${row.themes.length ? row.themes.slice(0, 3).map(theme => `<span class="organ-matrix-theme">${theme}</span>`).join("") : "–"}</td>
-              <td><span class="organ-matrix-status ${row.evidence === "noch nicht belegt" ? "is-empty" : ""}">${row.evidence}</span></td>
+              <td><span class="organ-matrix-type">${row.entityType}</span><strong class="organ-matrix-system">${row.systemLabel}</strong>${row.relatedSystems.map(system => `<small class="organ-matrix-related">auch: ${system}</small>`).join("")}</td>
+              <td>${row.themes.length ? `${row.themes.slice(0, 3).map(theme => `<span class="organ-matrix-theme">${theme}</span>`).join("")}${row.themes.length > 3 ? `<small class="organ-matrix-more">+ ${row.themes.length - 3} weitere</small>` : ""}` : "–"}</td>
+              <td><span class="organ-matrix-status ${row.evidence === "kein direkter Organpfad" ? "is-empty" : ""}">${row.evidence}</span></td>
               <td>${row.coverage}</td>
-              <td><span class="organ-matrix-need ${row.researchNeed === "prioritär prüfen" ? "is-priority" : ""}">${row.researchNeed}</span></td>
+              <td><span class="organ-matrix-need">${row.researchNeed}</span></td>
             </tr>`).join("")}</tbody>
         </table>
       </div>
@@ -3679,7 +3750,12 @@ function renderHotspots() {
     wrap.style.left = `${def.x}%`; wrap.style.top = `${def.y}%`;
     const btn = document.createElement("button"); btn.type = "button"; btn.className = "hotspot-dot is-neutral"; btn.dataset.organ = id; btn.setAttribute("aria-label", def.label);
     btn.addEventListener("click", () => openOrganOverlay(id));
-    const label = document.createElement("span"); label.className = "hotspot-label"; label.textContent = def.label;
+    const label = document.createElement("button");
+    label.type = "button";
+    label.className = "hotspot-label";
+    label.textContent = def.label;
+    label.setAttribute("aria-label", `${def.label} öffnen`);
+    label.addEventListener("click", () => openOrganOverlay(id));
     const exposureScale = document.createElement("span");
     exposureScale.className = "exposure-influence-scale";
     exposureScale.hidden = true;
@@ -3896,7 +3972,7 @@ function renderHealth(health) {
       } else {
         dot.classList.remove("is-neutral");
         dot.classList.add("is-unquantified");
-        texts.push(`${impact.label}: ${impact.contributors?.length || 0} belegte Beiträge; noch keine gemeinsame normierte Krankheitslast für die Organfarbe.`);
+        texts.push(`${impact.label}: ${impact.contributors?.length || 0} belegte Beiträge; noch keine gemeinsame normierte Krankheitslast für eine abgestufte Markerfüllung.`);
       }
     } else if (typeof impact.functionLoss === "number") {
       const loss = Math.max(0, Math.min(100, impact.functionLoss));
@@ -3917,11 +3993,15 @@ function createMediaNode(organId) {
   organOverlayContent.classList.remove("side-by-side");
 
   const block = document.createElement("div");
-  block.className = "organ-system-block";
+  block.className = `organ-system-block layout-${media.layout === "side" ? "side" : "stack"}`;
+  block.dataset.organId = organId;
+  block.dataset.organType = HOTSPOTS[organId]?.entityType || "organ";
+  block.dataset.systemId = HOTSPOTS[organId]?.primarySystemId || "";
 
   const visual = document.createElement("div");
-  visual.className = `organ-system-visual${media.systemLabel ? " has-system-label" : ""}`;
-  if (media.systemLabel) {
+  const showSystemLabel = media.systemLabel && media.systemLabel !== media.label;
+  visual.className = `organ-system-visual${showSystemLabel ? " has-system-label" : ""}`;
+  if (showSystemLabel) {
     const title = document.createElement("strong");
     title.className = "organ-system-title";
     title.textContent = media.systemLabel;
@@ -3979,7 +4059,7 @@ function renderGlobalEndpointCard(item) {
               </section>`;
           }).join("")}
         </div>
-        <small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>
+        <small><strong>Markerfüllung:</strong> ${item.whyNoColor}</small>
       </div>
     </details>`;
 }
@@ -4057,7 +4137,7 @@ function renderHealthContributionCards(items) {
           ${item.exposure?.path ? `<small><strong>Exposition:</strong> ${item.exposure.path}</small>` : ""}
           ${item.healthEndpoint ? `<small><strong>Endpunkt:</strong> ${item.healthEndpoint}</small>` : ""}
           ${burdenHtml}
-          ${item.whyNoColor ? `<small><strong>Organfarbe:</strong> ${item.whyNoColor}</small>` : ""}
+          ${item.whyNoColor ? `<small><strong>Markerfüllung:</strong> ${item.whyNoColor}</small>` : ""}
           ${source?.url ? `<a href="${source.url}" target="_blank" rel="noopener noreferrer">↗ Quelle öffnen</a>` : ""}
           ${routeBoundary ? `
             <button type="button" data-life-route-boundary="${routeBoundary}" data-life-route-item="${routeItem}">
@@ -4068,38 +4148,73 @@ function renderHealthContributionCards(items) {
   }).join("");
 }
 
+function renderKnowledgeMarkerContributionCards(contexts) {
+  return contexts.map(({ network, signal, navigation }) => `
+    <article class="organ-contribution-item">
+      <strong class="knowledge-marker-contribution-title">${signal.label}</strong>
+      <small>${signal.note || "Geprüfter Organbezug; keine gemeinsame normierte Krankheitslast für eine abgestufte Markerfüllung."}</small>
+      ${sourceLinksHtml(network, signal.sourceRefs)}
+      ${navigation ? `<button type="button" data-life-route-boundary="${navigation.boundary.id}" data-life-route-item="${navigation.item.id}" aria-label="${signal.label} im GWL-Panel öffnen">Zum Beitrag in WIRKUNG</button>` : ""}
+    </article>`).join("");
+}
+
+function organWindowIdentityHtml(organId) {
+  const organ = HOTSPOTS[organId] || {};
+  const typeLabel = {
+    organ: "Organ",
+    organ_group: "Organgruppe",
+    organ_system: "Organsystem"
+  }[organ.entityType] || "Organ";
+  const primarySystem = ORGAN_SYSTEMS[organ.primarySystemId]?.label || organ.primarySystemId || "Nicht zugeordnet";
+  const relatedSystems = (organ.relatedSystemIds || [])
+    .map(systemId => ORGAN_SYSTEMS[systemId]?.label || systemId)
+    .filter(Boolean);
+  return `
+    <span class="organ-window-identity">
+      <span class="organ-window-chip">${typeLabel}</span>
+      <span class="organ-window-chip is-system">${primarySystem}</span>
+      ${relatedSystems.map(system => `<span class="organ-window-related">auch: ${system}</span>`).join("")}
+    </span>`;
+}
+
+function setOrganWindowFinding(organId, status, text) {
+  organOverlayFinding.innerHTML = `
+    ${organWindowIdentityHtml(organId)}
+    <span class="organ-window-status">${status}</span>
+    <span class="organ-window-finding-text">${text}</span>`;
+}
+
 function openOrganOverlay(organId, preserveHidden = false) {
+  organId = resolveOrganId(organId) || organId;
   selectedOrganId = organId;
   const def = HOTSPOTS[organId];
   const knowledgeMarkerContexts = getKnowledgeMarkerContextsForOrgan(organId);
   const activeKnowledgeSignal = getActiveKnowledgeMarkerSignal(organId);
-  const impact = knowledgeMarkerContexts.length ? null : getImpactForOrgan(organId);
+  const impact = getImpactForOrgan(organId);
   organOverlayTitle.textContent = ORGAN_MEDIA[organId]?.label || def?.label || organId;
   organOverlayMedia.innerHTML = ""; organOverlayMedia.appendChild(createMediaNode(organId));
+  organOverlayContent.classList.add("health-contribution-layout", "organ-window-layout");
+  if (organOverlayNote?.parentElement !== organOverlayContent) {
+    organOverlayContent.appendChild(organOverlayNote);
+  }
   if (impact?.healthContributionView && Array.isArray(impact.contributors)) {
-    organOverlayContent.classList.add("health-contribution-layout");
-    if (organOverlayNote?.parentElement !== organOverlayContent) {
-      organOverlayContent.appendChild(organOverlayNote);
-    }
-
     const hasColor = typeof impact.burdenScore === "number";
     const panelContributors = impact.contributors.filter(item => !item.globalHealthReference);
     const globalContributors = impact.contributors.filter(item => item.globalHealthReference);
-    organOverlayFinding.textContent = hasColor
-      ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
-      : `${impact.contributors.length} gesundheitlich relevante Beiträge und globale Referenzen. Für die Organfarbe liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`;
+    setOrganWindowFinding(
+      organId,
+      hasColor ? "Krankheitslast quantifiziert · Markerfüllung abgestuft" : "Geprüfte Verbindungen · Markerfüllung neutral",
+      hasColor
+        ? `${impact.burdenScore} % normierte zurechenbare Krankheitslast aus ${impact.contributors.length} Beiträgen.`
+        : `${impact.contributors.length} gesundheitlich relevante Beiträge und globale Referenzen. Für eine abgestufte Markerfüllung liegt noch keine gemeinsame normierte zurechenbare Krankheitslast vor.`
+    );
 
     organOverlayNote.innerHTML = `
-      <div class="organ-prototype-warning">
-        <strong>METHODIK</strong>
-        <p>${LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""}</p>
-      </div>
-      <details class="organ-context-details" open>
-        <summary>Beitragende Ursachen / Pfade</summary>
-        <div class="organ-contribution-list">
-          ${renderHealthContributionCards(panelContributors)}
-        </div>
-      </details>
+      ${panelContributors.length ? `
+        <details class="organ-context-details" open>
+          <summary>Direkte Gesundheitsbeiträge</summary>
+          <div class="organ-contribution-list">${renderHealthContributionCards(panelContributors)}</div>
+        </details>` : ""}
       ${globalContributors.length ? `
         <details class="organ-context-details global-health-reference" open>
           <summary>
@@ -4109,6 +4224,21 @@ function openOrganOverlay(organId, preserveHidden = false) {
           <div class="inline-info-note" hidden>Diese Werte beschreiben globale, modellierte Krankheitslast. Sie sind kein lokaler Befund für den gewählten Ort und werden nicht mit anderen Belastungen addiert.</div>
           <div class="organ-contribution-list">${renderHealthContributionCards(globalContributors)}</div>
         </details>` : ""}`;
+
+    if (knowledgeMarkerContexts.length) {
+      organOverlayNote.insertAdjacentHTML("beforeend", `
+        <details class="organ-context-details" open>
+          <summary>Verbindungen aus WIRKUNG</summary>
+          <div class="organ-contribution-list">${renderKnowledgeMarkerContributionCards(knowledgeMarkerContexts)}</div>
+        </details>`);
+    }
+    organOverlayNote.insertAdjacentHTML("beforeend", `
+      <details class="organ-context-details organ-method-details">
+        <summary>Einordnung &amp; Methodik</summary>
+        <div class="organ-prototype-warning">
+          <p>${LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""}</p>
+        </div>
+      </details>`);
 
     organOverlayNote.querySelectorAll(".inline-info-button").forEach(button => {
       button.addEventListener("click", event => {
@@ -4131,37 +4261,27 @@ function openOrganOverlay(organId, preserveHidden = false) {
     });
   } else {
     const knowledgeSignal = activeKnowledgeSignal || knowledgeMarkerContexts[0]?.signal;
-    organOverlayContent.classList.remove("health-contribution-layout");
-    if (organOverlayNoteHomeParent && organOverlayNote?.parentElement !== organOverlayNoteHomeParent) {
-      if (organOverlayNoteHomeNextSibling && organOverlayNoteHomeNextSibling.parentNode === organOverlayNoteHomeParent) {
-        organOverlayNoteHomeParent.insertBefore(organOverlayNote, organOverlayNoteHomeNextSibling);
-      } else {
-        organOverlayNoteHomeParent.appendChild(organOverlayNote);
-      }
-    }
-
-    organOverlayFinding.textContent = impact
+    const finding = impact
       ? (findingText.textContent || "–")
       : knowledgeMarkerContexts.length > 1
         ? `${knowledgeMarkerContexts.length} geprüfte Organbezüge sind in der Gesamtübersicht hinterlegt.`
         : knowledgeSignal?.label || "Für dieses Organ liegt in der aktuellen Auswahl noch kein geprüfter Gesundheitsbeitrag vor.";
+    setOrganWindowFinding(
+      organId,
+      knowledgeMarkerContexts.length ? "Geprüfter Organpfad · Markerfüllung neutral" : "Noch kein direkter Organpfad",
+      finding
+    );
 
     organOverlayNote.innerHTML = `
       ${knowledgeMarkerContexts.length ? `
-        <details class="organ-context-details">
-          <summary>Geprüfte Beiträge</summary>
+        <details class="organ-context-details" open>
+          <summary>Verbindungen aus WIRKUNG</summary>
           <div class="organ-contribution-list">
-            ${knowledgeMarkerContexts.map(({ network, signal, navigation }) => `
-              <article class="organ-contribution-item">
-                <strong class="knowledge-marker-contribution-title">${signal.label}</strong>
-                <small>${signal.note || "Geprüfter Organbezug; keine gemeinsame normierte Krankheitslast für die Organfarbe."}</small>
-                ${sourceLinksHtml(network, signal.sourceRefs)}
-                ${navigation ? `<button type="button" data-life-route-boundary="${navigation.boundary.id}" data-life-route-item="${navigation.item.id}" aria-label="${signal.label} im GWL-Panel öffnen">Zum Beitrag</button>` : ""}
-              </article>`).join("")}
+            ${renderKnowledgeMarkerContributionCards(knowledgeMarkerContexts)}
           </div>
         </details>` : ""}
-      <details class="organ-context-details">
-        <summary>Einordnung</summary>
+      <details class="organ-context-details organ-method-details" open>
+        <summary>Einordnung &amp; Methodik</summary>
         <p>${impact
           ? "Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>."
           : knowledgeSignal?.note || (knowledgeSignal

@@ -28,6 +28,6 @@ Jede angenommene Studie erhält beim Import zusätzlich eine interne `panelImpor
 - höchstens fünf sichtbare Gesundheitsendpunkte je Studie,
 - keine automatische Addition überlappender Krankheitslasten,
 - keine Organmarker ohne geprüfte Organzuordnung,
-- der reine Import aktiviert weder Organfarbe noch lokale Kausalitätsaussagen.
+- der reine Import aktiviert weder eine abgestufte Markerfüllung noch lokale Kausalitätsaussagen.
 
 Die geladene, aber noch nicht dargestellte Registrierung steht für die nächste Ausbaustufe unter `window.GWL_HEALTH_IMPORT` bereit.

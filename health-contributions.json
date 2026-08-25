@@ -2,11 +2,11 @@
   "format": "gwl-health-contributions-v2",
   "status": "pilot",
   "methodPolicy": {
-    "organColorRule": "Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert und für die Organfarbe auf eine gemeinsame Bezugsgröße normiert werden kann.",
+    "organColorRule": "Die Markerfüllung bleibt neutral, solange keine quantifizierbare, zurechenbare Krankheitslast auf eine gemeinsame organspezifische Bezugsgröße normiert ist. Belegte Organwirkungen ohne ausreichende Quantifizierung werden schraffiert; eine Graustufe wird ausschließlich für normierte Krankheitslast verwendet. Der Außenring kennzeichnet unabhängig davon einen geprüften Organbezug.",
     "evidenceLevels": {
-      "A": "Quantifizierte, zurechenbare Krankheitslast vorhanden. Grundsätzlich für die Organfarbe geeignet; eine gemeinsame Bezugsgröße ist zusätzlich erforderlich.",
-      "B": "Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe.",
-      "C": "Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Sichtbar als Beitrag, ohne Einfluss auf die Organfarbe."
+      "A": "Quantifizierte, zurechenbare Krankheitslast vorhanden. Grundsätzlich für eine abgestufte Markerfüllung geeignet; eine gemeinsame Bezugsgröße ist zusätzlich erforderlich.",
+      "B": "Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Sichtbar als Beitrag, ohne abgestufte Markerfüllung.",
+      "C": "Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Sichtbar als Beitrag, ohne abgestufte Markerfüllung."
     },
     "colorMetric": "normalized_attributable_burden_only",
     "evidenceIsGateNotMultiplier": true,
@@ -60,7 +60,7 @@
           },
           "affectsOrganColor": false,
           "colorStatus": "eligible_pending_common_denominator",
-          "whyNoColor": "Die zurechenbare Krankheitslast ist quantifiziert, aber noch nicht auf eine gemeinsame organspezifische Bezugsgröße normiert. Deshalb bleibt der Organmarker vorerst ungefärbt.",
+          "whyNoColor": "Die zurechenbare Krankheitslast ist quantifiziert, aber noch nicht auf eine gemeinsame organspezifische Bezugsgröße normiert. Deshalb bleibt die Markerfüllung vorerst neutral.",
           "sourceRefs": [
             "ilo_climate_osh_2024"
           ],

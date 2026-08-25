@@ -106,6 +106,6 @@
     "organMappingChecked": true,
     "plainLanguagePath": "Unzureichende Versorgung und Verschmutzung → unsicheres Trinkwasser → Durchfallerkrankungen → Verdauungssystem",
     "decision": "include",
-    "notes": "Die JMP-Servicegröße 'sicher gemanagtes Trinkwasser' ist nicht identisch mit der GBD-Expositionskategorie 'Unsafe water source'. Deshalb bleibt der Gesundheitsendpunkt hier Kontext und erhält noch keine Organfarbe. Für den Zeitregler soll später die originale JMP-Reihe importiert werden, nicht zwischen Einzelwerten interpoliert werden."
+    "notes": "Die JMP-Servicegröße 'sicher gemanagtes Trinkwasser' ist nicht identisch mit der GBD-Expositionskategorie 'Unsafe water source'. Deshalb bleibt der Gesundheitsendpunkt hier Kontext und erhält noch keine abgestufte Markerfüllung. Für den Zeitregler soll später die originale JMP-Reihe importiert werden, nicht zwischen Einzelwerten interpoliert werden."
   }
 }

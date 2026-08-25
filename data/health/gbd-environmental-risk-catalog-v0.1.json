@@ -41,7 +41,7 @@
       "Studien sind Quellen oder Messreihen und keine zusätzlichen sichtbaren Knoten.",
       "Krankheiten und Organe werden erst nach Prüfung konkreter GBD-Risiko–Krankheits-Paare freigeschaltet.",
       "Beobachtete Werte, modellierte Schätzungen und Projektionen werden sichtbar getrennt.",
-      "Organfarben bleiben an die Regeln in health-contributions.json gebunden."
+      "Markerfüllungen bleiben an die Regeln in health-contributions.json gebunden."
     ]
   },
   "coreRisks": [

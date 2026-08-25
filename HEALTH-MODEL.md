@@ -8,17 +8,35 @@ Diese Datei hält die verbindliche Struktur für den Bereich **LEBEN** im GWL-PA
 
 ## Grundprinzip
 
-**Die Farbe eines Organs zeigt nur quantifizierbare, zurechenbare Krankheitslast. Weitere wissenschaftlich belegte Risiken erscheinen beim Anklicken als zusätzliche Wirkungspfade, verändern die Farbe aber erst, wenn ihre Krankheitslast belastbar quantifiziert und für die Organfarbe auf eine gemeinsame organspezifische Bezugsgröße normiert werden kann.**
+**Die Markerfüllung ist das innere Darstellungssignal des Organmarkers. Sie bleibt neutral, wird bei belegter, aber nicht ausreichend quantifizierter Organwirkung schraffiert und erhält erst bei quantifizierter, zurechenbarer sowie organspezifisch normierter Krankheitslast eine Graustufe. Der Außenring kennzeichnet davon unabhängig einen geprüften Organbezug.**
 
 Evidenz wird **nicht** mit Krankheitslast verrechnet. Sie ist eine Qualitäts- und Freigabeschranke.
 
 ## Evidenzstufen
 
-- **A** – Quantifizierte, zurechenbare Krankheitslast vorhanden. Grundsätzlich für die Organfarbe geeignet; eine gemeinsame Bezugsgröße ist zusätzlich erforderlich.
-- **B** – Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Als Beitrag sichtbar, ohne Einfluss auf die Organfarbe.
-- **C** – Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Als Beitrag sichtbar, ohne Einfluss auf die Organfarbe.
+- **A** – Quantifizierte, zurechenbare Krankheitslast vorhanden. Grundsätzlich für eine abgestufte Markerfüllung geeignet; eine gemeinsame Bezugsgröße ist zusätzlich erforderlich.
+- **B** – Gesundheitsrisiko quantitativ beschrieben, aber keine belastbare zurechenbare Krankheitslast. Als Beitrag sichtbar, ohne abgestufte Markerfüllung.
+- **C** – Wirkungspfad wissenschaftlich belegt, aber Krankheitslast nicht ausreichend quantifiziert. Als Beitrag sichtbar, ohne abgestufte Markerfüllung.
 
 ## Referenzstruktur eines Organs
+
+Das kanonische Organregister liegt in `bodymap.json` und wird durch
+`data/schema/bodymap-organ-v1.json` beschrieben. Die dortige `id` ist der
+stabile Schlüssel für Bodymap, Gesundheitsstudien, Knowledge-Beiträge sowie
+Links aus GRUNDLAGE und WIRKUNG. Fachlich eindeutige Bezeichnungen werden
+über `aliases` aufgelöst. `legacyAliases` erhalten bestehende Verbindungen,
+sollen aber nicht für neue Daten verwendet werden. Breite oder mehrdeutige
+`searchTerms` unterstützen ausschließlich die Suche und aktivieren niemals
+automatisch einen Organmarker. Ein Eintrag kennzeichnet außerdem mit `entityType`,
+ob der Marker ein einzelnes Organ, eine Organgruppe oder ein Organsystem
+repräsentiert, und ordnet ihn einem `primarySystemId` zu.
+Medizinisch überlappende Systeme bleiben als Beziehung erhalten: Die Nase gehört
+primär zum Atmungssystem und zusätzlich zu den Sinnesorganen; das Skelettsystem
+ist ein eigenständiges System mit Bezug zum übergeordneten Bewegungsapparat.
+
+Gesundheitsbeiträge bleiben in ihren Quelldatensätzen getrennt. Das
+Organfenster führt sie über die kanonische Organ-ID zusammen, ohne
+Krankheitslasten, Gewebenachweise oder Wirkungspfade rechnerisch zu vermischen.
 
 Jedes Organ steht in `health-contributions.json` unter `organs[]`.
 
@@ -38,9 +56,9 @@ Jeder Beitrag verwendet möglichst:
 - `healthEndpoint` – gesundheitlicher Endpunkt
 - `evidenceLevel` – A, B oder C
 - `burden` – Krankheitslast, falls belastbar quantifiziert
-- `affectsOrganColor` – nur `true`, wenn die Farbregel vollständig erfüllt ist
+- `affectsOrganColor` – technischer Kompatibilitätsname; nur `true`, wenn die Regel für eine abgestufte Markerfüllung vollständig erfüllt ist
 - `colorStatus` – maschinenlesbare Einordnung
-- `whyNoColor` – transparente Begründung, wenn keine Färbung erfolgt
+- `whyNoColor` – technischer Kompatibilitätsname; transparente Begründung, weshalb keine Graustufe gesetzt wird
 - `sourceRefs` – Verweise auf geprüfte Quellen
 - `route` – Rücksprung in die passende GRUNDLAGE/Knowledge-Struktur
 
@@ -67,7 +85,7 @@ Geöffnete Gesundheitskarte:
 - Exposition
 - Gesundheitsendpunkt
 - Krankheitslast
-- Einordnung / Begründung der Organfarbe
+- Einordnung / Begründung der Markerfüllung
 - Quelle
 - Rücksprung: `→ Ursache im GWL-Panel öffnen`
 
@@ -76,7 +94,10 @@ Geöffnete Gesundheitskarte:
 Einheitlich verwenden:
 
 - **Organmarker** – anklickbares Symbol auf der Körperabbildung
-- **Organfarbe** – Visualisierung quantifizierter, normierter zurechenbarer Krankheitslast
+- **Markerfüllung** – Oberbegriff für die neutrale, schraffierte oder grau abgestufte Innenfläche des Markers
+- **Graustufe** – ausschließlich Visualisierung quantifizierter, zurechenbarer und organspezifisch normierter Krankheitslast
+- **Schraffur** – belegte Organwirkung ohne ausreichend quantifizierte zurechenbare Krankheitslast
+- **Außenring** – geprüfter Organbezug; unabhängig von der Markerfüllung und kein automatischer Nachweis eines ursächlichen Organschadens
 - **Organfenster** – Detailfenster nach Klick auf den Organmarker
 - **Gesundheitsbeitrag** – einzelner belegter Wirkungspfad auf ein Organ/System
 - **Krankheitslast** – bevorzugte Zielgröße, z. B. DALYs, sofern belastbar zurechenbar
@@ -101,7 +122,7 @@ Neue Organe werden grundsätzlich **datengetrieben** ergänzt:
 
 Die Niere dient als technische Referenz. Der aktuelle Pilot zeigt zwei unterschiedliche Fälle:
 
-- quantifizierte Krankheitslast vorhanden, aber noch nicht normiert → sichtbar, noch keine Organfarbe
-- gesundheitlicher Zusammenhang belegt, Krankheitslast nicht belastbar quantifiziert → sichtbar, keine Organfarbe
+- quantifizierte Krankheitslast vorhanden, aber noch nicht normiert → sichtbar, noch keine Graustufe der Markerfüllung
+- gesundheitlicher Zusammenhang belegt, Krankheitslast nicht belastbar quantifiziert → sichtbar, je nach Evidenz schraffierte oder neutrale Markerfüllung
 
 Damit ist die Architektur für weitere Organe grundsätzlich vorbereitet.
