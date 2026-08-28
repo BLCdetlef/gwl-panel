@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.73 · B56";
+const GWL_BUILD_VERSION = "0.9.73 · B58";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -40,6 +40,11 @@ const projectionWindowButton = document.getElementById("projectionWindowButton")
 const blcWindowButton = document.getElementById("blcWindowButton");
 const scenarioControls = document.getElementById("scenarioControls");
 const scenarioSelect = document.getElementById("scenarioSelect");
+const blcReleaseControl = document.getElementById("blcReleaseControl");
+const blcReleaseLabel = document.getElementById("blcReleaseLabel");
+const blcReleaseSwitch = document.getElementById("blcReleaseSwitch");
+const blcReleaseStatus = document.getElementById("blcReleaseStatus");
+const blcReleaseExportButton = document.getElementById("blcReleaseExportButton");
 const hotspotLayer = document.getElementById("hotspotLayer");
 let healthLegend = null;
 const organOverlay = document.getElementById("organOverlay");
@@ -90,6 +95,104 @@ let organMatrixPanel = null;
 let knowledgeNetworks = {};
 let knowledgePanel = null;
 let mobilePanelView = "life";
+const BLC_CURVE_APPROVALS_SOURCE = "data/blc/curve-approvals-v1.json";
+let blcCurveApprovalManifest = { format: "gwl-blc-curve-approvals-v1", version: "1.0", approvedCurves: [] };
+const blcCurveApprovalDraft = new Map();
+const blcCurveDescriptorDraft = new Map();
+let activeBlcCurveApproval = null;
+
+function isLocalBlcEditor() {
+  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+}
+
+async function loadBlcCurveApprovalManifest() {
+  try {
+    const response = await fetch(BLC_CURVE_APPROVALS_SOURCE, { cache: "no-store" });
+    if (!response.ok) throw new Error(`${BLC_CURVE_APPROVALS_SOURCE}: ${response.status}`);
+    const payload = await response.json();
+    if (payload?.format !== "gwl-blc-curve-approvals-v1" || !Array.isArray(payload.approvedCurves)) {
+      throw new Error("Ungültiges BLC-Freigabeformat");
+    }
+    blcCurveApprovalManifest = payload;
+  } catch (error) {
+    console.warn("BLC-Kurvenfreigaben konnten nicht geladen werden:", error);
+  }
+}
+
+function getCommittedBlcApproval(curveId) {
+  return (blcCurveApprovalManifest.approvedCurves || []).find(entry =>
+    entry.curveId === curveId && entry.status === "approved"
+  ) || null;
+}
+
+function getEffectiveBlcApproval(curveId) {
+  if (blcCurveApprovalDraft.has(curveId)) return blcCurveApprovalDraft.get(curveId);
+  return Boolean(getCommittedBlcApproval(curveId));
+}
+
+function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = null } = {}) {
+  if (!blcReleaseControl || !blcReleaseSwitch || !blcReleaseStatus) return;
+  if (!curveId) {
+    activeBlcCurveApproval = null;
+    blcReleaseControl.hidden = true;
+    return;
+  }
+  const localEditor = isLocalBlcEditor();
+  const approved = eligible && getEffectiveBlcApproval(curveId);
+  activeBlcCurveApproval = { curveId, eligible, descriptor };
+  if (descriptor) blcCurveDescriptorDraft.set(curveId, descriptor);
+  blcReleaseControl.hidden = false;
+  blcReleaseControl.classList.toggle("is-readonly", !localEditor);
+  if (blcReleaseLabel) blcReleaseLabel.hidden = !localEditor;
+  if (blcReleaseExportButton) blcReleaseExportButton.hidden = !localEditor;
+  blcReleaseSwitch.disabled = !localEditor || !eligible;
+  blcReleaseSwitch.checked = approved;
+  blcReleaseControl.classList.toggle("is-approved", approved);
+  blcReleaseStatus.textContent = !eligible
+    ? "Nicht freigabefähig: Es fehlt eine Beobachtungsreihe mit mindestens zwei Zeitpunkten."
+    : approved
+      ? localEditor
+        ? "Für den nächsten versionierten BLC-Export freigegeben."
+        : "Versioniert für BLC freigegeben."
+      : localEditor
+        ? "Freigabefähig, aber noch nicht für BLC ausgewählt."
+        : "Nicht für BLC freigegeben.";
+}
+
+function updateActiveBlcCurveApproval() {
+  if (!activeBlcCurveApproval || !blcReleaseSwitch || blcReleaseSwitch.disabled) return;
+  blcCurveApprovalDraft.set(activeBlcCurveApproval.curveId, blcReleaseSwitch.checked);
+  setBlcReleaseControl(activeBlcCurveApproval);
+}
+
+function buildBlcCurveApprovalExport() {
+  const approvals = new Map((blcCurveApprovalManifest.approvedCurves || []).map(entry => [entry.curveId, entry]));
+  for (const [curveId, approved] of blcCurveApprovalDraft.entries()) {
+    if (!approved) {
+      approvals.delete(curveId);
+      continue;
+    }
+    const descriptor = blcCurveDescriptorDraft.get(curveId) || null;
+    const previous = approvals.get(curveId);
+    if (descriptor || previous) approvals.set(curveId, { ...(previous || {}), ...(descriptor || {}), curveId, status: "approved" });
+  }
+  return {
+    format: "gwl-blc-curve-approvals-v1",
+    version: "1.0",
+    approvedCurves: [...approvals.values()].sort((a, b) => a.curveId.localeCompare(b.curveId))
+  };
+}
+
+function downloadBlcCurveApprovalManifest() {
+  if (!isLocalBlcEditor()) return;
+  const payload = `${JSON.stringify(buildBlcCurveApprovalExport(), null, 2)}\n`;
+  const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "curve-approvals-v1.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
 
 function isMobilePanelLayout() {
   return window.matchMedia("(max-width: 820px)").matches;
@@ -472,6 +575,11 @@ async function loadBodymapConfig() {
 
 
 const FRESHWATER_KNOWLEDGE_SOURCE = "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json";
+const BLC_CURVE_TEST_SOURCE = "data/tests/blc-curve-release-test-v1.json";
+
+function isBlcCurveTestMode() {
+  return new URLSearchParams(window.location.search).get("blcCurveTest") === "1";
+}
 
 function normalizeFreshwaterBlueGreenKnowledge(payload) {
   if (!payload || payload.planetaryBoundary !== "Süßwasser" || !Array.isArray(payload.timeSeries)) {
@@ -676,6 +784,22 @@ async function loadKnowledgeNetworks() {
   // Danach alle im Index referenzierten Knowledge-Dateien automatisch entdecken.
   // Neue Themen brauchen damit künftig keinen zusätzlichen Eintrag in data.js.
   const index = knowledgeNetworks.knowledgeIndex;
+  if (isBlcCurveTestMode()) {
+    const climateGroup = index?.systemBoundaries
+      ?.find(boundary => boundary.id === "planetary_boundaries")
+      ?.groups?.find(group => group.id === "climate_change");
+    if (climateGroup && !(climateGroup.items || []).some(item => item.id === "blc_curve_release_test")) {
+      climateGroup.items = [
+        ...(climateGroup.items || []),
+        {
+          id: "blc_curve_release_test",
+          label: "[TEST] Kurve ohne Beobachtungsreihe",
+          type: "study",
+          source: BLC_CURVE_TEST_SOURCE
+        }
+      ];
+    }
+  }
   for (const boundary of index?.systemBoundaries || []) {
     for (const group of boundary.groups || []) {
       for (const item of group.items || []) {
@@ -2229,6 +2353,7 @@ function updateGroupOverviewRole() {
 }
 
 function renderGroupOverview(boundary, item) {
+  setBlcReleaseControl();
   updateGroupOverviewRole();
   const frameworkLabel = isEahExtension(boundary)
     ? "ERGÄNZENDER EINFLUSSBEREICH"
@@ -2258,7 +2383,23 @@ function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
     || null;
 }
 
+function getValidTimeSeriesPoints(series) {
+  return (series?.points || []).filter(point =>
+    Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value))
+  );
+}
+
+function hasRequiredObservationSeries(networkOrSeries) {
+  const series = Array.isArray(networkOrSeries?.timeSeries)
+    ? getKnowledgeSeries(networkOrSeries)
+    : networkOrSeries;
+  return getValidTimeSeriesPoints(series).length >= 2;
+}
+
 function getQualifiedProjectionSeries(network) {
+  // BLC-Freigabe: Eine vollständige Kurve setzt eine Beobachtungsreihe voraus.
+  // Historische Rekonstruktionen und Projektionen dürfen sie ergänzen, aber nie ersetzen.
+  if (!hasRequiredObservationSeries(network)) return [];
   const qualifiedGrades = new Set(["robust_scenario_projection", "qualified_scenario_projection"]);
   return (network?.projectionSeries || []).filter(series => {
     const assessment = getProjectionAssessment(network, series);
@@ -2350,9 +2491,9 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
       .sort((a, b) => a.year - b.year)
   })).filter(segment => segment.points.length);
 
-  if (!observed.length) {
+  if (observed.length < 2) {
     timeCard?.classList.add("no-time-series");
-    timeChart.innerHTML = `<title id="timeChartTitle">Keine numerische Zeitreihe</title><desc id="timeChartDescription">Für diesen Datensatz ist keine numerische Zeitreihe hinterlegt.</desc>`;
+    timeChart.innerHTML = `<title id="timeChartTitle">Keine freigegebene Beobachtungsreihe</title><desc id="timeChartDescription">Eine vollständige BLC-Kurve wird nur mit mindestens zwei numerischen Beobachtungspunkten dargestellt. Historische Rekonstruktionen und Projektionen allein reichen nicht aus.</desc>`;
     return;
   }
 
@@ -2587,9 +2728,27 @@ function renderKnowledgeTime(network) {
   const series = getActiveKnowledgeSeries(network);
   const points = series?.points || [];
   const blc = data.timePresets.blc;
+  const observationSeries = getKnowledgeSeries(network);
+  const activeItem = getCurrentItem();
+  const knowledgeSource = activeItem?.knowledgeSource || "unknown";
+  const curveId = observationSeries?.id
+    ? `knowledge:${knowledgeSource}#${observationSeries.id}`
+    : `knowledge:${knowledgeSource}#missing`;
+  setBlcReleaseControl({
+    curveId,
+    eligible: hasRequiredObservationSeries(observationSeries) && !getSelectedFreshwaterRegion(network),
+    descriptor: observationSeries?.id ? {
+      kind: "knowledge",
+      source: knowledgeSource,
+      seriesId: observationSeries.id,
+      boundaryId: selectedBoundaryId || "unknown",
+      itemId: selectedItemId || activeItem?.id || "unknown"
+    } : null
+  });
 
   dataWindowButton.classList.toggle("active", timeWindow === "data");
-  projectionWindowButton.hidden = !(network?.projectionSeries || []).length;
+  projectionWindowButton.hidden = !hasRequiredObservationSeries(network)
+    || !getQualifiedProjectionSeries(network).length;
   projectionWindowButton.classList.toggle("active", timeWindow === "projection");
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
   scenarioControls.hidden = timeWindow !== "projection";
@@ -3330,6 +3489,17 @@ function setDetails(item, point = null, noMeasurementYear = null) {
 
 function renderTime(item) {
   const points = getTimePoints(item);
+  setBlcReleaseControl({
+    curveId: item?.id ? `legacy:data.js#${selectedBoundaryId || "unknown"}/${item.id}` : "",
+    eligible: points.filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value))).length >= 2,
+    descriptor: item?.id ? {
+      kind: "legacy",
+      source: "data.js",
+      seriesId: item.id,
+      boundaryId: selectedBoundaryId || "unknown",
+      itemId: item.id
+    } : null
+  });
   const blc = data.timePresets.blc;
   dataWindowButton.classList.toggle("active", timeWindow === "data");
   projectionWindowButton.hidden = true;
@@ -4508,6 +4678,8 @@ scenarioSelect.addEventListener("change", event => {
   projectionScenario = event.target.value;
   setTimeWindow("projection");
 });
+blcReleaseSwitch?.addEventListener("change", updateActiveBlcCurveApproval);
+blcReleaseExportButton?.addEventListener("click", downloadBlcCurveApprovalManifest);
 timeSlider.addEventListener("input", event => {
   let year = Number(event.target.value);
   const context = getActiveKnowledgeContext();
@@ -4573,6 +4745,7 @@ async function initPanel() {
     await loadBodymapConfig();
     await loadHealthContributionPrototype();
     await loadHealthStudyImport();
+    await loadBlcCurveApprovalManifest();
     await loadKnowledgeNetworks();
     syncKnowledgeNavigationFromIndex();
     syncFreshwaterBlueGreenNavigation();

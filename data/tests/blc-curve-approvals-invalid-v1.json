@@ -1,0 +1,15 @@
+{
+  "format": "gwl-blc-curve-approvals-v1",
+  "version": "1.0",
+  "approvedCurves": [
+    {
+      "curveId": "knowledge:data/tests/blc-curve-release-test-v1.json#test_single_observation",
+      "kind": "knowledge",
+      "source": "data/tests/blc-curve-release-test-v1.json",
+      "seriesId": "test_single_observation",
+      "boundaryId": "climate",
+      "itemId": "blc-curve-release-test",
+      "status": "approved"
+    }
+  ]
+}

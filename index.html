@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.73-b56">
+  <link rel="stylesheet" href="style.css?v=0.9.73-b58">
 </head>
 <body>
   <main class="app-shell">
@@ -108,6 +108,15 @@
             <p class="projection-method-note">Projektionsmethode: Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben. Liegen geeignete Fachszenarien oder Einflussfaktoren vor, werden diese stattdessen verwendet und benannt.</p>
           </div>
           <p id="timeStatus" class="time-status">Für diese Messreihe ist noch keine Zeitnavigation hinterlegt.</p>
+          <div id="blcReleaseControl" class="blc-release-control" hidden>
+            <label id="blcReleaseLabel" for="blcReleaseSwitch" class="blc-release-label">
+              <input id="blcReleaseSwitch" type="checkbox">
+              <span class="blc-release-track" aria-hidden="true"></span>
+              <strong>Für BLC freigeben</strong>
+            </label>
+            <small id="blcReleaseStatus">Redaktionelle Freigabe ist noch nicht erteilt.</small>
+            <button id="blcReleaseExportButton" class="blc-release-export" type="button" hidden>Freigabedatei herunterladen</button>
+          </div>
           <div class="time-chart-wrap">
             <svg id="timeChart" class="time-chart" viewBox="0 0 500 112" role="img" aria-labelledby="timeChartTitle timeChartDescription">
               <title id="timeChartTitle">Zeitreihe von 1700 bis 2100</title>
@@ -282,7 +291,7 @@
       </div>
     </section>
   </main>
-  <script src="data.js?v=0.9.73-b56"></script>
-  <script src="app.js?v=0.9.73-b56"></script>
+  <script src="data.js?v=0.9.73-b58"></script>
+  <script src="app.js?v=0.9.73-b58"></script>
 </body>
 </html>

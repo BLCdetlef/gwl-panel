@@ -1,0 +1,42 @@
+{
+  "format": "gwl-blc-curve-approvals-v1",
+  "version": "1.0",
+  "approvedCurves": [
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_biosphere_functional_integrity_v0.1.json",
+      "seriesId": "biosphere_hanpp_1910_2020",
+      "boundaryId": "biosphere",
+      "itemId": "functional-integrity-hanpp",
+      "curveId": "knowledge:data/knowledge/gwl_biosphere_functional_integrity_v0.1.json#biosphere_hanpp_1910_2020",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json",
+      "seriesId": "global_co2_noaa_annual",
+      "boundaryId": "climate",
+      "itemId": "global-warming",
+      "curveId": "knowledge:data/knowledge/gwl_climate_change_pilot_v0.1.json#global_co2_noaa_annual",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
+      "seriesId": "blue_water_streamflow",
+      "boundaryId": "freshwater",
+      "itemId": "blue-water-streamflow",
+      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
+      "seriesId": "global_forest_cover_1992_2022",
+      "boundaryId": "land",
+      "itemId": "global-forest-status",
+      "curveId": "knowledge:data/knowledge/gwl_land_system_change_pilot_v0.1.json#global_forest_cover_1992_2022",
+      "status": "approved"
+    }
+  ]
+}

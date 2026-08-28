@@ -27,6 +27,24 @@ Liegen veröffentlichte Fachszenarien oder belastbare Einflussfaktoren vor, die 
 
 ## Darstellungsregeln
 
+### BLC-Freigabe für vollständige Kurven
+
+Die BLC-Freigabe besteht aus zwei getrennten Stufen. Zuerst wird geprüft, ob eine Kurve fachlich freigabefähig ist. Danach ist eine ausdrückliche redaktionelle Freigabe am Schalter der jeweiligen Kurve erforderlich. Eine fachlich geeignete Kurve wird niemals automatisch für BLC freigegeben.
+
+Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindestens zwei gültigen Zeitpunkten. Historische Rekonstruktionen und Projektionen sind optionale Ergänzungen; sie dürfen eine fehlende Beobachtungsreihe nicht ersetzen.
+
+- Die Beobachtungsreihe wird als durchgezogene Hauptreihe dargestellt.
+- Eine historische Rekonstruktion darf als methodisch getrennt gekennzeichneter Abschnitt vorangestellt werden.
+- Eine fachlich qualifizierte Projektion darf als Szenarioabschnitt ergänzt werden.
+- Rekonstruktionen oder Projektionen ohne Beobachtungsreihe ergeben keine BLC-Freigabe für eine vollständige Kurve.
+- Ein einzelner Zustands- oder Messwert bleibt eine Punktangabe und wird nicht zur Zeitreihe erklärt.
+- Der Schalter „Für BLC freigeben“ ist standardmäßig aus und bei nicht freigabefähigen Kurven deaktiviert.
+- Der Schalter ist ausschließlich auf `localhost` bedienbar. Öffentliche Ansichten zeigen nur den versionierten Freigabestatus.
+- Lokale Änderungen sind zunächst ein flüchtiger Redaktionsentwurf. Sie ändern weder die öffentliche Ansicht noch BLC.
+- Der Redaktionsmodus exportiert eine neue `curve-approvals-v1.json`. Erst deren Prüfung, Commit und Push machen die Entscheidung verbindlich.
+- Das Manifest wird vor der Übernahme gegen bekannte Quellen, Kurven-IDs und die verpflichtende Beobachtungsreihe validiert.
+- Nur fachlich freigabefähige und zusätzlich versioniert freigegebene Kurven dürfen später an BLC übergeben werden.
+
 1. Szenarien sind keine Prognosen mit Eintrittswahrscheinlichkeit und keine Messwerte.
 2. Szenariopfad, Quelle, Modellcharakter und Vergleichbarkeit müssen sichtbar bleiben.
 3. Es gibt keine Interpolation zwischen Stützjahren.

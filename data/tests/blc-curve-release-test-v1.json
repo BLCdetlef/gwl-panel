@@ -1,0 +1,86 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "test-1",
+  "topic": "BLC-Kurvenfreigabe · technischer Testsatz",
+  "status": "test_only",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Klimawandel",
+    "effectFocus": "Technischer Test: Rekonstruktion und Projektion dürfen einen einzelnen Beobachtungspunkt nicht zu einer vollständigen Kurve ergänzen."
+  },
+  "corePrinciples": [
+    "Nur für den lokalen Testmodus; keine fachliche Aussage.",
+    "Die Kurvenfreigabe muss wegen der fehlenden Beobachtungsreihe verweigert werden."
+  ],
+  "nodes": [],
+  "edges": [],
+  "measurements": [],
+  "pathways": [],
+  "healthContext": {
+    "systemImpacts": []
+  },
+  "sources": [],
+  "presentation": {
+    "primaryTimeSeriesId": "test_single_observation",
+    "referenceLabel": "Technischer Testsatz",
+    "finding": "Erwartung: keine vollständige Kurve und kein Szenario-Schalter.",
+    "effectPath": "Rekonstruktion + Einzelwert + Projektion ≠ freigegebene vollständige Kurve",
+    "uncertainty": "Künstliche Testwerte ohne fachliche Bedeutung."
+  },
+  "timeSeries": [
+    {
+      "id": "test_single_observation",
+      "label": "Testsatz mit nur einem Beobachtungspunkt",
+      "metric": "Künstlicher Prüfwert",
+      "unit": "Testeinheiten",
+      "dataStartYear": 2020,
+      "dataEndYear": 2020,
+      "reference": {
+        "type": "test_only",
+        "display": "Keine fachliche Referenz"
+      },
+      "historicalSegments": [
+        {
+          "id": "test_reconstruction",
+          "label": "Künstliche historische Rekonstruktion",
+          "points": [
+            { "year": 1850, "value": 4 },
+            { "year": 1900, "value": 6 }
+          ]
+        }
+      ],
+      "points": [
+        {
+          "year": 2020,
+          "value": 10,
+          "display": "10 Testeinheiten",
+          "finding": "Ein Einzelwert ist keine Beobachtungsreihe.",
+          "uncertainty": "Künstlicher Testwert."
+        }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "status": "scenario_model",
+    "grade": "robust_scenario_projection",
+    "label": "nur zur technischen Prüfung"
+  },
+  "projectionSeries": [
+    {
+      "id": "test_projection",
+      "observedSeriesId": "test_single_observation",
+      "scenario": "TEST",
+      "scenarioLabel": "Künstliche Projektion",
+      "unit": "Testeinheiten",
+      "assessment": {
+        "status": "scenario_model",
+        "grade": "robust_scenario_projection",
+        "label": "nur zur technischen Prüfung"
+      },
+      "points": [
+        { "year": 2050, "value": 14 },
+        { "year": 2100, "value": 18 }
+      ]
+    }
+  ]
+}
