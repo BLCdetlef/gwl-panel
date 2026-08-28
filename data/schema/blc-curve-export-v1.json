@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gwl://schema/blc-curve-export-v1",
+  "title": "GWL to BLC read-only curve export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "manifestVersion", "curves", "integrity"],
+  "properties": {
+    "format": { "const": "gwl-blc-curve-export-v1" },
+    "version": { "const": "1.0" },
+    "manifestVersion": { "type": "string" },
+    "curves": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "label", "metric", "unit", "geography", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
+        "properties": {
+          "curveId": { "type": "string" },
+          "boundaryId": { "type": "string" },
+          "itemId": { "type": "string" },
+          "seriesId": { "type": "string" },
+          "source": { "type": "string", "pattern": "^data/knowledge/" },
+          "label": { "type": "string" },
+          "metric": { "type": "string" },
+          "unit": { "type": "string" },
+          "geography": { "type": "string" },
+          "reference": { "type": "object" },
+          "observations": { "type": "array", "minItems": 2 },
+          "historicalReconstruction": { "type": "array" },
+          "projections": { "type": "array" },
+          "methodBreaks": { "type": "array" },
+          "sources": { "type": "array" }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "scope", "hash"],
+      "properties": {
+        "algorithm": { "const": "SHA-256" },
+        "scope": { "type": "string" },
+        "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  }
+}
