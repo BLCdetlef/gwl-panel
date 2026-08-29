@@ -403,12 +403,13 @@
       "label": "Globales atmosphärisches CO₂ · NOAA",
       "metric": "Jahresmittel der global gemittelten atmosphärischen CO₂-Konzentration über marinen Hintergrundstationen",
       "unit": "ppm",
+      "worseningDirection": "increase",
       "period": "1979–2025",
       "reference": {
-        "type": "planetary_boundary",
+        "type": "planetary_boundaries_model",
         "value": 350,
         "unit": "ppm",
-        "display": "Planetare Grenze: 350 ppm CO₂",
+        "display": "Grenzwert nach dem Modell der Planetaren Grenzen: 350 ppm CO₂",
         "sourceRefs": [
           "src_richardson_pb_2023"
         ]

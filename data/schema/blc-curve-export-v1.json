@@ -1,19 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gwl://schema/blc-curve-export-v1",
-  "title": "GWL to BLC read-only curve export",
+  "title": "GWL to BLC read-only curve export 1.1",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.0" },
+    "version": { "const": "1.1" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "label", "metric", "unit", "geography", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
+        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
         "properties": {
           "curveId": { "type": "string" },
           "boundaryId": { "type": "string" },
@@ -24,8 +24,31 @@
           "metric": { "type": "string" },
           "unit": { "type": "string" },
           "geography": { "type": "string" },
-          "reference": { "type": "object" },
-          "observations": { "type": "array", "minItems": 2 },
+          "worseningDirection": { "enum": ["increase", "decrease"] },
+          "observationCoverage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["startYear", "endYear", "spanYears", "pointCount"],
+            "properties": {
+              "startYear": { "type": "number" },
+              "endYear": { "type": "number" },
+              "spanYears": { "type": "number", "minimum": 50 },
+              "pointCount": { "type": "integer", "minimum": 5 }
+            }
+          },
+          "reference": {
+            "type": "object",
+            "properties": {
+              "type": { "enum": ["planetary_boundaries_model", "scientific_reference"] },
+              "modelName": { "type": "string" },
+              "value": { "type": "number" },
+              "unit": { "type": "string" },
+              "display": { "type": "string" },
+              "sourceRefs": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "observations": { "type": "array", "minItems": 5 },
+          "observationSourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
           "historicalReconstruction": { "type": "array" },
           "projections": { "type": "array" },
           "methodBreaks": { "type": "array" },

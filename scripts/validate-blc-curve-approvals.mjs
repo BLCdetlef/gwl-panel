@@ -9,11 +9,23 @@ const manifestPath = process.argv[2]
 const indexPath = path.join(projectRoot, "data", "knowledge", "knowledge-index.json");
 const allowedTopFields = new Set(["format", "version", "approvedCurves"]);
 const allowedEntryFields = new Set(["curveId", "kind", "source", "seriesId", "boundaryId", "itemId", "status", "note"]);
+const minimumObservationPoints = 5;
+const minimumObservationSpanYears = 50;
 
 const readJson = async file => JSON.parse(await fs.readFile(file, "utf8"));
 const numericPoints = series => (series?.points || series?.values || []).filter(point =>
   Number.isFinite(Number(point?.year)) && Number.isFinite(Number(point?.value))
 );
+const validateObservationCoverage = (curveId, points) => {
+  const years = [...new Set(points.map(point => Number(point.year)))].sort((a, b) => a - b);
+  if (years.length < minimumObservationPoints) {
+    fail(`${curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
+  }
+  const spanYears = years.at(-1) - years[0];
+  if (spanYears < minimumObservationSpanYears) {
+    fail(`${curveId}: Beobachtungsdauer ${spanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+  }
+};
 const fail = message => { throw new Error(message); };
 
 const manifest = await readJson(manifestPath);
@@ -58,7 +70,7 @@ for (const entry of manifest.approvedCurves) {
     const payload = await readJson(path.join(projectRoot, ...entry.source.split("/")));
     const series = (payload.timeSeries || []).find(candidate => candidate.id === entry.seriesId);
     if (!series) fail(`${entry.curveId}: Beobachtungsreihe wurde nicht gefunden.`);
-    if (numericPoints(series).length < 2) fail(`${entry.curveId}: Mindestens zwei Beobachtungspunkte sind erforderlich.`);
+    validateObservationCoverage(entry.curveId, numericPoints(series));
     continue;
   }
 
@@ -69,7 +81,7 @@ for (const entry of manifest.approvedCurves) {
     const boundary = (legacyData?.boundaries || []).find(candidate => candidate.id === entry.boundaryId);
     const item = (boundary?.items || []).find(candidate => candidate.id === entry.itemId);
     if (!item) fail(`${entry.curveId}: Legacy-Kurve wurde nicht gefunden.`);
-    if (numericPoints({ points: item.timePoints }).length < 2) fail(`${entry.curveId}: Mindestens zwei Beobachtungspunkte sind erforderlich.`);
+    validateObservationCoverage(entry.curveId, numericPoints({ points: item.timePoints }));
     continue;
   }
 

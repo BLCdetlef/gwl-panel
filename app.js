@@ -149,7 +149,7 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
   blcReleaseSwitch.checked = approved;
   blcReleaseControl.classList.toggle("is-approved", approved);
   blcReleaseStatus.textContent = !eligible
-    ? "Nicht freigabefähig: Es fehlt eine Beobachtungsreihe mit mindestens zwei Zeitpunkten."
+    ? "Nicht freigabefähig: Erforderlich sind mindestens fünf Beobachtungspunkte über mindestens 50 Jahre."
     : approved
       ? localEditor
         ? "Für den nächsten versionierten BLC-Export freigegeben."
@@ -2384,7 +2384,7 @@ function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
 }
 
 function getValidTimeSeriesPoints(series) {
-  return (series?.points || []).filter(point =>
+  return (series?.points || series?.values || []).filter(point =>
     Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value))
   );
 }
@@ -2393,7 +2393,8 @@ function hasRequiredObservationSeries(networkOrSeries) {
   const series = Array.isArray(networkOrSeries?.timeSeries)
     ? getKnowledgeSeries(networkOrSeries)
     : networkOrSeries;
-  return getValidTimeSeriesPoints(series).length >= 2;
+  const years = [...new Set(getValidTimeSeriesPoints(series).map(point => Number(point.year)))].sort((a, b) => a - b);
+  return years.length >= 5 && years.at(-1) - years[0] >= 50;
 }
 
 function getQualifiedProjectionSeries(network) {

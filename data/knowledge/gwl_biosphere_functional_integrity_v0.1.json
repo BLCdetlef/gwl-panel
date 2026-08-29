@@ -171,13 +171,15 @@
       "metric": "Human Appropriation of Net Primary Production (HANPP) als Anteil der Referenz-NPP",
       "unit": "%",
       "geography": "Global",
+      "worseningDirection": "increase",
       "dataStartYear": 1910,
       "dataEndYear": 2020,
       "reference": {
-        "type": "planetary_boundary",
+        "type": "planetary_boundaries_model",
         "value": 10,
         "unit": "%",
-        "display": "Planetare Grenze: etwa 10 % HANPP"
+        "display": "Grenzwert nach dem Modell der Planetaren Grenzen: etwa 10 % HANPP",
+        "sourceRefs": ["src_richardson_2023"]
       },
       "highRisk": {
         "value": 20,

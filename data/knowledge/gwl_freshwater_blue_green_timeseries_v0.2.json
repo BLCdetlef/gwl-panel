@@ -26,6 +26,7 @@
       "title": "Blaues Wasser – ungewöhnlicher Abfluss",
       "measure": "Anteil der globalen eisfreien Landfläche mit ungewöhnlich hohem oder niedrigem Abfluss gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
+      "worseningDirection": "increase",
       "period": "1901–2019",
       "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
       "boundaryUpperEnd": 12.94,

@@ -25,6 +25,8 @@
       "display": "≈ 59 %",
       "value": 59,
       "unit": "%",
+      "metric": "Globaler Waldanteil relativ zur potenziellen natürlichen Waldfläche",
+      "worseningDirection": "decrease",
       "period": "2022; Bewertung im Planetary Health Check 2025",
       "geography": "Global",
       "reference": {
@@ -254,9 +256,11 @@
       "temporalResolution": "annual",
       "observationMethod": "Remote Sensing / Datenintegration",
       "reference": {
-        "display": "Grenze: 75 %",
+        "type": "planetary_boundaries_model",
+        "display": "Grenzwert nach dem Modell der Planetaren Grenzen: 75 %",
         "value": 75,
-        "unit": "%"
+        "unit": "%",
+        "sourceRefs": ["src_richardson_2023"]
       },
       "finding": "Figure 28 zeigt einen langfristig leicht rückläufigen globalen Waldanteil zwischen 1992 und 2022. Das GWL-Panel verwendet ausgewählte Stützjahre statt aller Jahreswerte.",
       "uncertainty": "Die Stützwerte 1992–2020 wurden näherungsweise aus Figure 28 des Planetary Health Check 2025 abgelesen. Sie dienen der Trenddarstellung und sind keine veröffentlichten tabellarischen Originalwerte. 2022 ist auf den berichteten aktuellen Wert von rund 59 % gerundet.",

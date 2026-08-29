@@ -7,6 +7,9 @@ const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.j
 const indexPath = path.join(projectRoot, "data", "knowledge", "knowledge-index.json");
 const outputPath = path.join(projectRoot, "data", "blc", "blc-curve-export-v1.json");
 const qualifiedProjectionGrades = new Set(["robust_scenario_projection", "qualified_scenario_projection"]);
+const worseningDirections = new Set(["increase", "decrease"]);
+const minimumObservationPoints = 5;
+const minimumObservationSpanYears = 50;
 
 const readJson = async file => JSON.parse(await fs.readFile(file, "utf8"));
 const fail = message => { throw new Error(message); };
@@ -16,11 +19,16 @@ const safeUrl = value => typeof value === "string" && /^https:\/\//i.test(value)
 
 function normalizeReference(reference) {
   if (!reference || typeof reference !== "object" || Array.isArray(reference)) return undefined;
+  const sourceRefs = cleanStringArray(reference.sourceRefs);
+  const isPlanetaryBoundariesModel = reference.type === "planetary_boundary" || reference.type === "planetary_boundaries_model";
   const normalized = {
-    ...(cleanText(reference.type) ? { type: reference.type } : {}),
+    ...(isPlanetaryBoundariesModel
+      ? { type: "planetary_boundaries_model", modelName: "Planetare Grenzen" }
+      : cleanText(reference.type) ? { type: reference.type } : {}),
     ...(Number.isFinite(Number(reference.value)) ? { value: Number(reference.value) } : {}),
     ...(cleanText(reference.unit) ? { unit: reference.unit } : {}),
-    ...(cleanText(reference.display) ? { display: reference.display } : {})
+    ...(cleanText(reference.display) ? { display: reference.display } : {}),
+    ...(sourceRefs?.length ? { sourceRefs } : {})
   };
   return Object.keys(normalized).length ? normalized : undefined;
 }
@@ -45,6 +53,7 @@ function normalizeHistorical(series) {
       id: cleanText(segment.id) || "historical-segment",
       ...(cleanText(segment.label) ? { label: segment.label } : {}),
       ...(cleanText(segment.method) ? { method: segment.method } : {}),
+      ...(cleanText(segment.sourceId) ? { sourceRefs: [segment.sourceId] } : cleanStringArray(segment.sourceRefs)?.length ? { sourceRefs: segment.sourceRefs } : {}),
       points: normalizePoints(segment.points || segment.values)
     }))
     .filter(segment => segment.points.length);
@@ -88,6 +97,13 @@ function normalizeSources(payload) {
       ...(cleanText(payload.source.doi) ? { doi: payload.source.doi } : {}),
       ...(safeUrl(payload.source.url) ? { url: payload.source.url } : {})
     });
+    if (payload.source.historicalPredecessor && typeof payload.source.historicalPredecessor === "object") {
+      sources.push({
+        id: "src_freshwater_porkka_2024",
+        ...(cleanText(payload.source.historicalPredecessor.publication) ? { title: payload.source.historicalPredecessor.publication } : {}),
+        ...(cleanText(payload.source.historicalPredecessor.publicationDoi) ? { doi: payload.source.historicalPredecessor.publicationDoi } : {})
+      });
+    }
   }
   return sources;
 }
@@ -124,7 +140,12 @@ for (const approval of manifest.approvedCurves) {
   const series = (payload.timeSeries || []).find(candidate => candidate.id === approval.seriesId);
   if (!series) fail(`${approval.curveId}: Beobachtungsreihe fehlt.`);
   const observations = normalizePoints(series.points || series.values);
-  if (observations.length < 2) fail(`${approval.curveId}: mindestens zwei Beobachtungspunkte erforderlich.`);
+  const observationYears = [...new Set(observations.map(point => point.year))];
+  if (observationYears.length < minimumObservationPoints) fail(`${approval.curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
+  const observationSpanYears = Math.max(...observationYears) - Math.min(...observationYears);
+  if (observationSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: Beobachtungsdauer ${observationSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+  if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
+  const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
 
   curves.push({
     curveId: approval.curveId,
@@ -136,6 +157,14 @@ for (const approval of manifest.approvedCurves) {
     metric: cleanText(series.metric) || cleanText(series.measure) || "",
     unit: cleanText(series.unit) || "",
     geography: cleanText(series.geography) || "Global",
+    worseningDirection: series.worseningDirection,
+    observationCoverage: {
+      startYear: Math.min(...observationYears),
+      endYear: Math.max(...observationYears),
+      spanYears: observationSpanYears,
+      pointCount: observationYears.length
+    },
+    observationSourceRefs,
     ...(normalizeReference(series.reference) ? { reference: normalizeReference(series.reference) } : {}),
     observations,
     historicalReconstruction: normalizeHistorical(series),
@@ -148,7 +177,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.0",
+  version: "1.1",
   manifestVersion: manifest.version,
   curves
 };
