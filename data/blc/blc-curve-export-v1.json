@@ -1,6 +1,6 @@
 {
   "format": "gwl-blc-curve-export-v1",
-  "version": "1.1",
+  "version": "1.2",
   "manifestVersion": "1.0",
   "curves": [
     {
@@ -9,6 +9,9 @@
       "itemId": "functional-integrity-hanpp",
       "seriesId": "biosphere_hanpp_1910_2020",
       "source": "data/knowledge/gwl_biosphere_functional_integrity_v0.1.json",
+      "domainType": "planetary_boundary",
+      "domainId": "biosphere_integrity",
+      "domainLabel": "Biosphärenintegrität",
       "label": "Funktionelle Integrität – HANPP",
       "metric": "Human Appropriation of Net Primary Production (HANPP) als Anteil der Referenz-NPP",
       "unit": "%",
@@ -185,6 +188,9 @@
       "itemId": "blue-water-streamflow",
       "seriesId": "blue_water_streamflow",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
+      "domainType": "planetary_boundary",
+      "domainId": "freshwater_change",
+      "domainLabel": "Süßwasser",
       "label": "Blaues Wasser – ungewöhnlicher Abfluss",
       "metric": "Anteil der globalen eisfreien Landfläche mit ungewöhnlich hohem oder niedrigem Abfluss gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
@@ -367,6 +373,6 @@
   "integrity": {
     "algorithm": "SHA-256",
     "scope": "UTF-8 JSON.stringify({format,version,manifestVersion,curves})",
-    "hash": "f6e2b163afd882344b448f955b1583b243351a067850a1ff137f25503ab08cef"
+    "hash": "5ef11c81edbbc90e75b46b06cffe4cbf9ce1794d0ad48e64ac21657a57a575bb"
   }
 }

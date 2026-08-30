@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = process.argv[2]
@@ -37,15 +38,7 @@ for (const field of Object.keys(manifest)) {
 }
 
 const knowledgeIndex = await readJson(indexPath);
-const indexedSources = new Set();
-for (const boundary of knowledgeIndex.systemBoundaries || []) {
-  for (const group of boundary.groups || []) {
-    for (const item of group.items || []) {
-      if (item.source) indexedSources.add(item.source);
-    }
-  }
-}
-indexedSources.add("data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json");
+const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
 
 globalThis.window = {};
 await import(`${pathToFileURL(path.join(projectRoot, "data.js")).href}?blc-validator=1`);
@@ -63,7 +56,7 @@ for (const entry of manifest.approvedCurves) {
   if (!entry.boundaryId || !entry.itemId || !entry.seriesId) fail(`${entry.curveId}: Pflichtfelder fehlen.`);
 
   if (entry.kind === "knowledge") {
-    if (!indexedSources.has(entry.source)) fail(`${entry.curveId}: Knowledge-Quelle ist nicht im freigegebenen Index.`);
+    resolveBlcDomain(domainCatalog, entry.source);
     if (!entry.source.startsWith("data/knowledge/") || entry.source.includes("..")) fail(`${entry.curveId}: Unzulässiger Quellpfad.`);
     const expectedId = `knowledge:${entry.source}#${entry.seriesId}`;
     if (entry.curveId !== expectedId) fail(`${entry.curveId}: curveId stimmt nicht mit Quelle und Reihe überein.`);

@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
@@ -114,20 +115,14 @@ if (manifest.format !== "gwl-blc-curve-approvals-v1" || !Array.isArray(manifest.
 }
 
 const knowledgeIndex = await readJson(indexPath);
-const indexedSources = new Set();
-for (const boundary of knowledgeIndex.systemBoundaries || []) {
-  for (const group of boundary.groups || []) {
-    for (const item of group.items || []) if (item.source) indexedSources.add(item.source);
-  }
-}
-indexedSources.add("data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json");
+const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
 
 const curves = [];
 const seen = new Set();
 for (const approval of manifest.approvedCurves) {
   if (approval.status !== "approved") fail(`${approval.curveId || "Unbekannte Kurve"}: nicht freigegeben.`);
   if (approval.kind !== "knowledge") fail(`${approval.curveId}: Legacy-Kurven werden noch nicht exportiert.`);
-  if (!indexedSources.has(approval.source)) fail(`${approval.curveId}: Quelle ist nicht freigegeben.`);
+  const domain = resolveBlcDomain(domainCatalog, approval.source);
   if (!approval.source.startsWith("data/knowledge/") || approval.source.includes("..")) fail(`${approval.curveId}: unzulässiger Quellpfad.`);
   const expectedId = `knowledge:${approval.source}#${approval.seriesId}`;
   if (approval.curveId !== expectedId || seen.has(approval.curveId)) fail(`${approval.curveId}: inkonsistente oder doppelte Kurven-ID.`);
@@ -153,6 +148,7 @@ for (const approval of manifest.approvedCurves) {
     itemId: approval.itemId,
     seriesId: approval.seriesId,
     source: approval.source,
+    ...domain,
     label: cleanText(series.label) || cleanText(series.title) || approval.seriesId,
     metric: cleanText(series.metric) || cleanText(series.measure) || "",
     unit: cleanText(series.unit) || "",
@@ -177,7 +173,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.1",
+  version: "1.2",
   manifestVersion: manifest.version,
   curves
 };

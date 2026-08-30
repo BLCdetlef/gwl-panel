@@ -1,25 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "gwl://schema/blc-curve-export-v1",
-  "title": "GWL to BLC read-only curve export 1.1",
+  "$id": "gwl://schema/blc-curve-export-v1.2",
+  "title": "GWL to BLC read-only curve export 1.2",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.1" },
+    "version": { "const": "1.2" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
+        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "domainType", "domainId", "domainLabel", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
         "properties": {
           "curveId": { "type": "string" },
           "boundaryId": { "type": "string" },
           "itemId": { "type": "string" },
           "seriesId": { "type": "string" },
           "source": { "type": "string", "pattern": "^data/knowledge/" },
+          "domainType": { "enum": ["planetary_boundary", "influence_area"] },
+          "domainId": { "enum": ["climate_change", "biosphere_integrity", "freshwater_change", "land_system_change", "nutrient_cycles", "ocean_acidification", "atmospheric_aerosol_loading", "stratospheric_ozone_depletion", "novel_entities", "eah_material_energy_flows", "eah_tech_social_environment"] },
+          "domainLabel": { "type": "string", "minLength": 1 },
           "label": { "type": "string" },
           "metric": { "type": "string" },
           "unit": { "type": "string" },

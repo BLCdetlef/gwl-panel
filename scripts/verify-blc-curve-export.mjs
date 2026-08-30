@@ -1,17 +1,19 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { BLC_DOMAIN_DEFINITIONS, buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const exportPath = process.argv[2]
   ? path.resolve(projectRoot, process.argv[2])
   : path.join(projectRoot, "data", "blc", "blc-curve-export-v1.json");
+const indexPath = path.join(projectRoot, "data", "knowledge", "knowledge-index.json");
 const fail = message => { throw new Error(message); };
 const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.1") fail("Unbekanntes BLC-Exportformat.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.2") fail("Unbekanntes BLC-Exportformat.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -25,10 +27,20 @@ const actualHash = crypto.createHash("sha256").update(JSON.stringify(signedPaylo
 if (actualHash !== payload.integrity.hash) fail("SHA-256-Prüfung fehlgeschlagen: Export wurde verändert oder beschädigt.");
 
 const seen = new Set();
+const knowledgeIndex = JSON.parse(await fs.readFile(indexPath, "utf8"));
+const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
+const allowedDomains = new Set(BLC_DOMAIN_DEFINITIONS.map(domain => `${domain.domainType}:${domain.domainId}`));
 for (const curve of payload.curves) {
   if (!curve?.curveId || seen.has(curve.curveId)) fail(`Fehlende oder doppelte Kurven-ID: ${curve?.curveId || "–"}`);
   seen.add(curve.curveId);
   if (!curve.source?.startsWith("data/knowledge/") || curve.source.includes("..")) fail(`${curve.curveId}: unzulässiger Quellverweis.`);
+  if (!allowedDomains.has(`${curve.domainType}:${curve.domainId}`) || typeof curve.domainLabel !== "string" || !curve.domainLabel.trim()) {
+    fail(`${curve.curveId}: ungültige BLC-Kategorie.`);
+  }
+  const expectedDomain = resolveBlcDomain(domainCatalog, curve.source);
+  for (const field of ["domainType", "domainId", "domainLabel"]) {
+    if (curve[field] !== expectedDomain[field]) fail(`${curve.curveId}: ${field} stimmt nicht mit dem Knowledge-Index überein.`);
+  }
   if (!Array.isArray(curve.observations)) fail(`${curve.curveId}: Beobachtungsreihe fehlt.`);
   const years = [...new Set(curve.observations.map(point => Number(point?.year)))].sort((a, b) => a - b);
   if (years.length < 5) fail(`${curve.curveId}: mindestens fünf zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);

@@ -1,12 +1,40 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 29. August 2026 · Exportvertrag 1.1
+Stand: 30. August 2026 · Exportvertrag 1.2
 
 ## Sicherheitsmodell
 
 BLC übernimmt keine Kurven aus Local Storage, URL-Parametern oder einer öffentlichen Laufzeit-API. Maßgeblich ist ausschließlich das im GWL-Repository versionierte Freigabemanifest `data/blc/curve-approvals-v1.json`.
 
 Der Generator akzeptiert nur dort ausdrücklich freigegebene Kurven aus bekannten, im Knowledge-Index registrierten Dateien. Testverzeichnisse, unbekannte Quellen, Pfadwechsel aus dem Knowledge-Verzeichnis und doppelte IDs führen zum Abbruch.
+
+### Elf fachliche Kategorien
+
+Exportversion 1.2 ergänzt jede Kurve additiv um `domainType`, `domainId` und `domainLabel`. Diese Angaben werden nicht in Knowledge-Dateien oder im Freigabemanifest gepflegt, sondern ausschließlich aus der eindeutigen Position der Kurvenquelle in `knowledge-index.json` abgeleitet.
+
+Für `planetary_boundaries` bestimmt die jeweilige Gruppe die Kategorie. Für die beiden ergänzenden Einflussbereiche bestimmt dagegen der gesamte Einflussbereich die Kategorie; interne Gruppen wie Energie oder Luftverschmutzung werden nicht als eigene BLC-Kategorien exportiert.
+
+Die elf stabilen Kategorie-IDs sind:
+
+- `climate_change`
+- `biosphere_integrity`
+- `freshwater_change`
+- `land_system_change`
+- `nutrient_cycles`
+- `ocean_acidification`
+- `atmospheric_aerosol_loading`
+- `stratospheric_ozone_depletion`
+- `novel_entities`
+- `eah_material_energy_flows`
+- `eah_tech_social_environment`
+
+Nicht registrierte Quellen sowie mehrfache oder widersprüchliche Registrierungen führen zum vollständigen Abbruch. Eine manuelle Kategorie im Freigabemanifest ist nicht zulässig.
+
+#### Befristete Blau-/Grünwasser-Kompatibilitätsregel
+
+Die bereits im GWL-Panel über einen eigenen Lade- und Navigationspfad verwendete Quelle `data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json` ist vorübergehend die einzige Ausnahme von der erforderlichen Quellenregistrierung. Der Export bindet ausschließlich diesen exakten Pfad an die vorhandene Indexgruppe `planetary_boundaries/freshwater_change`; Typ, ID und sichtbare Bezeichnung werden aus dieser Indexgruppe gelesen. Die Freigabe bleibt weiterhin zeitserienspezifisch: Eine freigegebene Blauwasser-Reihe gibt die Grünwasser-Reihe derselben Datei nicht mit frei.
+
+Die Ausnahme ist abzulösen, sobald der Knowledge-Import Dateien nach URL dedupliziert und mehrere Zeitreihen derselben Knowledge-Datei im Index eindeutig adressiert werden können. Jede andere nicht registrierte Quelle bleibt gesperrt; doppelte oder widersprüchliche reguläre Registrierungen bleiben Fehler.
 
 Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche Beobachtungspunkte über mindestens 50 Jahre. Historische Rekonstruktionen und Projektionen dürfen die Beobachtungsreihe ergänzen, zählen aber nicht zu dieser Mindestdauer. Die physische Richtung der Messgröße bleibt erhalten: Steigende Messwerte werden steigend, sinkende Messwerte sinkend ausgegeben.
 
