@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
-import { normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
+import { BLUE_WATER_REFERENCE_SOURCE, buildBlueWaterBoundaryReference, normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
@@ -143,7 +143,8 @@ for (const approval of manifest.approvedCurves) {
   const payload = await readJson(sourcePath);
   const series = (payload.timeSeries || []).find(candidate => candidate.id === approval.seriesId);
   if (!series) fail(`${approval.curveId}: Beobachtungsreihe fehlt.`);
-  const sourceIds = new Set((payload.sources || []).map(source => source?.id).filter(id => typeof id === "string"));
+  const normalizedSources = normalizeSources(payload);
+  const sourceIds = new Set(normalizedSources.map(source => source?.id).filter(id => typeof id === "string"));
   const observations = normalizePoints(series.points || series.values);
   const observationYears = [...new Set(observations.map(point => point.year))];
   if (observationYears.length < minimumObservationPoints) fail(`${approval.curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
@@ -151,7 +152,9 @@ for (const approval of manifest.approvedCurves) {
   if (observationSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: Beobachtungsdauer ${observationSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
   const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
-  const normalizedReference = normalizeReference(series.reference, series, sourceIds);
+  const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE
+    ? buildBlueWaterBoundaryReference({ sourcePath: approval.source, series, sourceIds })
+    : normalizeReference(series.reference, series, sourceIds);
 
   curves.push({
     curveId: approval.curveId,
@@ -178,7 +181,7 @@ for (const approval of manifest.approvedCurves) {
     historicalReconstruction: normalizeHistorical(series),
     projections: normalizeProjections(payload, series),
     methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({ year: Number(marker.year) })) : [],
-    sources: normalizeSources(payload)
+    sources: normalizedSources
   });
 }
 

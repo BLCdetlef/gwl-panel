@@ -1,6 +1,8 @@
 export const BLC_REFERENCE_ROLES = Object.freeze(["boundary"]);
 export const BLC_REFERENCE_QUALIFIERS = Object.freeze(["exact", "approximate"]);
 export const BLC_EXCEEDANCE_OPERATORS = Object.freeze([">", "<"]);
+export const BLUE_WATER_REFERENCE_SOURCE = "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json";
+export const BLUE_WATER_REFERENCE_SERIES = "blue_water_streamflow";
 
 const allowedRoles = new Set(BLC_REFERENCE_ROLES);
 const allowedQualifiers = new Set(BLC_REFERENCE_QUALIFIERS);
@@ -43,4 +45,37 @@ export function normalizeBlcReference(reference, { series, sourceIds, requirePil
     qualifier: reference.qualifier,
     exceedanceOperator: reference.exceedanceOperator
   };
+}
+
+export function buildBlueWaterBoundaryReference({ sourcePath, series, sourceIds } = {}) {
+  if (sourcePath !== BLUE_WATER_REFERENCE_SOURCE) return undefined;
+  if (series?.id !== BLUE_WATER_REFERENCE_SERIES) {
+    throw new Error(`${series?.id || "BLC-Kurve"}: Blauwasser-Modellreferenz ist ausschließlich für ${BLUE_WATER_REFERENCE_SERIES} zulässig.`);
+  }
+  if (!Number.isFinite(Number(series.boundaryUpperEnd))) {
+    throw new Error(`${series.id}: boundaryUpperEnd muss numerisch sein.`);
+  }
+  if (Number(series.boundaryUpperEnd) !== 12.94) {
+    throw new Error(`${series.id}: boundaryUpperEnd muss für diese Kompatibilitätsregel exakt 12.94 sein.`);
+  }
+  if (series.unit !== "%") {
+    throw new Error(`${series.id}: Referenzeinheit ${series.unit || "–"} stimmt nicht exakt mit der erwarteten Zeitreiheneinheit % überein.`);
+  }
+  if (!sourceIds?.has("dataset-source")) {
+    throw new Error(`${series.id}: unbekannte Referenzquelle dataset-source.`);
+  }
+
+  const reference = {
+    type: "planetary_boundaries_model",
+    modelName: "Planetare Grenzen",
+    role: "boundary",
+    qualifier: "approximate",
+    exceedanceOperator: ">",
+    value: Number(series.boundaryUpperEnd),
+    unit: series.unit,
+    display: "Obere Modellreferenz: etwa 12,94 % der eisfreien Landfläche",
+    sourceRefs: ["dataset-source"]
+  };
+  normalizeBlcReference(reference, { series, sourceIds, requirePilot: true });
+  return reference;
 }

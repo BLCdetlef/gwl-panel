@@ -210,6 +210,19 @@
       "observationSourceRefs": [
         "dataset-source"
       ],
+      "reference": {
+        "type": "planetary_boundaries_model",
+        "modelName": "Planetare Grenzen",
+        "role": "boundary",
+        "qualifier": "approximate",
+        "exceedanceOperator": ">",
+        "value": 12.94,
+        "unit": "%",
+        "display": "Obere Modellreferenz: etwa 12,94 % der eisfreien Landfläche",
+        "sourceRefs": [
+          "dataset-source"
+        ]
+      },
       "observations": [
         {
           "year": 1905,
@@ -378,6 +391,6 @@
   "integrity": {
     "algorithm": "SHA-256",
     "scope": "UTF-8 JSON.stringify({format,version,manifestVersion,curves})",
-    "hash": "4209ddae6a0af6545ed23043e36197b360d97ad17280ccdd3d423c49a4986a98"
+    "hash": "0eff8f87ab8795cacbaa8ab7b1fec54edbc824e89cfc1af551b51fbd8e3b2d18"
   }
 }

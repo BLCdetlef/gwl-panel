@@ -89,7 +89,17 @@ if (!hanpp || JSON.stringify(hanpp.reference) !== JSON.stringify({
   exceedanceOperator: ">"
 })) throw new Error("HANPP-Referenzinhalt ging im Export verloren oder wurde verändert.");
 const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
-if (!blue || "reference" in blue) throw new Error("Blauwasser muss weiterhin ohne exportierte Referenz bleiben.");
+if (!blue || JSON.stringify(blue.reference) !== JSON.stringify({
+  type: "planetary_boundaries_model",
+  modelName: "Planetare Grenzen",
+  role: "boundary",
+  qualifier: "approximate",
+  exceedanceOperator: ">",
+  value: 12.94,
+  unit: "%",
+  display: "Obere Modellreferenz: etwa 12,94 % der eisfreien Landfläche",
+  sourceRefs: ["dataset-source"]
+})) throw new Error("Blauwasser-Modellreferenz fehlt oder wurde verändert.");
 if (curveExport.curves.some(curve => curve.seriesId === "green_water_rootzone_soil_moisture")) throw new Error("Grünwasser wurde versehentlich exportiert.");
 
 console.log("BLC-HANPP-Referenzpilot gültig: Validierung, Regression, SHA-256 und Determinismus geprüft.");
