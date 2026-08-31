@@ -1,6 +1,6 @@
 {
   "format": "gwl-blc-curve-export-v1",
-  "version": "1.3",
+  "version": "1.4",
   "manifestVersion": "1.1",
   "curves": [
     {
@@ -36,7 +36,10 @@
         "display": "Grenzwert nach dem Modell der Planetaren Grenzen: etwa 10 % HANPP",
         "sourceRefs": [
           "src_richardson_2023"
-        ]
+        ],
+        "role": "boundary",
+        "qualifier": "approximate",
+        "exceedanceOperator": ">"
       },
       "observations": [
         {
@@ -375,6 +378,6 @@
   "integrity": {
     "algorithm": "SHA-256",
     "scope": "UTF-8 JSON.stringify({format,version,manifestVersion,curves})",
-    "hash": "31a140f9920a7a7cc064e53083ece5d315696fb9185cfafa63eb35ea445fd321"
+    "hash": "4209ddae6a0af6545ed23043e36197b360d97ad17280ccdd3d423c49a4986a98"
   }
 }

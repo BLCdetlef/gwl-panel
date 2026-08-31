@@ -176,6 +176,9 @@
       "dataEndYear": 2020,
       "reference": {
         "type": "planetary_boundaries_model",
+        "role": "boundary",
+        "qualifier": "approximate",
+        "exceedanceOperator": ">",
         "value": 10,
         "unit": "%",
         "display": "Grenzwert nach dem Modell der Planetaren Grenzen: etwa 10 % HANPP",

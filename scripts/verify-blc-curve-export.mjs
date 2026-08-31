@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.3") fail("Unbekanntes BLC-Exportformat; für curveRole ist Exportversion 1.3 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.4") fail("Unbekanntes BLC-Exportformat; für den HANPP-Referenzpilot ist Exportversion 1.4 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -35,6 +35,15 @@ for (const curve of payload.curves) {
   if (!curve?.curveId || seen.has(curve.curveId)) fail(`Fehlende oder doppelte Kurven-ID: ${curve?.curveId || "–"}`);
   seen.add(curve.curveId);
   requireBlcCurveRole(curve, curve.curveId);
+  const hasReferencePilotField = ["role", "qualifier", "exceedanceOperator"].some(field => field in (curve.reference || {}));
+  if (curve.seriesId === "biosphere_hanpp_1910_2020" || hasReferencePilotField) {
+    if (curve.reference?.role !== "boundary") fail(`${curve.curveId}: reference.role muss boundary sein.`);
+    if (!["exact", "approximate"].includes(curve.reference?.qualifier)) fail(`${curve.curveId}: ungültiger reference.qualifier.`);
+    if (!curve.reference?.exceedanceOperator) fail(`${curve.curveId}: reference.exceedanceOperator fehlt.`);
+    if (![">", "<"].includes(curve.reference.exceedanceOperator)) fail(`${curve.curveId}: unbekannter reference.exceedanceOperator.`);
+    if (!Number.isFinite(Number(curve.reference?.value))) fail(`${curve.curveId}: reference.value muss numerisch sein.`);
+    if (curve.reference?.unit !== curve.unit) fail(`${curve.curveId}: Referenzeinheit stimmt nicht exakt mit der Zeitreiheneinheit überein.`);
+  }
   if (!curve.source?.startsWith("data/knowledge/") || curve.source.includes("..")) fail(`${curve.curveId}: unzulässiger Quellverweis.`);
   if (!allowedDomains.has(`${curve.domainType}:${curve.domainId}`) || typeof curve.domainLabel !== "string" || !curve.domainLabel.trim()) {
     fail(`${curve.curveId}: ungültige BLC-Kategorie.`);

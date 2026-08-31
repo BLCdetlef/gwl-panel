@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 30. August 2026 · Freigabevertrag 1.1 · Exportvertrag 1.3
+Stand: 31. August 2026 · Freigabevertrag 1.1 · Exportvertrag 1.4
 
 ## Sicherheitsmodell
 
@@ -11,6 +11,8 @@ Der Generator akzeptiert nur dort ausdrücklich freigegebene Kurven aus bekannte
 ### Elf fachliche Kategorien
 
 Exportversion 1.2 ergänzt jede Kurve additiv um `domainType`, `domainId` und `domainLabel`. Diese Angaben werden nicht in Knowledge-Dateien oder im Freigabemanifest gepflegt, sondern ausschließlich aus der eindeutigen Position der Kurvenquelle in `knowledge-index.json` abgeleitet.
+
+Exportversion 1.4 ergänzt ausschließlich für die vorhandene HANPP-Modellreferenz die Felder `role`, `qualifier` und `exceedanceOperator`. Der Pilot speichert keinen berechneten Status und führt kein allgemeines Grenzwertmodell ein. Bei `value: 10` und `exceedanceOperator: ">"` gilt für einen späteren Verbraucher: letzter gültiger Beobachtungswert unter 10 = nicht überschritten, gleich 10 = Modellgrenze erreicht, über 10 = Modellgrenze überschritten. Für die aktuelle Statusbestimmung darf ausschließlich der letzte gültige Punkt der Beobachtungsreihe verwendet werden; historische Rekonstruktionen und Zukunftsszenarien sind davon ausdrücklich ausgeschlossen.
 
 Für `planetary_boundaries` bestimmt die jeweilige Gruppe die Kategorie. Für die beiden ergänzenden Einflussbereiche bestimmt dagegen der gesamte Einflussbereich die Kategorie; interne Gruppen wie Energie oder Luftverschmutzung werden nicht als eigene BLC-Kategorien exportiert.
 

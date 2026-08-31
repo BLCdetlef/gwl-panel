@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
+import { normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
@@ -19,10 +20,15 @@ const cleanText = value => typeof value === "string" ? value : undefined;
 const cleanStringArray = value => Array.isArray(value) ? value.filter(item => typeof item === "string") : undefined;
 const safeUrl = value => typeof value === "string" && /^https:\/\//i.test(value) ? value : undefined;
 
-function normalizeReference(reference) {
+function normalizeReference(reference, series, sourceIds) {
   if (!reference || typeof reference !== "object" || Array.isArray(reference)) return undefined;
   const sourceRefs = cleanStringArray(reference.sourceRefs);
   const isPlanetaryBoundariesModel = reference.type === "planetary_boundary" || reference.type === "planetary_boundaries_model";
+  const pilotFields = normalizeBlcReference(reference, {
+    series,
+    sourceIds,
+    requirePilot: series?.id === "biosphere_hanpp_1910_2020"
+  });
   const normalized = {
     ...(isPlanetaryBoundariesModel
       ? { type: "planetary_boundaries_model", modelName: "Planetare Grenzen" }
@@ -30,7 +36,8 @@ function normalizeReference(reference) {
     ...(Number.isFinite(Number(reference.value)) ? { value: Number(reference.value) } : {}),
     ...(cleanText(reference.unit) ? { unit: reference.unit } : {}),
     ...(cleanText(reference.display) ? { display: reference.display } : {}),
-    ...(sourceRefs?.length ? { sourceRefs } : {})
+    ...(sourceRefs?.length ? { sourceRefs } : {}),
+    ...(pilotFields || {})
   };
   return Object.keys(normalized).length ? normalized : undefined;
 }
@@ -136,6 +143,7 @@ for (const approval of manifest.approvedCurves) {
   const payload = await readJson(sourcePath);
   const series = (payload.timeSeries || []).find(candidate => candidate.id === approval.seriesId);
   if (!series) fail(`${approval.curveId}: Beobachtungsreihe fehlt.`);
+  const sourceIds = new Set((payload.sources || []).map(source => source?.id).filter(id => typeof id === "string"));
   const observations = normalizePoints(series.points || series.values);
   const observationYears = [...new Set(observations.map(point => point.year))];
   if (observationYears.length < minimumObservationPoints) fail(`${approval.curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
@@ -143,6 +151,7 @@ for (const approval of manifest.approvedCurves) {
   if (observationSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: Beobachtungsdauer ${observationSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
   const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
+  const normalizedReference = normalizeReference(series.reference, series, sourceIds);
 
   curves.push({
     curveId: approval.curveId,
@@ -164,7 +173,7 @@ for (const approval of manifest.approvedCurves) {
       pointCount: observationYears.length
     },
     observationSourceRefs,
-    ...(normalizeReference(series.reference) ? { reference: normalizeReference(series.reference) } : {}),
+    ...(normalizedReference ? { reference: normalizedReference } : {}),
     observations,
     historicalReconstruction: normalizeHistorical(series),
     projections: normalizeProjections(payload, series),
@@ -176,7 +185,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.3",
+  version: "1.4",
   manifestVersion: manifest.version,
   curves
 };
