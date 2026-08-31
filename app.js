@@ -43,6 +43,8 @@ const scenarioSelect = document.getElementById("scenarioSelect");
 const blcReleaseControl = document.getElementById("blcReleaseControl");
 const blcReleaseLabel = document.getElementById("blcReleaseLabel");
 const blcReleaseSwitch = document.getElementById("blcReleaseSwitch");
+const blcReleaseRoleWrap = document.getElementById("blcReleaseRoleWrap");
+const blcReleaseRole = document.getElementById("blcReleaseRole");
 const blcReleaseStatus = document.getElementById("blcReleaseStatus");
 const blcReleaseExportButton = document.getElementById("blcReleaseExportButton");
 const hotspotLayer = document.getElementById("hotspotLayer");
@@ -96,8 +98,13 @@ let knowledgeNetworks = {};
 let knowledgePanel = null;
 let mobilePanelView = "life";
 const BLC_CURVE_APPROVALS_SOURCE = "data/blc/curve-approvals-v1.json";
-let blcCurveApprovalManifest = { format: "gwl-blc-curve-approvals-v1", version: "1.0", approvedCurves: [] };
+const BLC_CURVE_APPROVAL_FORMAT = "gwl-blc-curve-approvals-v1";
+const BLC_CURVE_APPROVAL_VERSION = "1.1";
+const BLC_CURVE_ROLES = new Set(["core", "deep_dive"]);
+const BLC_CURVE_ROLE_LABELS = { core: "Kernkurve", deep_dive: "Vertiefende Studie" };
+let blcCurveApprovalManifest = { format: BLC_CURVE_APPROVAL_FORMAT, version: BLC_CURVE_APPROVAL_VERSION, approvedCurves: [] };
 const blcCurveApprovalDraft = new Map();
+const blcCurveRoleDraft = new Map();
 const blcCurveDescriptorDraft = new Map();
 let activeBlcCurveApproval = null;
 
@@ -110,8 +117,11 @@ async function loadBlcCurveApprovalManifest() {
     const response = await fetch(BLC_CURVE_APPROVALS_SOURCE, { cache: "no-store" });
     if (!response.ok) throw new Error(`${BLC_CURVE_APPROVALS_SOURCE}: ${response.status}`);
     const payload = await response.json();
-    if (payload?.format !== "gwl-blc-curve-approvals-v1" || !Array.isArray(payload.approvedCurves)) {
-      throw new Error("Ungültiges BLC-Freigabeformat");
+    if (payload?.format !== BLC_CURVE_APPROVAL_FORMAT || payload?.version !== BLC_CURVE_APPROVAL_VERSION || !Array.isArray(payload.approvedCurves)) {
+      throw new Error(`Ungültiges BLC-Freigabeformat; erwartet wird Version ${BLC_CURVE_APPROVAL_VERSION}.`);
+    }
+    for (const entry of payload.approvedCurves) {
+      if (!BLC_CURVE_ROLES.has(entry?.curveRole)) throw new Error(`${entry?.curveId || "BLC-Kurve"}: gültige curveRole fehlt.`);
     }
     blcCurveApprovalManifest = payload;
   } catch (error) {
@@ -130,6 +140,11 @@ function getEffectiveBlcApproval(curveId) {
   return Boolean(getCommittedBlcApproval(curveId));
 }
 
+function getEffectiveBlcCurveRole(curveId) {
+  if (blcCurveRoleDraft.has(curveId)) return blcCurveRoleDraft.get(curveId);
+  return getCommittedBlcApproval(curveId)?.curveRole || "";
+}
+
 function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = null } = {}) {
   if (!blcReleaseControl || !blcReleaseSwitch || !blcReleaseStatus) return;
   if (!curveId) {
@@ -138,22 +153,31 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
     return;
   }
   const localEditor = isLocalBlcEditor();
-  const approved = eligible && getEffectiveBlcApproval(curveId);
+  const curveRole = getEffectiveBlcCurveRole(curveId);
+  const validRole = BLC_CURVE_ROLES.has(curveRole);
+  const approved = eligible && validRole && getEffectiveBlcApproval(curveId);
   activeBlcCurveApproval = { curveId, eligible, descriptor };
   if (descriptor) blcCurveDescriptorDraft.set(curveId, descriptor);
   blcReleaseControl.hidden = false;
   blcReleaseControl.classList.toggle("is-readonly", !localEditor);
   if (blcReleaseLabel) blcReleaseLabel.hidden = !localEditor;
   if (blcReleaseExportButton) blcReleaseExportButton.hidden = !localEditor;
-  blcReleaseSwitch.disabled = !localEditor || !eligible;
+  if (blcReleaseRoleWrap) blcReleaseRoleWrap.hidden = !localEditor && !approved;
+  if (blcReleaseRole) {
+    blcReleaseRole.value = validRole ? curveRole : "";
+    blcReleaseRole.disabled = !localEditor || !eligible;
+  }
+  blcReleaseSwitch.disabled = !localEditor || !eligible || !validRole;
   blcReleaseSwitch.checked = approved;
   blcReleaseControl.classList.toggle("is-approved", approved);
   blcReleaseStatus.textContent = !eligible
     ? "Nicht freigabefähig: Erforderlich sind mindestens fünf Beobachtungspunkte über mindestens 50 Jahre."
+    : !validRole
+      ? "Bitte zuerst die Kurvenrolle Kernkurve oder Vertiefende Studie wählen."
     : approved
       ? localEditor
-        ? "Für den nächsten versionierten BLC-Export freigegeben."
-        : "Versioniert für BLC freigegeben."
+        ? `Für den nächsten versionierten BLC-Export freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}.`
+        : `Versioniert für BLC freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}.`
       : localEditor
         ? "Freigabefähig, aber noch nicht für BLC ausgewählt."
         : "Nicht für BLC freigegeben.";
@@ -162,6 +186,14 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
 function updateActiveBlcCurveApproval() {
   if (!activeBlcCurveApproval || !blcReleaseSwitch || blcReleaseSwitch.disabled) return;
   blcCurveApprovalDraft.set(activeBlcCurveApproval.curveId, blcReleaseSwitch.checked);
+  setBlcReleaseControl(activeBlcCurveApproval);
+}
+
+function updateActiveBlcCurveRole() {
+  if (!activeBlcCurveApproval || !blcReleaseRole || blcReleaseRole.disabled) return;
+  const curveRole = blcReleaseRole.value;
+  if (curveRole && !BLC_CURVE_ROLES.has(curveRole)) return;
+  blcCurveRoleDraft.set(activeBlcCurveApproval.curveId, curveRole);
   setBlcReleaseControl(activeBlcCurveApproval);
 }
 
@@ -174,18 +206,32 @@ function buildBlcCurveApprovalExport() {
     }
     const descriptor = blcCurveDescriptorDraft.get(curveId) || null;
     const previous = approvals.get(curveId);
-    if (descriptor || previous) approvals.set(curveId, { ...(previous || {}), ...(descriptor || {}), curveId, status: "approved" });
+    const curveRole = blcCurveRoleDraft.get(curveId) || previous?.curveRole || "";
+    if (descriptor || previous) approvals.set(curveId, { ...(previous || {}), ...(descriptor || {}), curveId, curveRole, status: "approved" });
+  }
+  for (const [curveId, curveRole] of blcCurveRoleDraft.entries()) {
+    const previous = approvals.get(curveId);
+    if (previous) approvals.set(curveId, { ...previous, curveRole });
+  }
+  for (const entry of approvals.values()) {
+    if (!BLC_CURVE_ROLES.has(entry.curveRole)) throw new Error(`${entry.curveId}: Kurvenrolle fehlt oder ist ungültig.`);
   }
   return {
-    format: "gwl-blc-curve-approvals-v1",
-    version: "1.0",
+    format: BLC_CURVE_APPROVAL_FORMAT,
+    version: BLC_CURVE_APPROVAL_VERSION,
     approvedCurves: [...approvals.values()].sort((a, b) => a.curveId.localeCompare(b.curveId))
   };
 }
 
 function downloadBlcCurveApprovalManifest() {
   if (!isLocalBlcEditor()) return;
-  const payload = `${JSON.stringify(buildBlcCurveApprovalExport(), null, 2)}\n`;
+  let payload;
+  try {
+    payload = `${JSON.stringify(buildBlcCurveApprovalExport(), null, 2)}\n`;
+  } catch (error) {
+    if (blcReleaseStatus) blcReleaseStatus.textContent = error.message;
+    return;
+  }
   const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
   const link = document.createElement("a");
   link.href = url;
@@ -4680,6 +4726,7 @@ scenarioSelect.addEventListener("change", event => {
   setTimeWindow("projection");
 });
 blcReleaseSwitch?.addEventListener("change", updateActiveBlcCurveApproval);
+blcReleaseRole?.addEventListener("change", updateActiveBlcCurveRole);
 blcReleaseExportButton?.addEventListener("click", downloadBlcCurveApprovalManifest);
 timeSlider.addEventListener("input", event => {
   let year = Number(event.target.value);

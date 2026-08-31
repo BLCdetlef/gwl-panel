@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
+import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = process.argv[2]
@@ -9,7 +10,7 @@ const manifestPath = process.argv[2]
   : path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
 const indexPath = path.join(projectRoot, "data", "knowledge", "knowledge-index.json");
 const allowedTopFields = new Set(["format", "version", "approvedCurves"]);
-const allowedEntryFields = new Set(["curveId", "kind", "source", "seriesId", "boundaryId", "itemId", "status", "note"]);
+const allowedEntryFields = new Set(["curveId", "kind", "source", "seriesId", "boundaryId", "itemId", "curveRole", "status", "note"]);
 const minimumObservationPoints = 5;
 const minimumObservationSpanYears = 50;
 
@@ -31,7 +32,7 @@ const fail = message => { throw new Error(message); };
 
 const manifest = await readJson(manifestPath);
 if (manifest.format !== "gwl-blc-curve-approvals-v1") fail("Unbekanntes Freigabeformat.");
-if (manifest.version !== "1.0") fail("Unbekannte Freigabeversion.");
+if (manifest.version !== "1.1") fail("Unbekannte Freigabeversion; für curveRole ist Freigabeversion 1.1 erforderlich.");
 if (!Array.isArray(manifest.approvedCurves)) fail("approvedCurves muss ein Array sein.");
 for (const field of Object.keys(manifest)) {
   if (!allowedTopFields.has(field)) fail(`Unbekanntes Feld im Manifest: ${field}`);
@@ -53,6 +54,7 @@ for (const entry of manifest.approvedCurves) {
   if (!entry.curveId || seen.has(entry.curveId)) fail(`Fehlende oder doppelte curveId: ${entry.curveId || "–"}`);
   seen.add(entry.curveId);
   if (entry.status !== "approved") fail(`${entry.curveId}: status muss approved sein.`);
+  requireBlcCurveRole(entry, entry.curveId);
   if (!entry.boundaryId || !entry.itemId || !entry.seriesId) fail(`${entry.curveId}: Pflichtfelder fehlen.`);
 
   if (entry.kind === "knowledge") {

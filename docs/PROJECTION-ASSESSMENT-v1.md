@@ -39,9 +39,10 @@ Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindest
 - Rekonstruktionen oder Projektionen ohne Beobachtungsreihe ergeben keine BLC-Freigabe für eine vollständige Kurve.
 - Ein einzelner Zustands- oder Messwert bleibt eine Punktangabe und wird nicht zur Zeitreihe erklärt.
 - Der Schalter „Für BLC freigeben“ ist standardmäßig aus und bei nicht freigabefähigen Kurven deaktiviert.
+- Vor einer neuen Freigabe muss redaktionell „Kernkurve“ (`core`) oder „Vertiefende Studie“ (`deep_dive`) gewählt werden; ohne gültige Rolle bleibt der Schalter deaktiviert.
 - Der Schalter ist ausschließlich auf `localhost` bedienbar. Öffentliche Ansichten zeigen nur den versionierten Freigabestatus.
 - Lokale Änderungen sind zunächst ein flüchtiger Redaktionsentwurf. Sie ändern weder die öffentliche Ansicht noch BLC.
-- Der Redaktionsmodus exportiert eine neue `curve-approvals-v1.json`. Erst deren Prüfung, Commit und Push machen die Entscheidung verbindlich.
+- Der Redaktionsmodus exportiert eine neue `curve-approvals-v1.json` einschließlich der gewählten Rollen. Geladene Rollen bleiben bei einem erneuten Download erhalten. Erst Prüfung, Commit und Push machen die Entscheidung verbindlich.
 - Das Manifest wird vor der Übernahme gegen bekannte Quellen, Kurven-IDs und die verpflichtende Beobachtungsreihe validiert.
 - Nur fachlich freigabefähige und zusätzlich versioniert freigegebene Kurven dürfen später an BLC übergeben werden.
 

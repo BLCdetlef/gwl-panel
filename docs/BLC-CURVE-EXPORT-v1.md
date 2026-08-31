@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 30. August 2026 · Exportvertrag 1.2
+Stand: 30. August 2026 · Freigabevertrag 1.1 · Exportvertrag 1.3
 
 ## Sicherheitsmodell
 
@@ -36,6 +36,15 @@ Die bereits im GWL-Panel über einen eigenen Lade- und Navigationspfad verwendet
 
 Die Ausnahme ist abzulösen, sobald der Knowledge-Import Dateien nach URL dedupliziert und mehrere Zeitreihen derselben Knowledge-Datei im Index eindeutig adressiert werden können. Jede andere nicht registrierte Quelle bleibt gesperrt; doppelte oder widersprüchliche reguläre Registrierungen bleiben Fehler.
 
+### Redaktionelle Kurvenrolle
+
+Freigabeversion 1.1 verlangt für jede freigegebene Zeitreihe genau eine ausdrücklich redaktionell gewählte `curveRole`:
+
+- `core`: zentrale Kurve einer Planetaren Grenze oder eines ergänzenden Einflussbereichs
+- `deep_dive`: vertiefende Studie oder ergänzende Messreihe
+
+Die Rolle wird weder aus Kategorie, Beschriftung, Dateiname noch Kurvenwerten abgeleitet. Eine fehlende oder unbekannte Rolle sperrt Manifest und Export. Exportversion 1.3 übernimmt die Rolle unverändert pro Kurve; sie ist unabhängig von `domainType`, `domainId` und `domainLabel` und dient BLC26 später ausschließlich zur visuellen Gewichtung.
+
 Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche Beobachtungspunkte über mindestens 50 Jahre. Historische Rekonstruktionen und Projektionen dürfen die Beobachtungsreihe ergänzen, zählen aber nicht zu dieser Mindestdauer. Die physische Richtung der Messgröße bleibt erhalten: Steigende Messwerte werden steigend, sinkende Messwerte sinkend ausgegeben.
 
 Grenzwerte des Planetary-Boundaries-Ansatzes werden als **Modellreferenz nach dem Modell der Planetaren Grenzen** bezeichnet und mit einer konkreten Quelle verbunden. Der Export stellt sie nicht als unumstrittene Naturgrenzen dar. Beobachtungsreihe, Modellreferenz und historische Rekonstruktionen tragen jeweils überprüfbare Quellenverweise.
@@ -45,27 +54,28 @@ Das erzeugte Paket `data/blc/blc-curve-export-v1.json` ist rein lesbar und enth�
 ## Komfortabler Redaktionsablauf
 
 1. GWL lokal über `localhost` öffnen.
-2. Geeignete Kurven mit „Für BLC freigeben“ auswählen.
-3. `curve-approvals-v1.json` herunterladen und in `data/blc/` übernehmen.
-4. Manifest prüfen:
+2. Für jede geeignete Kurve ausdrücklich „Kernkurve“ oder „Vertiefende Studie“ auswählen.
+3. Die Kurve mit „Für BLC freigeben“ auswählen.
+4. `curve-approvals-v1.json` herunterladen und in `data/blc/` übernehmen.
+5. Manifest prüfen:
 
    ```powershell
    node scripts/validate-blc-curve-approvals.mjs
    ```
 
-5. Export neu erzeugen:
+6. Export neu erzeugen:
 
    ```powershell
    node scripts/build-blc-curve-export.mjs
    ```
 
-6. Export unabhängig verifizieren:
+7. Export unabhängig verifizieren:
 
    ```powershell
    node scripts/verify-blc-curve-export.mjs
    ```
 
-7. Manifest, Export und gegebenenfalls geänderte Quelldaten gemeinsam committen und pushen.
+8. Manifest, Export und gegebenenfalls geänderte Quelldaten gemeinsam committen und pushen.
 
 ## Übergaberegel
 

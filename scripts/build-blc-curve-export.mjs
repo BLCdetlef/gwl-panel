@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
+import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
@@ -110,7 +111,7 @@ function normalizeSources(payload) {
 }
 
 const manifest = await readJson(manifestPath);
-if (manifest.format !== "gwl-blc-curve-approvals-v1" || !Array.isArray(manifest.approvedCurves)) {
+if (manifest.format !== "gwl-blc-curve-approvals-v1" || manifest.version !== "1.1" || !Array.isArray(manifest.approvedCurves)) {
   fail("Ungültiges BLC-Freigabemanifest.");
 }
 
@@ -121,6 +122,7 @@ const curves = [];
 const seen = new Set();
 for (const approval of manifest.approvedCurves) {
   if (approval.status !== "approved") fail(`${approval.curveId || "Unbekannte Kurve"}: nicht freigegeben.`);
+  const curveRole = requireBlcCurveRole(approval, approval.curveId || "Unbekannte Kurve");
   if (approval.kind !== "knowledge") fail(`${approval.curveId}: Legacy-Kurven werden noch nicht exportiert.`);
   const domain = resolveBlcDomain(domainCatalog, approval.source);
   if (!approval.source.startsWith("data/knowledge/") || approval.source.includes("..")) fail(`${approval.curveId}: unzulässiger Quellpfad.`);
@@ -149,6 +151,7 @@ for (const approval of manifest.approvedCurves) {
     seriesId: approval.seriesId,
     source: approval.source,
     ...domain,
+    curveRole,
     label: cleanText(series.label) || cleanText(series.title) || approval.seriesId,
     metric: cleanText(series.metric) || cleanText(series.measure) || "",
     unit: cleanText(series.unit) || "",
@@ -173,7 +176,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.2",
+  version: "1.3",
   manifestVersion: manifest.version,
   curves
 };

@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { BLC_DOMAIN_DEFINITIONS, buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
+import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const exportPath = process.argv[2]
@@ -13,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.2") fail("Unbekanntes BLC-Exportformat.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.3") fail("Unbekanntes BLC-Exportformat; für curveRole ist Exportversion 1.3 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -33,6 +34,7 @@ const allowedDomains = new Set(BLC_DOMAIN_DEFINITIONS.map(domain => `${domain.do
 for (const curve of payload.curves) {
   if (!curve?.curveId || seen.has(curve.curveId)) fail(`Fehlende oder doppelte Kurven-ID: ${curve?.curveId || "–"}`);
   seen.add(curve.curveId);
+  requireBlcCurveRole(curve, curve.curveId);
   if (!curve.source?.startsWith("data/knowledge/") || curve.source.includes("..")) fail(`${curve.curveId}: unzulässiger Quellverweis.`);
   if (!allowedDomains.has(`${curve.domainType}:${curve.domainId}`) || typeof curve.domainLabel !== "string" || !curve.domainLabel.trim()) {
     fail(`${curve.curveId}: ungültige BLC-Kategorie.`);

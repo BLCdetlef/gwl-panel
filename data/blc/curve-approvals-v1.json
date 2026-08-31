@@ -1,6 +1,6 @@
 {
   "format": "gwl-blc-curve-approvals-v1",
-  "version": "1.0",
+  "version": "1.1",
   "approvedCurves": [
     {
       "kind": "knowledge",
@@ -9,6 +9,7 @@
       "boundaryId": "biosphere",
       "itemId": "functional-integrity-hanpp",
       "curveId": "knowledge:data/knowledge/gwl_biosphere_functional_integrity_v0.1.json#biosphere_hanpp_1910_2020",
+      "curveRole": "core",
       "status": "approved"
     },
     {
@@ -18,6 +19,7 @@
       "boundaryId": "freshwater",
       "itemId": "blue-water-streamflow",
       "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "curveRole": "core",
       "status": "approved"
     }
   ]
