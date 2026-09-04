@@ -56,15 +56,20 @@ function normalizePoints(points) {
     .sort((a, b) => a.year - b.year);
 }
 
-function normalizeHistorical(series) {
+export function normalizeHistorical(series, firstObservationYear) {
   return (series.historicalSegments || series.historicalSeries || [])
-    .map(segment => ({
-      id: cleanText(segment.id) || "historical-segment",
-      ...(cleanText(segment.label) ? { label: segment.label } : {}),
-      ...(cleanText(segment.method) ? { method: segment.method } : {}),
-      ...(cleanText(segment.sourceId) ? { sourceRefs: [segment.sourceId] } : cleanStringArray(segment.sourceRefs)?.length ? { sourceRefs: segment.sourceRefs } : {}),
-      points: normalizePoints(segment.points || segment.values)
-    }))
+    .map(segment => {
+      const isLawDomeCo2 = series.id === "global_co2_noaa_annual" && segment.id === "law_dome_co2_20yr_spline_1700_1996";
+      return {
+        id: cleanText(segment.id) || "historical-segment",
+        ...(cleanText(segment.label) ? { label: segment.label } : {}),
+        ...(isLawDomeCo2 && cleanText(segment.period) ? { period: segment.period } : {}),
+        ...(cleanText(segment.method) ? { method: segment.method } : {}),
+        ...(isLawDomeCo2 && cleanText(segment.uncertainty) ? { uncertainty: segment.uncertainty } : {}),
+        ...(cleanText(segment.sourceId) ? { sourceRefs: [segment.sourceId] } : cleanStringArray(segment.sourceRefs)?.length ? { sourceRefs: segment.sourceRefs } : {}),
+        points: normalizePoints(segment.points || segment.values).filter(point => !isLawDomeCo2 || point.year < firstObservationYear)
+      };
+    })
     .filter(segment => segment.points.length);
 }
 
@@ -149,7 +154,11 @@ for (const approval of manifest.approvedCurves) {
   const observationYears = [...new Set(observations.map(point => point.year))];
   if (observationYears.length < minimumObservationPoints) fail(`${approval.curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
   const observationSpanYears = Math.max(...observationYears) - Math.min(...observationYears);
-  if (observationSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: Beobachtungsdauer ${observationSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+  const historicalReconstruction = normalizeHistorical(series, Math.min(...observationYears));
+  const historicalYears = historicalReconstruction.flatMap(segment => segment.points.map(point => point.year));
+  const coverageStart = Math.min(Math.min(...observationYears), ...historicalYears);
+  const combinedSpanYears = Math.max(...observationYears) - coverageStart;
+  if (combinedSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${combinedSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
   const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
   const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE
@@ -178,7 +187,7 @@ for (const approval of manifest.approvedCurves) {
     observationSourceRefs,
     ...(normalizedReference ? { reference: normalizedReference } : {}),
     observations,
-    historicalReconstruction: normalizeHistorical(series),
+    historicalReconstruction,
     projections: normalizeProjections(payload, series),
     methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({ year: Number(marker.year) })) : [],
     sources: normalizedSources
@@ -188,7 +197,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.4",
+  version: "1.5",
   manifestVersion: manifest.version,
   curves
 };

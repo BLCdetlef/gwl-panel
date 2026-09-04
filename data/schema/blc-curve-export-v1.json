@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "gwl://schema/blc-curve-export-v1.4",
-  "title": "GWL to BLC read-only curve export 1.4",
+  "$id": "gwl://schema/blc-curve-export-v1.5",
+  "title": "GWL to BLC read-only curve export 1.5",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.4" },
+    "version": { "const": "1.5" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
@@ -36,7 +36,7 @@
             "properties": {
               "startYear": { "type": "number" },
               "endYear": { "type": "number" },
-              "spanYears": { "type": "number", "minimum": 50 },
+              "spanYears": { "type": "number", "minimum": 0 },
               "pointCount": { "type": "integer", "minimum": 5 }
             }
           },

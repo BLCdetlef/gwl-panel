@@ -14,6 +14,16 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json",
+      "seriesId": "global_co2_noaa_annual",
+      "boundaryId": "climate",
+      "itemId": "global-warming",
+      "curveId": "knowledge:data/knowledge/gwl_climate_change_pilot_v0.1.json#global_co2_noaa_annual",
+      "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
       "seriesId": "blue_water_streamflow",
       "boundaryId": "freshwater",

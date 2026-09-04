@@ -31,7 +31,7 @@ Liegen veröffentlichte Fachszenarien oder belastbare Einflussfaktoren vor, die 
 
 Die BLC-Freigabe besteht aus zwei getrennten Stufen. Zuerst wird geprüft, ob eine Kurve fachlich freigabefähig ist. Danach ist eine ausdrückliche redaktionelle Freigabe am Schalter der jeweiligen Kurve erforderlich. Eine fachlich geeignete Kurve wird niemals automatisch für BLC freigegeben.
 
-Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindestens fünf zeitlich unterschiedlichen Messpunkten über mindestens 50 Jahre. Historische Rekonstruktionen und Projektionen sind optionale Ergänzungen; sie dürfen weder fehlende Beobachtungen noch eine zu kurze Beobachtungsdauer ersetzen.
+Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindestens fünf zeitlich unterschiedlichen direkten Messpunkten. Die Mindestzeitabdeckung von 50 Jahren darf gemeinsam durch historische Rekonstruktion und direkte Beobachtung erreicht werden; Projektionen zählen nicht mit. Historische Rekonstruktionen dürfen die direkten Beobachtungspunkte nicht ersetzen.
 
 - Die Beobachtungsreihe wird als durchgezogene Hauptreihe dargestellt.
 - Eine historische Rekonstruktion darf als methodisch getrennt gekennzeichneter Abschnitt vorangestellt werden.

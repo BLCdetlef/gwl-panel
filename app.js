@@ -171,7 +171,7 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
   blcReleaseSwitch.checked = approved;
   blcReleaseControl.classList.toggle("is-approved", approved);
   blcReleaseStatus.textContent = !eligible
-    ? "Nicht freigabefähig: Erforderlich sind mindestens fünf Beobachtungspunkte über mindestens 50 Jahre."
+    ? "Nicht freigabefähig: Erforderlich sind mindestens fünf direkte Beobachtungspunkte und zusammen mit einer optionalen historischen Rekonstruktion mindestens 50 Jahre Zeitabdeckung."
     : !validRole
       ? "Bitte zuerst die Kurvenrolle Kernkurve oder Vertiefende Studie wählen."
     : approved
@@ -2440,7 +2440,11 @@ function hasRequiredObservationSeries(networkOrSeries) {
     ? getKnowledgeSeries(networkOrSeries)
     : networkOrSeries;
   const years = [...new Set(getValidTimeSeriesPoints(series).map(point => Number(point.year)))].sort((a, b) => a - b);
-  return years.length >= 5 && years.at(-1) - years[0] >= 50;
+  const historicalYears = (series?.historicalSeries || series?.historicalSegments || [])
+    .flatMap(segment => getValidTimeSeriesPoints({ points: segment.points || segment.values }))
+    .map(point => Number(point.year));
+  const coverageStart = Math.min(years[0] ?? Infinity, ...historicalYears);
+  return years.length >= 5 && Number.isFinite(coverageStart) && years.at(-1) - coverageStart >= 50;
 }
 
 function getQualifiedProjectionSeries(network) {
@@ -2783,7 +2787,7 @@ function renderKnowledgeTime(network) {
     : `knowledge:${knowledgeSource}#missing`;
   setBlcReleaseControl({
     curveId,
-    eligible: hasRequiredObservationSeries(observationSeries) && !getSelectedFreshwaterRegion(network),
+    eligible: hasRequiredObservationSeries(network) && !getSelectedFreshwaterRegion(network),
     descriptor: observationSeries?.id ? {
       kind: "knowledge",
       source: knowledgeSource,
@@ -3538,7 +3542,7 @@ function renderTime(item) {
   const points = getTimePoints(item);
   setBlcReleaseControl({
     curveId: item?.id ? `legacy:data.js#${selectedBoundaryId || "unknown"}/${item.id}` : "",
-    eligible: points.filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value))).length >= 2,
+    eligible: hasRequiredObservationSeries({ points }) ,
     descriptor: item?.id ? {
       kind: "legacy",
       source: "data.js",

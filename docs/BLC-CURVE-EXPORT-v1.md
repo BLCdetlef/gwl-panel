@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 31. August 2026 · Freigabevertrag 1.1 · Exportvertrag 1.4
+Stand: 4. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.5
 
 ## Sicherheitsmodell
 
@@ -13,6 +13,8 @@ Der Generator akzeptiert nur dort ausdrücklich freigegebene Kurven aus bekannte
 Exportversion 1.2 ergänzt jede Kurve additiv um `domainType`, `domainId` und `domainLabel`. Diese Angaben werden nicht in Knowledge-Dateien oder im Freigabemanifest gepflegt, sondern ausschließlich aus der eindeutigen Position der Kurvenquelle in `knowledge-index.json` abgeleitet.
 
 Exportversion 1.4 ergänzt ausschließlich für die vorhandene HANPP-Modellreferenz die Felder `role`, `qualifier` und `exceedanceOperator`. Der Pilot speichert keinen berechneten Status und führt kein allgemeines Grenzwertmodell ein. Bei `value: 10` und `exceedanceOperator: ">"` gilt für einen späteren Verbraucher: letzter gültiger Beobachtungswert unter 10 = nicht überschritten, gleich 10 = Modellgrenze erreicht, über 10 = Modellgrenze überschritten. Für die aktuelle Statusbestimmung darf ausschließlich der letzte gültige Punkt der Beobachtungsreihe verwendet werden; historische Rekonstruktionen und Zukunftsszenarien sind davon ausdrücklich ausgeschlossen.
+
+Exportversion 1.5 ändert ausschließlich die Eignungsregel für die Zeitabdeckung: Mindestens fünf direkte Beobachtungspunkte bleiben verpflichtend, während die geforderten 50 Jahre gemeinsam aus historischer Rekonstruktion und anschließender Beobachtungsreihe erreicht werden dürfen. `observationCoverage` beschreibt weiterhin nur die direkte Messreihe.
 
 Für `planetary_boundaries` bestimmt die jeweilige Gruppe die Kategorie. Für die beiden ergänzenden Einflussbereiche bestimmt dagegen der gesamte Einflussbereich die Kategorie; interne Gruppen wie Energie oder Luftverschmutzung werden nicht als eigene BLC-Kategorien exportiert.
 
@@ -47,7 +49,7 @@ Freigabeversion 1.1 verlangt für jede freigegebene Zeitreihe genau eine ausdrü
 
 Die Rolle wird weder aus Kategorie, Beschriftung, Dateiname noch Kurvenwerten abgeleitet. Eine fehlende oder unbekannte Rolle sperrt Manifest und Export. Exportversion 1.3 übernimmt die Rolle unverändert pro Kurve; sie ist unabhängig von `domainType`, `domainId` und `domainLabel` und dient BLC26 später ausschließlich zur visuellen Gewichtung.
 
-Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche Beobachtungspunkte über mindestens 50 Jahre. Historische Rekonstruktionen und Projektionen dürfen die Beobachtungsreihe ergänzen, zählen aber nicht zu dieser Mindestdauer. Die physische Richtung der Messgröße bleibt erhalten: Steigende Messwerte werden steigend, sinkende Messwerte sinkend ausgegeben.
+Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche direkte Beobachtungspunkte. Die Zeitabdeckung von mindestens 50 Jahren darf sich aus der historischen Rekonstruktion und der anschließenden direkten Beobachtungsreihe zusammensetzen; Projektionen zählen nicht mit. Eine Rekonstruktion ersetzt niemals die verpflichtende Beobachtungsreihe. Die physische Richtung der Messgröße bleibt erhalten: Steigende Messwerte werden steigend, sinkende Messwerte sinkend ausgegeben.
 
 Grenzwerte des Planetary-Boundaries-Ansatzes werden als **Modellreferenz nach dem Modell der Planetaren Grenzen** bezeichnet und mit einer konkreten Quelle verbunden. Der Export stellt sie nicht als unumstrittene Naturgrenzen dar. Beobachtungsreihe, Modellreferenz und historische Rekonstruktionen tragen jeweils überprüfbare Quellenverweise.
 

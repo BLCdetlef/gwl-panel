@@ -69,8 +69,8 @@ const signedPayload = {
 };
 const actualHash = crypto.createHash("sha256").update(JSON.stringify(signedPayload), "utf8").digest("hex");
 if (actualHash !== curveExport.integrity?.hash) throw new Error("SHA-256 des Referenzpilot-Exports ist ungültig.");
-if (curveExport.version !== "1.4") throw new Error("Referenzpilot muss Exportversion 1.4 verwenden.");
-if (schema.properties?.version?.const !== "1.4") throw new Error("Exportschema muss Version 1.4 verlangen.");
+if (curveExport.version !== "1.5") throw new Error("Referenzpilot muss Exportversion 1.5 verwenden.");
+if (schema.properties?.version?.const !== "1.5") throw new Error("Exportschema muss Version 1.5 verlangen.");
 const referenceSchema = schema.properties?.curves?.items?.properties?.reference;
 if (referenceSchema?.properties?.role?.const !== "boundary") throw new Error("Schema begrenzt reference.role nicht auf boundary.");
 if (!referenceSchema?.properties?.qualifier?.enum?.includes("approximate")) throw new Error("Schema erlaubt qualifier approximate nicht.");

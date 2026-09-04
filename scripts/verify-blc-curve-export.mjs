@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.4") fail("Unbekanntes BLC-Exportformat; für den HANPP-Referenzpilot ist Exportversion 1.4 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.5") fail("Unbekanntes BLC-Exportformat; für die kombinierte Mindestzeitabdeckung ist Exportversion 1.5 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -55,7 +55,10 @@ for (const curve of payload.curves) {
   if (!Array.isArray(curve.observations)) fail(`${curve.curveId}: Beobachtungsreihe fehlt.`);
   const years = [...new Set(curve.observations.map(point => Number(point?.year)))].sort((a, b) => a - b);
   if (years.length < 5) fail(`${curve.curveId}: mindestens fünf zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
-  if (years.at(-1) - years[0] < 50) fail(`${curve.curveId}: Beobachtungsdauer unter 50 Jahren.`);
+  const historicalYears = (curve.historicalReconstruction || []).flatMap(segment => (segment.points || []).map(point => Number(point.year))).filter(Number.isFinite);
+  const coverageStart = Math.min(years[0], ...historicalYears);
+  if (years.at(-1) - coverageStart < 50) fail(`${curve.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion unter 50 Jahren.`);
+  if (historicalYears.some(year => year >= years[0])) fail(`${curve.curveId}: historische Rekonstruktion überlappt die direkte Beobachtungsreihe.`);
   if (!["increase", "decrease"].includes(curve.worseningDirection)) fail(`${curve.curveId}: ungültige Belastungsrichtung.`);
   if (curve.observationCoverage?.startYear !== years[0] || curve.observationCoverage?.endYear !== years.at(-1) || curve.observationCoverage?.spanYears !== years.at(-1) - years[0] || curve.observationCoverage?.pointCount !== years.length) {
     fail(`${curve.curveId}: inkonsistente Beobachtungsabdeckung.`);

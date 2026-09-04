@@ -28,8 +28,8 @@ expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series: { ...series, bo
 expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series, sourceIds: new Set() }, /unbekannte Referenzquelle dataset-source/);
 expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series: { ...series, unit: "fraction" }, sourceIds }, /stimmt nicht exakt/);
 
-if (curveExport.version !== "1.4") throw new Error("Exportversion 1.4 wurde verändert.");
-if (curveExport.curves.length !== 2) throw new Error("Export muss exakt zwei freigegebene Kurven enthalten.");
+if (curveExport.version !== "1.5") throw new Error("Exportversion 1.5 wird erwartet.");
+if (curveExport.curves.length !== 3) throw new Error("Export muss exakt drei freigegebene Kurven enthalten.");
 const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
 const hanpp = curveExport.curves.find(curve => curve.seriesId === "biosphere_hanpp_1910_2020");
 if (!blue?.sources?.some(source => source.id === "dataset-source")) throw new Error("dataset-source fehlt im sources-Array der Blauwasser-Kurve.");

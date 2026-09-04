@@ -18,14 +18,16 @@ const readJson = async file => JSON.parse(await fs.readFile(file, "utf8"));
 const numericPoints = series => (series?.points || series?.values || []).filter(point =>
   Number.isFinite(Number(point?.year)) && Number.isFinite(Number(point?.value))
 );
-const validateObservationCoverage = (curveId, points) => {
+const validateObservationCoverage = (curveId, points, historicalSegments = []) => {
   const years = [...new Set(points.map(point => Number(point.year)))].sort((a, b) => a - b);
   if (years.length < minimumObservationPoints) {
     fail(`${curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
   }
-  const spanYears = years.at(-1) - years[0];
+  const historicalYears = historicalSegments.flatMap(segment => numericPoints({ points: segment.points || segment.values })).map(point => Number(point.year));
+  const coverageStart = Math.min(years[0], ...historicalYears);
+  const spanYears = years.at(-1) - coverageStart;
   if (spanYears < minimumObservationSpanYears) {
-    fail(`${curveId}: Beobachtungsdauer ${spanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+    fail(`${curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${spanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   }
 };
 const fail = message => { throw new Error(message); };
@@ -65,7 +67,7 @@ for (const entry of manifest.approvedCurves) {
     const payload = await readJson(path.join(projectRoot, ...entry.source.split("/")));
     const series = (payload.timeSeries || []).find(candidate => candidate.id === entry.seriesId);
     if (!series) fail(`${entry.curveId}: Beobachtungsreihe wurde nicht gefunden.`);
-    validateObservationCoverage(entry.curveId, numericPoints(series));
+    validateObservationCoverage(entry.curveId, numericPoints(series), series.historicalSegments || series.historicalSeries || []);
     continue;
   }
 
