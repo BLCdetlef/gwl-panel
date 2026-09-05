@@ -31,6 +31,16 @@
       "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
       "curveRole": "core",
       "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
+      "seriesId": "global_forest_cover_1992_2022",
+      "boundaryId": "land",
+      "itemId": "global-forest-status",
+      "curveId": "knowledge:data/knowledge/gwl_land_system_change_pilot_v0.1.json#global_forest_cover_1992_2022",
+      "curveRole": "core",
+      "status": "approved"
     }
   ]
 }

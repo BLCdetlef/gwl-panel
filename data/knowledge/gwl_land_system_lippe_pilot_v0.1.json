@@ -214,6 +214,17 @@
       "evidenceStatus": "strong"
     },
     {
+      "id": "path_forest_transition_livelihoods",
+      "label": "Lokale Lebensgrundlagen",
+      "nodes": [
+        "state_fragmentation",
+        "effect_ecosystem_services",
+        "effect_livelihoods"
+      ],
+      "evidenceStatus": "moderate",
+      "caution": "Die Studie misst vor allem Wald- und Ökosystemleistungen. Konkrete Gesundheitsendpunkte oder Organwirkungen wurden nicht untersucht."
+    },
+    {
       "id": "path_measurement_uncertainty",
       "label": "Walddefinition + räumliche Auflösung + Klassifikationsfehler → unterschiedliche Waldkarten → unterschiedliche Zustandsaussage",
       "nodes": [
@@ -226,6 +237,7 @@
   "healthContext": {
     "bodymapStatus": "not_applicable_yet",
     "systemImpacts": [],
+    "summary": "Lokale Lebensgrundlagen sind über veränderte Wald- und Ökosystemleistungen berührt. Konkrete Gesundheitsendpunkte wurden nicht untersucht; deshalb wird kein Bodymap-Organmarker aktiviert.",
     "bodymapRule": "Für dieses Modul keine Organmarker aktivieren. Die direkte Stärke liegt in der Verbindung GRUNDLAGE → WIRKUNG: Landschaftszustand, Ökosystemfunktionen und Lebensgrundlagen."
   },
   "knowledgeGaps": [

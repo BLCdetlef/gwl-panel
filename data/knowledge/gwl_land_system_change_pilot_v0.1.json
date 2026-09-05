@@ -236,6 +236,28 @@
       "type": "peer_reviewed_planetary_boundaries_assessment",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10499318/",
       "access": "open_full_text"
+    },
+    {
+      "id": "src_pongratz_2008",
+      "title": "A reconstruction of global agricultural areas and land cover for the last millennium",
+      "authors": "Pongratz, J.; Reick, C.; Raddatz, T.; Claussen, M.",
+      "publisher": "Global Biogeochemical Cycles",
+      "year": 2008,
+      "doi": "10.1029/2007GB003153",
+      "type": "peer_reviewed_historical_reconstruction",
+      "url": "https://doi.org/10.1029/2007GB003153",
+      "access": "open_manuscript_and_dataset"
+    },
+    {
+      "id": "src_pongratz_wdcc_dataset",
+      "title": "Reconstruction of global land use and land cover AD 800 to 1992",
+      "authors": "Pongratz, J.; Reick, C.; Raddatz, T.; Claussen, M.",
+      "publisher": "World Data Center for Climate",
+      "year": 2007,
+      "doi": "10.1594/WDCC/RECON_LAND_COVER_800-1992",
+      "type": "institutional_historical_reconstruction_dataset",
+      "url": "https://doi.org/10.1594/WDCC/RECON_LAND_COVER_800-1992",
+      "access": "open_dataset"
     }
   ],
   "navigationRule": "Dieses Grundlagenmodul gehört als erster Eintrag unter Planetare Grenzen → Land-System-Wandel. Die vorhandene Datei gwl_land_system_lippe_pilot_v0.1.json bleibt als Vertiefung 'Waldtransition und Waldzustand' erhalten.",
@@ -267,6 +289,43 @@
       "sourceRefs": [
         "src_phc_2025_report",
         "src_phc_land_2025"
+      ],
+      "methodNote": "Die gestrichelte Rekonstruktion beruht auf Pongratz et al. (2008), die durchgezogene Hauptreihe auf Copernicus/ESA-CCI-Daten in der Auswertung des Planetary Health Check 2025. Das ◇ bei 1992 markiert den Methodenwechsel. Die beiden Werte für 1992 werden nicht verbunden: 71,1 % rekonstruiert und etwa 60,2 % satellitenbasiert. Unterschiedliche Walddefinitionen, räumliche Auflösungen und erfasste Landnutzungsprozesse verhindern eine unmittelbare Vergleichbarkeit.",
+      "historicalSeries": [
+        {
+          "id": "pongratz_2008_historical_forest_reconstruction",
+          "label": "Historische Landbedeckungsrekonstruktion",
+          "period": "1700–1992 im BLC-Zeitfenster; Gesamtdatensatz 800–1992",
+          "sourceRefs": [
+            "src_pongratz_2008",
+            "src_pongratz_wdcc_dataset"
+          ],
+          "points": [
+            {
+              "year": 1700,
+              "value": 93.78,
+              "display": "≈ 93,8 %",
+              "finding": "Pongratz et al. berichten für 1700 45,65 Mio. km² Wald bei 48,68 Mio. km² potenzieller Waldfläche; daraus ergeben sich rund 93,8 %.",
+              "uncertainty": "Quotient aus den publizierten globalen Summen. Modellbasierte Rekonstruktion landwirtschaftlich verursachter Landbedeckungsänderung; Holzeinschlag und langfristige Brache sind nicht vollständig enthalten.",
+              "sourceRefs": ["src_pongratz_2008"]
+            },
+            {
+              "year": 1992,
+              "value": 71.08,
+              "display": "≈ 71,1 %",
+              "finding": "Pongratz et al. berichten für 1992 34,60 Mio. km² Wald bei 48,68 Mio. km² potenzieller Waldfläche; daraus ergeben sich rund 71,1 %.",
+              "uncertainty": "Quotient aus den publizierten globalen Summen. Nicht direkt mit dem Copernicus-/PHC-Wert von etwa 60,2 % vergleichbar; der Abstand beträgt rund 10,9 Prozentpunkte.",
+              "sourceRefs": ["src_pongratz_2008"]
+            }
+          ]
+        }
+      ],
+      "methodBreaks": [
+        {
+          "year": 1992,
+          "label": "Wechsel der Datengrundlage",
+          "showValues": true
+        }
       ],
       "points": [
         {

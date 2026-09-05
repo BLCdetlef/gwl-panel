@@ -150,10 +150,15 @@ a { color: inherit; }
 .time-chart-axis-label-start { text-anchor: start; }
 .time-chart-axis-label-end { text-anchor: end; }
 .time-chart-value-label { fill: #59635f; font-size: 13px; text-anchor: end; dominant-baseline: middle; }
+.time-chart-value-label-maximum { text-anchor: start; }
 .time-chart-observed { fill: none; stroke: #1f2423; stroke-width: 3.3; stroke-linecap: round; stroke-linejoin: round; }
 .time-chart-historical { fill: none; stroke: #687570; stroke-width: 2.5; stroke-dasharray: 7 5; stroke-linecap: round; stroke-linejoin: round; }
 .time-chart-projection { fill: none; stroke: var(--projection-color); stroke-width: 2.6; stroke-dasharray: 2 5; stroke-linecap: round; stroke-linejoin: round; }
 .time-chart-method-break { fill: #52615b; font-size: 14px; text-anchor: middle; dominant-baseline: middle; }
+.time-chart-break-point { fill: #fff; stroke: #687570; stroke-width: 2; }
+.time-chart-break-value { fill: #52615b; font-size: 8px; font-weight: 700; dominant-baseline: middle; }
+.time-chart-break-value.is-historical { text-anchor: end; }
+.time-chart-break-value.is-observed { text-anchor: start; }
 .time-chart-projection-label { font-size: 13px; font-weight: 700; }
 .time-chart-hit { fill: transparent; cursor: pointer; }
 .time-chart-hit:focus { outline: none; stroke: #1f2423; stroke-width: 1.5; }

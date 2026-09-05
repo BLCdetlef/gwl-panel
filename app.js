@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.73 · B58";
+const GWL_BUILD_VERSION = "0.9.73 · B61";
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -1783,7 +1783,7 @@ function sourceLinksHtml(network, sourceRefs = []) {
 
 function allOpenSourcesHtml(network) {
   return (network?.sources || [])
-    .filter(source => source.access === "open_full_text" && source.url)
+    .filter(source => String(source.access || "").startsWith("open_") && source.url)
     .map(source => {
       const title = source.title || source.id;
       const meta = [source.authors || source.publisher, source.journal, source.year].filter(Boolean).join(" · ");
@@ -2101,6 +2101,7 @@ function deriveGenericPathways(network) {
 }
 
 function genericHealthReadout(network) {
+  if (network?.healthContext?.summary) return network.healthContext.summary;
   const impacts = network?.healthContext?.systemImpacts || [];
   if (!impacts.length) {
     return "Kein direkter Organmarker. Gesundheitsbezüge werden erst über konkrete Wirkungspfade dargestellt.";
@@ -2121,7 +2122,7 @@ function genericTimeSeriesCards(network) {
   const cards = seriesList.map(series => {
     const points = (series.points || []).filter(point => Number.isFinite(point.year) && Number.isFinite(point.value));
     if (!points.length) return null;
-    const historicalSegments = (series.historicalSeries || []).map(segment => ({
+    const historicalSegments = (series.historicalSeries || series.historicalSegments || []).map(segment => ({
       ...segment,
       points: (segment.points || segment.values || []).filter(point => Number.isFinite(point.year) && Number.isFinite(point.value))
     })).filter(segment => segment.points.length);
@@ -2155,6 +2156,7 @@ function genericTimeSeriesCards(network) {
       </svg>
       <div class="knowledge-series-values"><span>${first.year}: <b>${formatValue(first)}</b></span><span>${latest.year}: <b>${formatValue(latest)}</b></span></div>
       ${(historicalSegments.length || projections.length) ? `<div class="knowledge-series-legend"><span class="is-observed">Beobachtung</span>${historicalSegments.length ? '<span class="is-historical">Historische Rekonstruktion</span>' : ""}${projections.length ? '<span class="is-projection">Projektion</span>' : ""}</div>` : ""}
+      ${series.methodNote ? `<p><small><strong>Methodenhinweis:</strong> ${series.methodNote}</small></p>` : ""}
       ${projections.map(projection => `<p><small><strong>${projection.scenarioLabel || "Projektion"}:</strong> ${projection.method || ""} ${projection.uncertainty || ""}</small></p>`).join("")}
       <p><small>${series.finding || ""} ${series.uncertainty || ""}</small></p>
     </div>`
@@ -2182,9 +2184,10 @@ function genericTimeSeriesCards(network) {
   return cards.length ? `<h3>MESS- UND ZEITREIHEN</h3>${seriesHtml}${projectionHtml}` : "";
 }
 
-function renderGenericPathChain(pathway) {
-  const steps = (pathway.chain || pathway.path || [])
-    .map(step => typeof step === "string" ? step : step.label)
+function renderGenericPathChain(pathway, network) {
+  const nodeLabels = Object.fromEntries((network?.nodes || []).map(node => [node.id, node.label]));
+  const steps = (pathway.chain || pathway.path || pathway.nodes || [])
+    .map(step => typeof step === "string" ? (nodeLabels[step] || step) : step.label)
     .filter(Boolean);
 
   return steps.map((label, index) => {
@@ -2214,7 +2217,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
   const pathways = deriveGenericPathways(network).map(p => `
     <div class="oil-boundary-link">
       <strong>${p.label === "Expositions- und Wirkungspfad" ? "Gesundheitspfad" : (p.label || "Wirkungspfad")}</strong>
-      <p class="effect-path-flow">${renderGenericPathChain(p)}</p>
+      <p class="effect-path-flow">${renderGenericPathChain(p, network)}</p>
       ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
       ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
     </div>`).join("");
@@ -2517,7 +2520,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const width = Math.max(320, Math.round(timeChart.clientWidth || 500));
   const height = 112;
   timeChart.setAttribute("viewBox", `0 0 ${width} ${height}`);
-  const plot = { left: 10, right: 10, top: 8, bottom: 27 };
+  const plot = { left: 28, right: 10, top: 8, bottom: 27 };
   const xMin = 1700;
   const xMax = 2100;
   const observed = (observedSeries?.points || [])
@@ -2533,7 +2536,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
       .filter(point => point.year >= xMin && point.year <= xMax)
       .sort((a, b) => a.year - b.year)
   })).filter(series => series.points.length);
-  const historicalSegments = (observedSeries?.historicalSegments || []).map(segment => ({
+  const historicalSegments = (observedSeries?.historicalSegments || observedSeries?.historicalSeries || []).map(segment => ({
     ...segment,
     points: (segment.points || [])
       .filter(point => Number.isFinite(Number(point.year)) && Number.isFinite(Number(point.value)))
@@ -2557,8 +2560,9 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const yMin = Math.min(observedMin, ...allValues);
   const yMax = Math.max(observedMax, ...allValues);
   const yRange = Math.max(yMax - yMin, 1);
+  const dataBottomGap = 7;
   const x = year => plot.left + ((year - xMin) / (xMax - xMin)) * (width - plot.left - plot.right);
-  const y = value => height - plot.bottom - ((value - yMin) / yRange) * (height - plot.top - plot.bottom);
+  const y = value => height - plot.bottom - dataBottomGap - ((value - yMin) / yRange) * (height - plot.top - plot.bottom - dataBottomGap);
   const makePath = points => points.map((point, index) => `${index ? "L" : "M"}${x(point.year).toFixed(2)} ${y(point.value).toFixed(2)}`).join(" ");
   const axisYears = [1700, 1800, 1900, 2000, 2100];
   const colors = ["#4c718b", "#6f657e", "#8b6a43", "#3f7c6d", "#9a5555"];
@@ -2569,10 +2573,23 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const maxPoint = extrema.reduce((highest, point) => point.value > highest.value ? point : highest, extrema[0]);
   const projectionMarkup = projections.map((series, index) => `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`).join("");
   const historicalMarkup = historicalSegments.map(segment => `<path class="time-chart-historical" d="${makePath(segment.points)}"/>`).join("");
-  const methodBreakMarkup = (observedSeries?.methodBreaks || [])
+  const methodBreaks = (observedSeries?.methodBreaks || [])
     .filter(marker => Number.isFinite(Number(marker.year)) && Number(marker.year) >= xMin && Number(marker.year) <= xMax)
+  const methodBreakMarkup = methodBreaks
     .map(marker => `<text class="time-chart-method-break" x="${x(Number(marker.year))}" y="${height - plot.bottom}" aria-hidden="true">◇</text>`)
     .join("");
+  const methodBreakValueMarkup = methodBreaks.filter(marker => marker.showValues).map(marker => {
+    const breakYear = Number(marker.year);
+    const historicalPoint = historicalSegments.flatMap(segment => segment.points).find(point => point.year === breakYear);
+    const observedPoint = observed.find(point => point.year === breakYear);
+    if (!historicalPoint || !observedPoint) return "";
+    const format = point => point.display || `${point.value.toLocaleString("de-DE", { maximumFractionDigits: 1 })}${unit}`;
+    const pointX = x(breakYear);
+    return `<circle class="time-chart-break-point is-historical" cx="${pointX}" cy="${y(historicalPoint.value)}" r="3"/>
+      <text class="time-chart-break-value is-historical" x="${pointX - 6}" y="${Math.max(plot.top + 9, y(historicalPoint.value) - 6)}">Rek. ${format(historicalPoint)}</text>
+      <text class="time-chart-break-value is-observed" x="${pointX + 6}" y="${Math.max(plot.top + 9, y(observedPoint.value) - 7)}">Beob. ${format(observedPoint)}</text>`;
+  }).join("");
+  const showMinimumLabel = !methodBreaks.some(marker => marker.showValues);
   const observationMarkup = observed.map((point, index) => {
     const pointX = x(point.year);
     const before = index ? (x(observed[index - 1].year) + pointX) / 2 : Math.max(plot.left, pointX - 3);
@@ -2587,24 +2604,27 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
     <defs><marker id="timeChartArrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 6 3 0 6Z" fill="#71807a"/></marker></defs>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${width - plot.right}" y2="${height - plot.bottom}" marker-end="url(#timeChartArrow)"/>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${plot.left}" y2="${plot.top}" marker-end="url(#timeChartArrow)"/>
-    <text class="time-chart-value-label" x="${Math.min(width - plot.right, x(maxPoint.year) + 4)}" y="${Math.min(height - plot.bottom - 4, y(maxPoint.value) + 9)}">${maxPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
-    <text class="time-chart-value-label" data-extrema-label="minimum" x="${x(minPoint.year)}" y="${y(minPoint.value)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    <text class="time-chart-value-label time-chart-value-label-maximum" x="${Math.min(width - plot.right, x(maxPoint.year) + 8)}" y="${Math.min(height - plot.bottom - 4, y(maxPoint.value) + 11)}">${maxPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
+    ${showMinimumLabel ? `<text class="time-chart-value-label" data-extrema-label="minimum" x="${x(minPoint.year)}" y="${y(minPoint.value)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>` : ""}
     ${historicalMarkup}
     <path class="time-chart-observed" d="${makePath(observed)}"/>
     ${projectionMarkup}
     ${observationMarkup}
+    ${methodBreakValueMarkup}
     <line class="time-chart-current-year" x1="${x(currentYear)}" y1="${plot.top}" x2="${x(currentYear)}" y2="${height - plot.bottom}"/>
     ${methodBreakMarkup}
     ${axisYears.map(year => `<text class="time-chart-axis-label${year === 1700 ? " time-chart-axis-label-start" : " time-chart-axis-label-end"}" x="${x(year)}" y="${height - 9}">${year}</text>`).join("")}
     <text class="time-chart-axis-label" x="${x(currentYear)}" y="${height - 9}">${currentYear}</text>`;
-  positionTimeChartLabelNearPoint(
-    timeChart.querySelector('[data-extrema-label="minimum"]'),
-    x(minPoint.year),
-    y(minPoint.value),
-    plot,
-    width,
-    height
-  );
+  if (showMinimumLabel) {
+    positionTimeChartLabelNearPoint(
+      timeChart.querySelector('[data-extrema-label="minimum"]'),
+      x(minPoint.year),
+      y(minPoint.value),
+      plot,
+      width,
+      height
+    );
+  }
   timeChart.querySelectorAll("[data-time-chart-year]").forEach(button => button.addEventListener("click", () => {
     timeWindow = "data";
     selectYear(Number(button.dataset.timeChartYear));

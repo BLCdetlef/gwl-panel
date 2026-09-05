@@ -22,7 +22,7 @@ const cases = [
   {
     source: "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
     seriesId: "global_forest_cover_1992_2022",
-    expected: false
+    expected: true
   }
 ];
 
