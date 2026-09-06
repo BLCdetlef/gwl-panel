@@ -3,7 +3,7 @@ const payload = require("../data/blc/blc-curve-export-v1.json");
 const expected = new Map([
   ["biosphere_hanpp_1910_2020", ["already_crossed_at_start", 1910, "crossed", 1970]],
   ["global_co2_noaa_annual", ["crossed", 1988, "not_crossed", null]],
-  ["blue_water_streamflow", ["already_crossed_at_start", 1905, "not_crossed", null]],
+  ["green_water_rootzone_soil_moisture", ["already_crossed_at_start", 1905, "not_crossed", null]],
   ["global_forest_cover_1992_2022", ["already_crossed_at_start", 1992, "not_crossed", null]],
   ["global_surface_omega_arag_oceansoda_1982_2021", ["series_ends_before_known_crossing", null, "not_crossed", null]]
 ]);

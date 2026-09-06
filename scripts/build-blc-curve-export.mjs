@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
-import { BLUE_WATER_REFERENCE_SOURCE, buildBlueWaterBoundaryReference, normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
+import { BLUE_WATER_REFERENCE_SERIES, BLUE_WATER_REFERENCE_SOURCE, buildBlueWaterBoundaryReference, normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
 import thresholdCrossings from "../threshold-crossings.js";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
@@ -184,7 +184,7 @@ for (const approval of manifest.approvedCurves) {
   if (combinedSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${combinedSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
   const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
-  const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE
+  const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE && series.id === BLUE_WATER_REFERENCE_SERIES
     ? buildBlueWaterBoundaryReference({ sourcePath: approval.source, series, sourceIds })
     : normalizeReference(series.reference, series, sourceIds);
   const normalizedHighRisk = normalizeThreshold(series.highRisk, normalizedReference?.exceedanceOperator);

@@ -2201,17 +2201,17 @@
       ]
     },
     {
-      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#green_water_rootzone_soil_moisture",
       "boundaryId": "freshwater",
-      "itemId": "blue-water-streamflow",
-      "seriesId": "blue_water_streamflow",
+      "itemId": "green-water-rootzone-soil-moisture",
+      "seriesId": "green_water_rootzone_soil_moisture",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
       "domainType": "planetary_boundary",
       "domainId": "freshwater_change",
       "domainLabel": "Süßwasser",
       "curveRole": "core",
-      "label": "Blaues Wasser – ungewöhnlicher Abfluss",
-      "metric": "Anteil der globalen eisfreien Landfläche mit ungewöhnlich hohem oder niedrigem Abfluss gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
+      "label": "Grünes Wasser – ungewöhnliche Bodenfeuchte für Pflanzen",
+      "metric": "Anteil der globalen eisfreien Landfläche mit für Pflanzen ungewöhnlich trockener oder nasser Bodenfeuchte gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
       "geography": "Global",
       "worseningDirection": "increase",
@@ -2228,15 +2228,15 @@
       "reference": {
         "type": "planetary_boundaries_model",
         "modelName": "Planetare Grenzen",
-        "role": "boundary",
-        "qualifier": "approximate",
-        "exceedanceOperator": ">",
-        "value": 12.94,
+        "value": 12.38,
         "unit": "%",
-        "display": "Obere Modellreferenz: etwa 12,94 % der eisfreien Landfläche",
+        "display": "Obere Modellreferenz: etwa 12,38 % der eisfreien Landfläche",
         "sourceRefs": [
           "dataset-source"
-        ]
+        ],
+        "role": "boundary",
+        "qualifier": "approximate",
+        "exceedanceOperator": ">"
       },
       "highRisk": {
         "value": 50,
@@ -2248,17 +2248,17 @@
       },
       "thresholdAssessments": {
         "boundary": {
-          "thresholdValue": 12.94,
+          "thresholdValue": 12.38,
           "thresholdUnit": "%",
           "exceedanceOperator": ">",
           "status": "already_crossed_at_start",
           "firstCrossingPoint": {
             "year": 1905,
-            "value": 14.33
+            "value": 13.68
           },
           "lastCheckedPoint": {
             "year": 2019,
-            "value": 22.84
+            "value": 23.56
           }
         },
         "highRisk": {
@@ -2268,106 +2268,106 @@
           "status": "not_crossed",
           "lastCheckedPoint": {
             "year": 2019,
-            "value": 22.84
+            "value": 23.56
           }
         }
       },
       "observations": [
         {
           "year": 1905,
-          "value": 14.33
+          "value": 13.68
         },
         {
           "year": 1910,
-          "value": 11.87
+          "value": 11.09
         },
         {
           "year": 1915,
-          "value": 14.45
+          "value": 13.47
         },
         {
           "year": 1920,
-          "value": 13.78
+          "value": 12.78
         },
         {
           "year": 1925,
-          "value": 11.53
+          "value": 11.15
         },
         {
           "year": 1930,
-          "value": 10.34
+          "value": 10.13
         },
         {
           "year": 1935,
-          "value": 10.81
+          "value": 9.72
         },
         {
           "year": 1940,
-          "value": 13.77
+          "value": 12.06
         },
         {
           "year": 1945,
-          "value": 16.01
+          "value": 15.01
         },
         {
           "year": 1950,
-          "value": 14.19
+          "value": 13.08
         },
         {
           "year": 1955,
-          "value": 13.62
+          "value": 12.95
         },
         {
           "year": 1960,
-          "value": 13.35
+          "value": 11.1
         },
         {
           "year": 1965,
-          "value": 14.76
+          "value": 13.3
         },
         {
           "year": 1970,
-          "value": 16.43
+          "value": 13.5
         },
         {
           "year": 1975,
-          "value": 17.11
+          "value": 16.68
         },
         {
           "year": 1980,
-          "value": 15.94
+          "value": 15.1
         },
         {
           "year": 1985,
-          "value": 19.07
+          "value": 16.52
         },
         {
           "year": 1990,
-          "value": 19.25
+          "value": 17.51
         },
         {
           "year": 1995,
-          "value": 18.31
+          "value": 17.07
         },
         {
           "year": 2000,
-          "value": 21.11
+          "value": 19.46
         },
         {
           "year": 2005,
-          "value": 20.31
+          "value": 19.68
         },
         {
           "year": 2010,
-          "value": 22.56
+          "value": 21.66
         },
         {
           "year": 2015,
-          "value": 23.22
+          "value": 22.75
         },
         {
           "year": 2019,
-          "value": 22.84
+          "value": 23.56
         }
       ],
       "historicalReconstruction": [
@@ -2381,39 +2381,39 @@
           "points": [
             {
               "year": 1861,
-              "value": 12.27
+              "value": 10.63
             },
             {
               "year": 1865,
-              "value": 12.26
+              "value": 12.74
             },
             {
               "year": 1870,
-              "value": 10.07
+              "value": 10.81
             },
             {
               "year": 1875,
-              "value": 11.21
+              "value": 9.83
             },
             {
               "year": 1880,
-              "value": 9.58
+              "value": 9.19
             },
             {
               "year": 1885,
-              "value": 9.61
+              "value": 9.01
             },
             {
               "year": 1890,
-              "value": 10.18
+              "value": 9.54
             },
             {
               "year": 1895,
-              "value": 10.4
+              "value": 9.82
             },
             {
               "year": 1900,
-              "value": 10.02
+              "value": 9.6
             }
           ]
         }
@@ -3161,6 +3161,6 @@
   "integrity": {
     "algorithm": "SHA-256",
     "scope": "UTF-8 JSON.stringify({format,version,manifestVersion,curves})",
-    "hash": "472d1c0d083ccabdac9d3441a38208518e14f04170e23c7aef0e257f1960cbea"
+    "hash": "8b49243f9468d01094d7c2e824b74b22b13a633025eb6569238f889c8e94c298"
   }
 }

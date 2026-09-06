@@ -25,10 +25,10 @@
     {
       "kind": "knowledge",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
-      "seriesId": "blue_water_streamflow",
+      "seriesId": "green_water_rootzone_soil_moisture",
       "boundaryId": "freshwater",
-      "itemId": "blue-water-streamflow",
-      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "itemId": "green-water-rootzone-soil-moisture",
+      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#green_water_rootzone_soil_moisture",
       "curveRole": "core",
       "status": "approved"
     },

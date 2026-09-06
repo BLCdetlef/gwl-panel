@@ -16,7 +16,7 @@ const cases = [
   },
   {
     source: "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
-    seriesId: "blue_water_streamflow",
+    seriesId: "green_water_rootzone_soil_moisture",
     expected: true
   },
   {

@@ -32,10 +32,9 @@ if (curveExport.version !== "1.6") throw new Error("Exportversion 1.6 wird erwar
 if (curveExport.curves.length !== 5) throw new Error("Export muss exakt fünf freigegebene Kernkurven enthalten.");
 const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
 const hanpp = curveExport.curves.find(curve => curve.seriesId === "biosphere_hanpp_1910_2020");
-if (!blue?.sources?.some(source => source.id === "dataset-source")) throw new Error("dataset-source fehlt im sources-Array der Blauwasser-Kurve.");
-if (blue.reference?.value !== 12.94 || blue.reference?.sourceRefs?.[0] !== "dataset-source") throw new Error("Blauwasser-Referenz wurde nicht korrekt exportiert.");
-if ("baseline" in blue.reference || "referenceUpperEnd" in blue.reference) throw new Error("Unzulässige Referenzfelder wurden exportiert.");
+if (blue) throw new Error("Blauwasser darf nach der neuen Freigabe nicht mehr exportiert werden.");
 if (!hanpp || hanpp.reference?.value !== 10 || hanpp.reference?.sourceRefs?.[0] !== "src_richardson_2023") throw new Error("HANPP-Referenz wurde verändert.");
-if (curveExport.curves.some(curve => curve.seriesId === "green_water_rootzone_soil_moisture")) throw new Error("Grünwasser wurde versehentlich exportiert.");
+const green = curveExport.curves.find(curve => curve.seriesId === "green_water_rootzone_soil_moisture");
+if (!green?.sources?.some(source => source.id === "dataset-source") || green.reference?.value !== 12.38) throw new Error("Grünwasser wurde nicht mit seiner Modellreferenz exportiert.");
 
 console.log("BLC-Blauwasser-Modellreferenz gültig: exakte Sonderregel, Quelle und Regression geprüft.");

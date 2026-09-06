@@ -90,18 +90,18 @@ if (!hanpp || JSON.stringify(hanpp.reference) !== JSON.stringify({
   qualifier: "approximate",
   exceedanceOperator: ">"
 })) throw new Error("HANPP-Referenzinhalt ging im Export verloren oder wurde verändert.");
-const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
-if (!blue || JSON.stringify(blue.reference) !== JSON.stringify({
+const green = curveExport.curves.find(curve => curve.seriesId === "green_water_rootzone_soil_moisture");
+if (!green || JSON.stringify(green.reference) !== JSON.stringify({
   type: "planetary_boundaries_model",
   modelName: "Planetare Grenzen",
+  value: 12.38,
+  unit: "%",
+  display: "Obere Modellreferenz: etwa 12,38 % der eisfreien Landfläche",
+  sourceRefs: ["dataset-source"],
   role: "boundary",
   qualifier: "approximate",
-  exceedanceOperator: ">",
-  value: 12.94,
-  unit: "%",
-  display: "Obere Modellreferenz: etwa 12,94 % der eisfreien Landfläche",
-  sourceRefs: ["dataset-source"]
-})) throw new Error("Blauwasser-Modellreferenz fehlt oder wurde verändert.");
-if (curveExport.curves.some(curve => curve.seriesId === "green_water_rootzone_soil_moisture")) throw new Error("Grünwasser wurde versehentlich exportiert.");
+  exceedanceOperator: ">"
+})) throw new Error("Grünwasser-Modellreferenz fehlt oder wurde verändert.");
+if (curveExport.curves.some(curve => curve.seriesId === "blue_water_streamflow")) throw new Error("Blauwasser wurde trotz neuer Freigabe exportiert.");
 
 console.log("BLC-HANPP-Referenzpilot gültig: Validierung, Regression, SHA-256 und Determinismus geprüft.");

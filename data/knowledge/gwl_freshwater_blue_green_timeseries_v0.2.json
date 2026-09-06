@@ -239,9 +239,26 @@
       "title": "Grünes Wasser – ungewöhnliche Bodenfeuchte für Pflanzen",
       "measure": "Anteil der globalen eisfreien Landfläche mit für Pflanzen ungewöhnlich trockener oder nasser Bodenfeuchte gegenüber dem früher üblichen Bereich. Höher bedeutet mehr gestörte Fläche, nicht mehr Wasser.",
       "unit": "%",
+      "worseningDirection": "increase",
       "period": "1901–2019",
       "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
       "boundaryUpperEnd": 12.38,
+      "reference": {
+        "type": "planetary_boundaries_model",
+        "role": "boundary",
+        "qualifier": "approximate",
+        "exceedanceOperator": ">",
+        "value": 12.38,
+        "unit": "%",
+        "display": "Obere Modellreferenz: etwa 12,38 % der eisfreien Landfläche",
+        "sourceRefs": ["dataset-source"]
+      },
+      "highRisk": {
+        "value": 50,
+        "unit": "%",
+        "exceedanceOperator": ">",
+        "sourceRefs": ["dataset-source"]
+      },
       "baseline": 9.83,
       "uncertainty": "Interquartilsbereich des Modellensembles (IQR)",
       "values": [
