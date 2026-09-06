@@ -29,10 +29,10 @@ expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series, sourceIds: new 
 expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series: { ...series, unit: "fraction" }, sourceIds }, /stimmt nicht exakt/);
 
 if (curveExport.version !== "1.6") throw new Error("Exportversion 1.6 wird erwartet.");
-if (curveExport.curves.length !== 5) throw new Error("Export muss exakt fünf freigegebene Kernkurven enthalten.");
+if (curveExport.curves.length !== 8) throw new Error("Export muss exakt acht freigegebene Kernkurven enthalten.");
 const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
 const hanpp = curveExport.curves.find(curve => curve.seriesId === "biosphere_hanpp_1910_2020");
-if (blue) throw new Error("Blauwasser darf nach der neuen Freigabe nicht mehr exportiert werden.");
+if (!blue?.sources?.some(source => source.id === "dataset-source") || blue.reference?.value !== 12.94) throw new Error("Blauwasser wurde nicht mit seiner Modellreferenz exportiert.");
 if (!hanpp || hanpp.reference?.value !== 10 || hanpp.reference?.sourceRefs?.[0] !== "src_richardson_2023") throw new Error("HANPP-Referenz wurde verändert.");
 const green = curveExport.curves.find(curve => curve.seriesId === "green_water_rootzone_soil_moisture");
 if (!green?.sources?.some(source => source.id === "dataset-source") || green.reference?.value !== 12.38) throw new Error("Grünwasser wurde nicht mit seiner Modellreferenz exportiert.");

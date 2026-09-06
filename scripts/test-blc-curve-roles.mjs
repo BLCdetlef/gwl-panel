@@ -52,11 +52,14 @@ const expected = new Map([
   ["biosphere_hanpp_1910_2020", { curveRole: "core", domainType: "planetary_boundary", domainId: "biosphere_integrity", domainLabel: "Biosphärenintegrität" }],
   ["global_co2_noaa_annual", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
   ["green_water_rootzone_soil_moisture", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
+  ["blue_water_streamflow", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
+  ["nitrogen_fixation_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
+  ["phosphorus_cropland_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
   ["global_forest_cover_1992_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "land_system_change", domainLabel: "Land-System-Wandel" }],
   ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }]
 ]);
 
-if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen genau die fünf freigegebenen Kernkurven enthalten.");
+if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen genau die acht freigegebenen Kernkurven enthalten.");
 for (const approval of manifest.approvedCurves) {
   const expectedCurve = expected.get(approval.seriesId);
   if (!expectedCurve) throw new Error(`${approval.seriesId}: unerwartete Freigabe.`);

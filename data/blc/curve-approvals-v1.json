@@ -34,6 +34,36 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
+      "seriesId": "blue_water_streamflow",
+      "boundaryId": "freshwater",
+      "itemId": "blue-water-streamflow",
+      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json",
+      "seriesId": "nitrogen_fixation_1961_2022",
+      "boundaryId": "nutrients",
+      "itemId": "nitrogen",
+      "curveId": "knowledge:data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json#nitrogen_fixation_1961_2022",
+      "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json",
+      "seriesId": "phosphorus_cropland_1961_2022",
+      "boundaryId": "nutrients",
+      "itemId": "phosphorus",
+      "curveId": "knowledge:data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json#phosphorus_cropland_1961_2022",
+      "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_ocean_acidification_v0.1.json",
       "seriesId": "global_surface_omega_arag_oceansoda_1982_2021",
       "boundaryId": "ocean",

@@ -259,14 +259,25 @@
       "label": "Anthropogene Stickstofffixierung für die Landwirtschaft",
       "metric": "Anthropogene Stickstofffixierung durch Mineraldünger und intentionale biologische Fixierung",
       "unit": "Tg N/Jahr",
+      "worseningDirection": "increase",
       "geography": "Global",
       "dataStartYear": 1961,
       "dataEndYear": 2022,
       "reference": {
         "type": "planetary_boundary",
+        "role": "boundary",
+        "qualifier": "exact",
+        "exceedanceOperator": ">",
         "value": 62,
         "unit": "Tg N/Jahr",
-        "display": "Planetare Grenze: 62 Tg N/Jahr"
+        "display": "Planetare Grenze: 62 Tg N/Jahr",
+        "sourceRefs": ["src_phc_2025"]
+      },
+      "highRisk": {
+        "value": 82,
+        "unit": "Tg N/Jahr",
+        "exceedanceOperator": ">",
+        "sourceRefs": ["src_phc_2025"]
       },
       "sourceRefs": [
         "src_phc_2025",

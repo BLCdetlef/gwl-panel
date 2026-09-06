@@ -102,6 +102,6 @@ if (!green || JSON.stringify(green.reference) !== JSON.stringify({
   qualifier: "approximate",
   exceedanceOperator: ">"
 })) throw new Error("Grünwasser-Modellreferenz fehlt oder wurde verändert.");
-if (curveExport.curves.some(curve => curve.seriesId === "blue_water_streamflow")) throw new Error("Blauwasser wurde trotz neuer Freigabe exportiert.");
+if (!curveExport.curves.some(curve => curve.seriesId === "blue_water_streamflow")) throw new Error("Die freigegebene Blauwasser-Kurve fehlt.");
 
 console.log("BLC-HANPP-Referenzpilot gültig: Validierung, Regression, SHA-256 und Determinismus geprüft.");

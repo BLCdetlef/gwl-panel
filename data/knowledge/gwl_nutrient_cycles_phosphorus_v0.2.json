@@ -281,14 +281,25 @@
       "label": "Mineralischer Phosphoreinsatz auf globalen Ackerflächen",
       "metric": "Anwendung von abgebautem/mineralischem Phosphor auf globalen Ackerflächen",
       "unit": "Tg P/Jahr",
+      "worseningDirection": "increase",
       "geography": "Global aggregiert",
       "dataStartYear": 1961,
       "dataEndYear": 2022,
       "reference": {
         "type": "planetary_boundary",
+        "role": "boundary",
+        "qualifier": "exact",
+        "exceedanceOperator": ">",
         "value": 6.2,
         "unit": "Tg P/Jahr",
-        "display": "Planetare Grenze: 6,2 Tg P/Jahr"
+        "display": "Planetare Grenze: 6,2 Tg P/Jahr",
+        "sourceRefs": ["src_phc_2025"]
+      },
+      "highRisk": {
+        "value": 11.2,
+        "unit": "Tg P/Jahr",
+        "exceedanceOperator": ">",
+        "sourceRefs": ["src_phc_2025"]
       },
       "sourceRefs": [
         "src_phc_2025",

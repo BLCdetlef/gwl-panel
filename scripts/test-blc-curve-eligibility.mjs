@@ -20,6 +20,21 @@ const cases = [
     expected: true
   },
   {
+    source: "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
+    seriesId: "blue_water_streamflow",
+    expected: true
+  },
+  {
+    source: "data/knowledge/gwl_nutrient_cycles_nitrogen_v0.2.json",
+    seriesId: "nitrogen_fixation_1961_2022",
+    expected: true
+  },
+  {
+    source: "data/knowledge/gwl_nutrient_cycles_phosphorus_v0.2.json",
+    seriesId: "phosphorus_cropland_1961_2022",
+    expected: true
+  },
+  {
     source: "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
     seriesId: "global_forest_cover_1992_2022",
     expected: true
