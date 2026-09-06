@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.75 · B63";
+const GWL_BUILD_VERSION = "0.9.76 · B64";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 
 const boundaryList = document.getElementById("boundaryList");
@@ -151,6 +151,7 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
   if (!curveId) {
     activeBlcCurveApproval = null;
     blcReleaseControl.hidden = true;
+    if (blcReleaseExportButton) blcReleaseExportButton.hidden = !isLocalBlcEditor();
     return;
   }
   const localEditor = isLocalBlcEditor();

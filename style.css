@@ -125,7 +125,7 @@ a { color: inherit; }
 .blc-release-control.is-approved small { color: #2f5c4e; font-weight: 700; }
 .blc-release-control.is-readonly { justify-content: flex-start; }
 .blc-release-control.is-readonly small { text-align: left; }
-.blc-release-export { border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 4px 7px; font: inherit; font-size: 9px; cursor: pointer; white-space: nowrap; }
+.blc-release-export { border: 1px solid var(--text); border-radius: 999px; background: #fff; color: var(--text); padding: 4px 8px; font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .blc-release-export:hover { border-color: #385f55; }
 .knowledge-marker-contribution-title {
   display: -webkit-box;
