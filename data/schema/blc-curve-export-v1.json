@@ -1,19 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "gwl://schema/blc-curve-export-v1.5",
-  "title": "GWL to BLC read-only curve export 1.5",
+  "$id": "gwl://schema/blc-curve-export-v1.6",
+  "title": "GWL to BLC read-only curve export 1.6",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.5" },
+    "version": { "const": "1.6" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "domainType", "domainId", "domainLabel", "curveRole", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
+        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "domainType", "domainId", "domainLabel", "curveRole", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "thresholdAssessments", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
         "properties": {
           "curveId": { "type": "string" },
           "boundaryId": { "type": "string" },
@@ -29,6 +29,9 @@
           "unit": { "type": "string" },
           "geography": { "type": "string" },
           "worseningDirection": { "enum": ["increase", "decrease"] },
+          "finding": { "type": "string" },
+          "uncertainty": { "type": "string" },
+          "methodNote": { "type": "string" },
           "observationCoverage": {
             "type": "object",
             "additionalProperties": false,
@@ -43,6 +46,7 @@
           "reference": {
             "type": "object",
             "additionalProperties": false,
+            "required": ["role", "qualifier", "exceedanceOperator", "value", "unit", "sourceRefs"],
             "properties": {
               "type": { "enum": ["planetary_boundaries_model", "scientific_reference"] },
               "modelName": { "type": "string" },
@@ -55,29 +59,44 @@
               "sourceRefs": { "type": "array", "items": { "type": "string" } }
             }
           },
+          "highRisk": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "unit", "exceedanceOperator"],
+            "properties": {
+              "value": { "type": "number" },
+              "unit": { "type": "string" },
+              "exceedanceOperator": { "enum": [">", "<"] },
+              "sourceRefs": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "knownBoundaryCrossing": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["year", "value", "unit"],
+            "properties": {
+              "year": { "type": "number" },
+              "value": { "type": "number" },
+              "unit": { "type": "string" },
+              "sourceRefs": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "thresholdAssessments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["boundary", "highRisk"],
+            "properties": {
+              "boundary": { "$ref": "#/$defs/thresholdAssessment" },
+              "highRisk": { "$ref": "#/$defs/thresholdAssessment" }
+            }
+          },
           "observations": { "type": "array", "minItems": 5 },
           "observationSourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
           "historicalReconstruction": { "type": "array" },
           "projections": { "type": "array" },
           "methodBreaks": { "type": "array" },
           "sources": { "type": "array" }
-        },
-        "allOf": [
-          {
-            "if": {
-              "required": ["seriesId"],
-              "properties": { "seriesId": { "const": "biosphere_hanpp_1910_2020" } }
-            },
-            "then": {
-              "required": ["reference"],
-              "properties": {
-                "reference": {
-                  "required": ["role", "qualifier", "exceedanceOperator", "value", "unit", "sourceRefs"]
-                }
-              }
-            }
-          }
-        ]
+        }
       }
     },
     "integrity": {
@@ -88,6 +107,27 @@
         "algorithm": { "const": "SHA-256" },
         "scope": { "type": "string" },
         "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "required": ["year", "value"],
+      "properties": { "year": { "type": "number" }, "value": { "type": "number" } }
+    },
+    "thresholdAssessment": {
+      "type": "object",
+      "required": ["thresholdValue", "thresholdUnit", "exceedanceOperator", "status"],
+      "properties": {
+        "thresholdValue": { "type": ["number", "null"] },
+        "thresholdUnit": { "type": ["string", "null"] },
+        "exceedanceOperator": { "enum": [">", "<", null] },
+        "status": { "enum": ["crossed", "already_crossed_at_start", "not_crossed", "series_ends_before_known_crossing", "not_assessable"] },
+        "reason": { "type": "string" },
+        "firstCrossingPoint": { "$ref": "#/$defs/point" },
+        "lastCheckedPoint": { "$ref": "#/$defs/point" },
+        "knownCrossingPoint": { "$ref": "#/$defs/point" }
       }
     }
   }

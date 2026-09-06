@@ -1,5 +1,6 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.73 · B61";
+const GWL_BUILD_VERSION = "0.9.75 · B63";
+const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -2514,7 +2515,7 @@ function positionTimeChartLabelNearPoint(label, pointX, pointY, plot, width, hei
   label.setAttribute("text-anchor", best.anchor);
 }
 
-function renderTimeChart(observedSeries = null, projectionSeries = []) {
+function renderTimeChart(observedSeries = null, projectionSeries = [], options = {}) {
   if (!timeChart) return;
   const timeCard = timeChart.closest(".time-card");
   const width = Math.max(320, Math.round(timeChart.clientWidth || 500));
@@ -2547,6 +2548,8 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
 
   if (observed.length < 2) {
     timeCard?.classList.add("no-time-series");
+    delete timeChart.dataset.boundaryStatus;
+    delete timeChart.dataset.highRiskStatus;
     timeChart.innerHTML = `<title id="timeChartTitle">Keine freigegebene Beobachtungsreihe</title><desc id="timeChartDescription">Eine vollständige BLC-Kurve wird nur mit mindestens zwei numerischen Beobachtungspunkten dargestellt. Historische Rekonstruktionen und Projektionen allein reichen nicht aus.</desc>`;
     return;
   }
@@ -2573,6 +2576,8 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
   const maxPoint = extrema.reduce((highest, point) => point.value > highest.value ? point : highest, extrema[0]);
   const projectionMarkup = projections.map((series, index) => `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`).join("");
   const historicalMarkup = historicalSegments.map(segment => `<path class="time-chart-historical" d="${makePath(segment.points)}"/>`).join("");
+  const thresholdAssessments = thresholdCrossings?.getThresholdAssessments(observedSeries);
+  const thresholdMarkers = thresholdCrossings?.getThresholdCrossings(observedSeries, options.curveRole) || [];
   const methodBreaks = (observedSeries?.methodBreaks || [])
     .filter(marker => Number.isFinite(Number(marker.year)) && Number(marker.year) >= xMin && Number(marker.year) <= xMax)
   const methodBreakMarkup = methodBreaks
@@ -2590,6 +2595,13 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
       <text class="time-chart-break-value is-observed" x="${pointX + 6}" y="${Math.max(plot.top + 9, y(observedPoint.value) - 7)}">Beob. ${format(observedPoint)}</text>`;
   }).join("");
   const showMinimumLabel = !methodBreaks.some(marker => marker.showValues);
+  const thresholdMarkerMarkup = thresholdMarkers.map(marker => {
+    const pointX = x(marker.point.year);
+    const pointY = y(marker.point.value);
+    const timing = marker.alreadyExceededAtStart ? "beim ersten verfügbaren Messpunkt bereits überschritten" : "erstmals im Datensatz überschritten";
+    const label = `${marker.label}: ${timing}, ${marker.point.year}; Modellreferenz ${marker.operator}${marker.value} ${marker.unit}`;
+    return `<line class="time-chart-threshold-crossing is-${marker.kind}" x1="${pointX}" y1="${pointY - 5}" x2="${pointX}" y2="${pointY + 5}" role="img" aria-label="${label}"><title>${label}</title></line>`;
+  }).join("");
   const observationMarkup = observed.map((point, index) => {
     const pointX = x(point.year);
     const before = index ? (x(observed[index - 1].year) + pointX) / 2 : Math.max(plot.left, pointX - 3);
@@ -2597,10 +2609,22 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
     const label = `Messwert ${point.year}: ${point.display || `${point.value}${unit}`}`;
     return `<rect class="time-chart-hit" data-time-chart-year="${point.year}" x="${before}" y="${plot.top}" width="${Math.max(1, after - before)}" height="${height - plot.top - plot.bottom}" tabindex="0" role="button" aria-label="${label}"/><circle class="time-chart-point${Number(selectedYear) === point.year ? " is-selected" : ""}" cx="${pointX}" cy="${y(point.value)}" r="3"/>`;
   }).join("");
+  const describeAssessment = (label, assessment, isDefined) => {
+    if (!assessment || (!isDefined && assessment.status === "not_assessable")) return "";
+    if (assessment.status === "already_crossed_at_start") return `${label}: beim ersten Messpunkt ${assessment.firstCrossingPoint.year} bereits überschritten. `;
+    if (assessment.status === "crossed") return `${label}: erstmals im Datensatz ${assessment.firstCrossingPoint.year} überschritten. `;
+    if (assessment.status === "not_crossed") return `${label}: in der geprüften Reihe bis ${assessment.lastCheckedPoint.year} nicht überschritten. `;
+    if (assessment.status === "series_ends_before_known_crossing") return `${label}: Reihe endet ${assessment.lastCheckedPoint.year} vor der anderweitig belegten Überschreitung ${assessment.knownCrossingPoint.year}. `;
+    return `${label}: mit dieser Reihe nicht beurteilbar. `;
+  };
+  const thresholdDescription = thresholdAssessments
+    ? describeAssessment("Planetare Grenze", thresholdAssessments.boundary, Boolean(observedSeries?.reference))
+      + describeAssessment("Hoher Risikobereich", thresholdAssessments.highRisk, Boolean(observedSeries?.highRisk))
+    : "";
 
   timeChart.innerHTML = `
     <title id="timeChartTitle">${observedSeries?.label || "Messreihe"} von 1700 bis 2100</title>
-    <desc id="timeChartDescription">${historicalSegments.length ? "Gestrichelte Linie: historische Vorgängerrekonstruktion mit abweichender Methode. " : ""}Durchgezogene Linie: aktuelle Hauptreihe. ${methodBreakMarkup ? "Diamant auf der Zeitachse: Methodenwechsel. " : ""}${projections.length ? "Gepunktete Linien: wissenschaftlich qualifizierte Szenarien." : "Keine wissenschaftlich qualifizierte Projektion hinterlegt."}</desc>
+    <desc id="timeChartDescription">${historicalSegments.length ? "Gestrichelte Linie: historische Vorgängerrekonstruktion mit abweichender Methode. " : ""}Durchgezogene Linie: aktuelle Hauptreihe. ${methodBreakMarkup ? "Diamant auf der Zeitachse: Methodenwechsel. " : ""}${thresholdMarkers.length ? "Kurze senkrechte Striche auf der Kernkurve markieren den ersten belegten Punkt jenseits einer Modellreferenz; es wird nicht interpoliert. " : ""}${thresholdDescription}${projections.length ? "Gepunktete Linien: wissenschaftlich qualifizierte Szenarien." : "Keine wissenschaftlich qualifizierte Projektion hinterlegt."}</desc>
     <defs><marker id="timeChartArrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 6 3 0 6Z" fill="#71807a"/></marker></defs>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${width - plot.right}" y2="${height - plot.bottom}" marker-end="url(#timeChartArrow)"/>
     <line class="time-chart-axis" x1="${plot.left}" y1="${height - plot.bottom}" x2="${plot.left}" y2="${plot.top}" marker-end="url(#timeChartArrow)"/>
@@ -2608,6 +2632,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
     ${showMinimumLabel ? `<text class="time-chart-value-label" data-extrema-label="minimum" x="${x(minPoint.year)}" y="${y(minPoint.value)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>` : ""}
     ${historicalMarkup}
     <path class="time-chart-observed" d="${makePath(observed)}"/>
+    ${thresholdMarkerMarkup}
     ${projectionMarkup}
     ${observationMarkup}
     ${methodBreakValueMarkup}
@@ -2615,6 +2640,13 @@ function renderTimeChart(observedSeries = null, projectionSeries = []) {
     ${methodBreakMarkup}
     ${axisYears.map(year => `<text class="time-chart-axis-label${year === 1700 ? " time-chart-axis-label-start" : " time-chart-axis-label-end"}" x="${x(year)}" y="${height - 9}">${year}</text>`).join("")}
     <text class="time-chart-axis-label" x="${x(currentYear)}" y="${height - 9}">${currentYear}</text>`;
+  if (thresholdAssessments) {
+    timeChart.dataset.boundaryStatus = thresholdAssessments.boundary.status;
+    timeChart.dataset.highRiskStatus = thresholdAssessments.highRisk.status;
+  } else {
+    delete timeChart.dataset.boundaryStatus;
+    delete timeChart.dataset.highRiskStatus;
+  }
   if (showMinimumLabel) {
     positionTimeChartLabelNearPoint(
       timeChart.querySelector('[data-extrema-label="minimum"]'),
@@ -2907,7 +2939,9 @@ function renderKnowledgeTime(network) {
   } else {
     timeStatus.textContent = "Nur tatsächlich hinterlegte Messjahre werden angezeigt; keine Interpolation.";
   }
-  renderTimeChart(getKnowledgeSeries(network), getQualifiedProjectionSeries(network));
+  renderTimeChart(getKnowledgeSeries(network), getQualifiedProjectionSeries(network), {
+    curveRole: getEffectiveBlcCurveRole(curveId)
+  });
 }
 
 
@@ -4774,7 +4808,13 @@ window.addEventListener("resize", () => {
   timeChartResizeFrame = requestAnimationFrame(() => {
     const context = getActiveKnowledgeContext();
     if (context?.network) {
-      renderTimeChart(getKnowledgeSeries(context.network), getQualifiedProjectionSeries(context.network));
+      const activeItem = getCurrentItem();
+      const source = activeItem?.knowledgeSource || "unknown";
+      const series = getKnowledgeSeries(context.network);
+      const curveId = series?.id ? `knowledge:${source}#${series.id}` : "";
+      renderTimeChart(series, getQualifiedProjectionSeries(context.network), {
+        curveRole: getEffectiveBlcCurveRole(curveId)
+      });
       return;
     }
     renderTimeChart({ points: getTimePoints(getCurrentItem()) });

@@ -4,6 +4,7 @@ import path from "node:path";
 import { buildBlcDomainCatalog, resolveBlcDomain } from "./lib/blc-domain-catalog.mjs";
 import { requireBlcCurveRole } from "./lib/blc-curve-roles.mjs";
 import { BLUE_WATER_REFERENCE_SOURCE, buildBlueWaterBoundaryReference, normalizeBlcReference } from "./lib/blc-reference-pilot.mjs";
+import thresholdCrossings from "../threshold-crossings.js";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
@@ -56,6 +57,28 @@ function normalizePoints(points) {
     .sort((a, b) => a.year - b.year);
 }
 
+function normalizeThreshold(threshold, fallbackOperator) {
+  if (!threshold || typeof threshold !== "object" || Array.isArray(threshold)) return undefined;
+  const normalized = {
+    ...(Number.isFinite(Number(threshold.value)) ? { value: Number(threshold.value) } : {}),
+    ...(cleanText(threshold.unit) ? { unit: threshold.unit } : {}),
+    ...(cleanText(threshold.exceedanceOperator || fallbackOperator) ? { exceedanceOperator: threshold.exceedanceOperator || fallbackOperator } : {}),
+    ...(cleanStringArray(threshold.sourceRefs)?.length ? { sourceRefs: threshold.sourceRefs } : {})
+  };
+  return Object.keys(normalized).length ? normalized : undefined;
+}
+
+function normalizeKnownCrossing(point) {
+  if (!point || typeof point !== "object" || Array.isArray(point)
+    || !Number.isFinite(Number(point.year)) || !Number.isFinite(Number(point.value)) || !cleanText(point.unit)) return undefined;
+  return {
+    year: Number(point.year),
+    value: Number(point.value),
+    unit: point.unit,
+    ...(cleanStringArray(point.sourceRefs)?.length ? { sourceRefs: point.sourceRefs } : {})
+  };
+}
+
 export function normalizeHistorical(series, firstObservationYear) {
   return (series.historicalSegments || series.historicalSeries || [])
     .map(segment => {
@@ -63,9 +86,9 @@ export function normalizeHistorical(series, firstObservationYear) {
       return {
         id: cleanText(segment.id) || "historical-segment",
         ...(cleanText(segment.label) ? { label: segment.label } : {}),
-        ...(isLawDomeCo2 && cleanText(segment.period) ? { period: segment.period } : {}),
+        ...(cleanText(segment.period) ? { period: segment.period } : {}),
         ...(cleanText(segment.method) ? { method: segment.method } : {}),
-        ...(isLawDomeCo2 && cleanText(segment.uncertainty) ? { uncertainty: segment.uncertainty } : {}),
+        ...(cleanText(segment.uncertainty) ? { uncertainty: segment.uncertainty } : {}),
         ...(cleanText(segment.sourceId) ? { sourceRefs: [segment.sourceId] } : cleanStringArray(segment.sourceRefs)?.length ? { sourceRefs: segment.sourceRefs } : {}),
         points: normalizePoints(segment.points || segment.values).filter(point => !isLawDomeCo2 || point.year < firstObservationYear)
       };
@@ -164,6 +187,15 @@ for (const approval of manifest.approvedCurves) {
   const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE
     ? buildBlueWaterBoundaryReference({ sourcePath: approval.source, series, sourceIds })
     : normalizeReference(series.reference, series, sourceIds);
+  const normalizedHighRisk = normalizeThreshold(series.highRisk, normalizedReference?.exceedanceOperator);
+  const normalizedKnownBoundaryCrossing = normalizeKnownCrossing(series.knownBoundaryCrossing);
+  const assessmentSeries = {
+    unit: cleanText(series.unit) || "",
+    points: observations,
+    reference: normalizedReference,
+    highRisk: normalizedHighRisk,
+    knownBoundaryCrossing: normalizedKnownBoundaryCrossing
+  };
 
   curves.push({
     curveId: approval.curveId,
@@ -178,6 +210,9 @@ for (const approval of manifest.approvedCurves) {
     unit: cleanText(series.unit) || "",
     geography: cleanText(series.geography) || "Global",
     worseningDirection: series.worseningDirection,
+    ...(cleanText(series.finding) ? { finding: series.finding } : {}),
+    ...(cleanText(series.uncertainty) ? { uncertainty: series.uncertainty } : {}),
+    ...(cleanText(series.methodNote) ? { methodNote: series.methodNote } : {}),
     observationCoverage: {
       startYear: Math.min(...observationYears),
       endYear: Math.max(...observationYears),
@@ -186,10 +221,17 @@ for (const approval of manifest.approvedCurves) {
     },
     observationSourceRefs,
     ...(normalizedReference ? { reference: normalizedReference } : {}),
+    ...(normalizedHighRisk ? { highRisk: normalizedHighRisk } : {}),
+    ...(normalizedKnownBoundaryCrossing ? { knownBoundaryCrossing: normalizedKnownBoundaryCrossing } : {}),
+    thresholdAssessments: thresholdCrossings.getThresholdAssessments(assessmentSeries),
     observations,
     historicalReconstruction,
     projections: normalizeProjections(payload, series),
-    methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({ year: Number(marker.year) })) : [],
+    methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({
+      year: Number(marker.year),
+      ...(cleanText(marker.label) ? { label: marker.label } : {}),
+      ...(marker.showValues === true ? { showValues: true } : {})
+    })) : [],
     sources: normalizedSources
   });
 }
@@ -197,7 +239,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.5",
+  version: "1.6",
   manifestVersion: manifest.version,
   curves
 };

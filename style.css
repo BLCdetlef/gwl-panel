@@ -164,6 +164,8 @@ a { color: inherit; }
 .time-chart-hit:focus { outline: none; stroke: #1f2423; stroke-width: 1.5; }
 .time-chart-point { display: none; fill: #fff; stroke: #1f2423; stroke-width: 2; }
 .time-chart-point.is-selected { display: block; fill: #1f2423; }
+.time-chart-threshold-crossing { stroke: #26302d; stroke-width: 2; stroke-linecap: square; pointer-events: stroke; }
+.time-chart-threshold-crossing.is-high-risk { stroke-width: 3.2; }
 .slider-wrap { position: relative; padding: 15px 4px 22px; }
 #timeSlider { width: 100%; accent-color: #222; cursor: pointer; }
 #timeSlider:disabled { cursor: default; opacity: .45; }

@@ -45,16 +45,18 @@ try {
 }
 
 if (manifest.format !== "gwl-blc-curve-approvals-v1" || manifest.version !== "1.1") throw new Error("Freigabemanifest muss Version 1.1 verwenden.");
-if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.5") throw new Error("Kurvenexport muss Version 1.5 verwenden.");
+if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.6") throw new Error("Kurvenexport muss Version 1.6 verwenden.");
 if (curveExport.manifestVersion !== manifest.version) throw new Error("Manifestversion ging im Export verloren.");
 
 const expected = new Map([
   ["biosphere_hanpp_1910_2020", { curveRole: "core", domainType: "planetary_boundary", domainId: "biosphere_integrity", domainLabel: "Biosphärenintegrität" }],
   ["global_co2_noaa_annual", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
-  ["blue_water_streamflow", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }]
+  ["blue_water_streamflow", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
+  ["global_forest_cover_1992_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "land_system_change", domainLabel: "Land-System-Wandel" }],
+  ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }]
 ]);
 
-if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen genau HANPP, CO₂ und Blauwasser enthalten.");
+if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen genau die fünf freigegebenen Kernkurven enthalten.");
 for (const approval of manifest.approvedCurves) {
   const expectedCurve = expected.get(approval.seriesId);
   if (!expectedCurve) throw new Error(`${approval.seriesId}: unerwartete Freigabe.`);

@@ -30,6 +30,22 @@
       "period": "1901–2019",
       "displayInterval": "5 Jahre; zusätzlich letzter Datenpunkt 2019",
       "boundaryUpperEnd": 12.94,
+      "reference": {
+        "type": "planetary_boundaries_model",
+        "role": "boundary",
+        "qualifier": "exact",
+        "exceedanceOperator": ">",
+        "value": 12.94,
+        "unit": "%",
+        "display": "Grenzwert nach dem Modell der Planetaren Grenzen: 12,94 %",
+        "sourceRefs": ["dataset-source"]
+      },
+      "highRisk": {
+        "value": 50,
+        "unit": "%",
+        "exceedanceOperator": ">",
+        "sourceRefs": ["dataset-source"]
+      },
       "baseline": 10.31,
       "uncertainty": "Interquartilsbereich des Modellensembles (IQR)",
       "values": [

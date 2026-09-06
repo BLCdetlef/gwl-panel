@@ -277,11 +277,21 @@
       "dataEndYear": 2022,
       "temporalResolution": "annual",
       "observationMethod": "Remote Sensing / Datenintegration",
+      "worseningDirection": "decrease",
       "reference": {
         "type": "planetary_boundaries_model",
+        "role": "boundary",
+        "qualifier": "exact",
+        "exceedanceOperator": "<",
         "display": "Grenzwert nach dem Modell der Planetaren Grenzen: 75 %",
         "value": 75,
         "unit": "%",
+        "sourceRefs": ["src_richardson_2023"]
+      },
+      "highRisk": {
+        "value": 54,
+        "unit": "%",
+        "exceedanceOperator": "<",
         "sourceRefs": ["src_richardson_2023"]
       },
       "finding": "Figure 28 zeigt einen langfristig leicht rückläufigen globalen Waldanteil zwischen 1992 und 2022. Das GWL-Panel verwendet ausgewählte Stützjahre statt aller Jahreswerte.",

@@ -69,13 +69,15 @@ const signedPayload = {
 };
 const actualHash = crypto.createHash("sha256").update(JSON.stringify(signedPayload), "utf8").digest("hex");
 if (actualHash !== curveExport.integrity?.hash) throw new Error("SHA-256 des Referenzpilot-Exports ist ungültig.");
-if (curveExport.version !== "1.5") throw new Error("Referenzpilot muss Exportversion 1.5 verwenden.");
-if (schema.properties?.version?.const !== "1.5") throw new Error("Exportschema muss Version 1.5 verlangen.");
+if (curveExport.version !== "1.6") throw new Error("Referenzpilot muss Exportversion 1.6 verwenden.");
+if (schema.properties?.version?.const !== "1.6") throw new Error("Exportschema muss Version 1.6 verlangen.");
 const referenceSchema = schema.properties?.curves?.items?.properties?.reference;
 if (referenceSchema?.properties?.role?.const !== "boundary") throw new Error("Schema begrenzt reference.role nicht auf boundary.");
 if (!referenceSchema?.properties?.qualifier?.enum?.includes("approximate")) throw new Error("Schema erlaubt qualifier approximate nicht.");
 if (!referenceSchema?.properties?.exceedanceOperator?.enum?.includes(">")) throw new Error("Schema erlaubt den Überschreitungsoperator > nicht.");
-if (!schema.properties?.curves?.items?.allOf?.length) throw new Error("Schema verlangt die HANPP-Pilotfelder nicht bedingt.");
+for (const field of ["role", "qualifier", "exceedanceOperator", "value", "unit", "sourceRefs"]) {
+  if (!referenceSchema?.required?.includes(field)) throw new Error(`Schema verlangt das allgemeine Referenzfeld ${field} nicht.`);
+}
 const hanpp = curveExport.curves.find(curve => curve.seriesId === "biosphere_hanpp_1910_2020");
 if (!hanpp || JSON.stringify(hanpp.reference) !== JSON.stringify({
   type: "planetary_boundaries_model",

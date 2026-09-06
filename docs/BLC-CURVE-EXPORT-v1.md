@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 4. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.5
+Stand: 6. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.6
 
 ## Sicherheitsmodell
 
@@ -15,6 +15,12 @@ Exportversion 1.2 ergänzt jede Kurve additiv um `domainType`, `domainId` und `d
 Exportversion 1.4 ergänzt ausschließlich für die vorhandene HANPP-Modellreferenz die Felder `role`, `qualifier` und `exceedanceOperator`. Der Pilot speichert keinen berechneten Status und führt kein allgemeines Grenzwertmodell ein. Bei `value: 10` und `exceedanceOperator: ">"` gilt für einen späteren Verbraucher: letzter gültiger Beobachtungswert unter 10 = nicht überschritten, gleich 10 = Modellgrenze erreicht, über 10 = Modellgrenze überschritten. Für die aktuelle Statusbestimmung darf ausschließlich der letzte gültige Punkt der Beobachtungsreihe verwendet werden; historische Rekonstruktionen und Zukunftsszenarien sind davon ausdrücklich ausgeschlossen.
 
 Exportversion 1.5 ändert ausschließlich die Eignungsregel für die Zeitabdeckung: Mindestens fünf direkte Beobachtungspunkte bleiben verpflichtend, während die geforderten 50 Jahre gemeinsam aus historischer Rekonstruktion und anschließender Beobachtungsreihe erreicht werden dürfen. `observationCoverage` beschreibt weiterhin nur die direkte Messreihe.
+
+Exportversion 1.6 ergänzt für jede Kurve die abgeleiteten `thresholdAssessments` für planetare Grenze und hohen Risikobereich. Zulässige Status sind `crossed`, `already_crossed_at_start`, `not_crossed`, `series_ends_before_known_crossing` und `not_assessable`. Referenzwert, Operator, Einheit sowie erster Überschreitungspunkt beziehungsweise zuletzt geprüfter Punkt werden mitgeführt. Die kurze Strichmarkierung im Diagramm bleibt eine Sonderdarstellung für `curveRole: core`; Vertiefungskurven können die Statuslogik später ohne diese Darstellung übernehmen.
+
+Die optionalen Felder `finding`, `uncertainty` und `methodNote` werden aus der freigegebenen Hauptreihe übernommen. Auch historische Segmente dürfen `period`, `method` und `uncertainty` tragen. Dadurch bleiben insbesondere nicht validierte Niveauanschlüsse an einem sichtbaren Methodenwechsel Bestandteil des Übergabepakets; BLC darf solche Reihen weder automatisch verschieben noch lückenlos verbinden.
+
+Historische und aktuelle Reihe dürfen nur dann dasselbe Wechseljahr enthalten, wenn `methodBreaks` dieses Jahr ausdrücklich mit `showValues: true` markiert. So können zwei methodisch verschiedene Werte nebeneinander sichtbar bleiben; jede weitergehende zeitliche Überlappung bleibt gesperrt.
 
 Für `planetary_boundaries` bestimmt die jeweilige Gruppe die Kategorie. Für die beiden ergänzenden Einflussbereiche bestimmt dagegen der gesamte Einflussbereich die Kategorie; interne Gruppen wie Energie oder Luftverschmutzung werden nicht als eigene BLC-Kategorien exportiert.
 

@@ -431,12 +431,21 @@
       "period": "1979–2025",
       "reference": {
         "type": "planetary_boundaries_model",
+        "role": "boundary",
+        "qualifier": "exact",
+        "exceedanceOperator": ">",
         "value": 350,
         "unit": "ppm",
         "display": "Grenzwert nach dem Modell der Planetaren Grenzen: 350 ppm CO₂",
         "sourceRefs": [
           "src_richardson_pb_2023"
         ]
+      },
+      "highRisk": {
+        "value": 450,
+        "unit": "ppm",
+        "exceedanceOperator": ">",
+        "sourceRefs": ["src_richardson_pb_2023"]
       },
       "finding": "Die planetare Grenze von 350 ppm wurde in dieser NOAA-Jahresreihe Ende der 1980er Jahre überschritten; 2025 lag der globale Jahresmittelwert bei 425,62 ppm.",
       "uncertainty": "Die NOAA-Reihe ist ein globales Jahresmittel aus marinen Hintergrundstationen. Die jüngsten Werte können durch Qualitätskontrollen geringfügig revidiert werden.",

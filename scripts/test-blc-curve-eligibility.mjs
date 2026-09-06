@@ -23,6 +23,11 @@ const cases = [
     source: "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
     seriesId: "global_forest_cover_1992_2022",
     expected: true
+  },
+  {
+    source: "data/knowledge/gwl_ocean_acidification_v0.1.json",
+    seriesId: "global_surface_omega_arag_oceansoda_1982_2021",
+    expected: true
   }
 ];
 

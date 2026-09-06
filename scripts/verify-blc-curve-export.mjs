@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.5") fail("Unbekanntes BLC-Exportformat; für die kombinierte Mindestzeitabdeckung ist Exportversion 1.5 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.6") fail("Unbekanntes BLC-Exportformat; für maschinenlesbare Grenzstatus ist Exportversion 1.6 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -31,6 +31,7 @@ const seen = new Set();
 const knowledgeIndex = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
 const allowedDomains = new Set(BLC_DOMAIN_DEFINITIONS.map(domain => `${domain.domainType}:${domain.domainId}`));
+const allowedThresholdStatuses = new Set(["crossed", "already_crossed_at_start", "not_crossed", "series_ends_before_known_crossing", "not_assessable"]);
 for (const curve of payload.curves) {
   if (!curve?.curveId || seen.has(curve.curveId)) fail(`Fehlende oder doppelte Kurven-ID: ${curve?.curveId || "–"}`);
   seen.add(curve.curveId);
@@ -58,8 +59,26 @@ for (const curve of payload.curves) {
   const historicalYears = (curve.historicalReconstruction || []).flatMap(segment => (segment.points || []).map(point => Number(point.year))).filter(Number.isFinite);
   const coverageStart = Math.min(years[0], ...historicalYears);
   if (years.at(-1) - coverageStart < 50) fail(`${curve.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion unter 50 Jahren.`);
-  if (historicalYears.some(year => year >= years[0])) fail(`${curve.curveId}: historische Rekonstruktion überlappt die direkte Beobachtungsreihe.`);
+  const visibleBreakYears = new Set((curve.methodBreaks || []).filter(marker => marker.showValues === true).map(marker => Number(marker.year)));
+  if (historicalYears.some(year => year > years[0] || (year === years[0] && !visibleBreakYears.has(year)))) {
+    fail(`${curve.curveId}: historische Rekonstruktion überlappt die direkte Beobachtungsreihe außerhalb eines sichtbar markierten Methodenwechsels.`);
+  }
   if (!["increase", "decrease"].includes(curve.worseningDirection)) fail(`${curve.curveId}: ungültige Belastungsrichtung.`);
+  for (const kind of ["boundary", "highRisk"]) {
+    const assessment = curve.thresholdAssessments?.[kind];
+    if (!assessment || !allowedThresholdStatuses.has(assessment.status)) fail(`${curve.curveId}: ungültiger Grenzstatus für ${kind}.`);
+    if (["crossed", "already_crossed_at_start"].includes(assessment.status) && !assessment.firstCrossingPoint) fail(`${curve.curveId}: erster Überschreitungspunkt für ${kind} fehlt.`);
+    if (assessment.status === "series_ends_before_known_crossing" && (!assessment.lastCheckedPoint || !assessment.knownCrossingPoint)) fail(`${curve.curveId}: Reihenende oder extern belegter Überschreitungspunkt für ${kind} fehlt.`);
+    if (assessment.status === "not_assessable" && !assessment.reason) fail(`${curve.curveId}: Begründung für nicht beurteilbaren Grenzstatus ${kind} fehlt.`);
+  }
+  if (curve.seriesId === "global_surface_omega_arag_oceansoda_1982_2021") {
+    if (!curve.uncertainty?.includes("Niveauanschluss") || !curve.methodNote?.includes("nicht verbunden oder gegeneinander verschoben")) {
+      fail(`${curve.curveId}: Anschlussunsicherheit fehlt im Übergabepaket.`);
+    }
+    if (!curve.historicalReconstruction?.[0]?.uncertainty?.includes("Niveauanschluss")) {
+      fail(`${curve.curveId}: Unsicherheit der historischen Rekonstruktion fehlt.`);
+    }
+  }
   if (curve.observationCoverage?.startYear !== years[0] || curve.observationCoverage?.endYear !== years.at(-1) || curve.observationCoverage?.spanYears !== years.at(-1) - years[0] || curve.observationCoverage?.pointCount !== years.length) {
     fail(`${curve.curveId}: inkonsistente Beobachtungsabdeckung.`);
   }
@@ -70,6 +89,8 @@ for (const curve of payload.curves) {
   if (!Array.isArray(curve.observationSourceRefs) || !curve.observationSourceRefs.length) fail(`${curve.curveId}: Quellenbezug der Beobachtungsreihe fehlt.`);
   for (const sourceRef of curve.observationSourceRefs) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Beobachtungsquelle ${sourceRef}.`);
   for (const sourceRef of curve.reference?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Modellreferenzquelle ${sourceRef}.`);
+  for (const sourceRef of curve.highRisk?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Quelle des hohen Risikobereichs ${sourceRef}.`);
+  for (const sourceRef of curve.knownBoundaryCrossing?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Quelle des belegten Überschreitungspunkts ${sourceRef}.`);
   for (const segment of curve.historicalReconstruction || []) {
     for (const sourceRef of segment.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Rekonstruktionsquelle ${sourceRef}.`);
   }
