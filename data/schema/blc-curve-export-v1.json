@@ -1,19 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "gwl://schema/blc-curve-export-v1.6",
-  "title": "GWL to BLC read-only curve export 1.6",
+  "$id": "gwl://schema/blc-curve-export-v1.7",
+  "title": "GWL to BLC read-only curve export 1.7",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.6" },
+    "version": { "const": "1.7" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "domainType", "domainId", "domainLabel", "curveRole", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "thresholdAssessments", "observations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
+        "required": ["curveId", "boundaryId", "itemId", "seriesId", "source", "domainType", "domainId", "domainLabel", "curveRole", "label", "metric", "unit", "geography", "worseningDirection", "observationCoverage", "observationSourceRefs", "thresholdAssessments", "observations", "displayObservations", "historicalReconstruction", "projections", "methodBreaks", "sources"],
         "properties": {
           "curveId": { "type": "string" },
           "boundaryId": { "type": "string" },
@@ -91,6 +91,7 @@
             }
           },
           "observations": { "type": "array", "minItems": 5 },
+          "displayObservations": { "type": "array", "minItems": 2 },
           "observationSourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
           "historicalReconstruction": { "type": "array" },
           "projections": { "type": "array" },

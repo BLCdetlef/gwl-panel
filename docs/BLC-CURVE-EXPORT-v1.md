@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 6. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.6
+Stand: 6. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.7
 
 ## Sicherheitsmodell
 
@@ -17,6 +17,8 @@ Exportversion 1.4 ergänzt ausschließlich für die vorhandene HANPP-Modellrefer
 Exportversion 1.5 ändert ausschließlich die Eignungsregel für die Zeitabdeckung: Mindestens fünf direkte Beobachtungspunkte bleiben verpflichtend, während die geforderten 50 Jahre gemeinsam aus historischer Rekonstruktion und anschließender Beobachtungsreihe erreicht werden dürfen. `observationCoverage` beschreibt weiterhin nur die direkte Messreihe.
 
 Exportversion 1.6 ergänzt für jede Kurve die abgeleiteten `thresholdAssessments` für planetare Grenze und hohen Risikobereich. Zulässige Status sind `crossed`, `already_crossed_at_start`, `not_crossed`, `series_ends_before_known_crossing` und `not_assessable`. Referenzwert, Operator, Einheit sowie erster Überschreitungspunkt beziehungsweise zuletzt geprüfter Punkt werden mitgeführt. Die kurze Strichmarkierung im Diagramm bleibt eine Sonderdarstellung für `curveRole: core`; Vertiefungskurven können die Statuslogik später ohne diese Darstellung übernehmen.
+
+Exportversion 1.7 trennt vollständige Daten und sichtbare Stützpunkte. `observations` enthält weiterhin sämtliche freigegebenen Originalbeobachtungen und bleibt Grundlage für Linienverlauf und Statusberechnung. `displayObservations` enthält nur Originalpunkte mit grundsätzlich mindestens fünf Jahren Abstand. Erster und letzter Beobachtungspunkt sowie erstmals belegte Überschreitungen der planetaren Grenze und des hohen Risikobereichs bleiben zwingend erhalten; nur zwischen solchen fachlich notwendigen Punkten darf der Abstand ausnahmsweise kleiner sein. Es wird nicht interpoliert.
 
 Die optionalen Felder `finding`, `uncertainty` und `methodNote` werden aus der freigegebenen Hauptreihe übernommen. Auch historische Segmente dürfen `period`, `method` und `uncertainty` tragen. Dadurch bleiben insbesondere nicht validierte Niveauanschlüsse an einem sichtbaren Methodenwechsel Bestandteil des Übergabepakets; BLC darf solche Reihen weder automatisch verschieben noch lückenlos verbinden.
 

@@ -45,7 +45,7 @@ try {
 }
 
 if (manifest.format !== "gwl-blc-curve-approvals-v1" || manifest.version !== "1.1") throw new Error("Freigabemanifest muss Version 1.1 verwenden.");
-if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.6") throw new Error("Kurvenexport muss Version 1.6 verwenden.");
+if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.7") throw new Error("Kurvenexport muss Version 1.7 verwenden.");
 if (curveExport.manifestVersion !== manifest.version) throw new Error("Manifestversion ging im Export verloren.");
 
 const expected = new Map([

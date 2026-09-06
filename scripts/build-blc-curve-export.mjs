@@ -79,6 +79,23 @@ function normalizeKnownCrossing(point) {
   };
 }
 
+export function buildDisplayObservations(observations, thresholdAssessments, minimumGapYears = 5) {
+  const ordered = normalizePoints(observations);
+  if (ordered.length < 2) return ordered;
+  const mandatoryYears = new Set([
+    ordered[0].year,
+    ordered.at(-1).year,
+    thresholdAssessments?.boundary?.firstCrossingPoint?.year,
+    thresholdAssessments?.highRisk?.firstCrossingPoint?.year
+  ].filter(Number.isFinite));
+  const selected = ordered.filter(point => mandatoryYears.has(point.year));
+  for (const point of ordered) {
+    if (mandatoryYears.has(point.year)) continue;
+    if (selected.every(existing => Math.abs(existing.year - point.year) >= minimumGapYears)) selected.push(point);
+  }
+  return selected.sort((a, b) => a.year - b.year);
+}
+
 export function normalizeHistorical(series, firstObservationYear) {
   return (series.historicalSegments || series.historicalSeries || [])
     .map(segment => {
@@ -196,6 +213,8 @@ for (const approval of manifest.approvedCurves) {
     highRisk: normalizedHighRisk,
     knownBoundaryCrossing: normalizedKnownBoundaryCrossing
   };
+  const thresholdAssessments = thresholdCrossings.getThresholdAssessments(assessmentSeries);
+  const displayObservations = buildDisplayObservations(observations, thresholdAssessments);
 
   curves.push({
     curveId: approval.curveId,
@@ -223,8 +242,9 @@ for (const approval of manifest.approvedCurves) {
     ...(normalizedReference ? { reference: normalizedReference } : {}),
     ...(normalizedHighRisk ? { highRisk: normalizedHighRisk } : {}),
     ...(normalizedKnownBoundaryCrossing ? { knownBoundaryCrossing: normalizedKnownBoundaryCrossing } : {}),
-    thresholdAssessments: thresholdCrossings.getThresholdAssessments(assessmentSeries),
+    thresholdAssessments,
     observations,
+    displayObservations,
     historicalReconstruction,
     projections: normalizeProjections(payload, series),
     methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({
@@ -239,7 +259,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.6",
+  version: "1.7",
   manifestVersion: manifest.version,
   curves
 };

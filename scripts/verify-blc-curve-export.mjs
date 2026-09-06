@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.6") fail("Unbekanntes BLC-Exportformat; für maschinenlesbare Grenzstatus ist Exportversion 1.6 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.7") fail("Unbekanntes BLC-Exportformat; für getrennte Daten- und Darstellungsreihen ist Exportversion 1.7 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -54,7 +54,12 @@ for (const curve of payload.curves) {
     if (curve[field] !== expectedDomain[field]) fail(`${curve.curveId}: ${field} stimmt nicht mit dem Knowledge-Index überein.`);
   }
   if (!Array.isArray(curve.observations)) fail(`${curve.curveId}: Beobachtungsreihe fehlt.`);
+  if (!Array.isArray(curve.displayObservations) || curve.displayObservations.length < 2) fail(`${curve.curveId}: Darstellungsreihe fehlt.`);
   const years = [...new Set(curve.observations.map(point => Number(point?.year)))].sort((a, b) => a - b);
+  const displayYears = curve.displayObservations.map(point => Number(point?.year)).sort((a, b) => a - b);
+  const observationYearSet = new Set(years);
+  if (displayYears.some(year => !observationYearSet.has(year))) fail(`${curve.curveId}: Darstellungsreihe enthält keinen Originalbeobachtungspunkt.`);
+  if (displayYears[0] !== years[0] || displayYears.at(-1) !== years.at(-1)) fail(`${curve.curveId}: erster oder letzter Beobachtungspunkt fehlt in der Darstellungsreihe.`);
   if (years.length < 5) fail(`${curve.curveId}: mindestens fünf zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
   const historicalYears = (curve.historicalReconstruction || []).flatMap(segment => (segment.points || []).map(point => Number(point.year))).filter(Number.isFinite);
   const coverageStart = Math.min(years[0], ...historicalYears);
@@ -70,6 +75,13 @@ for (const curve of payload.curves) {
     if (["crossed", "already_crossed_at_start"].includes(assessment.status) && !assessment.firstCrossingPoint) fail(`${curve.curveId}: erster Überschreitungspunkt für ${kind} fehlt.`);
     if (assessment.status === "series_ends_before_known_crossing" && (!assessment.lastCheckedPoint || !assessment.knownCrossingPoint)) fail(`${curve.curveId}: Reihenende oder extern belegter Überschreitungspunkt für ${kind} fehlt.`);
     if (assessment.status === "not_assessable" && !assessment.reason) fail(`${curve.curveId}: Begründung für nicht beurteilbaren Grenzstatus ${kind} fehlt.`);
+    if (assessment.firstCrossingPoint && !displayYears.includes(Number(assessment.firstCrossingPoint.year))) fail(`${curve.curveId}: Überschreitungspunkt für ${kind} fehlt in der Darstellungsreihe.`);
+  }
+  const mandatoryDisplayYears = new Set([years[0], years.at(-1), curve.thresholdAssessments.boundary.firstCrossingPoint?.year, curve.thresholdAssessments.highRisk.firstCrossingPoint?.year].filter(Number.isFinite));
+  for (let index = 1; index < displayYears.length; index += 1) {
+    if (displayYears[index] - displayYears[index - 1] < 5 && !(mandatoryDisplayYears.has(displayYears[index]) && mandatoryDisplayYears.has(displayYears[index - 1]))) {
+      fail(`${curve.curveId}: sichtbare Beobachtungspunkte unterschreiten ohne fachliche Ausnahme den Mindestabstand von fünf Jahren.`);
+    }
   }
   if (curve.seriesId === "global_surface_omega_arag_oceansoda_1982_2021") {
     if (!curve.uncertainty?.includes("Niveauanschluss") || !curve.methodNote?.includes("nicht verbunden oder gegeneinander verschoben")) {
