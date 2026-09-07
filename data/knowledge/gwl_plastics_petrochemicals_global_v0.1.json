@@ -265,6 +265,7 @@
       "label": "Globale Kunststoffproduktion · historische Reihe",
       "metric": "Globale jährliche Produktion von Polymerharzen und -fasern beziehungsweise harmonisierte globale Kunststoffproduktion",
       "unit": "million_tonnes_per_year",
+      "worseningDirection": "increase",
       "period": "1950–2019",
       "dataStartYear": 1950,
       "dataEndYear": 2019,

@@ -56,10 +56,11 @@ const expected = new Map([
   ["nitrogen_fixation_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
   ["phosphorus_cropland_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
   ["global_forest_cover_1992_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "land_system_change", domainLabel: "Land-System-Wandel" }],
-  ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }]
+  ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }],
+  ["global_plastics_production_1950_2019", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }]
 ]);
 
-if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen genau die acht freigegebenen Kernkurven enthalten.");
+if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen alle neun freigegebenen Kurven enthalten.");
 for (const approval of manifest.approvedCurves) {
   const expectedCurve = expected.get(approval.seriesId);
   if (!expectedCurve) throw new Error(`${approval.seriesId}: unerwartete Freigabe.`);
