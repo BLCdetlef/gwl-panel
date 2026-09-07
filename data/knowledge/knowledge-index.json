@@ -164,6 +164,12 @@
               "label": "Fassadenbiozide · Auswaschung",
               "type": "component",
               "source": "data/knowledge/gwl_novel_entities_facade_biocides_burkhardt_v0.1.json"
+            },
+            {
+              "id": "plastics_petrochemicals_global",
+              "label": "Kunststoffproduktion · global",
+              "type": "deep_dive",
+              "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
             }
           ]
         }
@@ -218,18 +224,6 @@
               "label": "Zement und Klinker",
               "type": "component",
               "source": "data/knowledge/gwl_cement_clinker_global_v0.1.json"
-            }
-          ]
-        },
-        {
-          "id": "chemical_feedstocks",
-          "label": "Chemische Grundstoffe",
-          "items": [
-            {
-              "id": "plastics_petrochemicals_global",
-              "label": "Kunststoffe & Petrochemie",
-              "type": "component",
-              "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
             }
           ]
         }

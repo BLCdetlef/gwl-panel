@@ -19,7 +19,7 @@ Liegen veröffentlichte Fachszenarien oder belastbare Einflussfaktoren vor, die 
 |---|---|---|
 | Globale Energieversorgung aus Öl, Kohle, Erdgas, Wind und Solar | tragfähig, quellenübergreifend | WEO 2025 CPS, STEPS und NZE für 2035, 2040 und 2050; getrennt von der historischen Energiereihe |
 | Globales atmosphärisches CO₂ | tragfähig, szenarioabhängig | IPCC-AR6-Pfade SSP1-1.9 bis SSP5-8.5 für publizierte Dekaden 2030–2090 |
-| Globale Kunststoffproduktion | bedingt tragfähig, nur separat | OECD-Kunststoffnutzung 2060 für Baseline, Regional Action und Global Ambition; Produktion und Nutzung werden nicht gleichgesetzt |
+| Globale Kunststoffproduktion | bedingt tragfähig, nur separat | Jährliche OECD-Kunststoffnutzung 2019–2060 für Baseline und Global Ambition; Produktion und Nutzung werden nicht gleichgesetzt |
 | Funktionelle Biosphärenintegrität / HANPP | nicht aufnehmen | Keine im Datensatz belegte, methodisch identische globale Zukunftsreihe |
 | Blaues und grünes Wasser | nicht aufnehmen | Modellierte historische Zustandsreihe; keine passende Zukunftsreihe in der verwendeten Quelle hinterlegt |
 | Globaler Waldzustand | nicht aufnehmen | Vorhandene Zukunftsstudien betreffen andere Räume oder Modellgrößen; keine direkte Fortsetzung der Kontrollvariable |
