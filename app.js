@@ -77,6 +77,10 @@ const causeBodyGround = document.getElementById("causeBodyGround");
 const causeBodyEffect = document.getElementById("causeBodyEffect");
 const causeBodyLife = document.getElementById("causeBodyLife");
 const contributionRoleCard = document.getElementById("contributionRoleCard");
+const copyItemLinkButton = document.getElementById("copyItemLinkButton");
+const copyCurveLinkButton = document.getElementById("copyCurveLinkButton");
+const copyLinkStatus = document.getElementById("copyLinkStatus");
+const directLinkNotice = document.getElementById("directLinkNotice");
 
 // Die Startansicht ist bewusst eine Gesamtübersicht: Erst eine Auswahl im
 // Seitenmenü legt eine konkrete Planetare Grenze als Kontext fest.
@@ -108,6 +112,70 @@ const blcCurveApprovalDraft = new Map();
 const blcCurveRoleDraft = new Map();
 const blcCurveDescriptorDraft = new Map();
 let activeBlcCurveApproval = null;
+let activeShareCurveId = null;
+const BLC26_BASE_URL = "https://blcdetlef.github.io/BLC26/";
+
+function buildDirectLink(curveId = null) {
+  if (curveId) {
+    const url = new URL(BLC26_BASE_URL);
+    url.searchParams.set("curve", curveId);
+    return url.href;
+  }
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.searchParams.set("boundary", selectedBoundaryId);
+  url.searchParams.set("item", selectedItemId);
+  return url.href;
+}
+
+function setShareControls({ itemAvailable = false, curveId = null } = {}) {
+  activeShareCurveId = curveId;
+  if (copyItemLinkButton) copyItemLinkButton.hidden = !itemAvailable;
+  if (copyCurveLinkButton) copyCurveLinkButton.hidden = !itemAvailable || !curveId;
+}
+
+function showCopyStatus(message, isError = false) {
+  if (!copyLinkStatus) return;
+  copyLinkStatus.textContent = message;
+  copyLinkStatus.style.color = isError ? "#8a3428" : "";
+}
+
+async function copyTextSafely(text) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      console.warn("Clipboard API nicht verfügbar, Fallback wird verwendet:", error);
+    }
+  }
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  document.body.appendChild(field);
+  field.select();
+  field.setSelectionRange(0, field.value.length);
+  let copied = false;
+  try { copied = document.execCommand("copy"); } catch (error) { console.warn("Kopier-Fallback fehlgeschlagen:", error); }
+  field.remove();
+  return copied;
+}
+
+async function copyDirectLink(curveId = null) {
+  if (!selectedBoundaryId || !selectedItemId) return;
+  const copied = await copyTextSafely(buildDirectLink(curveId));
+  showCopyStatus(copied
+    ? `${curveId ? "BLC26-Kurvenlink" : "Beitragslink"} wurde kopiert.`
+    : "Der Link konnte nicht automatisch kopiert werden. Bitte kopiere ihn aus der Adresszeile.", !copied);
+}
+
+function showDirectLinkNotice(message = "") {
+  if (!directLinkNotice) return;
+  directLinkNotice.hidden = !message;
+  directLinkNotice.textContent = message;
+  if (message && isMobilePanelLayout()) setMobilePanelView("effect", { focus: true });
+}
 
 function isLocalBlcEditor() {
   return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
@@ -2428,6 +2496,17 @@ function getKnowledgeSeries(network) {
   return (network?.timeSeries || [])[0] || null;
 }
 
+function getStableKnowledgeCurveId(item, network) {
+  const series = getKnowledgeSeries(network);
+  return item?.knowledgeSource && series?.id
+    ? `knowledge:${item.knowledgeSource}#${series.id}`
+    : null;
+}
+
+function getStableLegacyCurveId(boundaryId, item) {
+  return item?.id ? `legacy:data.js#${boundaryId}/${item.id}` : null;
+}
+
 function getKnowledgeProjectionSeries(network, scenario = projectionScenario) {
   return (network?.projectionSeries || []).find(series => series.scenario === scenario)
     || (network?.projectionSeries || [])[0]
@@ -2838,6 +2917,12 @@ function renderKnowledgeTime(network) {
   const curveId = observationSeries?.id
     ? `knowledge:${knowledgeSource}#${observationSeries.id}`
     : `knowledge:${knowledgeSource}#missing`;
+  setShareControls({
+    itemAvailable: Boolean(selectedBoundaryId && selectedItemId),
+    curveId: !getSelectedFreshwaterRegion(network) && getValidTimeSeriesPoints(observationSeries).length >= 2
+      ? curveId
+      : null
+  });
   setBlcReleaseControl({
     curveId,
     eligible: hasRequiredObservationSeries(network) && !getSelectedFreshwaterRegion(network),
@@ -2975,6 +3060,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   }
 
   setKnowledgePointDetails(network, activeBoundary, activeItem);
+  setShareControls({ itemAvailable: Boolean(selectedBoundaryId && selectedItemId) });
   timeSlider.disabled = true;
   timeSlider.min = "0";
   timeSlider.max = "1";
@@ -3595,8 +3681,13 @@ function setDetails(item, point = null, noMeasurementYear = null) {
 
 function renderTime(item) {
   const points = getTimePoints(item);
+  const curveId = getStableLegacyCurveId(selectedBoundaryId, item);
+  setShareControls({
+    itemAvailable: Boolean(selectedBoundaryId && selectedItemId),
+    curveId: points.length >= 2 ? curveId : null
+  });
   setBlcReleaseControl({
-    curveId: item?.id ? `legacy:data.js#${selectedBoundaryId || "unknown"}/${item.id}` : "",
+    curveId: curveId || "",
     eligible: hasRequiredObservationSeries({ points }) ,
     descriptor: item?.id ? {
       kind: "legacy",
@@ -4590,6 +4681,8 @@ function followHealthRoute(routeButton) {
 }
 
 function selectBoundary(boundaryId) {
+  showCopyStatus("");
+  setShareControls();
   selectedBoundaryId = boundaryId;
   selectedItemId = null;
   selectedDomainComponent = null;
@@ -4619,13 +4712,18 @@ const boundary = getBoundary(boundaryId);
 function selectItem(boundaryId, itemId) {
   closeOrganOverlay();
   closeAllCauseOverlays();
+  showCopyStatus("");
 
   selectedBoundaryId = boundaryId;
   selectedItemId = itemId;
 
   const boundary = getBoundary(boundaryId);
   const item = boundary?.items?.find(entry => entry.id === itemId);
-  if (!item) return;
+  if (!item) {
+    setShareControls();
+    return;
+  }
+  setShareControls({ itemAvailable: true });
   if (isMobilePanelLayout() && mobilePanelView === "ground") setMobilePanelView("effect", { focus: true });
 
   // Nährstoffkreisläufe: Stickstoff/Phosphor sind echte Untermenüs in GRUNDLAGE.
@@ -4777,6 +4875,8 @@ document.addEventListener("keydown", event => {
   }
 });
 resetButton.addEventListener("click", resetPanel);
+copyItemLinkButton?.addEventListener("click", () => copyDirectLink());
+copyCurveLinkButton?.addEventListener("click", () => copyDirectLink(activeShareCurveId));
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));
 projectionWindowButton.addEventListener("click", () => setTimeWindow("projection"));
 blcWindowButton.addEventListener("click", () => setTimeWindow("blc"));
@@ -4853,6 +4953,67 @@ healthPathOverlay?.addEventListener("click", event => {
   }
   if (event.target === healthPathOverlay) closeHealthPathOverlay();
 });
+
+function getExpectedCurveId(boundary, item) {
+  if (!boundary || !item) return null;
+  if (item.knowledgeSource) {
+    const rawNetwork = getKnowledgeNetworkBySource(item.knowledgeSource);
+    const network = getKnowledgeNetworkForItem(rawNetwork, item);
+    return getStableKnowledgeCurveId(item, network);
+  }
+  return getTimePoints(item).length >= 2 ? getStableLegacyCurveId(boundary.id, item) : null;
+}
+
+function applyDirectLink() {
+  const params = new URLSearchParams(window.location.search);
+  const boundaryId = params.get("boundary");
+  const itemId = params.get("item");
+  const curveId = params.get("curve");
+  showDirectLinkNotice();
+
+  if (!boundaryId && !itemId && !curveId) return false;
+  if (!boundaryId || !itemId) {
+    showDirectLinkNotice("Dieser Direktlink ist unvollständig. Er muss eine Grenze beziehungsweise einen Einflussbereich und einen Beitrag enthalten.");
+    return false;
+  }
+
+  const boundary = getBoundary(boundaryId);
+  if (!boundary) {
+    showDirectLinkNotice(`Die im Direktlink angegebene Grenze beziehungsweise der Einflussbereich „${boundaryId}“ ist unbekannt oder wurde entfernt.`);
+    return false;
+  }
+  const item = (boundary.items || []).find(entry => entry.id === itemId && entry.archived !== true);
+  if (!item) {
+    expandedBoundaryId = boundaryId;
+    renderBoundaries();
+    showDirectLinkNotice(`Der Beitrag „${itemId}“ ist in diesem Bereich unbekannt oder wurde entfernt.`);
+    return false;
+  }
+
+  if (item.scope && item.scope !== "all" && regionSelect?.querySelector(`option[value="${CSS.escape(item.scope)}"]`)) {
+    regionSelect.value = item.scope;
+    renderRegionPath();
+  }
+  expandedBoundaryId = boundaryId;
+  selectItem(boundaryId, itemId);
+  if (isMobilePanelLayout()) setMobilePanelView("effect", { focus: true });
+
+  if (curveId) {
+    const expectedCurveId = getExpectedCurveId(boundary, item);
+    if (!expectedCurveId || curveId !== expectedCurveId) {
+      showDirectLinkNotice(`Die Kurve „${curveId}“ ist für diesen Beitrag unbekannt oder wurde entfernt. Der Beitrag selbst wurde geöffnet.`);
+      return true;
+    }
+    const timeCard = timeChart?.closest(".time-card");
+    timeCard?.scrollIntoView({ block: "start" });
+    timeCard?.setAttribute("tabindex", "-1");
+    timeCard?.focus({ preventScroll: true });
+  }
+  return true;
+}
+
+window.addEventListener("popstate", applyDirectLink);
+
 async function initPanel() {
   try {
     await loadBodymapConfig();
@@ -4871,8 +5032,9 @@ async function initPanel() {
   ensureHealthLegend();
   updatePrototypeVersion();
   renderBoundaries();
-  renderHealth(null);
-  if (isMobilePanelLayout()) setMobilePanelView("life");
+  const directLinkApplied = applyDirectLink();
+  if (!directLinkApplied) renderHealth(null);
+  if (isMobilePanelLayout() && !directLinkApplied) setMobilePanelView("life");
 }
 
 

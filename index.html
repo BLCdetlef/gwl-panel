@@ -90,7 +90,12 @@
           <p>Wähle einen Beitrag in der linken Navigation. Seine Rolle bestimmt, welche Angaben in dieser Spalte fachlich erwartet werden.</p>
         </div>
 
+        <div id="directLinkNotice" class="direct-link-notice" role="alert" hidden></div>
+
         <section class="time-card top-card" aria-label="Zeitreihe">
+          <div class="share-actions curve-share-actions">
+            <button id="copyCurveLinkButton" class="share-link-button" type="button" hidden>BLC26-Kurvenlink kopieren</button>
+          </div>
           <div class="time-head" hidden>
             <div><strong id="timeReadout" hidden>–</strong></div>
             <div class="time-presets" aria-label="Zeitfenster">
@@ -138,10 +143,14 @@
         </section>
 
         <div class="state-card">
+          <div class="share-actions">
+            <button id="copyItemLinkButton" class="share-link-button" type="button" hidden>Beitragslink kopieren</button>
+          </div>
           <div class="eyebrow" id="focusType">Süßwasser</div>
           <h3 id="focusTitle">–</h3>
           <p id="focusSummary">–</p>
         </div>
+        <p id="copyLinkStatus" class="copy-link-status" role="status" aria-live="polite"></p>
 
         <div class="metrics">
           <div class="metric">

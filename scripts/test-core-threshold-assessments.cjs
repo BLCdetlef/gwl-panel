@@ -11,8 +11,9 @@ const expected = new Map([
   ["global_surface_omega_arag_oceansoda_1982_2021", ["series_ends_before_known_crossing", null, "not_crossed", null]]
 ]);
 
-if (payload.curves.length !== expected.size) throw new Error("Es werden genau acht Kernkurven erwartet.");
-for (const curve of payload.curves) {
+const coreCurves = payload.curves.filter(curve => curve.curveRole === "core");
+if (coreCurves.length !== expected.size) throw new Error("Es werden genau acht Kernkurven erwartet.");
+for (const curve of coreCurves) {
   const wanted = expected.get(curve.seriesId);
   if (!wanted) throw new Error(`${curve.seriesId}: unerwartete Kurve.`);
   const boundary = curve.thresholdAssessments?.boundary;
