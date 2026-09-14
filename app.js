@@ -376,6 +376,7 @@ function openPublishProcess() {
   if (publishProcessClose) publishProcessClose.disabled = true;
   if (publishProcessDone) publishProcessDone.disabled = true;
   if (publishProcessOverlay) publishProcessOverlay.hidden = false;
+  updatePublishProcess({ stage: "prepare", status: "running", message: "Verbindung zum lokalen Redaktionsserver wird hergestellt …" });
 }
 
 function updatePublishProcess(event) {
@@ -392,6 +393,7 @@ function updatePublishProcess(event) {
 }
 
 function failPublishProcess(message) {
+  if (message === "Failed to fetch") message = "Der lokale Redaktionsserver ist nicht erreichbar. Beende einen alten Server mit Strg+C und starte ihn im GWL-Verzeichnis neu: node scripts/serve-local.mjs";
   const running = publishProcessSteps?.querySelector("li.is-running");
   running?.classList.replace("is-running", "is-failed");
   const marker = running?.querySelector(".publish-process-marker");

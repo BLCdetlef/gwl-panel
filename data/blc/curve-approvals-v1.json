@@ -105,6 +105,16 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_wind_energy_pilot_v0.1.json",
+      "seriesId": "global_wind_tes_1965_2025",
+      "boundaryId": "materials-energy",
+      "itemId": "wind",
+      "curveId": "knowledge:data/knowledge/gwl_wind_energy_pilot_v0.1.json#global_wind_tes_1965_2025",
+      "curveRole": "deep_dive",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_oil_energy_pilot_v0.1b.json",
       "seriesId": "global_oil_tes_1965_2025",
       "boundaryId": "materials-energy",
