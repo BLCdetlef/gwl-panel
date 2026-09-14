@@ -3145,6 +3145,10 @@ function getKnowledgeStatusLabel(network) {
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
 
+  // Jede Knowledge-Ansicht beginnt ohne übernommene Kurvenfreigabe. Erst eine
+  // anschließend geprüfte Zeitreihe darf den Schalter wieder sichtbar setzen.
+  setBlcReleaseControl();
+
   if (getSelectedFreshwaterRegion(network, activeItem)) {
     selectedYear = null;
     timeWindow = "data";

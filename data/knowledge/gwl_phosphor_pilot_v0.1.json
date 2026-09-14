@@ -1,11 +1,11 @@
 {
   "schemaVersion": "gwl-knowledge-v0.1",
   "id": "gwl_phosphor_pilot_v0.1",
-  "topic": "Phosphor in Oberflächengewässern / Eutrophierung",
+  "topic": "Deutschland & Europa · Phosphorbelastung und Eutrophierung von Oberflächengewässern",
   "entry": {
     "systemBoundary": "Nährstoffkreisläufe",
     "domainComponent": "Phosphor",
-    "subComponent": "Oberflächengewässer / Eutrophierung",
+    "subComponent": "Deutschland & Europa · Phosphorbelastung und Eutrophierung von Oberflächengewässern",
     "effectFocus": "Phosphorbelastung von Flüssen und Seen, Eutrophierung und Folgen für aquatische Ökosysteme"
   },
   "corePrinciples": [

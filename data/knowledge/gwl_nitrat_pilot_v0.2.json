@@ -1,11 +1,11 @@
 {
   "schemaVersion": "gwl-knowledge-v0.1",
   "id": "gwl_nitrat_pilot_v0.2",
-  "topic": "Nitrat im Grundwasser",
+  "topic": "Deutschland · Nitratbelastung des Grundwassers",
   "entry": {
     "systemBoundary": "Nährstoffkreisläufe",
     "domainComponent": "Stickstoff",
-    "subComponent": "Nitrat im Grundwasser",
+    "subComponent": "Deutschland · Nitratbelastung des Grundwassers",
     "effectFocus": "Vom landwirtschaftlichen Stickstoffüberschuss über Nitratauswaschung zur Belastung des Grundwassers"
   },
   "corePrinciples": [

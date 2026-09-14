@@ -79,7 +79,7 @@
             },
             {
               "id": "nitrat_im_grundwasser",
-              "label": "Nitrat im Grundwasser",
+              "label": "Deutschland · Nitratbelastung des Grundwassers",
               "type": "study",
               "parentId": "nitrogen",
               "source": "data/knowledge/gwl_nitrat_pilot_v0.2.json"
@@ -92,7 +92,7 @@
             },
             {
               "id": "oberflaechenwasser_eutrophierung",
-              "label": "Oberflächengewässer / Eutrophierung",
+              "label": "Deutschland & Europa · Phosphorbelastung und Eutrophierung von Oberflächengewässern",
               "type": "study",
               "parentId": "phosphorus",
               "source": "data/knowledge/gwl_phosphor_pilot_v0.1.json"
