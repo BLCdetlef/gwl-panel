@@ -82,6 +82,12 @@ const copyItemLinkButton = document.getElementById("copyItemLinkButton");
 const copyCurveLinkButton = document.getElementById("copyCurveLinkButton");
 const copyLinkStatus = document.getElementById("copyLinkStatus");
 const directLinkNotice = document.getElementById("directLinkNotice");
+const publishProcessOverlay = document.getElementById("publishProcessOverlay");
+const publishProcessSummary = document.getElementById("publishProcessSummary");
+const publishProcessSteps = document.getElementById("publishProcessSteps");
+const publishProcessError = document.getElementById("publishProcessError");
+const publishProcessClose = document.getElementById("publishProcessClose");
+const publishProcessDone = document.getElementById("publishProcessDone");
 
 // Die Startansicht ist bewusst eine Gesamtübersicht: Erst eine Auswahl im
 // Seitenmenü legt eine konkrete Planetare Grenze als Kontext fest.
@@ -314,6 +320,7 @@ async function publishBlcCurveApprovalManifest() {
   }
 
   if (!window.confirm("Freigaben prüfen und vollständig in GWL und BLC26 veröffentlichen?")) return;
+  openPublishProcess();
   blcReleaseExportButton.disabled = true;
   if (blcReleaseStatus) blcReleaseStatus.textContent = "Freigaben werden geprüft und in GWL sowie BLC26 veröffentlicht …";
   try {
@@ -322,18 +329,86 @@ async function publishBlcCurveApprovalManifest() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(manifest)
     });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Veröffentlichung fehlgeschlagen (${response.status}).`);
+    if (!response.ok || !response.body) {
+      const result = await response.json().catch(() => ({}));
+      throw new Error(result.error || `Veröffentlichung fehlgeschlagen (${response.status}).`);
+    }
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let result = null;
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const event = JSON.parse(line);
+        updatePublishProcess(event);
+        if (event.type === "error") throw new Error(event.error || "Veröffentlichung fehlgeschlagen.");
+        if (event.type === "done") result = event;
+      }
+      if (done) break;
+    }
+    if (!result) throw new Error("Der lokale Redaktionsserver hat den Prozess nicht abgeschlossen.");
     blcCurveApprovalManifest = manifest;
     blcCurveApprovalDraft.clear();
     blcCurveRoleDraft.clear();
-    if (blcReleaseStatus) blcReleaseStatus.textContent = result.message || "Freigaben wurden veröffentlicht.";
     setBlcReleaseControl(activeBlcCurveApproval || {});
+    if (blcReleaseStatus) blcReleaseStatus.textContent = result.message || "Freigaben wurden veröffentlicht.";
   } catch (error) {
+    failPublishProcess(error.message);
     if (blcReleaseStatus) blcReleaseStatus.textContent = `${error.message} Starte das Panel mit: node scripts/serve-local.mjs`;
   } finally {
     blcReleaseExportButton.disabled = false;
   }
+}
+
+function openPublishProcess() {
+  publishProcessSteps?.querySelectorAll("li").forEach((step, index) => {
+    step.classList.remove("is-running", "is-complete", "is-failed");
+    const marker = step.querySelector(".publish-process-marker");
+    if (marker) marker.textContent = String(index + 1);
+  });
+  if (publishProcessSummary) publishProcessSummary.textContent = "Der Veröffentlichungsprozess startet …";
+  if (publishProcessError) { publishProcessError.hidden = true; publishProcessError.textContent = ""; }
+  if (publishProcessClose) publishProcessClose.disabled = true;
+  if (publishProcessDone) publishProcessDone.disabled = true;
+  if (publishProcessOverlay) publishProcessOverlay.hidden = false;
+}
+
+function updatePublishProcess(event) {
+  const step = event.stage ? publishProcessSteps?.querySelector(`[data-publish-stage="${event.stage}"]`) : null;
+  if (step && event.status) {
+    step.classList.remove("is-running", "is-complete", "is-failed");
+    step.classList.add(`is-${event.status}`);
+    const marker = step.querySelector(".publish-process-marker");
+    if (marker && event.status === "complete") marker.textContent = "✓";
+    if (marker && event.status === "failed") marker.textContent = "!";
+  }
+  if (publishProcessSummary && event.message) publishProcessSummary.textContent = event.message;
+  if (event.type === "done") finishPublishProcess();
+}
+
+function failPublishProcess(message) {
+  const running = publishProcessSteps?.querySelector("li.is-running");
+  running?.classList.replace("is-running", "is-failed");
+  const marker = running?.querySelector(".publish-process-marker");
+  if (marker) marker.textContent = "!";
+  if (publishProcessSummary) publishProcessSummary.textContent = "Veröffentlichung gestoppt. Die markierte Stufe konnte nicht abgeschlossen werden.";
+  if (publishProcessError) { publishProcessError.textContent = message; publishProcessError.hidden = false; }
+  finishPublishProcess();
+}
+
+function finishPublishProcess() {
+  if (publishProcessClose) publishProcessClose.disabled = false;
+  if (publishProcessDone) publishProcessDone.disabled = false;
+}
+
+function closePublishProcess() {
+  if (publishProcessDone?.disabled || !publishProcessOverlay) return;
+  publishProcessOverlay.hidden = true;
 }
 
 function isMobilePanelLayout() {
@@ -4940,6 +5015,8 @@ document.addEventListener("keydown", event => {
   }
 });
 resetButton.addEventListener("click", resetPanel);
+publishProcessClose?.addEventListener("click", closePublishProcess);
+publishProcessDone?.addEventListener("click", closePublishProcess);
 copyItemLinkButton?.addEventListener("click", () => copyDirectLink());
 copyCurveLinkButton?.addEventListener("click", () => copyDirectLink(activeShareCurveId));
 dataWindowButton.addEventListener("click", () => setTimeWindow("data"));

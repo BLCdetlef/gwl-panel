@@ -314,6 +314,26 @@
           <div id="healthPathContent" class="health-path-dialog-content"></div>
         </section>
       </div>
+
+      <div id="publishProcessOverlay" class="publish-process-overlay" hidden>
+        <section class="publish-process-dialog" role="dialog" aria-modal="true" aria-labelledby="publishProcessTitle">
+          <div class="publish-process-head">
+            <div><span class="eyebrow">BLC-VERÖFFENTLICHUNG</span><h3 id="publishProcessTitle">Freigaben veröffentlichen</h3></div>
+            <button id="publishProcessClose" class="overlay-close" type="button" aria-label="Prozessfenster schließen" disabled>×</button>
+          </div>
+          <p id="publishProcessSummary" class="publish-process-summary">Der Ablauf wird vorbereitet.</p>
+          <ol id="publishProcessSteps" class="publish-process-steps">
+            <li data-publish-stage="prepare"><span class="publish-process-marker">1</span><span><strong>Vorprüfung</strong><small>Repositories und Freigabemanifest prüfen</small></span></li>
+            <li data-publish-stage="gwl_validate"><span class="publish-process-marker">2</span><span><strong>GWL-Export</strong><small>Export erzeugen und Integrität verifizieren</small></span></li>
+            <li data-publish-stage="gwl_publish"><span class="publish-process-marker">3</span><span><strong>GWL veröffentlichen</strong><small>Manifest und Export committen und pushen</small></span></li>
+            <li data-publish-stage="blc_transfer"><span class="publish-process-marker">4</span><span><strong>An BLC übergeben</strong><small>Verifizierten Export nach BLC26 kopieren</small></span></li>
+            <li data-publish-stage="blc_validate"><span class="publish-process-marker">5</span><span><strong>BLC prüfen</strong><small>Import und Direktlink-IDs verifizieren</small></span></li>
+            <li data-publish-stage="blc_publish"><span class="publish-process-marker">6</span><span><strong>BLC veröffentlichen</strong><small>Import committen und pushen</small></span></li>
+          </ol>
+          <pre id="publishProcessError" class="publish-process-error" hidden></pre>
+          <button id="publishProcessDone" class="reset-button publish-process-done" type="button" disabled>Fenster schließen</button>
+        </section>
+      </div>
     </section>
   </main>
   <script src="data.js?v=0.9.74-b62"></script>

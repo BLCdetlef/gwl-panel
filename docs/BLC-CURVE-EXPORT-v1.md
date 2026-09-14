@@ -70,6 +70,8 @@ Das erzeugte Paket `data/blc/blc-curve-export-v1.json` ist rein lesbar und enth�
 3. Die Kurve mit „Für BLC freigeben“ auswählen.
 4. „Freigaben veröffentlichen“ anklicken und den Vorgang bestätigen. Der lokale Redaktionsserver führt die folgenden Schritte automatisch aus:
 
+   Ein Prozessfenster zeigt jede Stufe einzeln an. Bei einem Abbruch bleibt die betroffene Stufe rot markiert und die technische Fehlermeldung sichtbar; bereits erfolgreich abgeschlossene Stufen bleiben grün. Das Fenster schließt sich nicht automatisch.
+
 5. Manifest prüfen:
 
    ```powershell
