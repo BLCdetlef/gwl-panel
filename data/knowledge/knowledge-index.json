@@ -104,7 +104,7 @@
           "label": "Ozeanversauerung",
           "items": [
             {
-              "id": "global_aragonite_saturation",
+              "id": "global_surface_aragonite_saturation",
               "label": "Aragonit-Sättigungszustand",
               "type": "control",
               "source": "data/knowledge/gwl_ocean_acidification_v0.1.json"

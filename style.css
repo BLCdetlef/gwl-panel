@@ -87,7 +87,8 @@ a { color: inherit; }
 .state-card { padding: 14px; margin-bottom: 10px; }
 .share-actions { display: flex; justify-content: flex-end; margin: -3px -3px 5px 8px; float: right; }
 .curve-share-actions { float: none; margin: 0 0 4px; }
-.share-link-button { min-height: 30px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--text); padding: 5px 9px; font-size: 10px; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.share-link-button { display: inline-flex; align-items: center; min-height: 30px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--text); padding: 5px 9px; font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; touch-action: manipulation; }
+.share-link-button[hidden] { display: none; }
 .share-link-button:hover, .share-link-button:focus-visible { border-color: var(--text); background: var(--soft); }
 .copy-link-status { min-height: 0; margin: -5px 2px 8px; color: #2f5c4e; font-size: 10px; line-height: 1.35; }
 .copy-link-status:empty { display: none; }

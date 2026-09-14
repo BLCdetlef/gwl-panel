@@ -1,6 +1,7 @@
 const data = window.GWL_DATA;
 const GWL_BUILD_VERSION = "0.9.76 · B64";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
+const directLinks = window.GWL_DIRECT_LINKS;
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -130,7 +131,11 @@ function buildDirectLink(curveId = null) {
 function setShareControls({ itemAvailable = false, curveId = null } = {}) {
   activeShareCurveId = curveId;
   if (copyItemLinkButton) copyItemLinkButton.hidden = !itemAvailable;
-  if (copyCurveLinkButton) copyCurveLinkButton.hidden = !itemAvailable || !curveId;
+  if (copyCurveLinkButton) {
+    copyCurveLinkButton.hidden = !itemAvailable || !curveId;
+    if (itemAvailable && curveId) copyCurveLinkButton.href = buildDirectLink(curveId);
+    else copyCurveLinkButton.removeAttribute("href");
+  }
 }
 
 function showCopyStatus(message, isError = false) {
@@ -165,9 +170,14 @@ async function copyTextSafely(text) {
 async function copyDirectLink(curveId = null) {
   if (!selectedBoundaryId || !selectedItemId) return;
   const copied = await copyTextSafely(buildDirectLink(curveId));
-  showCopyStatus(copied
-    ? `${curveId ? "BLC26-Kurvenlink" : "Beitragslink"} wurde kopiert.`
-    : "Der Link konnte nicht automatisch kopiert werden. Bitte kopiere ihn aus der Adresszeile.", !copied);
+  const message = curveId
+    ? copied
+      ? "Die Kurve wurde im BLC geöffnet und der Link kopiert."
+      : "Die Kurve wurde im BLC geöffnet; der Link konnte nicht automatisch kopiert werden."
+    : copied
+      ? "Beitragslink wurde kopiert."
+      : "Der Link konnte nicht automatisch kopiert werden. Bitte kopiere ihn aus der Adresszeile.";
+  showCopyStatus(message, !copied);
 }
 
 function showDirectLinkNotice(message = "") {
@@ -4680,7 +4690,7 @@ function followHealthRoute(routeButton) {
   document.querySelector(`[data-boundary="${boundaryId}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-function selectBoundary(boundaryId) {
+function selectBoundary(boundaryId, { selectFirst = true } = {}) {
   showCopyStatus("");
   setShareControls();
   selectedBoundaryId = boundaryId;
@@ -4691,7 +4701,11 @@ const boundary = getBoundary(boundaryId);
   const items = getVisibleItems(boundary);
   closeOrganOverlay();
   closeAllCauseOverlays();
-  if (items.length) { selectItem(boundaryId, items[0].id); return; }
+  if (items.length) {
+    if (selectFirst) selectItem(boundaryId, items[0].id);
+    else renderBoundaries();
+    return;
+  }
 
   if (isEahExtension(boundary)) {
     selectedItemId = null;
@@ -4965,37 +4979,37 @@ function getExpectedCurveId(boundary, item) {
 }
 
 function applyDirectLink() {
-  const params = new URLSearchParams(window.location.search);
-  const boundaryId = params.get("boundary");
-  const itemId = params.get("item");
-  const curveId = params.get("curve");
+  const request = directLinks.readRequest(window.location.search);
+  const { boundaryId, itemId, curveId } = request;
   showDirectLinkNotice();
 
-  if (!boundaryId && !itemId && !curveId) return false;
-  if (!boundaryId || !itemId) {
+  const resolution = directLinks.resolve(data.boundaries, request);
+  if (resolution.status === "none") return false;
+  if (resolution.status === "incomplete") {
     showDirectLinkNotice("Dieser Direktlink ist unvollständig. Er muss eine Grenze beziehungsweise einen Einflussbereich und einen Beitrag enthalten.");
     return false;
   }
-
-  const boundary = getBoundary(boundaryId);
-  if (!boundary) {
+  if (resolution.status === "unknown_boundary") {
     showDirectLinkNotice(`Die im Direktlink angegebene Grenze beziehungsweise der Einflussbereich „${boundaryId}“ ist unbekannt oder wurde entfernt.`);
     return false;
   }
-  const item = (boundary.items || []).find(entry => entry.id === itemId && entry.archived !== true);
-  if (!item) {
+  if (resolution.status === "unknown_item") {
     expandedBoundaryId = boundaryId;
     renderBoundaries();
     showDirectLinkNotice(`Der Beitrag „${itemId}“ ist in diesem Bereich unbekannt oder wurde entfernt.`);
     return false;
   }
+  const { boundary, item } = resolution;
 
   if (item.scope && item.scope !== "all" && regionSelect?.querySelector(`option[value="${CSS.escape(item.scope)}"]`)) {
     regionSelect.value = item.scope;
     renderRegionPath();
   }
   expandedBoundaryId = boundaryId;
-  selectItem(boundaryId, itemId);
+  directLinks.select(resolution, {
+    selectBoundary: id => selectBoundary(id, { selectFirst: false }),
+    selectItem
+  });
   if (isMobilePanelLayout()) setMobilePanelView("effect", { focus: true });
 
   if (curveId) {
