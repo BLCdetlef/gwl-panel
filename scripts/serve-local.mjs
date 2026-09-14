@@ -11,6 +11,9 @@ const host = "127.0.0.1";
 const port = 4173;
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
 const exportPath = path.join(projectRoot, "data", "blc", "blc-curve-export-v1.json");
+const blcRoot = path.resolve(projectRoot, "..", "BLC26");
+const blcImportRelativePath = "data/gwl/blc-curve-export-v1.json";
+const blcImportPath = path.join(blcRoot, ...blcImportRelativePath.split("/"));
 const allowedOrigins = new Set([`http://localhost:${port}`, `http://${host}:${port}`]);
 const mimeTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -27,8 +30,29 @@ function sendJson(response, status, payload) {
   response.end(`${JSON.stringify(payload)}\n`);
 }
 
-async function run(command, args) {
-  return execFileAsync(command, args, { cwd: projectRoot, windowsHide: true, maxBuffer: 10 * 1024 * 1024 });
+async function run(command, args, cwd = projectRoot) {
+  return execFileAsync(command, args, { cwd, windowsHide: true, maxBuffer: 10 * 1024 * 1024 });
+}
+
+async function ensureCleanGitIndex(repositoryRoot, label) {
+  const staged = await run("git", ["diff", "--cached", "--name-only"], repositoryRoot);
+  if (staged.stdout.trim()) throw new Error(`${label}: Es gibt bereits vorgemerkte Git-Änderungen. Bitte diese zuerst committen oder aus dem Index entfernen.`);
+}
+
+async function commitAndPush(repositoryRoot, files, message) {
+  await run("git", ["add", "--", ...files], repositoryRoot);
+  try {
+    await run("git", ["diff", "--cached", "--quiet"], repositoryRoot);
+    return null;
+  } catch (error) {
+    if (error.code !== 1) throw error;
+  }
+
+  await run("git", ["commit", "-m", message], repositoryRoot);
+  const branch = (await run("git", ["branch", "--show-current"], repositoryRoot)).stdout.trim();
+  if (!branch) throw new Error(`${path.basename(repositoryRoot)}: Kein veröffentlichbarer Git-Branch aktiv.`);
+  await run("git", ["push", "origin", branch], repositoryRoot);
+  return (await run("git", ["rev-parse", "--short", "HEAD"], repositoryRoot)).stdout.trim();
 }
 
 async function readRequestJson(request) {
@@ -50,40 +74,46 @@ async function publishApprovals(request, response) {
 
   const previousManifest = await fs.readFile(manifestPath);
   const previousExport = await fs.readFile(exportPath);
-  let filesChanged = false;
+  let previousBlcImport;
+  let startingGwlHead;
+  let startingBlcHead;
   try {
+    previousBlcImport = await fs.readFile(blcImportPath);
+    startingGwlHead = (await run("git", ["rev-parse", "HEAD"])).stdout.trim();
+    startingBlcHead = (await run("git", ["rev-parse", "HEAD"], blcRoot)).stdout.trim();
+    await ensureCleanGitIndex(projectRoot, "GWL");
+    await ensureCleanGitIndex(blcRoot, "BLC26");
+
     const manifest = await readRequestJson(request);
     await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-    filesChanged = true;
 
     await run(process.execPath, ["scripts/validate-blc-curve-approvals.mjs"]);
     await run(process.execPath, ["scripts/build-blc-curve-export.mjs"]);
     await run(process.execPath, ["scripts/verify-blc-curve-export.mjs"]);
 
-    const stagedBefore = await run("git", ["diff", "--cached", "--name-only"]);
-    if (stagedBefore.stdout.trim()) throw new Error("Es gibt bereits vorgemerkte Git-Änderungen. Bitte diese zuerst committen oder aus dem Index entfernen.");
+    const gwlCommit = await commitAndPush(
+      projectRoot,
+      ["data/blc/curve-approvals-v1.json", "data/blc/blc-curve-export-v1.json"],
+      "Publish BLC curve approvals"
+    );
 
-    await run("git", ["add", "--", "data/blc/curve-approvals-v1.json", "data/blc/blc-curve-export-v1.json"]);
-    try {
-      await run("git", ["diff", "--cached", "--quiet"]);
-      sendJson(response, 200, { message: "Freigaben waren bereits vollständig veröffentlicht." });
-      return;
-    } catch (error) {
-      if (error.code !== 1) throw error;
-    }
+    await fs.copyFile(exportPath, blcImportPath);
+    await run(process.execPath, ["scripts/verify-gwl-import.mjs"], blcRoot);
+    const blcCommit = await commitAndPush(blcRoot, [blcImportRelativePath], "Update verified GWL curve import");
 
-    await run("git", ["commit", "-m", "Publish BLC curve approvals"]);
-    const branch = (await run("git", ["branch", "--show-current"])).stdout.trim();
-    if (!branch) throw new Error("Kein veröffentlichbarer Git-Branch aktiv.");
-    await run("git", ["push", "origin", branch]);
-
-    const commit = (await run("git", ["rev-parse", "--short", "HEAD"])).stdout.trim();
-    sendJson(response, 200, { message: `Freigaben validiert, exportiert und gepusht · Commit ${commit}.` });
+    const details = [gwlCommit ? `GWL ${gwlCommit}` : "GWL unverändert", blcCommit ? `BLC26 ${blcCommit}` : "BLC26 unverändert"];
+    sendJson(response, 200, { message: `Freigaben vollständig veröffentlicht · ${details.join(" · ")}.` });
   } catch (error) {
-    if (filesChanged) {
+    const currentGwlHead = await run("git", ["rev-parse", "HEAD"]).then(result => result.stdout.trim()).catch(() => null);
+    if (startingGwlHead && currentGwlHead === startingGwlHead) {
       await fs.writeFile(manifestPath, previousManifest);
       await fs.writeFile(exportPath, previousExport);
       await run("git", ["reset", "--quiet", "--", "data/blc/curve-approvals-v1.json", "data/blc/blc-curve-export-v1.json"]).catch(() => {});
+    }
+    const currentBlcHead = await run("git", ["rev-parse", "HEAD"], blcRoot).then(result => result.stdout.trim()).catch(() => null);
+    if (previousBlcImport && startingBlcHead && currentBlcHead === startingBlcHead) {
+      await fs.writeFile(blcImportPath, previousBlcImport);
+      await run("git", ["reset", "--quiet", "--", blcImportRelativePath], blcRoot).catch(() => {});
     }
     sendJson(response, 500, { error: String(error.stderr || error.message || error).trim() });
   }

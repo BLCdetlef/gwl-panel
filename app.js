@@ -313,9 +313,9 @@ async function publishBlcCurveApprovalManifest() {
     return;
   }
 
-  if (!window.confirm("Freigabemanifest prüfen, BLC-Export erzeugen, committen und zu GitHub pushen?")) return;
+  if (!window.confirm("Freigaben prüfen und vollständig in GWL und BLC26 veröffentlichen?")) return;
   blcReleaseExportButton.disabled = true;
-  if (blcReleaseStatus) blcReleaseStatus.textContent = "Freigaben werden geprüft und veröffentlicht …";
+  if (blcReleaseStatus) blcReleaseStatus.textContent = "Freigaben werden geprüft und in GWL sowie BLC26 veröffentlicht …";
   try {
     const response = await fetch("/api/blc/publish", {
       method: "POST",

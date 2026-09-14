@@ -88,8 +88,9 @@ Das erzeugte Paket `data/blc/blc-curve-export-v1.json` ist rein lesbar und enth�
    node scripts/verify-blc-curve-export.mjs
    ```
 
-8. Manifest, Export und gegebenenfalls geänderte Quelldaten gemeinsam committen und pushen.
+8. Manifest und Export im GWL-Repository committen und pushen.
+9. Den Export in das benachbarte Repository `BLC26` übernehmen, dort mit `scripts/verify-gwl-import.mjs` prüfen, committen und pushen.
 
 ## Übergaberegel
 
-Erst nach erfolgreicher Validierung, Erzeugung, Verifikation und Git-Versionierung gilt ein Export als für die spätere BLC-Übernahme bereit. BLC26 wird durch diesen Prozess noch nicht verändert.
+Erst nach erfolgreicher Validierung, Erzeugung, Verifikation und Git-Versionierung in beiden Repositories gilt ein Export als veröffentlicht. Bei bereits vorgemerkten Git-Änderungen in GWL oder BLC26 stoppt der lokale Redaktionsserver, damit keine fremden Änderungen in den automatischen Commit gelangen.
