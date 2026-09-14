@@ -4817,7 +4817,42 @@ function chooseFirstItemForScope() {
   selectedBoundaryId = "freshwater"; selectedItemId = items[0]?.id || null;
   if (selectedItemId) selectItem("freshwater", selectedItemId); else selectBoundary("freshwater");
 }
-function resetPanel() { setHealthMarkersEnabled(true); regionSelect.value = "global"; selectedAgeGroup = "adults"; timeWindow = "data"; chooseFirstItemForScope(); updateAgeGroupDisplay(); }
+function resetPanel() {
+  setHealthMarkersEnabled(true);
+  regionSelect.value = "global";
+  selectedAgeGroup = "adults";
+  timeWindow = "data";
+  selectedBoundaryId = null;
+  selectedItemId = null;
+  selectedDomainComponent = null;
+  selectedYear = null;
+  expandedBoundaryId = null;
+
+  renderRegionPath();
+  closeOrganOverlay();
+  closeAllCauseOverlays();
+  showCopyStatus("");
+  showDirectLinkNotice();
+  setShareControls();
+  syncBoundaryModeClass();
+  setStandardFocusCardVisible(true);
+  setStandardEffectBlocksVisible(true);
+  focusType.textContent = "Gesamtübersicht · Global";
+  focusTitle.textContent = "Planetare Grenzen und Lebensgrundlagen";
+  focusSummary.textContent = "Wähle links einen Beitrag, um Messwerte, Referenzen und Wirkungspfade zu öffnen.";
+  setDetails(null);
+  renderTime(null);
+  renderHealth(null);
+  updateCauseButtons(null, null);
+  renderBoundaries();
+  renderKnowledgePanel();
+  updateAgeGroupDisplay();
+  if (isMobilePanelLayout()) setMobilePanelView("life");
+
+  const url = new URL(window.location.href);
+  ["boundary", "item", "curve"].forEach(parameter => url.searchParams.delete(parameter));
+  window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
 
 regionSelect.addEventListener("change", () => {
   setHealthMarkersEnabled(true);
