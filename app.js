@@ -303,21 +303,37 @@ function buildBlcCurveApprovalExport() {
   };
 }
 
-function downloadBlcCurveApprovalManifest() {
+async function publishBlcCurveApprovalManifest() {
   if (!isLocalBlcEditor()) return;
-  let payload;
+  let manifest;
   try {
-    payload = `${JSON.stringify(buildBlcCurveApprovalExport(), null, 2)}\n`;
+    manifest = buildBlcCurveApprovalExport();
   } catch (error) {
     if (blcReleaseStatus) blcReleaseStatus.textContent = error.message;
     return;
   }
-  const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "curve-approvals-v1.json";
-  link.click();
-  URL.revokeObjectURL(url);
+
+  if (!window.confirm("Freigabemanifest prüfen, BLC-Export erzeugen, committen und zu GitHub pushen?")) return;
+  blcReleaseExportButton.disabled = true;
+  if (blcReleaseStatus) blcReleaseStatus.textContent = "Freigaben werden geprüft und veröffentlicht …";
+  try {
+    const response = await fetch("/api/blc/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(manifest)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Veröffentlichung fehlgeschlagen (${response.status}).`);
+    blcCurveApprovalManifest = manifest;
+    blcCurveApprovalDraft.clear();
+    blcCurveRoleDraft.clear();
+    if (blcReleaseStatus) blcReleaseStatus.textContent = result.message || "Freigaben wurden veröffentlicht.";
+    setBlcReleaseControl(activeBlcCurveApproval || {});
+  } catch (error) {
+    if (blcReleaseStatus) blcReleaseStatus.textContent = `${error.message} Starte das Panel mit: node scripts/serve-local.mjs`;
+  } finally {
+    blcReleaseExportButton.disabled = false;
+  }
 }
 
 function isMobilePanelLayout() {
@@ -4935,7 +4951,7 @@ scenarioSelect.addEventListener("change", event => {
 });
 blcReleaseSwitch?.addEventListener("change", updateActiveBlcCurveApproval);
 blcReleaseRole?.addEventListener("change", updateActiveBlcCurveRole);
-blcReleaseExportButton?.addEventListener("click", downloadBlcCurveApprovalManifest);
+blcReleaseExportButton?.addEventListener("click", publishBlcCurveApprovalManifest);
 timeSlider.addEventListener("input", event => {
   let year = Number(event.target.value);
   const context = getActiveKnowledgeContext();

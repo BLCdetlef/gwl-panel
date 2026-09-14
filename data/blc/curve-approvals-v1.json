@@ -92,6 +92,16 @@
       "curveId": "knowledge:data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json#global_plastics_production_1950_2019",
       "curveRole": "deep_dive",
       "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_oil_energy_pilot_v0.1b.json",
+      "seriesId": "global_oil_tes_1965_2025",
+      "boundaryId": "materials-energy",
+      "itemId": "oil",
+      "curveId": "knowledge:data/knowledge/gwl_oil_energy_pilot_v0.1b.json#global_oil_tes_1965_2025",
+      "curveRole": "deep_dive",
+      "status": "approved"
     }
   ]
 }

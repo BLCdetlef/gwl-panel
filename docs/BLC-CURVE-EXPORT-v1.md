@@ -65,10 +65,11 @@ Das erzeugte Paket `data/blc/blc-curve-export-v1.json` ist rein lesbar und enth�
 
 ## Komfortabler Redaktionsablauf
 
-1. GWL lokal über `localhost` öffnen.
+1. Den lokalen Redaktionsserver mit `node scripts/serve-local.mjs` starten und GWL über `http://localhost:4173` öffnen.
 2. Für jede geeignete Kurve ausdrücklich „Kernkurve“ oder „Vertiefende Studie“ auswählen.
 3. Die Kurve mit „Für BLC freigeben“ auswählen.
-4. `curve-approvals-v1.json` herunterladen und in `data/blc/` übernehmen.
+4. „Freigaben veröffentlichen“ anklicken und den Vorgang bestätigen. Der lokale Redaktionsserver führt die folgenden Schritte automatisch aus:
+
 5. Manifest prüfen:
 
    ```powershell
