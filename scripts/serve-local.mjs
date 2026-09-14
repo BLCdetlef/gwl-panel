@@ -8,7 +8,9 @@ import { fileURLToPath } from "node:url";
 const execFileAsync = promisify(execFile);
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = "127.0.0.1";
-const port = Number(process.argv[2] || process.env.GWL_EDITOR_PORT || 4173);
+const cliPort = process.argv.slice(2).find(argument => /^\d+$/.test(argument));
+const openBrowser = process.argv.includes("--open");
+const port = Number(cliPort || process.env.GWL_EDITOR_PORT || 4173);
 if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error("GWL_EDITOR_PORT muss ein gültiger lokaler Port sein.");
 const manifestPath = path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
 const exportPath = path.join(projectRoot, "data", "blc", "blc-curve-export-v1.json");
@@ -190,6 +192,10 @@ const server = http.createServer(async (request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`GWL-Redaktionsserver läuft auf http://localhost:${port}`);
+  const editorUrl = `http://localhost:${port}`;
+  console.log(`GWL-Redaktionsserver läuft auf ${editorUrl}`);
   console.log("Beenden mit Strg+C.");
+  if (openBrowser) execFile("explorer.exe", [editorUrl], { windowsHide: true }, error => {
+    if (error) console.warn(`Browser konnte nicht automatisch geöffnet werden: ${error.message}`);
+  });
 });
