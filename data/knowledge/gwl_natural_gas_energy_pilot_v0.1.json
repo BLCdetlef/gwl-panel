@@ -344,6 +344,7 @@
       "label": "Globale Energieversorgung aus Erdgas · Energy Institute 2026",
       "metric": "Globale Energieversorgung aus Erdgas",
       "unit": "TWh_per_year",
+      "worseningDirection": "increase",
       "period": "1965–2025",
       "dataStartYear": 1965,
       "dataEndYear": 2025,
