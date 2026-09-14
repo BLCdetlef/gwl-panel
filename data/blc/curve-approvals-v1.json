@@ -35,6 +35,16 @@
     {
       "kind": "knowledge",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
+      "seriesId": "blue_water_streamflow",
+      "boundaryId": "freshwater",
+      "itemId": "blue-water-streamflow",
+      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
       "seriesId": "green_water_rootzone_soil_moisture",
       "boundaryId": "freshwater",
       "itemId": "green-water-rootzone-soil-moisture",
@@ -44,12 +54,22 @@
     },
     {
       "kind": "knowledge",
-      "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
-      "seriesId": "blue_water_streamflow",
-      "boundaryId": "freshwater",
-      "itemId": "blue-water-streamflow",
-      "curveId": "knowledge:data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json#blue_water_streamflow",
+      "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
+      "seriesId": "global_forest_cover_1992_2022",
+      "boundaryId": "land",
+      "itemId": "global-forest-status",
+      "curveId": "knowledge:data/knowledge/gwl_land_system_change_pilot_v0.1.json#global_forest_cover_1992_2022",
       "curveRole": "core",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_natural_gas_energy_pilot_v0.1.json",
+      "seriesId": "global_gas_tes_1965_2025",
+      "boundaryId": "materials-energy",
+      "itemId": "natural-gas",
+      "curveId": "knowledge:data/knowledge/gwl_natural_gas_energy_pilot_v0.1.json#global_gas_tes_1965_2025",
+      "curveRole": "deep_dive",
       "status": "approved"
     },
     {
@@ -85,21 +105,11 @@
     },
     {
       "kind": "knowledge",
-      "source": "data/knowledge/gwl_land_system_change_pilot_v0.1.json",
-      "seriesId": "global_forest_cover_1992_2022",
-      "boundaryId": "land",
-      "itemId": "global-forest-status",
-      "curveId": "knowledge:data/knowledge/gwl_land_system_change_pilot_v0.1.json#global_forest_cover_1992_2022",
-      "curveRole": "core",
-      "status": "approved"
-    },
-    {
-      "kind": "knowledge",
-      "source": "data/knowledge/gwl_natural_gas_energy_pilot_v0.1.json",
-      "seriesId": "global_gas_tes_1965_2025",
+      "source": "data/knowledge/gwl_oil_energy_pilot_v0.1b.json",
+      "seriesId": "global_oil_tes_1965_2025",
       "boundaryId": "materials-energy",
-      "itemId": "natural-gas",
-      "curveId": "knowledge:data/knowledge/gwl_natural_gas_energy_pilot_v0.1.json#global_gas_tes_1965_2025",
+      "itemId": "oil",
+      "curveId": "knowledge:data/knowledge/gwl_oil_energy_pilot_v0.1b.json#global_oil_tes_1965_2025",
       "curveRole": "deep_dive",
       "status": "approved"
     },
@@ -130,16 +140,6 @@
       "boundaryId": "materials-energy",
       "itemId": "wind",
       "curveId": "knowledge:data/knowledge/gwl_wind_energy_pilot_v0.1.json#global_wind_tes_1965_2025",
-      "curveRole": "deep_dive",
-      "status": "approved"
-    },
-    {
-      "kind": "knowledge",
-      "source": "data/knowledge/gwl_oil_energy_pilot_v0.1b.json",
-      "seriesId": "global_oil_tes_1965_2025",
-      "boundaryId": "materials-energy",
-      "itemId": "oil",
-      "curveId": "knowledge:data/knowledge/gwl_oil_energy_pilot_v0.1b.json#global_oil_tes_1965_2025",
       "curveRole": "deep_dive",
       "status": "approved"
     }
