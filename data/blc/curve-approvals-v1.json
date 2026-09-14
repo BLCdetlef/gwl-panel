@@ -24,6 +24,16 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
+      "seriesId": "global_coal_tes_1965_2025",
+      "boundaryId": "materials-energy",
+      "itemId": "coal",
+      "curveId": "knowledge:data/knowledge/gwl_coal_energy_pilot_v0.1.json#global_coal_tes_1965_2025",
+      "curveRole": "deep_dive",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
       "seriesId": "green_water_rootzone_soil_moisture",
       "boundaryId": "freshwater",
