@@ -37,6 +37,16 @@ function sendProgress(response, payload) {
   response.write(`${JSON.stringify(payload)}\n`);
 }
 
+function conciseProcessError(error) {
+  const raw = String(error.stderr || error.message || error).trim();
+  const errorLine = raw.match(/Error:\s*(?:\r?\n)?([^\r\n]+)/)?.[1]?.trim();
+  const message = errorLine || raw;
+  if (message.includes("worseningDirection muss increase oder decrease sein")) {
+    return `${message.split(": worseningDirection")[0]}: Fachliche Richtung fehlt. Vor der Freigabe muss geklärt werden, ob höhere oder niedrigere Werte ungünstiger sind.`;
+  }
+  return message;
+}
+
 async function run(command, args, cwd = projectRoot) {
   return execFileAsync(command, args, { cwd, windowsHide: true, maxBuffer: 10 * 1024 * 1024 });
 }
@@ -149,7 +159,7 @@ async function publishApprovals(request, response) {
       await fs.writeFile(blcImportPath, previousBlcImport);
       await run("git", ["reset", "--quiet", "--", blcImportRelativePath], blcRoot).catch(() => {});
     }
-    sendProgress(response, { type: "error", stage: activeStage, status: "failed", error: String(error.stderr || error.message || error).trim() });
+    sendProgress(response, { type: "error", stage: activeStage, status: "failed", error: conciseProcessError(error) });
     response.end();
   }
 }
