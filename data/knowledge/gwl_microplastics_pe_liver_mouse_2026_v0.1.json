@@ -1,14 +1,14 @@
 {
   "format": "gwl-knowledge-network-v1.3",
   "version": "0.1",
-  "topic": "Polyethylen-Mikroplastik und Leberveränderungen · Mausstudie 2026",
+  "topic": "PE-Mikroplastik verstärkt Leberveränderungen im Mausmodell · Studie 2026",
   "status": "peer_reviewed_animal_experiment",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
     "systemBoundary": "Planetare Grenzen",
     "domainComponent": "Neue Substanzen",
-    "subComponent": "PE-Mikroplastik · Leberwirkung 2026",
-    "contributionRole": "experimental_health_pathway_without_human_burden",
+    "subComponent": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
+    "contributionRole": "deepening_with_organ",
     "effectFocus": "Experimentelle Untersuchung von Polyethylen-Mikroplastik auf Leberfunktion, Lipidstoffwechsel, Histopathologie und Ppara-Anxa2-Signalwege bei männlichen C57BL/6-Mäusen"
   },
   "corePrinciples": [
@@ -249,7 +249,7 @@
   ],
   "navigationRule": {
     "group": "Neue Substanzen",
-    "item": "PE-Mikroplastik · Leberwirkung Maus 2026",
+    "item": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
     "parentId": "plastics_petrochemicals_global",
     "classification": "health_pathway"
   },

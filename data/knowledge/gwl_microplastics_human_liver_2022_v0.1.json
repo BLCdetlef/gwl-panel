@@ -8,7 +8,7 @@
     "systemBoundary": "Planetare Grenzen",
     "domainComponent": "Neue Substanzen",
     "subComponent": "Mikroplastik · menschliche Leber 2022",
-    "contributionRole": "deepening_without_quantified_attributable_burden",
+    "contributionRole": "deepening_with_organ",
     "effectFocus": "Direkter Nachweis von Mikroplastik in menschlichem Lebergewebe; Vergleich von Personen mit Leberzirrhose und Personen ohne zugrunde liegende Lebererkrankung"
   },
   "corePrinciples": [
@@ -183,7 +183,7 @@
   ],
   "navigationRule": {
     "group": "Neue Substanzen",
-    "item": "Menschliche Leber · Nachweis 2022",
+    "item": "Mikroplastik · menschliche Leber 2022",
     "parentId": "plastics_petrochemicals_global",
     "classification": "study"
   },

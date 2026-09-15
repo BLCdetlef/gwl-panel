@@ -180,7 +180,7 @@
             },
             {
               "id": "microplastics-pe-liver-mouse-2026",
-              "label": "PE-Mikroplastik · Leberwirkung Maus 2026",
+              "label": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
               "type": "health_pathway",
               "parentId": "plastics_petrochemicals_global",
               "source": "data/knowledge/gwl_microplastics_pe_liver_mouse_2026_v0.1.json"
