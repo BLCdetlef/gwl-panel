@@ -170,6 +170,20 @@
               "label": "Kunststoffproduktion · global",
               "type": "deep_dive",
               "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
+            },
+            {
+              "id": "microplastics-human-liver-2022",
+              "label": "Mikroplastik · menschliche Leber 2022",
+              "type": "study",
+              "parentId": "plastics_petrochemicals_global",
+              "source": "data/knowledge/gwl_microplastics_human_liver_2022_v0.1.json"
+            },
+            {
+              "id": "microplastics-pe-liver-mouse-2026",
+              "label": "PE-Mikroplastik · Leberwirkung Maus 2026",
+              "type": "health_pathway",
+              "parentId": "plastics_petrochemicals_global",
+              "source": "data/knowledge/gwl_microplastics_pe_liver_mouse_2026_v0.1.json"
             }
           ]
         }
