@@ -1,0 +1,270 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Polyethylen-Mikroplastik und Leberveränderungen · Mausstudie 2026",
+  "status": "peer_reviewed_animal_experiment",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "PE-Mikroplastik · Leberwirkung 2026",
+    "contributionRole": "experimental_health_pathway_without_human_burden",
+    "effectFocus": "Experimentelle Untersuchung von Polyethylen-Mikroplastik auf Leberfunktion, Lipidstoffwechsel, Histopathologie und Ppara-Anxa2-Signalwege bei männlichen C57BL/6-Mäusen"
+  },
+  "corePrinciples": [
+    "Die Studie ist ein Tierexperiment und belegt keine Fettlebererkrankung durch Mikroplastik beim Menschen.",
+    "Männliche C57BL/6-Mäuse erhielten 2 mg Polyethylen-Mikroplastik pro Tier und Tag per Schlundsonde über 8 Wochen; die Partikel hatten 10–150 µm Durchmesser.",
+    "Polyethylen erhöhte Marker der Leberschädigung und verstärkte die hepatische Steatose; bei MASH-induzierender Ernährung wurden zusätzliche metabolische und histologische Veränderungen beobachtet.",
+    "Die experimentelle Dosis und Applikationsform sind nicht mit typischer menschlicher Alltagsaufnahme gleichzusetzen.",
+    "Die Leber erhält deshalb einen experimentellen Wirkungspfad, aber keine krankheitslastbasierte Organfärbung."
+  ],
+  "nodes": [
+    {
+      "id": "component_plastics",
+      "type": "domain_component",
+      "label": "Kunststoffe"
+    },
+    {
+      "id": "pressure_pe_microplastics",
+      "type": "pressure",
+      "label": "Polyethylen-Mikroplastik"
+    },
+    {
+      "id": "exposure_mouse_oral",
+      "type": "exposure",
+      "label": "Orale experimentelle Exposition bei Mäusen"
+    },
+    {
+      "id": "effect_hepatic_injury",
+      "type": "health_effect",
+      "label": "Leberschädigung"
+    },
+    {
+      "id": "effect_hepatic_steatosis",
+      "type": "health_effect",
+      "label": "Hepatische Steatose"
+    },
+    {
+      "id": "mechanism_ppara_anxa2",
+      "type": "mechanism",
+      "label": "Ppara–Anxa2-Signalweg"
+    },
+    {
+      "id": "organ_liver",
+      "type": "organ_system",
+      "label": "Leber"
+    }
+  ],
+  "edges": [
+    {
+      "from": "component_plastics",
+      "to": "pressure_pe_microplastics",
+      "relationType": "contains_polymer",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_pe_microplastics",
+      "to": "exposure_mouse_oral",
+      "relationType": "administered_as",
+      "evidenceStatus": "experimental"
+    },
+    {
+      "from": "exposure_mouse_oral",
+      "to": "effect_hepatic_injury",
+      "relationType": "caused_in_model",
+      "evidenceStatus": "animal_experimental"
+    },
+    {
+      "from": "exposure_mouse_oral",
+      "to": "effect_hepatic_steatosis",
+      "relationType": "increased_in_model",
+      "evidenceStatus": "animal_experimental"
+    },
+    {
+      "from": "exposure_mouse_oral",
+      "to": "mechanism_ppara_anxa2",
+      "relationType": "modulated",
+      "evidenceStatus": "animal_molecular"
+    },
+    {
+      "from": "effect_hepatic_injury",
+      "to": "organ_liver",
+      "relationType": "affects",
+      "evidenceStatus": "animal_experimental"
+    },
+    {
+      "from": "effect_hepatic_steatosis",
+      "to": "organ_liver",
+      "relationType": "affects",
+      "evidenceStatus": "animal_experimental"
+    },
+    {
+      "from": "mechanism_ppara_anxa2",
+      "to": "organ_liver",
+      "relationType": "localized_in",
+      "evidenceStatus": "animal_molecular"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "jung_2026_design",
+      "node": "exposure_mouse_oral",
+      "geography": "USA · University of Oklahoma · Tiermodell",
+      "period": "8 Wochen",
+      "metric": "Versuchsdesign",
+      "result": "Männliche C57BL/6-Mäuse; vier Gruppen mit Kontroll- oder MASH-induzierender Ernährung, jeweils mit oder ohne PE; n=4–5 pro Gruppe je nach Analyse",
+      "display": "4 Gruppen · 8 Wochen · männliche C57BL/6",
+      "interpretation": "Tierexperiment zur mechanistischen Untersuchung der PE-bedingten Leberwirkung.",
+      "sourceRefs": [
+        "src_jung_2026"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "jung_2026_pe_dose",
+      "node": "exposure_mouse_oral",
+      "geography": "Tiermodell",
+      "period": "täglich über 8 Wochen",
+      "metric": "Polyethylen-Mikroplastik-Dosis",
+      "value": 2,
+      "unit": "mg_per_mouse_per_day",
+      "display": "2 mg PE/Tier/Tag · 10–150 µm",
+      "result": "2 mg PE pro Tier und Tag, Partikeldurchmesser 10–150 µm, orale Gavage",
+      "interpretation": "Kontrollierte experimentelle Hochdosis zur Prüfung biologischer Effekte; nicht als Schätzung menschlicher Alltagsaufnahme verwenden.",
+      "uncertainty": "Direkte Übertragung der Dosis auf Menschen ist nicht zulässig; Expositionsweg, Körpergröße, Partikelmischung und reale Umweltbelastung unterscheiden sich.",
+      "sourceRefs": [
+        "src_jung_2026"
+      ],
+      "displayType": "experimental_exposure"
+    },
+    {
+      "id": "jung_2026_alt",
+      "node": "effect_hepatic_injury",
+      "geography": "Tiermodell",
+      "period": "nach 8 Wochen",
+      "metric": "Serum-ALT als Marker der Leberschädigung",
+      "result": "PE erhöhte Serum-ALT sowohl bei Kontroll- als auch bei MASH-induzierender Ernährung",
+      "display": "ALT ↑ durch PE",
+      "interpretation": "Hinweis auf experimentell induzierte Leberschädigung in beiden Ernährungsbedingungen.",
+      "sourceRefs": [
+        "src_jung_2026"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "jung_2026_histology",
+      "node": "effect_hepatic_steatosis",
+      "geography": "Tiermodell",
+      "period": "nach 8 Wochen",
+      "metric": "Leberhistologie",
+      "result": "Erhöhte hepatische Steatose in PE-behandelten Gruppen; zunehmender Trend bei hepatocellulärem Ballooning und lobulärer Entzündung; PE verschärfte die diätinduzierte Steatohepatitis",
+      "display": "Steatose ↑ · Entzündung/Ballooning Trend ↑",
+      "interpretation": "Experimenteller Leberphänotyp im Mausmodell, kein Humanbeleg.",
+      "uncertainty": "Kleine Tiergruppen und modellabhängige Effekte; keine Aussage zur Häufigkeit oder Krankheitslast beim Menschen.",
+      "sourceRefs": [
+        "src_jung_2026"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "jung_2026_ppara_anxa2",
+      "node": "mechanism_ppara_anxa2",
+      "geography": "Mausleber · räumliche Transkriptomik",
+      "period": "nach 8 Wochen",
+      "metric": "Molekularer Signalweg",
+      "result": "PE veränderte nukleäre Rezeptor-Signale; Ppara wurde als Regulator von Anxa2 identifiziert, mit räumlich ausgeprägten Entzündungs- und Schadensmustern",
+      "display": "Ppara → Anxa2",
+      "interpretation": "Mechanistischer Befund zur PE-bedingten Störung der hepatischen Homöostase.",
+      "sourceRefs": [
+        "src_jung_2026"
+      ],
+      "displayType": "mechanistic_evidence"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_pe_mouse_liver",
+      "label": "PE-Mikroplastik → orale Exposition → Leberschädigung/Steatose → Leber",
+      "nodes": [
+        "pressure_pe_microplastics",
+        "exposure_mouse_oral",
+        "effect_hepatic_injury",
+        "effect_hepatic_steatosis",
+        "organ_liver"
+      ],
+      "evidenceStatus": "animal_experimental",
+      "caution": "Tierexperiment; nicht als Beweis einer Fettlebererkrankung durch Mikroplastik beim Menschen darstellen."
+    },
+    {
+      "id": "path_pe_ppara_anxa2",
+      "label": "PE-Mikroplastik → veränderte hepatische Signalwege → Ppara–Anxa2",
+      "nodes": [
+        "pressure_pe_microplastics",
+        "exposure_mouse_oral",
+        "mechanism_ppara_anxa2",
+        "organ_liver"
+      ],
+      "evidenceStatus": "animal_molecular",
+      "caution": "Mechanistischer Tierbefund; Humanrelevanz muss separat geprüft werden."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "animal_experimental_pathway_without_human_attributable_burden",
+    "markerSignals": [
+      {
+        "organ": "liver",
+        "signalType": "animal_experimental_effect",
+        "fillStatus": "no_human_burden_fill",
+        "label": "PE-Mikroplastik verursachte im Mausmodell Leberveränderungen",
+        "note": "Experimenteller Tierbefund mit erhöhter ALT, Steatose und molekularen Veränderungen; kein Humanbeweis und keine quantifizierte menschliche Krankheitslast.",
+        "sourceRefs": [
+          "src_jung_2026"
+        ]
+      }
+    ],
+    "systemImpacts": [
+      {
+        "system": "liver",
+        "label": "Leber",
+        "evidenceStatus": "animal_experimental",
+        "note": "Experimentell belegter Organbezug im Mausmodell."
+      }
+    ],
+    "bodymapRule": "Leber als experimentellen Tier-Wirkungspfad kennzeichnen, aber nicht krankheitslastbasiert einfärben. Humaner Gewebenachweis und Tierexperiment bleiben als getrennte Evidenzstufen sichtbar."
+  },
+  "sources": [
+    {
+      "id": "src_jung_2026",
+      "title": "Spatial transcriptome mapping identifies Ppara-Anxa2 cross-talk in microplastic-induced hepatotoxicity",
+      "authors": "Jung W, Abushukair H, Patil NY, Ampadu F, Firouzi M, Rus I, Choi J, et al.",
+      "publisher": "Science Advances",
+      "year": 2026,
+      "type": "peer_reviewed_animal_experiment_and_spatial_transcriptomics",
+      "url": "https://doi.org/10.1126/sciadv.aec8681",
+      "doi": "10.1126/sciadv.aec8681",
+      "pmid": "42308314",
+      "pmcid": "PMC13274612",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Neue Substanzen",
+    "item": "PE-Mikroplastik · Leberwirkung Maus 2026",
+    "parentId": "plastics_petrochemicals_global",
+    "classification": "health_pathway"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Kontrolliertes 8-Wochen-Tierexperiment ohne zeitliche Bevölkerungsreihe.",
+    "panelRule": "Keinen historischen Zeitverlauf erzeugen. Dosis, Dauer, Ernährung, Organwirkung und Evidenzstufe zeigen."
+  },
+  "presentation": {
+    "primaryMeasurementId": "jung_2026_histology",
+    "referenceLabel": "Tierexperiment · keine Human-Kausalität",
+    "finding": "Bei männlichen C57BL/6-Mäusen führte tägliche orale Gabe von 2 mg Polyethylen-Mikroplastik (10–150 µm) über acht Wochen zu erhöhter Leberschädigung und Steatose und verschärfte eine diätinduzierte Steatohepatitis.",
+    "effectPath": "PE-Mikroplastik → orale Exposition → Leberschädigung und Steatose → räumlich veränderte Entzündungs- und Ppara–Anxa2-Signale → Leber",
+    "uncertainty": "Tierexperiment mit kleinen Gruppen und einer kontrollierten Dosis, die nicht einer typischen menschlichen Alltagsaufnahme entspricht. Keine Aussage zur menschlichen Krankheitslast oder zur Kausalität einer Fettleber beim Menschen.",
+    "hidePrimaryMeasurementInKnowledgeView": false
+  }
+}

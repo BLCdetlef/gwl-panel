@@ -1,0 +1,204 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Mikroplastik in menschlichem Lebergewebe · Humanstudie 2022",
+  "status": "peer_reviewed_human_detection_study",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "Mikroplastik · menschliche Leber 2022",
+    "contributionRole": "deepening_without_quantified_attributable_burden",
+    "effectFocus": "Direkter Nachweis von Mikroplastik in menschlichem Lebergewebe; Vergleich von Personen mit Leberzirrhose und Personen ohne zugrunde liegende Lebererkrankung"
+  },
+  "corePrinciples": [
+    "Die Studie belegt Mikroplastik in untersuchtem menschlichem Lebergewebe von Personen mit Leberzirrhose.",
+    "Sie belegt nicht, dass Mikroplastik die Zirrhose verursacht hat.",
+    "Die Autoren lassen ausdrücklich offen, ob die Anreicherung Ursache, Folge oder Begleiterscheinung von Zirrhose beziehungsweise portaler Hypertension ist.",
+    "Die kleine Proof-of-concept-Fallserie ist kein Maß für die Häufigkeit in der Allgemeinbevölkerung und liefert keine zurechenbare Krankheitslast.",
+    "Der Leberbezug wird als Gewebenachweis dargestellt; daraus wird keine Organfärbung nach Krankheitslast abgeleitet."
+  ],
+  "nodes": [
+    {
+      "id": "component_plastics",
+      "type": "domain_component",
+      "label": "Kunststoffe"
+    },
+    {
+      "id": "pressure_microplastics",
+      "type": "pressure",
+      "label": "Mikroplastik"
+    },
+    {
+      "id": "internal_exposure_human",
+      "type": "exposure",
+      "label": "Innere Exposition beim Menschen"
+    },
+    {
+      "id": "finding_human_liver_mp",
+      "type": "study_finding",
+      "label": "Mikroplastik in menschlichem Lebergewebe nachgewiesen"
+    },
+    {
+      "id": "condition_cirrhosis",
+      "type": "health_context",
+      "label": "Leberzirrhose"
+    },
+    {
+      "id": "organ_liver",
+      "type": "organ_system",
+      "label": "Leber"
+    }
+  ],
+  "edges": [
+    {
+      "from": "component_plastics",
+      "to": "pressure_microplastics",
+      "relationType": "can_generate",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_microplastics",
+      "to": "internal_exposure_human",
+      "relationType": "can_reach_human_tissues",
+      "evidenceStatus": "human_detection"
+    },
+    {
+      "from": "internal_exposure_human",
+      "to": "finding_human_liver_mp",
+      "relationType": "detected_as",
+      "evidenceStatus": "human_detection"
+    },
+    {
+      "from": "finding_human_liver_mp",
+      "to": "organ_liver",
+      "relationType": "detected_in",
+      "evidenceStatus": "human_detection"
+    },
+    {
+      "from": "condition_cirrhosis",
+      "to": "finding_human_liver_mp",
+      "relationType": "associated_with_higher_detection",
+      "evidenceStatus": "small_case_series_association"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "horvatits_2022_design",
+      "node": "finding_human_liver_mp",
+      "geography": "Deutschland",
+      "period": "Publikation 2022",
+      "metric": "Proof-of-concept-Fallserie",
+      "result": "6 Personen mit Leberzirrhose, 5 Personen ohne zugrunde liegende Lebererkrankung; 11 Leberproben, zusätzlich 3 Nieren- und 3 Milzproben",
+      "display": "11 Leberproben · 6 Zirrhose / 5 ohne Lebererkrankung",
+      "interpretation": "Kleine Humanstudie zum direkten Gewebenachweis, nicht zur Bestimmung einer Bevölkerungsprävalenz oder Krankheitslast.",
+      "sourceRefs": [
+        "src_horvatits_2022"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "horvatits_2022_liver_detection",
+      "node": "finding_human_liver_mp",
+      "geography": "Deutschland · menschliches Lebergewebe",
+      "period": "2022",
+      "metric": "Mikroplastik-Nachweis im Lebergewebe",
+      "result": "Blank-korrigiert 3,2–9,9 Partikel/g in zirrhotischen Leberproben; 0,0–1,5 Partikel/g in Leberproben ohne zugrunde liegende Lebererkrankung",
+      "display": "Zirrhose: 3,2–9,9 Partikel/g",
+      "interpretation": "Identifiziert wurden PS, PVC, PET, PMMA, POM und PP. Die Studie zeigt einen Gewebenachweis und eine Assoziation mit Zirrhose, aber keine Richtung der Kausalität.",
+      "uncertainty": "Kleine Fallserie; Mikroplastikmessungen sind kontaminationssensitiv. Zirrhose kann selbst die Anreicherung beeinflussen. Keine Aussage darüber, ob Mikroplastik Fibrose oder Zirrhose verursacht.",
+      "sourceRefs": [
+        "src_horvatits_2022"
+      ],
+      "displayType": "study_evidence"
+    },
+    {
+      "id": "horvatits_2022_particle_size",
+      "node": "finding_human_liver_mp",
+      "geography": "Deutschland · untersuchte menschliche Gewebe",
+      "period": "2022",
+      "metric": "Partikelgröße im menschlichen Gewebe",
+      "result": "3,0–29,5 µm; Median 9,8 µm",
+      "display": "3,0–29,5 µm",
+      "interpretation": "Der analytische Ansatz erfasste Mikroplastik im untersuchten Größenbereich; kleinere Nano- und Mikroplastikfraktionen werden damit nicht vollständig erfasst.",
+      "sourceRefs": [
+        "src_horvatits_2022"
+      ],
+      "displayType": "study_evidence"
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_microplastics_human_liver_detection",
+      "label": "Kunststoff → Mikroplastik → innere Exposition → Nachweis im Lebergewebe",
+      "nodes": [
+        "component_plastics",
+        "pressure_microplastics",
+        "internal_exposure_human",
+        "finding_human_liver_mp",
+        "organ_liver"
+      ],
+      "evidenceStatus": "human_tissue_detection",
+      "caution": "Der Gewebenachweis ist kein Beleg dafür, dass Mikroplastik eine Lebererkrankung verursacht."
+    }
+  ],
+  "healthContext": {
+    "bodymapStatus": "tissue_detection_without_quantified_attributable_burden",
+    "markerSignals": [
+      {
+        "organ": "liver",
+        "signalType": "tissue_detection",
+        "fillStatus": "no_burden_fill",
+        "label": "Mikroplastik in zirrhotischem menschlichem Lebergewebe nachgewiesen",
+        "note": "Humaner Gewebenachweis; Ursache-Wirkung zur Zirrhose ungeklärt. Keine quantifizierte zurechenbare Krankheitslast.",
+        "sourceRefs": [
+          "src_horvatits_2022"
+        ]
+      }
+    ],
+    "systemImpacts": [
+      {
+        "system": "liver",
+        "label": "Leber",
+        "evidenceStatus": "human_tissue_detection",
+        "note": "Direkter Gewebenachweis in einer kleinen Fallserie; keine Kausalitätsaussage."
+      }
+    ],
+    "bodymapRule": "Leber nur als geprüften Gewebenachweis markieren. Keine krankheitslastbasierte Organfärbung und keine Darstellung von Zirrhose als durch Mikroplastik verursacht."
+  },
+  "sources": [
+    {
+      "id": "src_horvatits_2022",
+      "title": "Microplastics detected in cirrhotic liver tissue",
+      "authors": "Horvatits T, Tamminga M, Liu B, Sebode M, Carambia A, Fischer L, Püschel K, Huber S, Fischer EK",
+      "publisher": "eBioMedicine",
+      "year": 2022,
+      "type": "peer_reviewed_human_tissue_case_series",
+      "url": "https://doi.org/10.1016/j.ebiom.2022.104147",
+      "doi": "10.1016/j.ebiom.2022.104147",
+      "pmid": "35835713",
+      "pmcid": "PMC9386716",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Neue Substanzen",
+    "item": "Menschliche Leber · Nachweis 2022",
+    "parentId": "plastics_petrochemicals_global",
+    "classification": "study"
+  },
+  "timeSeries": [],
+  "timeNavigation": {
+    "status": "not_available",
+    "reason": "Einmalige kleine Fallserie ohne Zeitreihe.",
+    "panelRule": "Keinen Zeitverlauf erzeugen. Studiendesign, Gewebenachweis, Partikelgröße und Unsicherheit zeigen."
+  },
+  "presentation": {
+    "primaryMeasurementId": "horvatits_2022_liver_detection",
+    "referenceLabel": "Humaner Gewebenachweis · keine Kausalität",
+    "finding": "In dieser kleinen Fallserie wurden sechs Mikroplastik-Polymertypen in zirrhotischem menschlichem Lebergewebe nachgewiesen; die blank-korrigierten Konzentrationen lagen dort bei 3,2 bis 9,9 Partikeln pro Gramm Gewebe.",
+    "effectPath": "Kunststoff → Mikroplastik → innere Exposition → Lebergewebe; Zusammenhang mit Zirrhose beobachtet, Richtung der Kausalität offen",
+    "uncertainty": "Proof-of-concept mit 11 Leberproben. Nicht repräsentativ für die Bevölkerung; keine Aussage zur Ursache der Zirrhose und keine quantifizierte Krankheitslast.",
+    "hidePrimaryMeasurementInKnowledgeView": false
+  }
+}
