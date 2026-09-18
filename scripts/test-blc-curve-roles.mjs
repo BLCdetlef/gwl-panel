@@ -45,22 +45,28 @@ try {
 }
 
 if (manifest.format !== "gwl-blc-curve-approvals-v1" || manifest.version !== "1.1") throw new Error("Freigabemanifest muss Version 1.1 verwenden.");
-if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.7") throw new Error("Kurvenexport muss Version 1.7 verwenden.");
+if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== "1.8") throw new Error("Kurvenexport muss Version 1.8 verwenden.");
 if (curveExport.manifestVersion !== manifest.version) throw new Error("Manifestversion ging im Export verloren.");
 
 const expected = new Map([
   ["biosphere_hanpp_1910_2020", { curveRole: "core", domainType: "planetary_boundary", domainId: "biosphere_integrity", domainLabel: "Biosphärenintegrität" }],
   ["global_co2_noaa_annual", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
+  ["global_anthropogenic_erf_1750_2025", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
+  ["global_coal_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["green_water_rootzone_soil_moisture", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
   ["blue_water_streamflow", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
   ["nitrogen_fixation_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
   ["phosphorus_cropland_1961_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "nutrient_cycles", domainLabel: "Nährstoffkreisläufe" }],
   ["global_forest_cover_1992_2022", { curveRole: "core", domainType: "planetary_boundary", domainId: "land_system_change", domainLabel: "Land-System-Wandel" }],
+  ["global_gas_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }],
-  ["global_plastics_production_1950_2019", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }]
+  ["global_oil_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
+  ["global_plastics_production_1950_2019", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
+  ["global_solar_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
+  ["global_wind_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }]
 ]);
 
-if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error("Manifest und Export müssen alle neun freigegebenen Kurven enthalten.");
+if (manifest.approvedCurves.length !== expected.size || curveExport.curves.length !== expected.size) throw new Error(`Manifest und Export müssen alle ${expected.size} freigegebenen Kurven enthalten.`);
 for (const approval of manifest.approvedCurves) {
   const expectedCurve = expected.get(approval.seriesId);
   if (!expectedCurve) throw new Error(`${approval.seriesId}: unerwartete Freigabe.`);

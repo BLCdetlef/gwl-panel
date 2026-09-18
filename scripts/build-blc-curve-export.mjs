@@ -79,21 +79,66 @@ function normalizeKnownCrossing(point) {
   };
 }
 
-export function buildDisplayObservations(observations, thresholdAssessments, minimumGapYears = 5) {
-  const ordered = normalizePoints(observations);
+export function buildDisplayPoints(points, minimumGapYears, mandatoryYears = []) {
+  const ordered = normalizePoints(points);
   if (ordered.length < 2) return ordered;
-  const mandatoryYears = new Set([
+  const requiredYears = new Set([
     ordered[0].year,
     ordered.at(-1).year,
-    thresholdAssessments?.boundary?.firstCrossingPoint?.year,
-    thresholdAssessments?.highRisk?.firstCrossingPoint?.year
+    ...mandatoryYears
   ].filter(Number.isFinite));
-  const selected = ordered.filter(point => mandatoryYears.has(point.year));
+  const selected = ordered.filter(point => requiredYears.has(point.year));
   for (const point of ordered) {
-    if (mandatoryYears.has(point.year)) continue;
+    if (requiredYears.has(point.year)) continue;
     if (selected.every(existing => Math.abs(existing.year - point.year) >= minimumGapYears)) selected.push(point);
   }
   return selected.sort((a, b) => a.year - b.year);
+}
+
+export function buildDisplayObservations(observations, thresholdAssessments, minimumGapYears = 5) {
+  return buildDisplayPoints(observations, minimumGapYears, [
+    thresholdAssessments?.boundary?.firstCrossingPoint?.year,
+    thresholdAssessments?.highRisk?.firstCrossingPoint?.year
+  ]);
+}
+
+export function buildDisplaySegments(segments, minimumGapYears = 20) {
+  return segments.map(segment => ({
+    ...segment,
+    points: buildDisplayPoints(segment.points, minimumGapYears)
+  }));
+}
+
+function countSegmentPoints(segments) {
+  return segments.reduce((total, segment) => total + segment.points.length, 0);
+}
+
+function buildDisplayDerivation({ observations, displayObservations, observationIntervalYears, dataNature, historicalReconstruction, displayHistoricalReconstruction, projections, displayProjections }) {
+  const observed = dataNature === "observed";
+  return {
+    interpolation: false,
+    transformations: [],
+    observations: {
+      inputPointCount: observations.length,
+      outputPointCount: displayObservations.length,
+      intervalYears: observationIntervalYears,
+      rule: observed
+        ? "Nur vorhandene Originalmesswerte; mindestens fünf Jahre Abstand. Erster und letzter Messpunkt sowie belegte Grenzübertritte bleiben erhalten."
+        : "Nur vorhandene Werte der veröffentlichten wissenschaftlichen Schätzreihe; mindestens 20 Jahre Abstand. Erster und letzter Wert sowie belegte Grenzübertritte bleiben erhalten."
+    },
+    historicalReconstruction: {
+      inputPointCount: countSegmentPoints(historicalReconstruction),
+      outputPointCount: countSegmentPoints(displayHistoricalReconstruction),
+      intervalYears: 20,
+      rule: "Nur vorhandene Rekonstruktionswerte; mindestens 20 Jahre Abstand je Segment. Erster und letzter Wert jedes Segments bleiben erhalten."
+    },
+    projections: {
+      inputPointCount: countSegmentPoints(projections),
+      outputPointCount: countSegmentPoints(displayProjections),
+      intervalYears: 20,
+      rule: "Nur vorhandene Modellwerte qualifizierter Szenarien; mindestens 20 Jahre Abstand je Szenario. Erster und letzter Wert jedes Szenarios bleiben erhalten."
+    }
+  };
 }
 
 export function normalizeHistorical(series, firstObservationYear) {
@@ -126,8 +171,10 @@ function normalizeProjections(payload, observedSeries) {
       id: cleanText(projection.id) || "projection",
       ...(cleanText(projection.scenario) ? { scenario: projection.scenario } : {}),
       ...(cleanText(projection.scenarioLabel) ? { scenarioLabel: projection.scenarioLabel } : {}),
+      ...(cleanText(projection.period) ? { period: projection.period } : {}),
       ...(cleanText(projection.method) ? { method: projection.method } : {}),
       ...(cleanText(projection.uncertainty) ? { uncertainty: projection.uncertainty } : {}),
+      ...(cleanStringArray(projection.sourceRefs)?.length ? { sourceRefs: projection.sourceRefs } : {}),
       grade: (projection.assessment || payload.projectionAssessment).grade,
       points: normalizePoints(projection.points)
     }))
@@ -214,7 +261,22 @@ for (const approval of manifest.approvedCurves) {
     knownBoundaryCrossing: normalizedKnownBoundaryCrossing
   };
   const thresholdAssessments = thresholdCrossings.getThresholdAssessments(assessmentSeries);
-  const displayObservations = buildDisplayObservations(observations, thresholdAssessments);
+  const dataNature = cleanText(series.dataNature) || "observed";
+  const observationIntervalYears = dataNature === "observed" ? 5 : 20;
+  const displayObservations = buildDisplayObservations(observations, thresholdAssessments, observationIntervalYears);
+  const projections = normalizeProjections(payload, series);
+  const displayHistoricalReconstruction = buildDisplaySegments(historicalReconstruction);
+  const displayProjections = buildDisplaySegments(projections);
+  const displayDerivation = buildDisplayDerivation({
+    observations,
+    displayObservations,
+    observationIntervalYears,
+    dataNature,
+    historicalReconstruction,
+    displayHistoricalReconstruction,
+    projections,
+    displayProjections
+  });
 
   curves.push({
     curveId: approval.curveId,
@@ -228,6 +290,7 @@ for (const approval of manifest.approvedCurves) {
     metric: cleanText(series.metric) || cleanText(series.measure) || "",
     unit: cleanText(series.unit) || "",
     geography: cleanText(series.geography) || "Global",
+    dataNature,
     worseningDirection: series.worseningDirection,
     ...(cleanText(series.finding) ? { finding: series.finding } : {}),
     ...(cleanText(series.uncertainty) ? { uncertainty: series.uncertainty } : {}),
@@ -246,7 +309,10 @@ for (const approval of manifest.approvedCurves) {
     observations,
     displayObservations,
     historicalReconstruction,
-    projections: normalizeProjections(payload, series),
+    displayHistoricalReconstruction,
+    projections,
+    displayProjections,
+    displayDerivation,
     methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({
       year: Number(marker.year),
       ...(cleanText(marker.label) ? { label: marker.label } : {}),
@@ -259,7 +325,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.7",
+  version: "1.8",
   manifestVersion: manifest.version,
   curves
 };

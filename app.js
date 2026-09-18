@@ -1450,6 +1450,15 @@ function setStandardEffectBlocksVisible(visible) {
   });
 }
 
+function setKnowledgeTimeCardMode(network = null) {
+  const timeCard = timeSlider?.closest(".time-card");
+  const compact = network?.presentation?.gwlTimeSeriesDisplay === "link_only";
+  timeCard?.classList.toggle("is-blc-link-only", compact);
+  [contributionRoleCard, effectPath?.closest(".accordion"), uncertaintyValue?.closest(".accordion")]
+    .filter(Boolean)
+    .forEach(element => { element.style.display = compact ? "none" : ""; });
+}
+
 
 function setStandardFocusCardVisible(visible) {
   const focusCard =
@@ -2378,6 +2387,7 @@ function renderGenericKnowledgeView(network, indexEntry) {
   }
 
   const presentation = network.presentation || {};
+  if (presentation.hideKnowledgePanelInKnowledgeView === true) return "";
   const primaryMeasurement = getPrimaryKnowledgeMeasurement(network);
   const hiddenMeasurementIds = new Set(presentation.hiddenMeasurementIds || []);
   const measurements = (presentation.hidePrimaryMeasurementInKnowledgeView
@@ -2430,14 +2440,15 @@ function renderGenericKnowledgeView(network, indexEntry) {
 
       ${getSelectedFreshwaterRegion(network) ? "" : genericTimeSeriesCards(network)}
 
+      ${presentation.hidePathwaysInKnowledgeView ? "" : `
       <h3>WIRKUNGSPFADE</h3>
-      <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>
+      <div class="oil-boundary-links">${pathways || "<p>Noch keine Wirkungspfade hinterlegt.</p>"}</div>`}
 
       ${boundaryInteractions ? `<h3>VERBINDUNGEN ZU PLANETAREN GRENZEN</h3><div class="oil-boundary-links">${boundaryInteractions}</div>` : ""}
 
       ${network.sourcePolicy?.rule ? `<div class="extension-note"><strong>Quellenregel:</strong> ${network.sourcePolicy.rule}</div>` : ""}
 
-      <div class="extension-note"><strong>Gesundheitsbezug:</strong> ${genericHealthReadout(network)}</div>
+      ${presentation.hideHealthContextInKnowledgeView ? "" : `<div class="extension-note"><strong>Gesundheitsbezug:</strong> ${genericHealthReadout(network)}</div>`}
 
       <details>
         <summary>Quellen · frei zugänglich</summary>
@@ -2576,6 +2587,7 @@ function updateGroupOverviewRole() {
 
 function renderGroupOverview(boundary, item) {
   setBlcReleaseControl();
+  setKnowledgeTimeCardMode(null);
   updateGroupOverviewRole();
   const frameworkLabel = isEahExtension(boundary)
     ? "ERGÄNZENDER EINFLUSSBEREICH"
@@ -3144,6 +3156,7 @@ function getKnowledgeStatusLabel(network) {
 
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
+  setKnowledgeTimeCardMode(network);
 
   // Jede Knowledge-Ansicht beginnt ohne übernommene Kurvenfreigabe. Erst eine
   // anschließend geprüfte Zeitreihe darf den Schalter wieder sichtbar setzen.
@@ -3787,6 +3800,7 @@ function setDetails(item, point = null, noMeasurementYear = null) {
 }
 
 function renderTime(item) {
+  setKnowledgeTimeCardMode(null);
   const points = getTimePoints(item);
   const curveId = getStableLegacyCurveId(selectedBoundaryId, item);
   setShareControls({

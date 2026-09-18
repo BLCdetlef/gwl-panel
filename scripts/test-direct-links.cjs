@@ -8,7 +8,7 @@ const { readRequest, resolve, select } = require("../direct-link.js");
 const boundaries = [
   { id: "ocean", items: [{ id: "global-surface-aragonite-saturation" }] },
   { id: "biosphere", items: [{ id: "functional-integrity-hanpp" }] },
-  { id: "climate", items: [{ id: "global-warming" }] }
+  { id: "climate", items: [{ id: "global-warming" }, { id: "radiative-forcing" }] }
 ];
 
 const aragonite = readRequest("?boundary=ocean&item=global-surface-aragonite-saturation");
@@ -23,7 +23,8 @@ assert.equal(resolve(boundaries, aragonite).item.id, "global-surface-aragonite-s
 
 for (const request of [
   { boundaryId: "biosphere", itemId: "functional-integrity-hanpp" },
-  { boundaryId: "climate", itemId: "global-warming" }
+  { boundaryId: "climate", itemId: "global-warming" },
+  { boundaryId: "climate", itemId: "radiative-forcing" }
 ]) assert.equal(resolve(boundaries, request).status, "ok");
 
 assert.equal(resolve(boundaries, { boundaryId: "removed", itemId: "anything" }).status, "unknown_boundary");
@@ -55,4 +56,13 @@ assert.equal(panelItemId, "global-surface-aragonite-saturation");
 assert.equal(exported.boundaryId, "ocean");
 assert.equal(exported.itemId, panelItemId);
 
-console.log("GWL-Direktlinks gültig: Aragonit, weitere Grenzen, Fehlerfälle, Auswahlreihenfolge und Linkwechsel geprüft.");
+const climateGroup = index.systemBoundaries
+  .find(entry => entry.id === "planetary_boundaries").groups
+  .find(group => group.id === "climate_change");
+const forcingItemId = climateGroup.items.find(item => item.id === "radiative_forcing").id.replaceAll("_", "-");
+const forcingExport = curveExport.curves.find(curve => curve.seriesId === "global_anthropogenic_erf_1750_2025");
+assert.equal(forcingItemId, "radiative-forcing");
+assert.equal(forcingExport.boundaryId, "climate");
+assert.equal(forcingExport.itemId, forcingItemId);
+
+console.log("GWL-Direktlinks gültig: Aragonit, Strahlungsantrieb, weitere Grenzen, Fehlerfälle, Auswahlreihenfolge und Linkwechsel geprüft.");

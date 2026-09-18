@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.7") fail("Unbekanntes BLC-Exportformat; für getrennte Daten- und Darstellungsreihen ist Exportversion 1.7 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.8") fail("Unbekanntes BLC-Exportformat; für getrennte Daten- und Darstellungsreihen ist Exportversion 1.8 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 
@@ -32,6 +32,37 @@ const knowledgeIndex = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
 const allowedDomains = new Set(BLC_DOMAIN_DEFINITIONS.map(domain => `${domain.domainType}:${domain.domainId}`));
 const allowedThresholdStatuses = new Set(["crossed", "already_crossed_at_start", "not_crossed", "series_ends_before_known_crossing", "not_assessable"]);
+
+function pointKey(point) {
+  return `${Number(point?.year)}:${Number(point?.value)}`;
+}
+
+function countSegmentPoints(segments) {
+  return segments.reduce((total, segment) => total + (segment.points || []).length, 0);
+}
+
+function verifyDisplaySegments(curveId, fullSegments, displaySegments, label, minimumGapYears = 20) {
+  if (!Array.isArray(displaySegments) || displaySegments.length !== fullSegments.length) fail(`${curveId}: Darstellungssegmente für ${label} fehlen oder sind unvollständig.`);
+  const fullById = new Map(fullSegments.map(segment => [segment.id, segment]));
+  for (const displaySegment of displaySegments) {
+    const fullSegment = fullById.get(displaySegment.id);
+    if (!fullSegment) fail(`${curveId}: unbekanntes Darstellungssegment ${displaySegment.id} für ${label}.`);
+    const fullPoints = fullSegment.points || [];
+    const displayPoints = displaySegment.points || [];
+    if (!fullPoints.length || !displayPoints.length) fail(`${curveId}: leeres Segment für ${label}.`);
+    const originalPoints = new Set(fullPoints.map(pointKey));
+    if (displayPoints.some(point => !originalPoints.has(pointKey(point)))) fail(`${curveId}: ${label} enthält einen nicht belegten Zwischenwert.`);
+    if (pointKey(displayPoints[0]) !== pointKey(fullPoints[0]) || pointKey(displayPoints.at(-1)) !== pointKey(fullPoints.at(-1))) {
+      fail(`${curveId}: erster oder letzter Wert fehlt in ${label}.`);
+    }
+    for (let index = 1; index < displayPoints.length; index += 1) {
+      const gap = Number(displayPoints[index].year) - Number(displayPoints[index - 1].year);
+      const endpointsOnly = index === 1 && displayPoints.length === 2;
+      if (gap < minimumGapYears && !endpointsOnly) fail(`${curveId}: sichtbare Punkte für ${label} unterschreiten ${minimumGapYears} Jahre Abstand.`);
+    }
+  }
+}
+
 for (const curve of payload.curves) {
   if (!curve?.curveId || seen.has(curve.curveId)) fail(`Fehlende oder doppelte Kurven-ID: ${curve?.curveId || "–"}`);
   seen.add(curve.curveId);
@@ -57,6 +88,8 @@ for (const curve of payload.curves) {
   if (!Array.isArray(curve.displayObservations) || curve.displayObservations.length < 2) fail(`${curve.curveId}: Darstellungsreihe fehlt.`);
   const years = [...new Set(curve.observations.map(point => Number(point?.year)))].sort((a, b) => a - b);
   const displayYears = curve.displayObservations.map(point => Number(point?.year)).sort((a, b) => a - b);
+  if (!["observed", "assessed_model_estimate"].includes(curve.dataNature)) fail(`${curve.curveId}: Art der Hauptreihe fehlt oder ist ungültig.`);
+  const primaryIntervalYears = curve.dataNature === "observed" ? 5 : 20;
   const observationYearSet = new Set(years);
   if (displayYears.some(year => !observationYearSet.has(year))) fail(`${curve.curveId}: Darstellungsreihe enthält keinen Originalbeobachtungspunkt.`);
   if (displayYears[0] !== years[0] || displayYears.at(-1) !== years.at(-1)) fail(`${curve.curveId}: erster oder letzter Beobachtungspunkt fehlt in der Darstellungsreihe.`);
@@ -79,8 +112,25 @@ for (const curve of payload.curves) {
   }
   const mandatoryDisplayYears = new Set([years[0], years.at(-1), curve.thresholdAssessments.boundary.firstCrossingPoint?.year, curve.thresholdAssessments.highRisk.firstCrossingPoint?.year].filter(Number.isFinite));
   for (let index = 1; index < displayYears.length; index += 1) {
-    if (displayYears[index] - displayYears[index - 1] < 5 && !(mandatoryDisplayYears.has(displayYears[index]) && mandatoryDisplayYears.has(displayYears[index - 1]))) {
-      fail(`${curve.curveId}: sichtbare Beobachtungspunkte unterschreiten ohne fachliche Ausnahme den Mindestabstand von fünf Jahren.`);
+    if (displayYears[index] - displayYears[index - 1] < primaryIntervalYears && !(mandatoryDisplayYears.has(displayYears[index]) && mandatoryDisplayYears.has(displayYears[index - 1]))) {
+      fail(`${curve.curveId}: sichtbare Punkte der Hauptreihe unterschreiten ohne fachliche Ausnahme den Mindestabstand von ${primaryIntervalYears} Jahren.`);
+    }
+  }
+  verifyDisplaySegments(curve.curveId, curve.historicalReconstruction || [], curve.displayHistoricalReconstruction, "historische Rekonstruktionen");
+  verifyDisplaySegments(curve.curveId, curve.projections || [], curve.displayProjections, "Modellprojektionen");
+  const derivation = curve.displayDerivation;
+  if (!derivation || derivation.interpolation !== false || !Array.isArray(derivation.transformations) || derivation.transformations.length) {
+    fail(`${curve.curveId}: transparente Darstellungsherleitung ohne Interpolation fehlt.`);
+  }
+  const expectedDerivation = {
+    observations: [curve.observations.length, curve.displayObservations.length, primaryIntervalYears],
+    historicalReconstruction: [countSegmentPoints(curve.historicalReconstruction || []), countSegmentPoints(curve.displayHistoricalReconstruction || []), 20],
+    projections: [countSegmentPoints(curve.projections || []), countSegmentPoints(curve.displayProjections || []), 20]
+  };
+  for (const [kind, [inputPointCount, outputPointCount, intervalYears]] of Object.entries(expectedDerivation)) {
+    const rule = derivation[kind];
+    if (rule?.inputPointCount !== inputPointCount || rule?.outputPointCount !== outputPointCount || rule?.intervalYears !== intervalYears || typeof rule?.rule !== "string" || !rule.rule.trim()) {
+      fail(`${curve.curveId}: inkonsistente Darstellungsherleitung für ${kind}.`);
     }
   }
   if (curve.seriesId === "global_surface_omega_arag_oceansoda_1982_2021") {
@@ -113,6 +163,7 @@ for (const curve of payload.curves) {
     if (!["robust_scenario_projection", "qualified_scenario_projection"].includes(projection.grade)) {
       fail(`${curve.curveId}: nicht qualifizierte Projektion im Export.`);
     }
+    for (const sourceRef of projection.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Projektionsquelle ${sourceRef}.`);
   }
 }
 

@@ -28,9 +28,9 @@ expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series: { ...series, bo
 expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series, sourceIds: new Set() }, /unbekannte Referenzquelle dataset-source/);
 expectFailure({ sourcePath: BLUE_WATER_REFERENCE_SOURCE, series: { ...series, unit: "fraction" }, sourceIds }, /stimmt nicht exakt/);
 
-if (curveExport.version !== "1.7") throw new Error("Exportversion 1.7 wird erwartet.");
+if (curveExport.version !== "1.8") throw new Error("Exportversion 1.8 wird erwartet.");
 const coreCurves = curveExport.curves.filter(curve => curve.curveRole === "core");
-if (coreCurves.length !== 8) throw new Error("Export muss exakt acht freigegebene Kernkurven enthalten.");
+if (coreCurves.length !== 9) throw new Error("Export muss exakt neun freigegebene Kernkurven enthalten.");
 const blue = curveExport.curves.find(curve => curve.seriesId === "blue_water_streamflow");
 const hanpp = curveExport.curves.find(curve => curve.seriesId === "biosphere_hanpp_1910_2020");
 if (!blue?.sources?.some(source => source.id === "dataset-source") || blue.reference?.value !== 12.94) throw new Error("Blauwasser wurde nicht mit seiner Modellreferenz exportiert.");

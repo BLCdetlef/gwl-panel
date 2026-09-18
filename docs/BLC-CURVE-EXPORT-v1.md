@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 6. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.7
+Stand: 18. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.8
 
 ## Sicherheitsmodell
 
@@ -19,6 +19,10 @@ Exportversion 1.5 ändert ausschließlich die Eignungsregel für die Zeitabdecku
 Exportversion 1.6 ergänzt für jede Kurve die abgeleiteten `thresholdAssessments` für planetare Grenze und hohen Risikobereich. Zulässige Status sind `crossed`, `already_crossed_at_start`, `not_crossed`, `series_ends_before_known_crossing` und `not_assessable`. Referenzwert, Operator, Einheit sowie erster Überschreitungspunkt beziehungsweise zuletzt geprüfter Punkt werden mitgeführt. Die kurze Strichmarkierung im Diagramm bleibt eine Sonderdarstellung für `curveRole: core`; Vertiefungskurven können die Statuslogik später ohne diese Darstellung übernehmen.
 
 Exportversion 1.7 trennt vollständige Daten und sichtbare Stützpunkte. `observations` enthält weiterhin sämtliche freigegebenen Originalbeobachtungen und bleibt Grundlage für Linienverlauf und Statusberechnung. `displayObservations` enthält nur Originalpunkte mit grundsätzlich mindestens fünf Jahren Abstand. Erster und letzter Beobachtungspunkt sowie erstmals belegte Überschreitungen der planetaren Grenze und des hohen Risikobereichs bleiben zwingend erhalten; nur zwischen solchen fachlich notwendigen Punkten darf der Abstand ausnahmsweise kleiner sein. Es wird nicht interpoliert.
+
+Exportversion 1.8 überträgt dieselbe Trennung auf Rekonstruktionen und Modellierungen. `historicalReconstruction` und `projections` bleiben als vollständige Prüfgrundlage erhalten. Für sichtbare Punktmarken enthalten `displayHistoricalReconstruction` und `displayProjections` ausschließlich bereits vorhandene Werte mit grundsätzlich mindestens 20 Jahren Abstand je Segment beziehungsweise Szenario; erster und letzter vorhandener Wert bleiben erhalten. `displayDerivation` nennt für Messung, Rekonstruktion und Modellierung jeweils Eingangs- und Ausgangspunktzahl, Auswahlintervall und Auswahlregel. `interpolation: false` und eine leere Transformationsliste machen ausdrücklich kenntlich, dass weder Zwischenwerte erzeugt noch Werte für die Darstellung umgerechnet wurden.
+
+Die Art der durchgezogenen Hauptreihe wird mit `dataNature` ausdrücklich getrennt: `observed` bezeichnet direkte Beobachtungsreihen und verwendet grundsätzlich fünf Jahre Abstand zwischen sichtbaren Punkten; `assessed_model_estimate` bezeichnet veröffentlichte wissenschaftliche Schätzreihen und verwendet grundsätzlich 20 Jahre Abstand. Der Strahlungsantrieb ist der erste Anwendungsfall: Die vollständige jährliche IGCC-Reihe bleibt erhalten, wird aber nicht als direkte Messung bezeichnet. Fachlich notwendige Grenzübertritte bleiben in beiden Fällen sichtbar.
 
 Die optionalen Felder `finding`, `uncertainty` und `methodNote` werden aus der freigegebenen Hauptreihe übernommen. Auch historische Segmente dürfen `period`, `method` und `uncertainty` tragen. Dadurch bleiben insbesondere nicht validierte Niveauanschlüsse an einem sichtbaren Methodenwechsel Bestandteil des Übergabepakets; BLC darf solche Reihen weder automatisch verschieben noch lückenlos verbinden.
 
@@ -57,7 +61,7 @@ Freigabeversion 1.1 verlangt für jede freigegebene Zeitreihe genau eine ausdrü
 
 Die Rolle wird weder aus Kategorie, Beschriftung, Dateiname noch Kurvenwerten abgeleitet. Eine fehlende oder unbekannte Rolle sperrt Manifest und Export. Exportversion 1.3 übernimmt die Rolle unverändert pro Kurve; sie ist unabhängig von `domainType`, `domainId` und `domainLabel` und dient BLC26 später ausschließlich zur visuellen Gewichtung.
 
-Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche direkte Beobachtungspunkte. Die Zeitabdeckung von mindestens 50 Jahren darf sich aus der historischen Rekonstruktion und der anschließenden direkten Beobachtungsreihe zusammensetzen; Projektionen zählen nicht mit. Eine Rekonstruktion ersetzt niemals die verpflichtende Beobachtungsreihe. Die physische Richtung der Messgröße bleibt erhalten: Steigende Messwerte werden steigend, sinkende Messwerte sinkend ausgegeben.
+Eine reguläre BLC-Kurve benötigt mindestens fünf zeitlich unterschiedliche Punkte einer fachlich geeigneten Hauptreihe. Diese ist entweder eine direkte Beobachtungsreihe oder eine ausdrücklich als solche gekennzeichnete, veröffentlichte wissenschaftliche Schätzreihe. Die Zeitabdeckung von mindestens 50 Jahren darf sich aus historischer Rekonstruktion und anschließender Hauptreihe zusammensetzen; Projektionen zählen nicht mit. Eine Rekonstruktion ersetzt niemals die verpflichtende Hauptreihe. Die physische Richtung der Größe bleibt erhalten: Steigende Werte werden steigend, sinkende Werte sinkend ausgegeben.
 
 Grenzwerte des Planetary-Boundaries-Ansatzes werden als **Modellreferenz nach dem Modell der Planetaren Grenzen** bezeichnet und mit einer konkreten Quelle verbunden. Der Export stellt sie nicht als unumstrittene Naturgrenzen dar. Beobachtungsreihe, Modellreferenz und historische Rekonstruktionen tragen jeweils überprüfbare Quellenverweise.
 

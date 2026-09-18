@@ -12,8 +12,14 @@
           "items": [
             {
               "id": "global_warming",
-              "label": "Globale Erwärmung",
+              "label": "Atmosphärisches CO₂",
               "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json"
+            },
+            {
+              "id": "radiative_forcing",
+              "label": "Strahlungsantrieb",
+              "type": "control",
+              "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json"
             }
           ]
         },

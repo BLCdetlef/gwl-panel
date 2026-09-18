@@ -30,5 +30,7 @@ const exportedCo2 = curveExport.curves.find(curve => curve.seriesId === "global_
 if (!exportedCo2 || exportedCo2.curveRole !== "core" || exportedCo2.domainId !== "climate_change") throw new Error("Freigegebene CO₂-Kurve fehlt im BLC-Export.");
 if (exportedCo2.observations.length !== 47 || exportedCo2.observations[0].year !== 1979 || exportedCo2.observations.at(-1).year !== 2025) throw new Error("Direkte NOAA-Reihe ist im BLC-Export unvollständig.");
 if (exportedCo2.historicalReconstruction.length !== 1 || exportedCo2.historicalReconstruction[0].points.length !== 279 || exportedCo2.historicalReconstruction[0].points.at(-1).year !== 1978) throw new Error("Law-Dome-Rekonstruktion ist im BLC-Export nicht überlappungsfrei.");
+if (exportedCo2.displayHistoricalReconstruction.length !== 1 || exportedCo2.displayHistoricalReconstruction[0].points.length !== 14 || exportedCo2.displayHistoricalReconstruction[0].points[0].year !== 1700 || exportedCo2.displayHistoricalReconstruction[0].points.at(-1).year !== 1978) throw new Error("Law-Dome-Rekonstruktion ist nicht nachvollziehbar auf vorhandene 20-Jahres-Punkte reduziert.");
 if (exportedCo2.projections.length !== 5) throw new Error("CO₂-Projektionen fehlen im BLC-Export.");
-console.log("Law-Dome-CO₂-Datentest gültig: 297 Rekonstruktionswerte, Quellen, Unsicherheit und BLC-Schnitt geprüft.");
+if (exportedCo2.displayProjections.length !== 5 || exportedCo2.displayDerivation?.historicalReconstruction?.intervalYears !== 20) throw new Error("CO₂-Modelldarstellung oder Herleitung fehlt.");
+console.log("Law-Dome-CO₂-Datentest gültig: vollständige Daten, 20-Jahres-Darstellung, Quellen, Unsicherheit und BLC-Schnitt geprüft.");

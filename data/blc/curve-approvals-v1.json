@@ -24,6 +24,17 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json",
+      "seriesId": "global_anthropogenic_erf_1750_2025",
+      "boundaryId": "climate",
+      "itemId": "radiative-forcing",
+      "curveId": "knowledge:data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json#global_anthropogenic_erf_1750_2025",
+      "curveRole": "core",
+      "status": "approved",
+      "note": "IGCC-2025-Schätzreihe des gesamten anthropogenen effektiven Strahlungsantriebs; keine direkte Messreihe."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
       "seriesId": "global_coal_tes_1965_2025",
       "boundaryId": "materials-energy",

@@ -1,14 +1,15 @@
 {
   "format": "gwl-knowledge-network-v1.3",
   "version": "0.1-pilot",
-  "topic": "Klimawandel / globale Erwärmung / Erdsystemwärme",
+  "topic": "Klimawandel / atmosphärisches CO₂",
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
     "systemBoundary": "Planetare Grenzen",
     "domainComponent": "Klimawandel",
-    "subComponent": "Globale Erwärmung",
-    "effectFocus": "Atmosphärisches CO₂, globale Erwärmung und Hitzebelastung"
+    "subComponent": "Atmosphärisches CO₂",
+    "contributionRole": "pg_core",
+    "effectFocus": "Atmosphärische CO₂-Konzentration als Kontrollvariable der planetaren Grenze Klimawandel"
   },
   "corePrinciples": [
     "Klimawandel wird als Veränderung des Erdsystems dargestellt, nicht als einzelnes Wetterereignis.",
@@ -414,12 +415,22 @@
   ],
   "navigationRule": "Klimawandel bleibt eine Planetare Grenze. Gesundheitswirkungen werden nur über konkrete Expositionspfade in LEBEN aktiviert.",
   "presentation": {
-    "primaryMeasurementId": "global_temperature_2025",
     "primaryTimeSeriesId": "global_co2_noaa_annual",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hidePathwaysInKnowledgeView": true,
+    "hideHealthContextInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
+    "hiddenMeasurementIds": [
+      "global_temperature_2025",
+      "human_caused_warming_2011_2020",
+      "global_mean_sea_level_1999_2025",
+      "ocean_heat_content_1993_2025"
+    ],
     "referenceLabel": "Planetare Grenze: 350 ppm CO₂",
     "finding": "Die planetare Grenze Klimawandel wird im Planetary-Boundaries-Rahmen unter anderem über die atmosphärische CO₂-Konzentration kontrolliert. Die Grenze liegt bei 350 ppm; NOAA weist für 2025 ein globales Jahresmittel von 425,62 ppm aus.",
-    "effectPath": "CO₂-Anstieg → Erwärmung des Klimasystems → häufigere/intensivere Hitzeexposition → Belastung von Thermoregulation, Herz-Kreislauf-System und Nieren",
-    "uncertainty": "CO₂ ist eine Kontrollvariable der planetaren Grenze, nicht selbst eine direkte Gesundheitsdosis. Organwirkungen werden deshalb erst über konkrete Hitzeexpositionen dargestellt."
+    "effectPath": "Anthropogene CO₂-Emissionen → Anstieg der atmosphärischen CO₂-Konzentration → Belastung der planetaren Klimagrenze",
+    "uncertainty": "Die NOAA-Reihe ist ein globales Jahresmittel aus marinen Hintergrundstationen und kann durch Qualitätskontrollen geringfügig revidiert werden. Globale Temperatur, Ozeanwärme, Meeresspiegel und Gesundheitswirkungen sind getrennte Vertiefungen und keine Messwerte dieser Kontrollvariable."
   },
   "timeSeries": [
     {

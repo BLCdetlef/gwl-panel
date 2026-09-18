@@ -35,6 +35,8 @@ Ein Item kann enthalten:
 
 `timePoints[]` überschreiben bei Bedarf Werte des übergeordneten Items. Es werden nur tatsächlich hinterlegte Messpunkte angezeigt; zwischen ihnen wird nicht automatisch interpoliert.
 
+Eine Knowledge-Zeitreihe kann mit `dataNature` als `observed` oder `assessed_model_estimate` gekennzeichnet werden. Wissenschaftliche Schätzreihen müssen ihre Methode und Unsicherheit nennen und dürfen in Text, Legende und Punktdichte nicht als direkte Messungen erscheinen. Im BLC werden direkte Messreihen grundsätzlich höchstens alle fünf Jahre, wissenschaftliche Schätzreihen grundsätzlich höchstens alle 20 Jahre mit sichtbaren Punkten markiert; vollständige Reihen bleiben als Prüf- und Liniengrundlage erhalten.
+
 ## Projektionen
 
 Beobachtungen und Projektionen werden getrennt dargestellt. Ohne belastbare präzisierende Faktoren verwendet das Panel als Standard genau einen Projektionspfad: die Fortschreibung des jüngeren beobachteten Trends einer methodisch konsistenten Reihe. Trendfenster, jährliche Änderungsrate und Basisjahr müssen benannt werden. Geeignete veröffentlichte Fachszenarien oder belastbare Einflussfaktoren haben Vorrang; ein fachlich nicht fortschreibbarer Indikator erhält keine Projektion.

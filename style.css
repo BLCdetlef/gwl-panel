@@ -123,6 +123,13 @@ a { color: inherit; }
 .time-card.no-time-series .time-head,
 .time-card.no-time-series .scenario-controls { display: none !important; }
 .top-card.time-card.no-time-series { min-height: 58px; }
+.time-card.is-blc-link-only .time-head,
+.time-card.is-blc-link-only .scenario-controls,
+.time-card.is-blc-link-only .time-status,
+.time-card.is-blc-link-only .time-chart-wrap,
+.time-card.is-blc-link-only .slider-wrap { display: none !important; }
+.time-card.is-blc-link-only { min-height: 0; padding: 7px 10px; }
+.time-card.is-blc-link-only .curve-share-actions { margin: 0; }
 .blc-release-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; margin: 6px 0 4px; padding-top: 6px; border-top: 1px solid var(--line); }
 .blc-release-control[hidden] { display: none; }
 .blc-release-label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 10px; }
