@@ -37,6 +37,8 @@ Ein Item kann enthalten:
 
 Eine Knowledge-Zeitreihe kann mit `dataNature` als `observed` oder `assessed_model_estimate` gekennzeichnet werden. Wissenschaftliche Schätzreihen müssen ihre Methode und Unsicherheit nennen und dürfen in Text, Legende und Punktdichte nicht als direkte Messungen erscheinen. Im BLC werden direkte Messreihen grundsätzlich höchstens alle fünf Jahre, wissenschaftliche Schätzreihen grundsätzlich höchstens alle 20 Jahre mit sichtbaren Punkten markiert; vollständige Reihen bleiben als Prüf- und Liniengrundlage erhalten.
 
+Für jedes fachlich eigenständige Segment – Beobachtung, historische Rekonstruktion und einzelnes Modellszenario – kann `provenance` die genaue Herkunft dokumentieren: `sourceFile`, `sourceUrl`, `locator`, `fields`, `extraction` und `transformation`. Die Fundstelle benennt Tabelle oder Datenzeile und Spalten; die Verarbeitung hält ausdrücklich fest, ob Werte umgerechnet, interpoliert oder unverändert übernommen wurden. Das BLC zeigt diese Angaben nur für das jeweils ausgewählte Kurvensegment.
+
 ## Projektionen
 
 Beobachtungen und Projektionen werden getrennt dargestellt. Ohne belastbare präzisierende Faktoren verwendet das Panel als Standard genau einen Projektionspfad: die Fortschreibung des jüngeren beobachteten Trends einer methodisch konsistenten Reihe. Trendfenster, jährliche Änderungsrate und Basisjahr müssen benannt werden. Geeignete veröffentlichte Fachszenarien oder belastbare Einflussfaktoren haben Vorrang; ein fachlich nicht fortschreibbarer Indikator erhält keine Projektion.

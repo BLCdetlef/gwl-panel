@@ -285,6 +285,17 @@
       ],
       "methodNote": "5-Jahres-Stützwerte näherungsweise aus Planetary Health Check 2025, Fig. 37, abgelesen; 1961 und 2022 als Randjahre zusätzlich. Keine Interpolation und keine höhere Genauigkeit beansprucht.",
       "uncertainty": "Näherungsweises Ablesen aus der publizierten Abbildung; die Werte dienen der Trenddarstellung im GWL-Panel.",
+      "provenance": {
+        "sourceFile": "PlanetaryHealthCheck2025.pdf",
+        "sourceUrl": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+        "locator": "Figure 37 – Nitrogen inputs to agriculture; globale Zeitreihe 1961–2022.",
+        "fields": [
+          "x-Achse → Jahr",
+          "y-Achse → anthropogene Stickstofffixierung für die Landwirtschaft in Tg N/Jahr"
+        ],
+        "extraction": "Näherungsweise abgelesen wurden die Randjahre 1961 und 2022 sowie die vorhandenen 5-Jahres-Stützjahre 1965–2020.",
+        "transformation": "Grafisch abgelesene Näherungswerte, ohne Interpolation oder Einheitenumrechnung; die Anzeige kennzeichnet sie mit ≈."
+      },
       "points": [
         {
           "year": 1961,

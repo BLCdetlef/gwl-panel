@@ -463,6 +463,18 @@
       "sourceRefs": [
         "src_noaa_global_co2_2026"
       ],
+      "provenance": {
+        "sourceFile": "co2_annmean_gl.txt",
+        "sourceUrl": "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_gl.txt",
+        "locator": "Datentabelle ab Zeile 39; Spaltenüberschrift in Zeile 38.",
+        "fields": [
+          "year → Jahr",
+          "mean → CO₂-Jahresmittel in ppm",
+          "unc → publizierte Unsicherheit in ppm"
+        ],
+        "extraction": "Alle publizierten Jahreszeilen 1979–2025 wurden übernommen.",
+        "transformation": "Keine Umrechnung und keine Interpolation; der Dezimalpunkt wird nur für die deutsche Anzeige als Komma formatiert."
+      },
       "points": [
         {
           "year": 1979,
@@ -899,6 +911,17 @@
             "src_noaa_law_dome_2018",
             "src_rubino_2019"
           ],
+          "provenance": {
+            "sourceFile": "law2018splines-noaa.txt",
+            "sourceUrl": "https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/law/law2018splines-noaa.txt",
+            "locator": "Tabulatorgetrennte Datentabelle ab Zeile 120; Spalte 1 age_gas und Spalte 2 CO2spl.",
+            "fields": [
+              "age_gas → Kalenderjahr CE",
+              "CO2spl → publizierter 20-Jahres-Spline in ppm"
+            ],
+            "extraction": "Ausgelesen wurden die vorhandenen Jahreswerte 1700–1996; für den Anschluss an die NOAA-Messreihe exportiert BLC die Werte bis 1978.",
+            "transformation": "Keine Umrechnung und keine Interpolation; CO2spl ist bereits der von der Quelle publizierte geglättete 20-Jahres-Spline."
+          },
           "values": [
             {
               "year": 1700,
@@ -2120,6 +2143,17 @@
       "sourceRefs": [
         "src_ipcc_ar6_wgi_annex_iii"
       ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_AnnexIII.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+        "locator": "Tabelle AIII.2, Block CO₂ (ppm), Spalte SSP1-1.9, Zeilen 2030–2090.",
+        "fields": [
+          "Year → Jahr",
+          "SSP1-1.9 im CO₂-Block → Konzentration in ppm"
+        ],
+        "extraction": "Übernommen wurden die sieben publizierten Dekadenwerte 2030, 2040, 2050, 2060, 2070, 2080 und 2090.",
+        "transformation": "Keine Umrechnung und keine Interpolation."
+      },
       "points": [
         {
           "year": 2030,
@@ -2177,6 +2211,17 @@
       "sourceRefs": [
         "src_ipcc_ar6_wgi_annex_iii"
       ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_AnnexIII.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+        "locator": "Tabelle AIII.2, Block CO₂ (ppm), Spalte SSP1-2.6, Zeilen 2030–2090.",
+        "fields": [
+          "Year → Jahr",
+          "SSP1-2.6 im CO₂-Block → Konzentration in ppm"
+        ],
+        "extraction": "Übernommen wurden die sieben publizierten Dekadenwerte 2030, 2040, 2050, 2060, 2070, 2080 und 2090.",
+        "transformation": "Keine Umrechnung und keine Interpolation."
+      },
       "points": [
         {
           "year": 2030,
@@ -2234,6 +2279,17 @@
       "sourceRefs": [
         "src_ipcc_ar6_wgi_annex_iii"
       ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_AnnexIII.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+        "locator": "Tabelle AIII.2, Block CO₂ (ppm), Spalte SSP2-4.5, Zeilen 2030–2090.",
+        "fields": [
+          "Year → Jahr",
+          "SSP2-4.5 im CO₂-Block → Konzentration in ppm"
+        ],
+        "extraction": "Übernommen wurden die sieben publizierten Dekadenwerte 2030, 2040, 2050, 2060, 2070, 2080 und 2090.",
+        "transformation": "Keine Umrechnung und keine Interpolation."
+      },
       "points": [
         {
           "year": 2030,
@@ -2291,6 +2347,17 @@
       "sourceRefs": [
         "src_ipcc_ar6_wgi_annex_iii"
       ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_AnnexIII.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+        "locator": "Tabelle AIII.2, Block CO₂ (ppm), Spalte SSP3-7.0, Zeilen 2030–2090.",
+        "fields": [
+          "Year → Jahr",
+          "SSP3-7.0 im CO₂-Block → Konzentration in ppm"
+        ],
+        "extraction": "Übernommen wurden die sieben publizierten Dekadenwerte 2030, 2040, 2050, 2060, 2070, 2080 und 2090.",
+        "transformation": "Keine Umrechnung und keine Interpolation."
+      },
       "points": [
         {
           "year": 2030,
@@ -2348,6 +2415,17 @@
       "sourceRefs": [
         "src_ipcc_ar6_wgi_annex_iii"
       ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_AnnexIII.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_AnnexIII.pdf",
+        "locator": "Tabelle AIII.2, Block CO₂ (ppm), Spalte SSP5-8.5, Zeilen 2030–2090.",
+        "fields": [
+          "Year → Jahr",
+          "SSP5-8.5 im CO₂-Block → Konzentration in ppm"
+        ],
+        "extraction": "Übernommen wurden die sieben publizierten Dekadenwerte 2030, 2040, 2050, 2060, 2070, 2080 und 2090.",
+        "transformation": "Keine Umrechnung und keine Interpolation."
+      },
       "points": [
         {
           "year": 2030,

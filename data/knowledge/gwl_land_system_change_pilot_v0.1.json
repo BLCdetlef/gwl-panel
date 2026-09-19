@@ -301,6 +301,18 @@
         "src_phc_land_2025"
       ],
       "methodNote": "Die gestrichelte Rekonstruktion beruht auf Pongratz et al. (2008), die durchgezogene Hauptreihe auf Copernicus/ESA-CCI-Daten in der Auswertung des Planetary Health Check 2025. Das ◇ bei 1992 markiert den Methodenwechsel. Die beiden Werte für 1992 werden nicht verbunden: 71,1 % rekonstruiert und etwa 60,2 % satellitenbasiert. Unterschiedliche Walddefinitionen, räumliche Auflösungen und erfasste Landnutzungsprozesse verhindern eine unmittelbare Vergleichbarkeit.",
+      "provenance": {
+        "sourceFile": "PlanetaryHealthCheck2025.pdf",
+        "sourceUrl": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+        "locator": "Figure 28, globale Kurve der verbleibenden Waldfläche relativ zur potenziellen natürlichen Waldfläche, 1992–2022.",
+        "fields": [
+          "x-Achse → Jahr",
+          "globale Kurve → verbleibende Waldfläche in % der potenziellen natürlichen Waldfläche",
+          "2022 assessment value → gerundeter aktueller Wert"
+        ],
+        "extraction": "Näherungsweise abgelesen wurden die acht Stützjahre 1992, 1995, 2000, 2005, 2010, 2015, 2020 und 2022.",
+        "transformation": "1992–2020 sind grafisch abgelesene Näherungswerte; 2022 ist der berichtete Wert von rund 59 %. Keine Interpolation oder rechnerische Harmonisierung mit der historischen Rekonstruktion."
+      },
       "historicalSeries": [
         {
           "id": "pongratz_2008_historical_forest_reconstruction",
@@ -310,6 +322,18 @@
             "src_pongratz_2008",
             "src_pongratz_wdcc_dataset"
           ],
+          "provenance": {
+            "sourceFile": "BZE_51.pdf – Pongratz et al. (2008), A reconstruction of global agricultural areas and land cover for the last millennium",
+            "sourceUrl": "https://pure.mpg.de/pubman/item/item_994226_9/component/file_994225/BZE_51.pdf",
+            "locator": "Tabelle 2, Zeile Total forest; Spalten Potential vegetation, 1700 und 1992.",
+            "fields": [
+              "Total forest 1700 → 45,65 Mio. km²",
+              "Total forest 1992 → 34,60 Mio. km²",
+              "Potential vegetation / Total forest → 48,68 Mio. km²"
+            ],
+            "extraction": "Übernommen wurden die zwei publizierten globalen Summen für 1700 und 1992 sowie der gemeinsame Potenzialwald-Nenner.",
+            "transformation": "Berechnung Waldanteil = Total forest / 48,68 × 100; Ergebnis auf zwei Dezimalstellen gespeichert. Keine Interpolation und keine Anpassung an die Copernicus-/PHC-Reihe."
+          },
           "points": [
             {
               "year": 1700,

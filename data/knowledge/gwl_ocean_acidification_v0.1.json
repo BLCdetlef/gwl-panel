@@ -272,6 +272,18 @@
       "uncertainty": "OceanSODA ist eine beobachtungsbasierte Rasterrekonstruktion und keine direkte flächendeckende Messung. Die publizierte Unsicherheit der jährlichen globalen Mittelwerte beträgt ±0,014 Ωarag. Die hier dargestellten absoluten Jahreswerte verbinden die publizierten jährlichen Änderungen mit dem auf zwei Dezimalstellen publizierten Periodenmittel 3,11; daraus folgt zusätzlich eine Rundungsunsicherheit des absoluten Niveaus von mindestens ±0,005. Der Niveauanschluss an NOAA 1980 ist nicht abschließend validiert.",
       "methodNote": "Gestrichelt: NOAA/Jiang-Median von 14 bias-korrigierten CMIP6-Rekonstruktionen. Durchgezogen: OceanSODA-Beobachtungsrekonstruktion. Das ◇ bei 1982 markiert den Methodenwechsel. NOAA 1980 (3,196) und OceanSODA 1982 (3,258) werden nicht verbunden oder gegeneinander verschoben; der Abstand ist nicht als reale Zweijahresänderung zu lesen.",
       "sourceRefs": ["src_ma_2023_oceansoda_trends", "src_ma_2023_oceansoda_data"],
+      "provenance": {
+        "sourceFile": "OceanSODA-ETHZ_GRaCER_v2022b_annual_decomp_1982-2021.nc",
+        "sourceUrl": "https://www.research-collection.ethz.ch/bitstreams/a6050c2a-f05c-49eb-b0ec-b325e917621d/download",
+        "locator": "NetCDF-Jahresreihe 1982–2021 für den globalen eisfreien Oberflächenozean; Ωarag-Dekomposition der OceanSODA-ETHZ-Auswertung.",
+        "fields": [
+          "time coordinate → Jahr",
+          "jährliche Ωarag-Änderung/Dekomposition → zeitlicher Verlauf",
+          "publiziertes Periodenmittel Ωarag 3,11 → absolutes Niveau"
+        ],
+        "extraction": "Ausgelesen wurden alle 40 Jahreswerte 1982–2021 der globalen Ωarag-Reihe.",
+        "transformation": "Die publizierten jährlichen relativen Änderungen wurden auf das publizierte Periodenmittel 3,11 zentriert, um absolute Jahreswerte darzustellen. Keine zeitliche Interpolation; zusätzliche Niveauunsicherheit mindestens ±0,005 wegen des auf zwei Dezimalstellen publizierten Mittels."
+      },
       "historicalSeries": [
         {
           "id": "noaa_jiang_cmip6_omega_arag_1750_1980",
@@ -280,6 +292,17 @@
           "method": "Flächengewichtete globale Mittel aus dem Median von 14 bias-korrigierten CMIP6-Erdsystemmodellen",
           "uncertainty": "Modellrekonstruktion mit anderer Datengrundlage als OceanSODA. Der absolute Niveauanschluss am Methodenwechsel wurde nicht durch eine gemeinsame Kalibrierung validiert.",
           "sourceRefs": ["src_jiang_2023_oa_indicators"],
+          "provenance": {
+            "sourceFile": "NCEI Accession 0259391 → Median_Std_surface, Excel-Tabelle für Aragonite saturation state",
+            "sourceUrl": "https://www.ncei.noaa.gov/archive/accession/download/259391",
+            "locator": "Ordner Median_Std_surface; flächengewichtete globale Medianwerte für Aragonite saturation state, historischer Abschnitt 1750–1980.",
+            "fields": [
+              "year → Dekadenjahr",
+              "median Aragonite saturation state → globales Ωarag"
+            ],
+            "extraction": "Übernommen wurden der vorindustrielle Wert 1750 und die publizierten Dekadenwerte 1850–1980.",
+            "transformation": "Keine Umrechnung, Interpolation oder Anpassung an OceanSODA; die publizierten globalen Medianwerte werden unverändert übernommen."
+          },
           "points": [
             { "year": 1750, "value": 3.57146, "display": "Ωarag 3,571", "sourceRefs": ["src_jiang_2023_oa_indicators"] },
             { "year": 1850, "value": 3.47739, "display": "Ωarag 3,477", "sourceRefs": ["src_jiang_2023_oa_indicators"] },

@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "gwl://schema/blc-curve-export-v1.8",
-  "title": "GWL to BLC read-only curve export 1.8",
+  "$id": "gwl://schema/blc-curve-export-v1.9",
+  "title": "GWL to BLC read-only curve export 1.9",
   "type": "object",
   "additionalProperties": false,
   "required": ["format", "version", "manifestVersion", "curves", "integrity"],
   "properties": {
     "format": { "const": "gwl-blc-curve-export-v1" },
-    "version": { "const": "1.8" },
+    "version": { "const": "1.9" },
     "manifestVersion": { "type": "string" },
     "curves": {
       "type": "array",
@@ -94,6 +94,7 @@
           "observations": { "type": "array", "minItems": 5 },
           "displayObservations": { "type": "array", "minItems": 2 },
           "observationSourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "observationProvenance": { "$ref": "#/$defs/provenance" },
           "historicalReconstruction": { "type": "array" },
           "displayHistoricalReconstruction": { "type": "array" },
           "projections": { "type": "array" },
@@ -155,6 +156,19 @@
         "outputPointCount": { "type": "integer", "minimum": 0 },
         "intervalYears": { "type": "integer", "minimum": 1 },
         "rule": { "type": "string", "minLength": 1 }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceFile", "sourceUrl", "locator", "fields", "extraction", "transformation"],
+      "properties": {
+        "sourceFile": { "type": "string", "minLength": 1 },
+        "sourceUrl": { "type": "string", "pattern": "^https://" },
+        "locator": { "type": "string", "minLength": 1 },
+        "fields": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "extraction": { "type": "string", "minLength": 1 },
+        "transformation": { "type": "string", "minLength": 1 }
       }
     }
   }

@@ -200,6 +200,18 @@
           "label": "Historische Vorgängerrekonstruktion",
           "period": "1861–1900",
           "sourceId": "src_freshwater_porkka_2024",
+          "provenance": {
+            "sourceFile": "Porkka_et_al_NatWater_2024_data.zip → Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/streamflow/regionid_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+            "sourceUrl": "https://zenodo.org/records/10531807",
+            "locator": "Globaler streamflow-Ordner; summed deviations; Jahreswerte 1861–1900.",
+            "fields": [
+              "year → Jahr",
+              "ensemble median → Anteil der Landfläche",
+              "IQR minimum und maximum → Interquartilsbereich"
+            ],
+            "extraction": "Übernommen wurden die vorhandenen Quellwerte 1861, 1865, 1870, …, 1900.",
+            "transformation": "Quellanteile wurden mit 100 in Prozent umgerechnet und auf zwei Dezimalstellen gerundet; keine Interpolation."
+          },
           "values": [
             { "year": 1861, "value": 12.27, "iqrMin": 9.33, "iqrMax": 22.26 },
             { "year": 1865, "value": 12.26, "iqrMin": 9.73, "iqrMax": 17.47 },
@@ -216,6 +228,17 @@
       "methodBreaks": [{ "year": 1901 }],
       "provenance": {
         "originalFile": "PHC_dis_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "sourceFile": "PHC_dis_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "sourceUrl": "https://zenodo.org/records/19663531/files/PHC_dis_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv?download=1",
+        "locator": "Zeilen variable=dis, area=global, scenario=obsclim_histsoc_default und class=summed_deviations; Jahresfeld 1901–2019.",
+        "fields": [
+          "year → Jahr",
+          "ensemble_median → Anteil der eisfreien Landfläche",
+          "IQR_min und IQR_max → Interquartilsbereich",
+          "boundary_baseline und boundary_upper_end → Referenzbereich"
+        ],
+        "extraction": "Aus der jährlichen Quellreihe wurden die vorhandenen Werte für 1905, 1910, …, 2015 und das letzte Jahr 2019 übernommen.",
+        "transformation": "Quellanteile wurden mit 100 in Prozent umgerechnet und auf zwei Dezimalstellen gerundet; keine Interpolation und kein Ablesen aus einer Abbildung.",
         "variable": "dis",
         "area": "global",
         "scenario": "obsclim_histsoc_default",
@@ -413,6 +436,18 @@
           "label": "Historische Vorgängerrekonstruktion",
           "period": "1861–1900",
           "sourceId": "src_freshwater_porkka_2024",
+          "provenance": {
+            "sourceFile": "Porkka_et_al_NatWater_2024_data.zip → Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/soilmoisture/regionid_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+            "sourceUrl": "https://zenodo.org/records/10531807",
+            "locator": "Globaler soilmoisture-Ordner; summed deviations; Jahreswerte 1861–1900.",
+            "fields": [
+              "year → Jahr",
+              "ensemble median → Anteil der Landfläche",
+              "IQR minimum und maximum → Interquartilsbereich"
+            ],
+            "extraction": "Übernommen wurden die vorhandenen Quellwerte 1861, 1865, 1870, …, 1900.",
+            "transformation": "Quellanteile wurden mit 100 in Prozent umgerechnet und auf zwei Dezimalstellen gerundet; keine Interpolation."
+          },
           "values": [
             { "year": 1861, "value": 10.63, "iqrMin": 9.85, "iqrMax": 13.54 },
             { "year": 1865, "value": 12.74, "iqrMin": 10.86, "iqrMax": 13.53 },
@@ -429,6 +464,17 @@
       "methodBreaks": [{ "year": 1901 }],
       "provenance": {
         "originalFile": "PHC_rootmoist_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "sourceFile": "PHC_rootmoist_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+        "sourceUrl": "https://zenodo.org/records/19663531/files/PHC_rootmoist_global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv?download=1",
+        "locator": "Zeilen variable=rootmoist, area=global, scenario=obsclim_histsoc_default und class=summed_deviations; Jahresfeld 1901–2019.",
+        "fields": [
+          "year → Jahr",
+          "ensemble_median → Anteil der eisfreien Landfläche",
+          "IQR_min und IQR_max → Interquartilsbereich",
+          "boundary_baseline und boundary_upper_end → Referenzbereich"
+        ],
+        "extraction": "Aus der jährlichen Quellreihe wurden die vorhandenen Werte für 1905, 1910, …, 2015 und das letzte Jahr 2019 übernommen.",
+        "transformation": "Quellanteile wurden mit 100 in Prozent umgerechnet und auf zwei Dezimalstellen gerundet; keine Interpolation und kein Ablesen aus einer Abbildung.",
         "variable": "rootmoist",
         "area": "global",
         "scenario": "obsclim_histsoc_default",

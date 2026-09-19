@@ -14,7 +14,7 @@ const payload = JSON.parse(await fs.readFile(exportPath, "utf8"));
 
 const allowedTopFields = new Set(["format", "version", "manifestVersion", "curves", "integrity"]);
 for (const field of Object.keys(payload)) if (!allowedTopFields.has(field)) fail(`Unbekanntes Exportfeld: ${field}`);
-if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.8") fail("Unbekanntes BLC-Exportformat; für getrennte Daten- und Darstellungsreihen ist Exportversion 1.8 erforderlich.");
+if (payload.format !== "gwl-blc-curve-export-v1" || payload.version !== "1.9") fail("Unbekanntes BLC-Exportformat; für segmentbezogene Herkunftsnachweise ist Exportversion 1.9 erforderlich.");
 if (!Array.isArray(payload.curves)) fail("curves muss ein Array sein.");
 if (payload.integrity?.algorithm !== "SHA-256" || !/^[a-f0-9]{64}$/.test(payload.integrity?.hash || "")) fail("Ungültiger Integritätsblock.");
 

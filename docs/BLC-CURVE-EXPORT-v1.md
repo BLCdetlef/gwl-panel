@@ -1,6 +1,6 @@
 # Sicherer Kurvenexport GWL → BLC
 
-Stand: 18. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.8
+Stand: 19. September 2026 · Freigabevertrag 1.1 · Exportvertrag 1.9
 
 ## Sicherheitsmodell
 
@@ -21,6 +21,8 @@ Exportversion 1.6 ergänzt für jede Kurve die abgeleiteten `thresholdAssessment
 Exportversion 1.7 trennt vollständige Daten und sichtbare Stützpunkte. `observations` enthält weiterhin sämtliche freigegebenen Originalbeobachtungen und bleibt Grundlage für Linienverlauf und Statusberechnung. `displayObservations` enthält nur Originalpunkte mit grundsätzlich mindestens fünf Jahren Abstand. Erster und letzter Beobachtungspunkt sowie erstmals belegte Überschreitungen der planetaren Grenze und des hohen Risikobereichs bleiben zwingend erhalten; nur zwischen solchen fachlich notwendigen Punkten darf der Abstand ausnahmsweise kleiner sein. Es wird nicht interpoliert.
 
 Exportversion 1.8 überträgt dieselbe Trennung auf Rekonstruktionen und Modellierungen. `historicalReconstruction` und `projections` bleiben als vollständige Prüfgrundlage erhalten. Für sichtbare Punktmarken enthalten `displayHistoricalReconstruction` und `displayProjections` ausschließlich bereits vorhandene Werte mit grundsätzlich mindestens 20 Jahren Abstand je Segment beziehungsweise Szenario; erster und letzter vorhandener Wert bleiben erhalten. `displayDerivation` nennt für Messung, Rekonstruktion und Modellierung jeweils Eingangs- und Ausgangspunktzahl, Auswahlintervall und Auswahlregel. `interpolation: false` und eine leere Transformationsliste machen ausdrücklich kenntlich, dass weder Zwischenwerte erzeugt noch Werte für die Darstellung umgerechnet wurden.
+
+Exportversion 1.9 ergänzt segmentbezogene Herkunftsnachweise. `observationProvenance` sowie `provenance` an Rekonstruktions- und Projektionssegmenten nennen Quelldatei, direkten Datenlink, Fundstelle, verwendete Felder, ausgelesenen Bereich und etwaige Transformationen. BLC kann damit nach Auswahl eines Kurvensegments ausschließlich dessen technische Details anzeigen.
 
 Die Art der durchgezogenen Hauptreihe wird mit `dataNature` ausdrücklich getrennt: `observed` bezeichnet direkte Beobachtungsreihen und verwendet grundsätzlich fünf Jahre Abstand zwischen sichtbaren Punkten; `assessed_model_estimate` bezeichnet veröffentlichte wissenschaftliche Schätzreihen und verwendet grundsätzlich 20 Jahre Abstand. Der Strahlungsantrieb ist der erste Anwendungsfall: Die vollständige jährliche IGCC-Reihe bleibt erhalten, wird aber nicht als direkte Messung bezeichnet. Fachlich notwendige Grenzübertritte bleiben in beiden Fällen sichtbar.
 

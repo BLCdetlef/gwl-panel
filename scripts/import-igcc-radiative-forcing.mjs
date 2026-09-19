@@ -94,6 +94,18 @@ const payload = {
     uncertainty: "Abgeleitete IGCC-Schätzreihe mit 5–95-%-Unsicherheitsbereich; keine direkte Messreihe und keine Prognose.",
     methodNote: "IGCC-2025-Gesamtreihe 'anthro' nach IPCC-AR6-Methodik; jährliche Bestwerte aus ERF_best_aggregates.csv, Unsicherheiten aus ERF_p05_aggregates.csv und ERF_p95_aggregates.csv.",
     sourceRefs: ["src_igcc_2025_data", "src_igcc_2025_paper"],
+    provenance: {
+      sourceFile: "data/effective_radiative_forcing/ERF_best_aggregates.csv; ERF_p05_aggregates.csv; ERF_p95_aggregates.csv (ClimateIndicator/data-v2026.06.15.zip)",
+      sourceUrl: "https://github.com/ClimateIndicator/data/tree/v2026.06.15/data/effective_radiative_forcing",
+      locator: "Alle drei CSV-Dateien: Kopfzeile mit timebound_lower und anthro; Jahreszeilen 1750–2025.",
+      fields: [
+        "timebound_lower → Jahr",
+        "anthro in ERF_best_aggregates.csv → bester Schätzwert in W/m²",
+        "anthro in ERF_p05_aggregates.csv und ERF_p95_aggregates.csv → 5–95-%-Bereich"
+      ],
+      extraction: "Ausgelesen wurden die 276 gemeinsamen Jahreszeilen 1750–2025 für die Gesamtkategorie anthro.",
+      transformation: "Keine Interpolation und keine Einheitenumrechnung; Rechenwerte werden auf sechs Dezimalstellen gespeichert, die Anzeige auf zwei Dezimalstellen formatiert."
+    },
     points
   }],
   pathways: [],

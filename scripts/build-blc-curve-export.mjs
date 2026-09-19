@@ -21,6 +21,19 @@ const cleanText = value => typeof value === "string" ? value : undefined;
 const cleanStringArray = value => Array.isArray(value) ? value.filter(item => typeof item === "string") : undefined;
 const safeUrl = value => typeof value === "string" && /^https:\/\//i.test(value) ? value : undefined;
 
+function normalizeProvenance(provenance) {
+  if (!provenance || typeof provenance !== "object" || Array.isArray(provenance)) return undefined;
+  const normalized = {
+    ...(cleanText(provenance.sourceFile) ? { sourceFile: provenance.sourceFile } : {}),
+    ...(safeUrl(provenance.sourceUrl) ? { sourceUrl: provenance.sourceUrl } : {}),
+    ...(cleanText(provenance.locator) ? { locator: provenance.locator } : {}),
+    ...(cleanStringArray(provenance.fields)?.length ? { fields: provenance.fields } : {}),
+    ...(cleanText(provenance.extraction) ? { extraction: provenance.extraction } : {}),
+    ...(cleanText(provenance.transformation) ? { transformation: provenance.transformation } : {})
+  };
+  return Object.keys(normalized).length ? normalized : undefined;
+}
+
 function normalizeReference(reference, series, sourceIds) {
   if (!reference || typeof reference !== "object" || Array.isArray(reference)) return undefined;
   const sourceRefs = cleanStringArray(reference.sourceRefs);
@@ -152,6 +165,7 @@ export function normalizeHistorical(series, firstObservationYear) {
         ...(cleanText(segment.method) ? { method: segment.method } : {}),
         ...(cleanText(segment.uncertainty) ? { uncertainty: segment.uncertainty } : {}),
         ...(cleanText(segment.sourceId) ? { sourceRefs: [segment.sourceId] } : cleanStringArray(segment.sourceRefs)?.length ? { sourceRefs: segment.sourceRefs } : {}),
+        ...(normalizeProvenance(segment.provenance) ? { provenance: normalizeProvenance(segment.provenance) } : {}),
         points: normalizePoints(segment.points || segment.values).filter(point => !isLawDomeCo2 || point.year < firstObservationYear)
       };
     })
@@ -175,6 +189,7 @@ function normalizeProjections(payload, observedSeries) {
       ...(cleanText(projection.method) ? { method: projection.method } : {}),
       ...(cleanText(projection.uncertainty) ? { uncertainty: projection.uncertainty } : {}),
       ...(cleanStringArray(projection.sourceRefs)?.length ? { sourceRefs: projection.sourceRefs } : {}),
+      ...(normalizeProvenance(projection.provenance) ? { provenance: normalizeProvenance(projection.provenance) } : {}),
       grade: (projection.assessment || payload.projectionAssessment).grade,
       points: normalizePoints(projection.points)
     }))
@@ -302,6 +317,7 @@ for (const approval of manifest.approvedCurves) {
       pointCount: observationYears.length
     },
     observationSourceRefs,
+    ...(normalizeProvenance(series.provenance) ? { observationProvenance: normalizeProvenance(series.provenance) } : {}),
     ...(normalizedReference ? { reference: normalizedReference } : {}),
     ...(normalizedHighRisk ? { highRisk: normalizedHighRisk } : {}),
     ...(normalizedKnownBoundaryCrossing ? { knownBoundaryCrossing: normalizedKnownBoundaryCrossing } : {}),
@@ -325,7 +341,7 @@ for (const approval of manifest.approvedCurves) {
 curves.sort((a, b) => a.curveId.localeCompare(b.curveId));
 const signedPayload = {
   format: "gwl-blc-curve-export-v1",
-  version: "1.8",
+  version: "1.9",
   manifestVersion: manifest.version,
   curves
 };

@@ -192,6 +192,18 @@
       "sourceRefs": ["src_phc_2025", "src_richardson_2023"],
       "methodNote": "Planetary Health Check 2025 beschreibt die historische HANPP-Reihe als 10–20-Jahres-Mittel; 2020 ist eine separate Abschätzung. Die Stützwerte sind näherungsweise aus der publizierten Abbildung abgelesen; es wird kein künstliches 5-Jahres-Raster erzeugt.",
       "uncertainty": "Näherungswerte aus einer publizierten Abbildung; keine jährliche Messgenauigkeit. HANPP ist ein Proxy, und methodisch unterschiedliche Datensätze ergeben unterschiedliche absolute Werte.",
+      "provenance": {
+        "sourceFile": "PlanetaryHealthCheck2025.pdf",
+        "sourceUrl": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",
+        "locator": "Figure 24, Abschnitt Change in Biosphere Integrity: HANPP-Zeitreihe 1910–2010 und separater 2020-Schätzwert.",
+        "fields": [
+          "x-Achse → Jahr",
+          "y-Achse HANPP [%] → Anteil der potenziellen NPP von 1910",
+          "2020 estimate → separater Schätzwert von 30 %"
+        ],
+        "extraction": "Aus der veröffentlichten Kurve wurden die zwölf dargestellten Stützwerte 1910, 1920, …, 2010 und 2020 näherungsweise abgelesen.",
+        "transformation": "Grafisch abgelesene Näherungswerte, auf eine Dezimalstelle dokumentiert; keine Interpolation und keine Umrechnung. Die 10–20-Jahres-Mittel und der separate 2020-Wert bleiben als unterschiedliche Quellgrundlagen kenntlich."
+      },
       "points": [
         { "year": 1910, "value": 13.0, "display": "≈ 13,0 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1910 liegt HANPP näherungsweise bei 13,0 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
         { "year": 1920, "value": 13.8, "display": "≈ 13,8 % HANPP", "sourceRefs": ["src_phc_2025"], "finding": "Für 1920 liegt HANPP näherungsweise bei 13,8 % der Referenz-NPP.", "uncertainty": "Näherungswert aus der PHC-Abbildung; historische Reihe als 10–20-Jahres-Mittel." },
