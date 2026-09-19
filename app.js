@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.78 · B66";
+const GWL_BUILD_VERSION = "0.9.79 · B67";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 const directLinks = window.GWL_DIRECT_LINKS;
 
@@ -1464,10 +1464,9 @@ function setKnowledgeTimeCardMode(network = null) {
     .forEach(element => { element.style.display = compact ? "none" : ""; });
 }
 
-function syncCoreCurveSummaryCard(network = null) {
+function syncCoreCurveSummaryCard(network = null, activeBoundary = null, activeItem = null) {
   const summary = network?.presentation?.effectSummary;
-  const curveId = activeBlcCurveApproval?.curveId || "";
-  const active = getEffectiveBlcCurveRole(curveId) === "core"
+  const active = contributionRoleFor(activeBoundary, activeItem) === "pg_core"
     && typeof summary === "string"
     && summary.trim();
   const timeCard = timeSlider?.closest(".time-card");
@@ -1478,8 +1477,9 @@ function syncCoreCurveSummaryCard(network = null) {
   if (active) {
     focusType.textContent = "PLANETARE GRENZE · KERNBEITRAG";
     focusSummary.textContent = summary.trim();
-    coreCurveControlsSlot.hidden = false;
-    coreCurveControlsSlot.appendChild(curveControlGroup);
+    const hasCurveControls = !copyCurveLinkButton?.hidden || !blcReleaseControl?.hidden;
+    coreCurveControlsSlot.hidden = !hasCurveControls;
+    if (hasCurveControls) coreCurveControlsSlot.appendChild(curveControlGroup);
     return;
   }
 
@@ -3195,7 +3195,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
     timeWindow = "data";
     renderKnowledgeTime(network);
     setKnowledgePointDetails(network, activeBoundary, activeItem);
-    syncCoreCurveSummaryCard(network);
+    syncCoreCurveSummaryCard(network, activeBoundary, activeItem);
     return;
   }
 
@@ -3205,7 +3205,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
     renderKnowledgeTime(network);
     const point = getKnowledgeSeriesPoint(network, selectedYear);
     setKnowledgePointDetails(network, activeBoundary, activeItem, point, point ? null : selectedYear);
-    syncCoreCurveSummaryCard(network);
+    syncCoreCurveSummaryCard(network, activeBoundary, activeItem);
     return;
   }
 
@@ -3220,7 +3220,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeStatus.textContent = "Noch keine numerische Zeitreihe hinterlegt.";
   // Beim Wechsel darf kein Diagramm des zuvor ausgewählten Datensatzes stehen bleiben.
   renderTimeChart();
-  syncCoreCurveSummaryCard(network);
+  syncCoreCurveSummaryCard(network, activeBoundary, activeItem);
 }
 
 function renderKnowledgePanel() {

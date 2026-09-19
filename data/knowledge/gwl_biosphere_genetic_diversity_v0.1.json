@@ -70,6 +70,7 @@
     }
   ],
   "presentation": {
+    "effectSummary": "Die globale Aussterberate beschreibt den Verlust genetischer Vielfalt. Sie liegt bei mehr als 100 ausgestorbenen Arten je einer Million Artenjahre (E/MSY). Damit ist die planetare Grenze von weniger als 10 E/MSY deutlich überschritten; wegen der heterogenen Datengrundlage wird daraus keine scheinbar kontinuierliche Zeitreihe erzeugt.",
     "primaryMeasurementId": "biosphere_extinction_rate",
     "referenceLabel": "Planetare Grenze: <10 E/MSY",
     "finding": "Die globale Aussterberate liegt bei mehr als 100 E/MSY und damit deutlich über der planetaren Grenze von weniger als 10 E/MSY.",

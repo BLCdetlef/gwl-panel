@@ -90,6 +90,7 @@
     }
   ],
   "presentation": {
+    "effectSummary": "Die globale mittlere stratosphärische Ozonkonzentration zeigt den Zustand der schützenden Ozonschicht. Mit 285,7 Dobson-Einheiten liegt sie oberhalb der planetaren Grenze von 277 DU und damit im sicheren Bereich. Die vorindustrielle Referenz von 292 DU ist jedoch noch nicht vollständig wieder erreicht.",
     "primaryMeasurementId": "ozone_global_stratospheric_concentration_2025",
     "referenceLabel": "Referenz: 292 DU · Planetare Grenze: 277 DU",
     "finding": "Die globale mittlere stratosphärische Ozonkonzentration liegt bei 285,7 DU und damit oberhalb der planetaren Grenze von 277 DU. Die Grenze befindet sich im sicheren Bereich, die Referenz von 292 DU ist jedoch noch nicht vollständig erreicht.",

@@ -79,6 +79,7 @@
     }
   ],
   "presentation": {
+    "effectSummary": "Die interhemisphärische Differenz der Aerosol Optical Depth beschreibt, wie ungleich atmosphärische Partikel zwischen Nord- und Südhalbkugel verteilt sind. Der aktuelle Wert von 0,063 liegt unter der planetaren Grenze von 0,10 und damit im sicheren Bereich. Regionale Luftverschmutzung wird durch diese globale Kontrollvariable nicht bewertet.",
     "primaryMeasurementId": "aerosol_interhemispheric_aod_difference_2025",
     "referenceLabel": "Referenz: 0,04 · Planetare Grenze: 0,10",
     "finding": "Die interhemisphärische AOD-Differenz liegt bei 0,063 und damit unter der planetaren Grenze von 0,10. Die globale Kontrollvariable befindet sich im sicheren Bereich und entwickelt sich derzeit in Richtung niedrigerer Werte.",
