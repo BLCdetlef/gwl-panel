@@ -260,7 +260,7 @@
       "access": "open_dataset"
     }
   ],
-  "navigationRule": "Dieses Grundlagenmodul gehört als erster Eintrag unter Planetare Grenzen → Land-System-Wandel. Die vorhandene Datei gwl_land_system_lippe_pilot_v0.1.json bleibt als Vertiefung 'Waldtransition und Waldzustand' erhalten.",
+  "navigationRule": "Dieses Grundlagenmodul bildet den Kernbeitrag unter Planetare Grenzen → Land-System-Wandel.",
   "presentation": {
     "effectSummary": "Der globale Waldanteil beschreibt, wie viel Wald im Verhältnis zur potenziellen natürlichen Waldfläche erhalten ist. Für 2022 werden rund 59 % ausgewiesen. Damit liegt der Wert deutlich unter der planetaren Grenze von 75 %; niedrigere Werte bedeuten einen stärkeren Verlust von Waldfläche.",
     "referenceLabel": "Grenze: 75 %",
