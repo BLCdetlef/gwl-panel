@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.76 · B64";
+const GWL_BUILD_VERSION = "0.9.78 · B66";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 const directLinks = window.GWL_DIRECT_LINKS;
 
@@ -82,6 +82,8 @@ const copyItemLinkButton = document.getElementById("copyItemLinkButton");
 const copyCurveLinkButton = document.getElementById("copyCurveLinkButton");
 const copyLinkStatus = document.getElementById("copyLinkStatus");
 const directLinkNotice = document.getElementById("directLinkNotice");
+const curveControlGroup = document.getElementById("curveControlGroup");
+const coreCurveControlsSlot = document.getElementById("coreCurveControlsSlot");
 const publishProcessOverlay = document.getElementById("publishProcessOverlay");
 const publishProcessSummary = document.getElementById("publishProcessSummary");
 const publishProcessSteps = document.getElementById("publishProcessSteps");
@@ -852,6 +854,7 @@ function normalizeFreshwaterBlueGreenKnowledge(payload) {
       },
       sourceRefs: ["src_freshwater_virkki_2026"],
       methodNote: payload.methodNote || "",
+      effectSummary: item.effectSummary || "",
       uncertainty: item.uncertainty || "Interquartilsbereich des Modellensembles (IQR).",
       provenance: item.provenance || {},
       historicalSegments: (item.historicalSeries || []).map(segment => ({
@@ -921,7 +924,9 @@ function getKnowledgeNetworkForItem(network, item) {
     },
     presentation: {
       ...(network.presentation || {}),
-      primaryTimeSeriesId: item.knowledgeTimeSeriesId
+      primaryTimeSeriesId: item.knowledgeTimeSeriesId,
+      effectSummary: network.timeSeries?.find(series => series.id === item.knowledgeTimeSeriesId)?.effectSummary
+        || network.presentation?.effectSummary
     }
   };
 }
@@ -1457,6 +1462,29 @@ function setKnowledgeTimeCardMode(network = null) {
   [contributionRoleCard, effectPath?.closest(".accordion"), uncertaintyValue?.closest(".accordion")]
     .filter(Boolean)
     .forEach(element => { element.style.display = compact ? "none" : ""; });
+}
+
+function syncCoreCurveSummaryCard(network = null) {
+  const summary = network?.presentation?.effectSummary;
+  const curveId = activeBlcCurveApproval?.curveId || "";
+  const active = getEffectiveBlcCurveRole(curveId) === "core"
+    && typeof summary === "string"
+    && summary.trim();
+  const timeCard = timeSlider?.closest(".time-card");
+
+  document.body.classList.toggle("core-curve-summary-mode", Boolean(active));
+  if (!curveControlGroup || !coreCurveControlsSlot || !timeCard) return;
+
+  if (active) {
+    focusType.textContent = "PLANETARE GRENZE · KERNBEITRAG";
+    focusSummary.textContent = summary.trim();
+    coreCurveControlsSlot.hidden = false;
+    coreCurveControlsSlot.appendChild(curveControlGroup);
+    return;
+  }
+
+  coreCurveControlsSlot.hidden = true;
+  if (curveControlGroup.parentElement !== timeCard) timeCard.prepend(curveControlGroup);
 }
 
 
@@ -3167,6 +3195,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
     timeWindow = "data";
     renderKnowledgeTime(network);
     setKnowledgePointDetails(network, activeBoundary, activeItem);
+    syncCoreCurveSummaryCard(network);
     return;
   }
 
@@ -3176,6 +3205,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
     renderKnowledgeTime(network);
     const point = getKnowledgeSeriesPoint(network, selectedYear);
     setKnowledgePointDetails(network, activeBoundary, activeItem, point, point ? null : selectedYear);
+    syncCoreCurveSummaryCard(network);
     return;
   }
 
@@ -3190,11 +3220,13 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   timeStatus.textContent = "Noch keine numerische Zeitreihe hinterlegt.";
   // Beim Wechsel darf kein Diagramm des zuvor ausgewählten Datensatzes stehen bleiben.
   renderTimeChart();
+  syncCoreCurveSummaryCard(network);
 }
 
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
+  syncCoreCurveSummaryCard();
 
   // Generischer Index-Pfad: funktioniert für Planetare Grenzen und Ergänzungen.
   const activeBoundary = getBoundary(state.boundaryId);
@@ -3226,7 +3258,7 @@ function renderKnowledgePanel() {
     }
 
     panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
-    panel.hidden = false;
+    panel.hidden = state.boundaryId === "climate";
     return;
   }
 

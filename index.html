@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.77-b65">
+  <link rel="stylesheet" href="style.css?v=0.9.78-b66">
 </head>
 <body>
   <main class="app-shell">
@@ -93,8 +93,26 @@
         <div id="directLinkNotice" class="direct-link-notice" role="alert" hidden></div>
 
         <section class="time-card top-card is-curve-controls-only" aria-label="Kurvenfreigabe und Kurvenkontrolle">
-          <div class="share-actions curve-share-actions">
-            <a id="copyCurveLinkButton" class="share-link-button" href="#" target="_blank" rel="noopener noreferrer" hidden>Kurve im BLC</a>
+          <div id="curveControlGroup" class="curve-control-group">
+            <div class="share-actions curve-share-actions">
+              <a id="copyCurveLinkButton" class="share-link-button" href="#" target="_blank" rel="noopener noreferrer" hidden>Kurve im BLC</a>
+            </div>
+            <div id="blcReleaseControl" class="blc-release-control" hidden>
+              <label id="blcReleaseLabel" for="blcReleaseSwitch" class="blc-release-label">
+                <input id="blcReleaseSwitch" type="checkbox">
+                <span class="blc-release-track" aria-hidden="true"></span>
+                <strong>Für BLC freigeben</strong>
+              </label>
+              <label id="blcReleaseRoleWrap" class="blc-release-role" for="blcReleaseRole">
+                <span>Kurvenrolle</span>
+                <select id="blcReleaseRole">
+                  <option value="">Rolle wählen</option>
+                  <option value="core">Kernkurve</option>
+                  <option value="deep_dive">Vertiefende Studie</option>
+                </select>
+              </label>
+              <small id="blcReleaseStatus">Redaktionelle Freigabe ist noch nicht erteilt.</small>
+            </div>
           </div>
           <div class="time-head" hidden>
             <div><strong id="timeReadout" hidden>–</strong></div>
@@ -114,22 +132,6 @@
             <p class="projection-method-note">Projektionsmethode: Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben. Liegen geeignete Fachszenarien oder Einflussfaktoren vor, werden diese stattdessen verwendet und benannt.</p>
           </div>
           <p id="timeStatus" class="time-status">Für diese Messreihe ist noch keine Zeitnavigation hinterlegt.</p>
-          <div id="blcReleaseControl" class="blc-release-control" hidden>
-            <label id="blcReleaseLabel" for="blcReleaseSwitch" class="blc-release-label">
-              <input id="blcReleaseSwitch" type="checkbox">
-              <span class="blc-release-track" aria-hidden="true"></span>
-              <strong>Für BLC freigeben</strong>
-            </label>
-            <label id="blcReleaseRoleWrap" class="blc-release-role" for="blcReleaseRole">
-              <span>Kurvenrolle</span>
-              <select id="blcReleaseRole">
-                <option value="">Rolle wählen</option>
-                <option value="core">Kernkurve</option>
-                <option value="deep_dive">Vertiefende Studie</option>
-              </select>
-            </label>
-            <small id="blcReleaseStatus">Redaktionelle Freigabe ist noch nicht erteilt.</small>
-          </div>
           <div class="time-chart-wrap">
             <svg id="timeChart" class="time-chart" viewBox="0 0 500 112" role="img" aria-labelledby="timeChartTitle timeChartDescription">
               <title id="timeChartTitle">Zeitreihe von 1700 bis 2100</title>
@@ -142,13 +144,16 @@
           </div>
         </section>
 
-        <div class="state-card">
+        <div class="state-card effect-summary-card">
           <div class="share-actions">
             <button id="copyItemLinkButton" class="share-link-button" type="button" hidden>Beitragslink kopieren</button>
           </div>
           <div class="eyebrow" id="focusType">Süßwasser</div>
           <h3 id="focusTitle">–</h3>
           <p id="focusSummary">–</p>
+          <div id="coreCurveControlsSlot" class="core-curve-controls" hidden>
+            <span>Daten und Quellen im BLC:</span>
+          </div>
         </div>
         <p id="copyLinkStatus" class="copy-link-status" role="status" aria-live="polite"></p>
 
@@ -171,7 +176,7 @@
           </div>
         </div>
 
-        <details class="accordion" open>
+        <details class="accordion finding-card" open>
           <summary id="findingSummary">Befund</summary>
           <p id="findingText">–</p>
         </details>
@@ -339,6 +344,6 @@
   <script src="data.js?v=0.9.74-b62"></script>
   <script src="threshold-crossings.js?v=0.9.76-b64"></script>
   <script src="direct-link.js?v=0.9.76-b64"></script>
-  <script src="app.js?v=0.9.76-b64"></script>
+  <script src="app.js?v=0.9.78-b66"></script>
 </body>
 </html>

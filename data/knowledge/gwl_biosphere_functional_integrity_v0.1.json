@@ -78,6 +78,7 @@
     }
   ],
   "presentation": {
+    "effectSummary": "Die menschliche Aneignung der Nettoprimärproduktion (HANPP) zeigt, wie viel pflanzliche Biomasse und Energie der Biosphäre durch Ernte und Landnutzung entzogen wird. Für 2020 wird der globale Anteil auf etwa 30 % geschätzt. Damit liegt er deutlich über der planetaren Grenze von etwa 10 %.",
     "primaryMeasurementId": "biosphere_hanpp",
     "referenceLabel": "Planetare Grenze: etwa 10 % HANPP",
     "finding": "Die funktionelle Integrität der Biosphäre ist deutlich überschritten. HANPP liegt 2020 bei etwa 30 % gegenüber einer planetaren Grenze von etwa 10 %.",

@@ -36,6 +36,7 @@
   ],
   "presentation": {
     "primaryTimeSeriesId": "global_anthropogenic_erf_1750_2025",
+    "effectSummary": "Der anthropogene effektive Strahlungsantrieb beschreibt, wie menschliche Einflüsse die Energiebilanz der Erde verändern. Für 2025 wird er auf 3,10 W/m² gegenüber 1750 geschätzt. Der aktuelle Wert überschreitet damit sowohl die planetare Grenze von +1,0 W/m² als auch den hohen Risikobereich von +1,5 W/m² deutlich.",
     "gwlTimeSeriesDisplay": "link_only",
     "hideTimeSeriesInKnowledgeView": true,
     "hidePathwaysInKnowledgeView": true,

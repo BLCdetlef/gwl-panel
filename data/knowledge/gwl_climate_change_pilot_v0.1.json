@@ -416,6 +416,7 @@
   "navigationRule": "Klimawandel bleibt eine Planetare Grenze. Gesundheitswirkungen werden nur über konkrete Expositionspfade in LEBEN aktiviert.",
   "presentation": {
     "primaryTimeSeriesId": "global_co2_noaa_annual",
+    "effectSummary": "Atmosphärisches CO₂ ist eine Kontrollvariable der planetaren Grenze Klimawandel. Im Jahr 2025 lag der globale Jahresmittelwert bei 425,62 ppm CO₂ und damit deutlich über der Grenze von 350 ppm CO₂. Die NOAA-Messreihe zeigt, dass diese Grenze bereits Ende der 1980er Jahre überschritten wurde.",
     "gwlTimeSeriesDisplay": "link_only",
     "hideTimeSeriesInKnowledgeView": true,
     "hidePathwaysInKnowledgeView": true,
