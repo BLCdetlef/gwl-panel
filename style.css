@@ -130,6 +130,14 @@ a { color: inherit; }
 .time-card.is-blc-link-only .slider-wrap { display: none !important; }
 .time-card.is-blc-link-only { min-height: 0; padding: 7px 10px; }
 .time-card.is-blc-link-only .curve-share-actions { margin: 0; }
+.time-card.is-curve-controls-only .time-head,
+.time-card.is-curve-controls-only .scenario-controls,
+.time-card.is-curve-controls-only .time-status,
+.time-card.is-curve-controls-only .time-chart-wrap,
+.time-card.is-curve-controls-only .slider-wrap { display: none !important; }
+.time-card.is-curve-controls-only { min-height: 0; padding: 7px 10px; }
+.time-card.is-curve-controls-only .curve-share-actions { margin: 0; }
+.time-card.is-curve-controls-only:not(:has(#copyCurveLinkButton:not([hidden]), #blcReleaseControl:not([hidden]))) { display: none; }
 .blc-release-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; margin: 6px 0 4px; padding-top: 6px; border-top: 1px solid var(--line); }
 .blc-release-control[hidden] { display: none; }
 .blc-release-label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 10px; }
