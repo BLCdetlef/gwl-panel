@@ -92,6 +92,28 @@ function normalizeKnownCrossing(point) {
   };
 }
 
+function normalizeContextNotes(notes, sourceIds) {
+  return (Array.isArray(notes) ? notes : [])
+    .map(note => {
+      if (!note || typeof note !== "object" || Array.isArray(note)) return null;
+      const sourceRefs = cleanStringArray(note.sourceRefs) || [];
+      if (sourceRefs.some(sourceRef => !sourceIds.has(sourceRef))) {
+        fail(`${cleanText(note.id) || "Ergänzender Kontext"}: unbekannte Quellenreferenz.`);
+      }
+      const normalized = {
+        ...(cleanText(note.id) ? { id: note.id } : {}),
+        ...(cleanText(note.label) ? { label: note.label } : {}),
+        ...(cleanText(note.value) ? { value: note.value } : {}),
+        ...(cleanText(note.detail) ? { detail: note.detail } : {}),
+        ...(sourceRefs.length ? { sourceRefs } : {})
+      };
+      return normalized.id && normalized.label && normalized.value && normalized.detail && normalized.sourceRefs
+        ? normalized
+        : null;
+    })
+    .filter(Boolean);
+}
+
 export function buildDisplayPoints(points, minimumGapYears, mandatoryYears = []) {
   const ordered = normalizePoints(points);
   if (ordered.length < 2) return ordered;
@@ -292,6 +314,7 @@ for (const approval of manifest.approvedCurves) {
     projections,
     displayProjections
   });
+  const contextNotes = normalizeContextNotes(series.contextNotes, sourceIds);
 
   curves.push({
     curveId: approval.curveId,
@@ -310,6 +333,7 @@ for (const approval of manifest.approvedCurves) {
     ...(cleanText(series.finding) ? { finding: series.finding } : {}),
     ...(cleanText(series.uncertainty) ? { uncertainty: series.uncertainty } : {}),
     ...(cleanText(series.methodNote) ? { methodNote: series.methodNote } : {}),
+    ...(contextNotes.length ? { contextNotes } : {}),
     observationCoverage: {
       startYear: Math.min(...observationYears),
       endYear: Math.max(...observationYears),

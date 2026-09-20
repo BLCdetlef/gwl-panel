@@ -33,6 +33,10 @@
           "finding": { "type": "string" },
           "uncertainty": { "type": "string" },
           "methodNote": { "type": "string" },
+          "contextNotes": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/contextNote" }
+          },
           "observationCoverage": {
             "type": "object",
             "additionalProperties": false,
@@ -156,6 +160,18 @@
         "outputPointCount": { "type": "integer", "minimum": 0 },
         "intervalYears": { "type": "integer", "minimum": 1 },
         "rule": { "type": "string", "minLength": 1 }
+      }
+    },
+    "contextNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "value", "detail", "sourceRefs"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "value": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string", "minLength": 1 },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
       }
     },
     "provenance": {

@@ -40,6 +40,11 @@ a { color: inherit; }
 .mobile-panel-back { display: none; }
 .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .panel-heading-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.effect-path-info-wrap { position: relative; display: inline-flex; align-items: center; }
+.effect-path-info-wrap .inline-info-button { margin-left: 0; }
+.effect-path-info { position: absolute; z-index: 105; top: calc(100% + 8px); left: -100px; width: min(380px, calc(40vw - 28px)); padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 12px 28px rgba(0,0,0,.16); font-size: 11px; line-height: 1.45; }
+.effect-path-info[hidden] { display: none; }
+.effect-path-info p { margin: 7px 0 0; }
 .organ-matrix-toggle { border: 1px solid var(--text); border-radius: 999px; background: #fff; color: var(--text); padding: 4px 8px; font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .organ-matrix-toggle[aria-expanded="true"] { background: var(--text); color: #fff; }
 .life-panel-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
@@ -202,6 +207,7 @@ a { color: inherit; }
 @media (max-width: 820px) {
   .share-link-button { min-height: 36px; padding: 7px 10px; }
   .state-card .share-actions { float: none; justify-content: flex-start; margin: 0 0 8px; }
+  .effect-path-info { position: fixed; top: 58px; right: 8px; left: 8px; width: auto; }
 }
 .time-chart-overview { fill: none; stroke: #8a9590; stroke-width: 1.5; }
 .time-chart-current-year { stroke: #4e5d58; stroke-width: 1.5; stroke-dasharray: 4 3; }

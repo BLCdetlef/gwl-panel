@@ -2,6 +2,8 @@ import fs from "node:fs";
 
 const root = new URL("../", import.meta.url);
 const index = JSON.parse(fs.readFileSync(new URL("data/knowledge/knowledge-index.json", root), "utf8"));
+const appSource = fs.readFileSync(new URL("app.js", root), "utf8");
+const pageSource = fs.readFileSync(new URL("index.html", root), "utf8");
 const planetaryBoundaries = index.systemBoundaries.find(entry => entry.id === "planetary_boundaries");
 const indexedCoreContributions = planetaryBoundaries.groups.flatMap(group =>
   (group.items || [])
@@ -28,4 +30,14 @@ for (const contribution of coreContributions) {
   }
 }
 
-console.log(`Kernbeitragskarten gültig: ${coreContributions.length} PG-Kernbeiträge besitzen einen Fließtext.`);
+if (!appSource.includes("function isCoreKnowledgeContribution")) {
+  throw new Error("Zentrale Darstellungsregel für PG-Kernbeiträge fehlt.");
+}
+if (!appSource.includes("panel.hidden = coreContribution")) {
+  throw new Error("Zusätzliche Knowledge-Panels werden für PG-Kernbeiträge nicht zentral ausgeblendet.");
+}
+if (!pageSource.includes('id="effectPathInfo"') || !pageSource.includes("verändert keine Kurven")) {
+  throw new Error("Nutzerhinweis zur Bedeutung und technischen Wirkung von Wirkungspfaden fehlt.");
+}
+
+console.log(`Kernbeitragskarten gültig: ${coreContributions.length} PG-Kernbeiträge besitzen einen Fließtext und folgen der zentralen Wirkungspfad-Regel.`);

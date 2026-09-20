@@ -264,6 +264,11 @@
   "presentation": {
     "effectSummary": "Der globale Waldanteil beschreibt, wie viel Wald im Verhältnis zur potenziellen natürlichen Waldfläche erhalten ist. Für 2022 werden rund 59 % ausgewiesen. Damit liegt der Wert deutlich unter der planetaren Grenze von 75 %; niedrigere Werte bedeuten einen stärkeren Verlust von Waldfläche.",
     "referenceLabel": "Grenze: 75 %",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hidePathwaysInKnowledgeView": true,
+    "hideHealthContextInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
     "compactKnowledgeView": true,
     "hidePrimaryMeasurementInKnowledgeView": true,
     "primaryTimeSeriesId": "global_forest_cover_1992_2022",
@@ -302,6 +307,22 @@
         "src_phc_land_2025"
       ],
       "methodNote": "Die gestrichelte Rekonstruktion beruht auf Pongratz et al. (2008), die durchgezogene Hauptreihe auf Copernicus/ESA-CCI-Daten in der Auswertung des Planetary Health Check 2025. Das ◇ bei 1992 markiert den Methodenwechsel. Die beiden Werte für 1992 werden nicht verbunden: 71,1 % rekonstruiert und etwa 60,2 % satellitenbasiert. Unterschiedliche Walddefinitionen, räumliche Auflösungen und erfasste Landnutzungsprozesse verhindern eine unmittelbare Vergleichbarkeit.",
+      "contextNotes": [
+        {
+          "id": "biome_forest_boundaries",
+          "label": "Biomspezifische Grenzwerte",
+          "value": "Tropisch 85 % · boreal 85 % · temperiert 50 %",
+          "detail": "Die biomspezifischen Werte ergänzen die globale Kernkurve als fachlicher Kontext. Sie werden nicht als zusätzliche Kurven dargestellt, weil hier keine getrennten numerischen Zeitreihen hinterlegt sind.",
+          "sourceRefs": ["src_phc_land_2025", "src_richardson_2023"]
+        },
+        {
+          "id": "forest_cover_trend_1992_2022",
+          "label": "Trendeinordnung der großen Wald-Biome",
+          "value": "1992–2022: insgesamt rückläufig",
+          "detail": "Der Planetary Health Check beschreibt für die großen tropischen, borealen und temperierten Wald-Biome insgesamt rückläufige relative Waldflächen. Die BLC-Kernkurve zeigt den global aggregierten Verlauf; getrennte Biom-Reihen sind nicht hinterlegt.",
+          "sourceRefs": ["src_phc_land_2025"]
+        }
+      ],
       "provenance": {
         "sourceFile": "PlanetaryHealthCheck2025.pdf",
         "sourceUrl": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf",

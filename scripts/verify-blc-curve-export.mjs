@@ -153,6 +153,12 @@ for (const curve of payload.curves) {
   for (const sourceRef of curve.reference?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Modellreferenzquelle ${sourceRef}.`);
   for (const sourceRef of curve.highRisk?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Quelle des hohen Risikobereichs ${sourceRef}.`);
   for (const sourceRef of curve.knownBoundaryCrossing?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Quelle des belegten Überschreitungspunkts ${sourceRef}.`);
+  for (const note of curve.contextNotes || []) {
+    if (!note?.id || !note?.label || !note?.value || !note?.detail || !Array.isArray(note.sourceRefs) || !note.sourceRefs.length) {
+      fail(`${curve.curveId}: unvollständiger ergänzender Kontext.`);
+    }
+    for (const sourceRef of note.sourceRefs) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Kontextquelle ${sourceRef}.`);
+  }
   for (const segment of curve.historicalReconstruction || []) {
     for (const sourceRef of segment.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Rekonstruktionsquelle ${sourceRef}.`);
   }
@@ -165,6 +171,12 @@ for (const curve of payload.curves) {
     }
     for (const sourceRef of projection.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Projektionsquelle ${sourceRef}.`);
   }
+}
+
+const landForest = payload.curves.find(curve => curve.seriesId === "global_forest_cover_1992_2022");
+const landContextIds = new Set((landForest?.contextNotes || []).map(note => note.id));
+if (!landContextIds.has("biome_forest_boundaries") || !landContextIds.has("forest_cover_trend_1992_2022")) {
+  fail("Waldzustand: biomspezifische Grenzwerte oder Trendeinordnung fehlen im BLC-Export.");
 }
 
 console.log(`BLC-Export verifiziert: ${payload.curves.length} Kurve(n), SHA-256 ${actualHash}`);

@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.79 · B67";
+const GWL_BUILD_VERSION = "0.9.79 · B68";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 const directLinks = window.GWL_DIRECT_LINKS;
 
@@ -10,6 +10,8 @@ const locationInfoButton = document.getElementById("locationInfoButton");
 const locationInfo = document.getElementById("locationInfo");
 const globalClimateInfoButton = document.getElementById("globalClimateInfoButton");
 const globalClimateInfo = document.getElementById("globalClimateInfo");
+const effectPathInfoButton = document.getElementById("effectPathInfoButton");
+const effectPathInfo = document.getElementById("effectPathInfo");
 const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
@@ -1204,9 +1206,15 @@ function setStandardEffectBlocksVisible(visible) {
   });
 }
 
-function setKnowledgeTimeCardMode(network = null) {
+function isCoreKnowledgeContribution(network = null, activeBoundary = null, activeItem = null) {
+  if (!network || !activeBoundary || !activeItem) return false;
+  return contributionRoleFor(activeBoundary, activeItem) === "pg_core";
+}
+
+function setKnowledgeTimeCardMode(network = null, activeBoundary = null, activeItem = null) {
   const timeCard = timeSlider?.closest(".time-card");
-  const compact = network?.presentation?.gwlTimeSeriesDisplay === "link_only";
+  const compact = isCoreKnowledgeContribution(network, activeBoundary, activeItem)
+    || network?.presentation?.gwlTimeSeriesDisplay === "link_only";
   timeCard?.classList.toggle("is-blc-link-only", compact);
   [contributionRoleCard, effectPath?.closest(".accordion"), uncertaintyValue?.closest(".accordion")]
     .filter(Boolean)
@@ -1215,7 +1223,7 @@ function setKnowledgeTimeCardMode(network = null) {
 
 function syncCoreCurveSummaryCard(network = null, activeBoundary = null, activeItem = null) {
   const summary = network?.presentation?.effectSummary;
-  const active = contributionRoleFor(activeBoundary, activeItem) === "pg_core"
+  const active = isCoreKnowledgeContribution(network, activeBoundary, activeItem)
     && typeof summary === "string"
     && summary.trim();
   const timeCard = timeSlider?.closest(".time-card");
@@ -2158,12 +2166,13 @@ function renderGenericPathChain(pathway, network) {
   }).join("");
 }
 
-function renderGenericKnowledgeView(network, indexEntry) {
+function renderGenericKnowledgeView(network, indexEntry, activeBoundary = null, activeItem = null) {
   if (!network) {
     return `<div class="nutrient-choice-note"><strong>Knowledge-Datensatz nicht geladen.</strong></div>`;
   }
 
   const presentation = network.presentation || {};
+  if (isCoreKnowledgeContribution(network, activeBoundary, activeItem)) return "";
   if (presentation.hideKnowledgePanelInKnowledgeView === true) return "";
   const primaryMeasurement = getPrimaryKnowledgeMeasurement(network);
   const hiddenMeasurementIds = new Set(presentation.hiddenMeasurementIds || []);
@@ -2933,7 +2942,7 @@ function getKnowledgeStatusLabel(network) {
 
 function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
   setStandardEffectBlocksVisible(true);
-  setKnowledgeTimeCardMode(network);
+  setKnowledgeTimeCardMode(network, activeBoundary, activeItem);
 
   // Jede Knowledge-Ansicht beginnt ohne übernommene Kurvenfreigabe. Erst eine
   // anschließend geprüfte Zeitreihe darf den Schalter wieder sichtbar setzen.
@@ -3006,8 +3015,9 @@ function renderKnowledgePanel() {
       applyKnowledgeToStandardEffect(network, activeBoundary, activeItem);
     }
 
-    panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
-    panel.hidden = network?.presentation?.hideKnowledgePanelInKnowledgeView === true;
+    const coreContribution = isCoreKnowledgeContribution(network, activeBoundary, activeItem);
+    panel.innerHTML = renderGenericKnowledgeView(network, indexEntry, activeBoundary, activeItem);
+    panel.hidden = coreContribution || network?.presentation?.hideKnowledgePanelInKnowledgeView === true;
     return;
   }
 
@@ -4719,9 +4729,20 @@ function setGlobalClimateInfoOpen(open) {
   globalClimateInfoButton.setAttribute("aria-expanded", String(open));
 }
 
+function setEffectPathInfoOpen(open) {
+  if (!effectPathInfoButton || !effectPathInfo) return;
+  effectPathInfo.hidden = !open;
+  effectPathInfoButton.setAttribute("aria-expanded", String(open));
+}
+
 globalClimateInfoButton?.addEventListener("click", event => {
   event.stopPropagation();
   setGlobalClimateInfoOpen(globalClimateInfoButton.getAttribute("aria-expanded") !== "true");
+});
+
+effectPathInfoButton?.addEventListener("click", event => {
+  event.stopPropagation();
+  setEffectPathInfoOpen(effectPathInfoButton.getAttribute("aria-expanded") !== "true");
 });
 
 locationInfoButton?.addEventListener("click", event => {
@@ -4737,6 +4758,11 @@ document.addEventListener("click", event => {
 document.addEventListener("click", event => {
   if (globalClimateInfoButton?.getAttribute("aria-expanded") !== "true") return;
   if (!event.target.closest(".global-climate-info-wrap")) setGlobalClimateInfoOpen(false);
+});
+
+document.addEventListener("click", event => {
+  if (effectPathInfoButton?.getAttribute("aria-expanded") !== "true") return;
+  if (!event.target.closest(".effect-path-info-wrap")) setEffectPathInfoOpen(false);
 });
 
 document.addEventListener("click", event => {
@@ -4756,6 +4782,11 @@ document.addEventListener("keydown", event => {
   if (event.key === "Escape" && globalClimateInfoButton?.getAttribute("aria-expanded") === "true") {
     setGlobalClimateInfoOpen(false);
     globalClimateInfoButton.focus();
+    return;
+  }
+  if (event.key === "Escape" && effectPathInfoButton?.getAttribute("aria-expanded") === "true") {
+    setEffectPathInfoOpen(false);
+    effectPathInfoButton.focus();
     return;
   }
   if (event.key === "Escape" && document.querySelector(".boundary-context-info:not([hidden])")) {

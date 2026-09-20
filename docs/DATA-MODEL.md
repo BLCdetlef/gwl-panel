@@ -88,6 +88,27 @@ Organbezüge oder Wirkungen können optional `ageGroups[]` sowie `ageEffects.<gr
 
 Querverweise auf eine im Panel vorhandene Systemgrenze erscheinen in WIRKUNG als klickbare Chips und öffnen diese Grenze. Sie sind als getrennte Kanten mit benanntem Mechanismus zu modellieren; ein Klick bedeutet keine Gleichsetzung von Messgrößen oder automatische Gesundheitswirkung. Hinweise ohne navigierbares Ziel bleiben als nicht klickbare Kontextchips sichtbar.
 
+### Bedeutung und technische Wirkung
+
+Ein Wirkungspfad ist eine fachlich belegte Erklärungskette. Er beschreibt, wie ein Ausgangspunkt über Umweltveränderungen oder Expositionen zu einer möglichen Wirkung führen kann. Er ist keine Rechenregel: Wirkungspfade verändern weder Messwerte noch Kurven, Grenzbewertungen oder BLC-Freigaben.
+
+Für Knowledge-Beiträge gelten drei getrennte Ebenen:
+
+- `pathways[]` ist die maßgebliche strukturierte Darstellung eines Pfades. Kettenglieder, Evidenzstatus und Einschränkungen bleiben dort prüfbar gespeichert.
+- `presentation.effectPath` ist ein kurzer Darstellungstext für ältere oder spezialisierte Ansichten. Er ersetzt keinen strukturierten Pfad und erzeugt keine Verknüpfung.
+- `healthContext.markerSignals[]` ist eine eigenständige, strengere Freigabe für die Bodymap. Erst ein geprüftes Markersignal aktiviert einen Organbezug; ein allgemeiner Wirkungspfad genügt dafür nicht.
+
+Verbindungen zu anderen planetaren Grenzen werden ebenfalls nicht aus frei formulierten Pfaden abgeleitet. Sie benötigen einen ausdrücklich hinterlegten Eintrag in `boundaryInteractions[]` oder eine entsprechend typisierte Graphkante. Navigation zu einer anderen Grenze ändert deren Messwerte oder Bewertung nicht.
+
+### Einheitliche Darstellungsregel
+
+- **Kernbeiträge zu planetaren Grenzen:** Die wesentliche Wirkung steht als kurzer, ruhiger Fließtext in der gemeinsamen Kernbeitragskarte. Separate Wirkungspfad-Karten und zusätzliche Knowledge-Panels werden für diese Beitragsrolle zentral ausgeblendet. Die strukturierten Pfade bleiben in den Quelldaten erhalten.
+- **Vertiefungs- und Gesundheitsbeiträge:** Wirkungspfade werden gezeigt, wenn sie die konkrete Exposition, die Evidenzkette oder einen geprüften Organbezug verständlich machen.
+- **Ergänzende Einflussbereiche:** Wirkungspfade dürfen sichtbar bleiben, wenn gerade die Verbindung zu mehreren planetaren Grenzen den fachlichen Zweck des Beitrags bildet.
+- **BLC:** Der Kurvenexport übernimmt Messreihen, Quellen und Herleitung der dargestellten Werte. Wirkungspfade beeinflussen den Export nicht und werden nicht als Teil der Kurvendaten interpretiert.
+
+Die Darstellungsregel wird aus der Beitragsrolle abgeleitet. Einzelne Kernbeiträge benötigen deshalb keine eigenen Sichtbarkeitsschalter, um dieselbe Oberfläche zu erhalten.
+
 ## Bodymap-IDs und medizinische Bilder
 
 Die Bodymap arbeitet mit stabilen Organ-/System-IDs. `ORGAN_MEDIA` in `app.js` ordnet diesen IDs eine statische medizinische Bilddatei zu. Mehrere Marker dürfen dasselbe Systembild verwenden, wenn es fachlich dieselbe Systemübersicht darstellt, z. B. `liver` und `gut` → `organ_digestive.jpg`.
