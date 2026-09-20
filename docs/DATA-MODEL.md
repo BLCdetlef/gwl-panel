@@ -6,6 +6,16 @@ Stand: Prototyp 0.9.2
 
 Daten, Darstellung und Interpretation werden getrennt. Das Panel darf keine Zwischenwerte, Krankheitswahrscheinlichkeiten oder Funktionsverluste erfinden. Jeder angezeigte Zustand bleibt an **Raum, Zeit, Messreihe und Quelle** gebunden.
 
+## Zentrales Regelregister
+
+Die übergreifenden Redaktions- und Darstellungsregeln liegen maschinenlesbar in [`data/policies/presentation-rules-v1.json`](../data/policies/presentation-rules-v1.json). **Regelregister-Version: 1.1.1.** Dieses Register ist die gemeinsame Quelle für:
+
+- die verständliche Regelerklärung im GWL unter **WIRKUNG**, einschließlich Zweck, Anwendung und Auswirkung im Programm,
+- die Verknüpfung jeder Regel mit den betroffenen Datenmodellfeldern,
+- sowie automatisierte Prüfungen, die Regel-IDs, Anwendungsfunktionen und Dokumentationsversion abgleichen.
+
+Die folgenden Abschnitte beschreiben die fachliche Bedeutung der verknüpften Felder. Regeltexte werden nicht zusätzlich im HTML gepflegt, sondern aus dem Register geladen. Bei einer Regeländerung werden deshalb zuerst das Register und – falls sich Feldbedeutung oder Datenstruktur ändern – der zugehörige Abschnitt dieses Datenmodells angepasst. Eine geänderte Registerversion muss auch hier eingetragen werden; andernfalls schlägt die Regelprüfung fehl.
+
 ## Oberstruktur
 
 `window.GWL_DATA` enthält derzeit:
@@ -108,6 +118,43 @@ Verbindungen zu anderen planetaren Grenzen werden ebenfalls nicht aus frei formu
 - **BLC:** Der Kurvenexport übernimmt Messreihen, Quellen und Herleitung der dargestellten Werte. Wirkungspfade beeinflussen den Export nicht und werden nicht als Teil der Kurvendaten interpretiert.
 
 Die Darstellungsregel wird aus der Beitragsrolle abgeleitet. Einzelne Kernbeiträge benötigen deshalb keine eigenen Sichtbarkeitsschalter, um dieselbe Oberfläche zu erhalten.
+
+## Einordnung und Aussagegrenzen
+
+Die Oberfläche trennt vier Funktionen, die nicht miteinander vermischt werden sollen:
+
+- **Befund:** Was zeigen die Daten oder die Studie?
+- **Einordnung:** Was bedeutet der Befund im Zusammenhang des Beitrags?
+- **Aussagegrenze:** Was lässt sich daraus nicht ableiten oder nicht auf andere Räume, Zeiten oder Populationen übertragen?
+- **Daten und Methode:** Wie wurde ein Wert erhoben, rekonstruiert, modelliert oder für die Darstellung ausgewählt?
+
+Der sichtbare Sammelbegriff lautet **„Einordnung und Aussagegrenzen“**. „Unsicherheit“ wird im sichtbaren Text nur verwendet, wenn tatsächlich eine statistische Unsicherheit, ein Messbereich oder eine Modellspanne gemeint ist.
+
+Die vorhandenen Datenfelder bleiben nach ihrer fachlichen Ebene getrennt:
+
+- `presentation.uncertainty` beschreibt die beitragsweite Einordnung oder Aussagegrenze.
+- `measurements[].uncertainty` gilt nur für den jeweiligen Studien- oder Messwert.
+- `timeSeries[].uncertainty`, punktbezogene `uncertainty` und Unsicherheiten von Szenarien gelten nur für das jeweilige Kurvensegment beziehungsweise den ausgewählten Wert.
+- `pathways[].caution` beschreibt ausschließlich die Aussagegrenze des betreffenden Wirkungspfads.
+- `knowledgeGaps[]` enthält offene Forschungsfragen und wird nicht als Synonym für Unsicherheit verwendet.
+
+Beitragsweite Aussagen werden nicht noch einmal an jedem Messwert wiederholt. Identische Texte werden bei der Darstellung unterdrückt. Spezifische Einschränkungen bleiben direkt bei dem Messwert, der Studie, dem Szenario oder dem Wirkungspfad, auf den sie sich beziehen.
+
+Für Kernbeiträge steht die Einordnung eingeklappt in der großen gemeinsamen Karte. Kurvenbezogene technische Details bleiben im BLC am jeweiligen Segment. Vertiefungsbeiträge verwenden dieselbe Bezeichnung und Reihenfolge; zusätzliche studien- oder pfadspezifische Aussagegrenzen stehen unmittelbar am jeweiligen Beleg.
+
+### Vertiefungsbeiträge: schrittweise Offenlegung
+
+Vertiefungen verwenden eine feste, themenunabhängige Reihenfolge: kurze Einordnung, höchstens drei nach Evidenzart bezeichnete Überblickszeilen, Wirkung und Gesundheit, Einordnung und Aussagegrenzen, Wissenslücken sowie Handlungsspielraum. Nicht vorhandene Bereiche werden ausgelassen. Jede Überblickszeile verwendet denselben Schalter „Details anzeigen“ und hält ihre Quellen und Aussagegrenzen unmittelbar bei der betreffenden Evidenzart. Ein zusätzliches beitragsweites Quellenpaket ist nur für echte Querschnittsquellen vorgesehen.
+
+Die Überblickszeilen dürfen unterschiedliche Größen nicht zu einer gemeinsamen Messreihe vermischen. Insbesondere bleiben gesetzliche Grenz- oder Richtwerte, empirische Stichproben, modellierte Inventare und gesundheitliche Referenzwerte ausdrücklich getrennt. Die Auswahl der Überblickszeilen ändert keine Quelldaten; weitere Werte bleiben in den Detailbereichen erhalten.
+
+Vorhandene Kurven- und Gesundheitsbezüge sind Fähigkeiten eines Beitrags, keine pauschale Eigenschaft seines Themas:
+
+- Ein untergeordneter Kurvenbeitrag bleibt aus der Übersicht direkt erreichbar. Ein BLC-Link wird nur erzeugt, wenn `timeSeries[]` tatsächlich eine stabile Kurven-ID liefert. Ist der Unterbeitrag nur der technische Träger der Kurve, kann `knowledge-index.items[].menuHidden: true` seinen zusätzlichen Menüeintrag unterdrücken; Direktlink, Datenregistrierung und BLC-Export bleiben erhalten.
+- Ein Eintrag in `healthContext` kann einen Gesundheitsbezug beschreiben. Erst `healthContext.markerSignals[]` erlaubt nach der Regel `explicit_links_only` einen Organstatus.
+- `boundaryInteractions[]` steuert ausdrücklich modellierte Querverbindungen zu anderen Systemgrenzen.
+
+Die generische Darstellung wird durch `renderDeepeningOverview` aufgebaut. Themen wie PFAS liefern nur die fachlichen Inhalte und die vorhandenen Fähigkeiten; Aufbau und Offenlegungsreihenfolge bleiben zentral geregelt.
 
 ## Bodymap-IDs und medizinische Bilder
 

@@ -4,6 +4,7 @@ const root = new URL("../", import.meta.url);
 const index = JSON.parse(fs.readFileSync(new URL("data/knowledge/knowledge-index.json", root), "utf8"));
 const appSource = fs.readFileSync(new URL("app.js", root), "utf8");
 const pageSource = fs.readFileSync(new URL("index.html", root), "utf8");
+const presentationRules = JSON.parse(fs.readFileSync(new URL("data/policies/presentation-rules-v1.json", root), "utf8"));
 const planetaryBoundaries = index.systemBoundaries.find(entry => entry.id === "planetary_boundaries");
 const indexedCoreContributions = planetaryBoundaries.groups.flatMap(group =>
   (group.items || [])
@@ -36,7 +37,9 @@ if (!appSource.includes("function isCoreKnowledgeContribution")) {
 if (!appSource.includes("panel.hidden = coreContribution")) {
   throw new Error("Zusätzliche Knowledge-Panels werden für PG-Kernbeiträge nicht zentral ausgeblendet.");
 }
-if (!pageSource.includes('id="effectPathInfo"') || !pageSource.includes("verändert keine Kurven")) {
+const effectPathRule = presentationRules.rules?.find(rule => rule.id === "effect_paths_are_explanatory");
+if (!pageSource.includes('id="effectPathInfo"')
+  || !effectPathRule?.programEffects?.some(text => text.includes("verändern keine Messwerte, Kurven"))) {
   throw new Error("Nutzerhinweis zur Bedeutung und technischen Wirkung von Wirkungspfaden fehlt.");
 }
 

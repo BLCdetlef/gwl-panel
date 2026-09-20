@@ -120,6 +120,7 @@
               "id": "pfas-pope-global-emissions",
               "label": "Globale Emissionen · POPE",
               "type": "emission_inventory",
+              "menuHidden": true,
               "parentId": "pfas",
               "source": "data/knowledge/gwl_pfas_pope_global_v0.1.json"
             },

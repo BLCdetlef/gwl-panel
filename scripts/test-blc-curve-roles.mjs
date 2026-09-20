@@ -62,6 +62,7 @@ const expected = new Map([
   ["global_surface_omega_arag_oceansoda_1982_2021", { curveRole: "core", domainType: "planetary_boundary", domainId: "ocean_acidification", domainLabel: "Ozeanversauerung" }],
   ["global_oil_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_plastics_production_1950_2019", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
+  ["global_pfoa_air_emissions_pope_1951_2020", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
   ["global_solar_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_wind_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }]
 ]);

@@ -1,0 +1,149 @@
+{
+  "format": "gwl-presentation-rules",
+  "version": "1.1.1",
+  "title": "Regeln für WIRKUNG",
+  "purpose": "Diese Regeln sorgen dafür, dass Kernbeiträge, Vertiefungen und Gesundheitsbezüge im GWL gleich aufgebaut, nachvollziehbar und nicht stärker dargestellt werden, als es die Daten erlauben.",
+  "linkedDataModel": "docs/DATA-MODEL.md",
+  "terms": {
+    "finding": "Befund",
+    "interpretationAndLimits": "Einordnung und Aussagegrenzen",
+    "statementLimit": "Aussagegrenze",
+    "dataAndMethod": "Daten und Methode"
+  },
+  "rules": [
+    {
+      "id": "finding_interpretation_separation",
+      "label": "Befund und Einordnung trennen",
+      "reason": "Nutzende sollen unterscheiden können, was eine Quelle tatsächlich zeigt und welche Bedeutung das Panel daraus ableitet.",
+      "application": "Der Befund nennt das beobachtete oder modellierte Ergebnis. Einordnung und Aussagegrenzen stehen in einem eigenen, zunächst geschlossenen Bereich.",
+      "programEffects": [
+        "Kernbeiträge zeigen den Befund im ruhigen Fließtext der Hauptkarte.",
+        "Vertiefungen verwenden dieselbe Reihenfolge und dieselben Begriffe."
+      ],
+      "dataModelFields": [
+        "presentation.finding",
+        "measurements[].interpretation",
+        "timeSeries[].finding",
+        "presentation.uncertainty"
+      ],
+      "appliedBy": [
+        "syncCoreCurveSummaryCard",
+        "setKnowledgePointDetails",
+        "setInterpretationValue"
+      ]
+    },
+    {
+      "id": "statement_limits_by_level",
+      "label": "Aussagegrenzen an der richtigen Stelle zeigen",
+      "reason": "Eine allgemeine Einschränkung des Beitrags ist etwas anderes als die Einschränkung eines einzelnen Messwertes, Szenarios oder Wirkungspfades.",
+      "application": "Beitragsweite Hinweise erscheinen einmal. Zusätzliche wert-, studien-, szenario- oder pfadspezifische Grenzen stehen unmittelbar beim jeweiligen Beleg. Wortgleiche Wiederholungen werden unterdrückt.",
+      "programEffects": [
+        "Bei mehreren Ebenen werden Beitrag und ausgewählter Wert getrennt bezeichnet.",
+        "Wissenslücken bleiben eine eigene Rubrik und werden nicht als Unsicherheit ausgegeben.",
+        "Der Begriff Unsicherheit bleibt echten Messbereichen, statistischen Intervallen und Modellspannen vorbehalten."
+      ],
+      "dataModelFields": [
+        "presentation.uncertainty",
+        "measurements[].uncertainty",
+        "timeSeries[].uncertainty",
+        "projectionSeries[].uncertainty",
+        "pathways[].caution",
+        "knowledgeGaps[]"
+      ],
+      "appliedBy": [
+        "getContributionInterpretation",
+        "distinctStatements",
+        "genericStudyCard",
+        "genericTimeSeriesCards"
+      ]
+    },
+    {
+      "id": "effect_paths_are_explanatory",
+      "label": "Wirkungspfade erklären, aber berechnen nichts",
+      "reason": "Eine fachliche Erklärungskette darf nicht mit einer Messreihe, einer Grenzbewertung oder einem nachgewiesenen Gesundheitseffekt verwechselt werden.",
+      "application": "Wirkungspfade beschreiben die Kette vom Ausgangspunkt über Veränderungen oder Expositionen bis zu einer möglichen Wirkung. Bei Kernbeiträgen ist die wesentliche Wirkung in den Fließtext integriert; ausführliche Pfade bleiben Vertiefungen und ergänzenden Zusammenhängen vorbehalten.",
+      "programEffects": [
+        "Wirkungspfade verändern keine Messwerte, Kurven oder BLC-Freigaben.",
+        "Ein Pfad allein aktiviert weder eine andere planetare Grenze noch einen Organmarker."
+      ],
+      "dataModelFields": [
+        "pathways[]",
+        "presentation.effectPath",
+        "pathways[].evidenceStatus",
+        "pathways[].caution"
+      ],
+      "appliedBy": [
+        "renderGenericKnowledgeView",
+        "renderGenericPathChain",
+        "isCoreKnowledgeContribution"
+      ]
+    },
+    {
+      "id": "explicit_links_only",
+      "label": "Grenzen und Organe nur ausdrücklich verknüpfen",
+      "reason": "Thematische Nähe allein belegt weder eine Wirkung auf eine andere planetare Grenze noch einen konkreten Gesundheitsbezug.",
+      "application": "Andere planetare Grenzen benötigen eine ausdrücklich modellierte Querverbindung. Organmarker benötigen zusätzlich einen geprüften Umwelt–Expositions–Gesundheitspfad.",
+      "programEffects": [
+        "Querverbindungen öffnen andere Beiträge, verändern dort aber keine Bewertung.",
+        "Nur geprüfte Markersignale beeinflussen die Bodymap."
+      ],
+      "dataModelFields": [
+        "boundaryInteractions[]",
+        "healthContext.markerSignals[]"
+      ],
+      "appliedBy": [
+        "applyKnowledgeOrganLinks",
+        "getActiveKnowledgeMarkerSignal",
+        "getKnowledgeMarkerContextsForOrgan"
+      ]
+    },
+    {
+      "id": "curve_method_details_in_blc",
+      "label": "Kurvendetails im BLC dokumentieren",
+      "reason": "Die GWL-Ansicht soll verständlich bleiben, während Herkunft, Auswahl und Verarbeitung der dargestellten Zahlen vollständig prüfbar sein müssen.",
+      "application": "Das GWL fasst die fachliche Aussage zusammen. Das BLC zeigt für das ausgewählte Kurvensegment Quelle, Fundstelle, ausgelesene Felder, Transformation und Auswahlregeln.",
+      "programEffects": [
+        "Kernkurven erscheinen im GWL ohne zusätzliches Diagramm.",
+        "Technische Unsicherheiten bleiben im BLC am jeweiligen Kurvensegment erhalten."
+      ],
+      "dataModelFields": [
+        "timeSeries[].provenance",
+        "historicalSegments[].provenance",
+        "projectionSeries[].provenance"
+      ],
+      "appliedBy": [
+        "setKnowledgeTimeCardMode",
+        "syncCoreCurveSummaryCard"
+      ]
+    },
+    {
+      "id": "deepening_progressive_disclosure",
+      "label": "Vertiefungen schrittweise und nach Evidenzart öffnen",
+      "reason": "Vertiefungen können Messwerte, Rechtswerte, Modellierungen, Gesundheitsreferenzen und Wirkungspfade enthalten. Werden diese Angaben gleichzeitig und gleichrangig gezeigt, sind sie schwer vergleichbar und können fachlich verwechselt werden.",
+      "application": "Die Hauptansicht beginnt mit einer kurzen Einordnung und höchstens drei klar bezeichneten Evidenzarten. Jede Überblickszeile öffnet ihre eigenen Details und Quellen über denselben Schalter. Vorhandene Kurvenbeiträge und Gesundheitsbezüge bleiben direkt erreichbar. Wirkungspfade, Aussagegrenzen, Wissenslücken und Handlungsspielraum werden in einer festen Reihenfolge bei Bedarf geöffnet; leere Abschnitte entfallen.",
+      "programEffects": [
+        "Rechtswerte, Stichproben, Modellinventare und Gesundheitsreferenzen erhalten unterschiedliche Bezeichnungen und werden nicht als gleichartige Messwerte dargestellt.",
+        "Quellen und Aussagegrenzen einer Evidenzart bleiben bei ihrer Überblickszeile; ein zusätzliches beitragsweites Quellenpaket wird nur bei echten Querschnittsquellen gezeigt.",
+        "Eine BLC-Verknüpfung erscheint nur, wenn der verknüpfte Beitrag tatsächlich eine Zeitreihe besitzt.",
+        "Ein technischer Kurvendatensatz darf im Beitragsmenü ausgeblendet bleiben, wenn die fachliche Übersicht ihn eindeutig verlinkt und er direkt erreichbar bleibt.",
+        "Ein Gesundheitsbezug bleibt sichtbar, aktiviert aber ohne geprüftes Markersignal keinen Organstatus.",
+        "Die Reihenfolge der Abschnitte gilt unabhängig vom Thema der Vertiefung."
+      ],
+      "dataModelFields": [
+        "entry",
+        "measurements[]",
+        "timeSeries[]",
+        "pathways[]",
+        "boundaryInteractions[]",
+        "healthContext",
+        "knowledgeGaps[]",
+        "actionScope",
+        "knowledge-index.items[].menuHidden"
+      ],
+      "appliedBy": [
+        "renderDeepeningOverview",
+        "renderDeepeningCurveActions"
+      ]
+    }
+  ]
+}

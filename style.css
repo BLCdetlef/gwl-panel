@@ -42,9 +42,16 @@ a { color: inherit; }
 .panel-heading-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .effect-path-info-wrap { position: relative; display: inline-flex; align-items: center; }
 .effect-path-info-wrap .inline-info-button { margin-left: 0; }
-.effect-path-info { position: absolute; z-index: 105; top: calc(100% + 8px); left: -100px; width: min(380px, calc(40vw - 28px)); padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 12px 28px rgba(0,0,0,.16); font-size: 11px; line-height: 1.45; }
+.effect-path-info { position: absolute; z-index: 105; top: calc(100% + 8px); left: -100px; width: min(380px, calc(40vw - 28px)); max-height: min(680px, calc(100vh - 90px)); overflow: auto; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 12px 28px rgba(0,0,0,.16); font-size: 11px; line-height: 1.45; }
 .effect-path-info[hidden] { display: none; }
 .effect-path-info p { margin: 7px 0 0; }
+.effect-rules-list { display: grid; gap: 6px; margin-top: 10px; }
+.effect-rule { border-top: 1px solid var(--line); padding-top: 6px; }
+.effect-rule summary { cursor: pointer; font-weight: 700; }
+.effect-rule-body { padding: 2px 0 4px; }
+.effect-rule-body ul { margin: 5px 0 0; padding-left: 18px; }
+.effect-rule-fields { color: var(--muted); overflow-wrap: anywhere; }
+.effect-rules-meta { margin-top: 10px !important; padding-top: 7px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
 .organ-matrix-toggle { border: 1px solid var(--text); border-radius: 999px; background: #fff; color: var(--text); padding: 4px 8px; font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .organ-matrix-toggle[aria-expanded="true"] { background: var(--text); color: #fff; }
 .life-panel-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
@@ -148,6 +155,10 @@ a { color: inherit; }
 .core-curve-summary-mode .finding-card { display: none !important; }
 .core-curve-summary-mode .effect-summary-card { padding: 16px; }
 .core-curve-summary-mode .effect-summary-card #focusSummary { margin-top: 10px; font-size: 13px; line-height: 1.55; }
+.core-interpretation-details { margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--line); }
+.core-interpretation-details[hidden] { display: none; }
+.core-interpretation-details summary { cursor: pointer; color: var(--muted); font-size: 10px; font-weight: 700; }
+.core-interpretation-details p { margin: 8px 0 0; color: var(--text); font-size: 11px; line-height: 1.48; }
 .core-curve-controls { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 7px 10px; margin-top: 12px; padding-top: 9px; border-top: 1px solid var(--line); }
 .core-curve-controls[hidden] { display: none; }
 .core-curve-controls > span { color: var(--muted); font-size: 10px; font-weight: 700; }
@@ -1174,6 +1185,155 @@ button.health-path-dialog-node { font: inherit; cursor: pointer; }
   font-size: 9px;
 }
 
+/* Regelbasierte Vertiefungsansicht: wenige Evidenzarten im Überblick,
+   fachliche Details erst auf Anforderung. */
+.deepening-overview {
+  display: grid;
+  gap: 9px;
+  margin-top: 8px;
+  padding: 11px;
+  border: 1px solid #d5ddd9;
+  border-radius: 12px;
+  background: #fff;
+}
+.deepening-overview-head {
+  padding-bottom: 9px;
+  border-bottom: 1px solid #d8dfdc;
+}
+.deepening-overview-head h2 {
+  margin: 2px 0 4px;
+  font-size: 17px;
+}
+.deepening-overview-head p {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.deepening-evidence h3 {
+  margin: 0 0 5px;
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.deepening-evidence-list {
+  border: 1px solid #d5ddd9;
+  border-radius: 9px;
+  overflow: hidden;
+}
+.deepening-evidence-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 9px;
+  background: #fbfcfb;
+}
+.deepening-evidence-row + .deepening-evidence-row {
+  border-top: 1px solid #d8dfdc;
+}
+.deepening-evidence-copy {
+  min-width: 0;
+}
+.deepening-evidence-kind {
+  display: block;
+  margin-bottom: 2px;
+  color: #647069;
+  font-size: 7px;
+  font-weight: 750;
+  letter-spacing: .07em;
+}
+.deepening-evidence-copy > strong {
+  display: block;
+  font-size: 11px;
+}
+.deepening-evidence-copy p {
+  margin: 2px 0;
+  font-size: 10px;
+  line-height: 1.35;
+}
+.deepening-evidence-copy small {
+  display: block;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.35;
+}
+.deepening-evidence-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  max-width: 150px;
+}
+.deepening-row-details {
+  grid-column: 1 / -1;
+  margin-top: 1px;
+  padding-top: 6px;
+  border-top: 1px solid #e1e6e3;
+}
+.deepening-row-details summary {
+  color: #4e5d56;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.deepening-action {
+  padding: 5px 7px;
+  border: 1px solid #9aa8a1;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.deepening-action:hover,
+.deepening-action:focus-visible {
+  border-color: #526d61;
+  background: #eef4f1;
+}
+.deepening-details-list {
+  border-top: 1px solid #d8dfdc;
+}
+.deepening-details {
+  margin-top: 0;
+  padding: 7px 1px;
+}
+.deepening-details + .deepening-details {
+  border-top: 1px solid #e0e5e2;
+}
+.deepening-details-body {
+  padding: 7px 2px 2px;
+  color: #2f3532;
+  font-size: 9px;
+  line-height: 1.48;
+}
+.deepening-details-body > :first-child { margin-top: 0; }
+.deepening-details-body > :last-child { margin-bottom: 0; }
+.deepening-path-sentence {
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: #eef3f0;
+}
+.deepening-limit-list {
+  margin: 0;
+  padding-left: 16px;
+}
+.deepening-limit-list li + li { margin-top: 4px; }
+.deepening-source-list {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #e0e5e2;
+}
+.deepening-source-list p { margin: 4px 0; }
+.deepening-source-list a { color: var(--text); font-weight: 650; }
+.deepening-source-list span { display: block; color: var(--muted); font-size: 8px; }
+
 /* Alte leere Standard-Messkarten bei Nährstoffkreisläufen ausblenden.
    Der Kontextkopf bleibt sichtbar; die echten Daten folgen darunter. */
 body.nutrient-mode #metricValue,
@@ -1213,6 +1373,13 @@ body.nutrient-mode .detail-grid + details + details + details {
   .path-node {
     font-size: .66rem;
   }
+  .deepening-evidence-row { grid-template-columns: 1fr; }
+  .deepening-evidence-actions { justify-content: flex-start; max-width: none; }
+  .deepening-overview-head h2 { font-size: .95rem; }
+  .deepening-overview-head p,
+  .deepening-evidence-copy p,
+  .deepening-evidence-copy > strong,
+  .deepening-details-body { font-size: .66rem; }
 }
 
 

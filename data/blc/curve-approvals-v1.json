@@ -136,6 +136,17 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_pfas_pope_global_v0.1.json",
+      "seriesId": "global_pfoa_air_emissions_pope_1951_2020",
+      "boundaryId": "novel",
+      "itemId": "pfas-pope-global-emissions",
+      "curveId": "knowledge:data/knowledge/gwl_pfas_pope_global_v0.1.json#global_pfoa_air_emissions_pope_1951_2020",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "POPE-Best-Guess-Modellreihe für globale jährliche PFOA-Luftemissionen; keine Messreihe, keine Gesamtreihe aller PFAS und keine Projektion."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_solar_energy_pilot_v0.1.json",
       "seriesId": "global_solar_tes_1965_2025",
       "boundaryId": "materials-energy",

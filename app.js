@@ -1,7 +1,9 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.79 · B68";
+const GWL_BUILD_VERSION = "0.9.79 · B70";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 const directLinks = window.GWL_DIRECT_LINKS;
+const PRESENTATION_RULES_SOURCE = "data/policies/presentation-rules-v1.json";
+let presentationRules = null;
 
 const boundaryList = document.getElementById("boundaryList");
 const regionSelect = document.getElementById("regionSelect");
@@ -12,9 +14,15 @@ const globalClimateInfoButton = document.getElementById("globalClimateInfoButton
 const globalClimateInfo = document.getElementById("globalClimateInfo");
 const effectPathInfoButton = document.getElementById("effectPathInfoButton");
 const effectPathInfo = document.getElementById("effectPathInfo");
+const effectRulesTitle = document.getElementById("effectRulesTitle");
+const effectRulesPurpose = document.getElementById("effectRulesPurpose");
+const effectRulesList = document.getElementById("effectRulesList");
+const effectRulesMeta = document.getElementById("effectRulesMeta");
 const focusType = document.getElementById("focusType");
 const focusTitle = document.getElementById("focusTitle");
 const focusSummary = document.getElementById("focusSummary");
+const coreInterpretationDetails = document.getElementById("coreInterpretationDetails");
+const coreInterpretationText = document.getElementById("coreInterpretationText");
 const metricLabel = document.getElementById("metricLabel");
 const referenceLabel = document.getElementById("referenceLabel");
 const metricValue = document.getElementById("metricValue");
@@ -1211,6 +1219,140 @@ function isCoreKnowledgeContribution(network = null, activeBoundary = null, acti
   return contributionRoleFor(activeBoundary, activeItem) === "pg_core";
 }
 
+function normalizedStatement(value) {
+  return String(value || "").replace(/\s+/g, " ").trim();
+}
+
+function presentationTerm(id, fallback) {
+  return presentationRules?.terms?.[id] || fallback;
+}
+
+function applyPresentationTermLabels() {
+  document.querySelectorAll("[data-presentation-rule-label]").forEach(element => {
+    const termId = element.dataset.presentationRuleLabel;
+    element.textContent = presentationTerm(termId, element.textContent.trim());
+  });
+}
+
+function renderPresentationRules() {
+  if (!presentationRules || !effectRulesList) return;
+  if (effectRulesTitle) effectRulesTitle.textContent = presentationRules.title || "Regeln für WIRKUNG";
+  if (effectRulesPurpose) effectRulesPurpose.textContent = presentationRules.purpose || "";
+  effectRulesList.replaceChildren();
+
+  for (const rule of presentationRules.rules || []) {
+    const details = document.createElement("details");
+    details.className = "effect-rule";
+    details.dataset.ruleId = rule.id;
+    const summary = document.createElement("summary");
+    summary.textContent = rule.label;
+    details.append(summary);
+
+    const body = document.createElement("div");
+    body.className = "effect-rule-body";
+    const reason = document.createElement("p");
+    reason.innerHTML = "<strong>Warum gibt es diese Regel?</strong>";
+    reason.append(` ${rule.reason || "–"}`);
+    body.append(reason);
+    const application = document.createElement("p");
+    application.innerHTML = "<strong>Wie wird sie angewendet?</strong>";
+    application.append(` ${rule.application || "–"}`);
+    body.append(application);
+
+    if ((rule.programEffects || []).length) {
+      const heading = document.createElement("strong");
+      heading.textContent = "Wirkung im Programm";
+      body.append(heading);
+      const list = document.createElement("ul");
+      for (const entry of rule.programEffects) {
+        const item = document.createElement("li");
+        item.textContent = entry;
+        list.append(item);
+      }
+      body.append(list);
+    }
+
+    const fields = document.createElement("p");
+    fields.className = "effect-rule-fields";
+    fields.innerHTML = "<strong>Verknüpfte Datenfelder:</strong>";
+    fields.append(` ${(rule.dataModelFields || []).join(" · ") || "–"}`);
+    body.append(fields);
+    details.append(body);
+    effectRulesList.append(details);
+  }
+
+  if (effectRulesMeta) {
+    effectRulesMeta.textContent = `Regelwerk ${presentationRules.version} · verbindlich mit ${presentationRules.linkedDataModel}`;
+  }
+  applyPresentationTermLabels();
+}
+
+async function loadPresentationRules() {
+  try {
+    const response = await fetch(PRESENTATION_RULES_SOURCE, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Regelwerk konnte nicht geladen werden (${response.status}).`);
+    const payload = await response.json();
+    if (payload?.format !== "gwl-presentation-rules" || !Array.isArray(payload.rules)) {
+      throw new Error("Regelwerk besitzt kein gültiges Format.");
+    }
+    presentationRules = payload;
+    renderPresentationRules();
+  } catch (error) {
+    console.error(error);
+    if (effectRulesPurpose) effectRulesPurpose.textContent = "Das zentrale Regelwerk konnte nicht geladen werden.";
+  }
+}
+
+function distinctStatements(values) {
+  const seen = new Set();
+  return values.map(normalizedStatement).filter(value => {
+    const key = value.toLocaleLowerCase("de-DE");
+    if (!value || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getContributionInterpretation(network = null, activeItem = null) {
+  if (!network) return "";
+  const presentation = network.presentation || {};
+  const seriesId = activeItem?.knowledgeTimeSeriesId || presentation.primaryTimeSeriesId;
+  const series = (network.timeSeries || []).find(entry => entry.id === seriesId)
+    || getKnowledgeSeries(network);
+  const measurement = getPrimaryKnowledgeMeasurement(network);
+  return distinctStatements([
+    presentation.uncertainty,
+    series?.uncertainty,
+    measurement?.uncertainty
+  ])[0] || "";
+}
+
+function getSelectedInterpretation(network = null, activeItem = null, specificLimit = "") {
+  return distinctStatements([
+    getContributionInterpretation(network, activeItem),
+    specificLimit
+  ]);
+}
+
+function setInterpretationValue(network = null, activeItem = null, specificLimit = "") {
+  if (!uncertaintyValue) return;
+  const statements = getSelectedInterpretation(network, activeItem, specificLimit);
+  uncertaintyValue.replaceChildren();
+  if (!statements.length) {
+    uncertaintyValue.textContent = "–";
+    return;
+  }
+  statements.forEach((statement, index) => {
+    if (index) uncertaintyValue.append(document.createElement("br"));
+    if (statements.length > 1) {
+      const label = document.createElement("strong");
+      label.textContent = index === 0 ? "Beitrag: " : "Ausgewählter Wert: ";
+      uncertaintyValue.append(label);
+    }
+    uncertaintyValue.append(document.createTextNode(statement));
+  });
+}
+
 function setKnowledgeTimeCardMode(network = null, activeBoundary = null, activeItem = null) {
   const timeCard = timeSlider?.closest(".time-card");
   const compact = isCoreKnowledgeContribution(network, activeBoundary, activeItem)
@@ -1234,12 +1376,23 @@ function syncCoreCurveSummaryCard(network = null, activeBoundary = null, activeI
   if (active) {
     focusType.textContent = "PLANETARE GRENZE · KERNBEITRAG";
     focusSummary.textContent = summary.trim();
+    const interpretation = getContributionInterpretation(network, activeItem);
+    if (coreInterpretationDetails && coreInterpretationText) {
+      coreInterpretationDetails.hidden = !interpretation;
+      coreInterpretationText.textContent = interpretation || "–";
+      coreInterpretationDetails.open = false;
+    }
     const hasCurveControls = !copyCurveLinkButton?.hidden || !blcReleaseControl?.hidden;
     coreCurveControlsSlot.hidden = !hasCurveControls;
     if (hasCurveControls) coreCurveControlsSlot.appendChild(curveControlGroup);
     return;
   }
 
+  if (coreInterpretationDetails && coreInterpretationText) {
+    coreInterpretationDetails.hidden = true;
+    coreInterpretationDetails.open = false;
+    coreInterpretationText.textContent = "–";
+  }
   coreCurveControlsSlot.hidden = true;
   if (curveControlGroup.parentElement !== timeCard) timeCard.prepend(curveControlGroup);
 }
@@ -1269,6 +1422,69 @@ function renderNovelShell() {
   }
 }
 
+function renderDeepeningOverview({ eyebrow, title, summary, rows = [], details = [] }) {
+  return `
+    <article class="deepening-overview">
+      <header class="deepening-overview-head">
+        <div class="eyebrow">${eyebrow}</div>
+        <h2>${title}</h2>
+        <p>${summary}</p>
+      </header>
+
+      <section class="deepening-evidence" aria-labelledby="deepeningEvidenceTitle">
+        <h3 id="deepeningEvidenceTitle">Daten im Überblick</h3>
+        <div class="deepening-evidence-list">
+          ${rows.map(row => `
+            <article class="deepening-evidence-row">
+              <div class="deepening-evidence-copy">
+                <span class="deepening-evidence-kind">${row.kind}</span>
+                <strong>${row.title}</strong>
+                <p>${row.text}</p>
+                ${row.note ? `<small>${row.note}</small>` : ""}
+              </div>
+              ${row.actions ? `<div class="deepening-evidence-actions">${row.actions}</div>` : ""}
+              ${row.details ? `
+                <details class="deepening-row-details">
+                  <summary>Details anzeigen</summary>
+                  <div class="deepening-details-body">${row.details}</div>
+                </details>` : ""}
+            </article>`).join("")}
+        </div>
+      </section>
+
+      <div class="deepening-details-list">
+        ${details.filter(detail => detail.content).map(detail => `
+          <details class="knowledge-details deepening-details">
+            <summary>${detail.label}</summary>
+            <div class="deepening-details-body">${detail.content}</div>
+          </details>`).join("")}
+      </div>
+    </article>`;
+}
+
+function renderDeepeningCurveActions({ boundaryId, itemId, label = "Datensatz öffnen", blcLabel = "Kurve im BLC", showContributionLink = true }) {
+  const boundary = getBoundary(boundaryId);
+  const item = boundary?.items?.find(entry => entry.id === itemId);
+  const network = item?.knowledgeSource ? getKnowledgeNetworkBySource(item.knowledgeSource) : null;
+  const curveId = getStableKnowledgeCurveId(item, network);
+  return `
+    ${showContributionLink ? `<button type="button" class="deepening-action" data-life-route-boundary="${boundaryId}" data-life-route-item="${itemId}">${label}</button>` : ""}
+    ${curveId ? `<a class="deepening-action" href="${buildDirectLink(curveId)}" target="_blank" rel="noopener noreferrer">${blcLabel}</a>` : ""}`;
+}
+
+function renderSourceRegister(network, sourceIds = []) {
+  const selectedIds = new Set(sourceIds);
+  const sources = (network?.sources || []).filter(source =>
+    source.url && (!selectedIds.size || selectedIds.has(source.id))
+  );
+  if (!sources.length) return "";
+  return `<div class="deepening-source-list">${sources.map(source => `
+    <p>
+      <a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.title || source.id}</a>
+      <span>${[source.publisher || source.authors, source.journal, source.year || source.updated].filter(Boolean).join(" · ")}</span>
+    </p>`).join("")}</div>`;
+}
+
 function renderPfasMainView() {
   const network = knowledgeNetworks.pfas;
   if (!network) {
@@ -1276,69 +1492,95 @@ function renderPfasMainView() {
   }
 
   const m20 = getMeasurement(network, "de_drinkingwater_pfas20_limit");
+  const m4 = getMeasurement(network, "de_drinkingwater_pfas4_limit");
   const mSample = getMeasurement(network, "de_drinkingwater_screening");
+  const mGroundwater = getMeasurement(network, "de_groundwater_monitoring_gap");
   const mTwi = getMeasurement(network, "efsa_twi_pfas4");
+  const popeNetwork = getKnowledgeNetworkBySource("data/knowledge/gwl_pfas_pope_global_v0.1.json");
+  const popeMeasurement = popeNetwork?.measurements?.[0];
+  const health = network.healthContext || {};
 
-  return `
-    <div class="nutrient-main">
-      <div class="nutrient-main-head">
-        <div class="eyebrow">PLANETARE GRENZE · NEUE SUBSTANZEN</div>
-        <h2>PFAS</h2>
-        <p>
-          PFAS sind ein Beispiel innerhalb der Planetaren Grenze Neue Substanzen.
-          Sie besitzen keine eigene planetare Kontrollgröße. Entscheidend sind konkrete
-          Umweltmessungen, Expositionswege und gesundheitsbezogene Referenzen.
-        </p>
-      </div>
+  const interpretationItems = distinctStatements([
+    ...(network.principles || []),
+    mSample?.interpretation,
+    health.note
+  ]).map(statement => `<li>${statement}</li>`).join("");
+  const gaps = (network.knowledgeGaps || []).map(gap => `
+    <div class="knowledge-gap">
+      <span class="gap-priority">${String(gap.priority || "open").replaceAll("_", " ")}</span>
+      <p>${gap.question}</p>
+    </div>`).join("");
 
-      <div class="knowledge-scope-note">
-        <strong>Planetarer Kontext:</strong>
-        Die Grenze Neue Substanzen gilt auf Systemebene als überschritten.
-        Daraus folgt jedoch kein einzelner globaler „PFAS-Grenzwert“.
-      </div>
-
-      <div class="nutrient-measurement-grid">
-        ${renderMeasurementTile(m20)}
-        ${renderMeasurementTile(mSample)}
-        ${renderMeasurementTile(mTwi)}
-      </div>
-
-      <div class="nutrient-paths">
-        ${renderPathCard(
-          "Wasserpfad",
-          "Verbindung zu Süßwasser",
-          ["PFAS-Nutzung / Freisetzung","Boden / Grundwasser","Trinkwasser","Exposition","LEBEN"],
-          ["Süßwasser"]
-        )}
-
-        ${renderPathCard(
-          "Nahrungspfad",
-          "weitere wichtige Exposition",
-          ["PFAS in Umwelt","Nahrungskette","Lebensmittel","Aufnahme","LEBEN"],
-          []
-        )}
-
-        ${renderPathCard(
-          "Gesundheitsbewertung",
-          "Evidenz ist stoff- und endpunktspezifisch",
-          ["PFAS-Exposition","innere Belastung","immunologische / weitere Wirkungen","Gesundheit"],
-          ["WHO: weitere Bewertung läuft"]
-        )}
-      </div>
-
-      ${renderActionScope(network)}
-
-      <details class="knowledge-details">
-        <summary>Wissenslücken (${(network.knowledgeGaps || []).length})</summary>
-        <div class="knowledge-gap-list">
-          ${(network.knowledgeGaps || []).map(gap => `
-            <div class="knowledge-gap">
-              <span class="gap-priority">${String(gap.priority || "open").replaceAll("_"," ")}</span>
-              <p>${gap.question}</p>
-            </div>`).join("")}
-        </div>
-      </details>
-    </div>`;
+  return renderDeepeningOverview({
+    eyebrow: "PLANETARE GRENZE · NEUE SUBSTANZEN · VERTIEFUNG",
+    title: "PFAS",
+    summary: "PFAS sind eine langlebige Stoffgruppe innerhalb der Neuen Substanzen. Für PFAS gibt es keine eigene planetare Kontrollvariable. Die Einordnung trennt deshalb Emissionen, Umweltbelastung, Aufnahme und mögliche gesundheitliche Wirkungen.",
+    rows: [
+      {
+        kind: "MODELLIERTES EMISSIONSINVENTAR",
+        title: "Globale PFAS-Emissionen · POPE",
+        text: popeMeasurement?.result || "Kumulierte Emissionen ausgewählter PFAS für 1950–2020.",
+        note: "POPE ist ein Modellinventar. Die verfügbare BLC-Kurve zeigt die jährlichen PFOA-Luftemissionen, nicht alle PFAS und keine Umweltkonzentration.",
+        actions: renderDeepeningCurveActions({
+          boundaryId: "novel",
+          itemId: "pfas-pope-global-emissions",
+          blcLabel: "PFOA-Kurve im BLC",
+          showContributionLink: false
+        }),
+        details: `
+          <p><strong>Kumulierter Inventarwert:</strong> ${popeMeasurement?.result || "–"} für ${popeMeasurement?.period || "–"}. ${popeMeasurement?.interpretation || ""}</p>
+          <p><strong>Zeitreihe:</strong> 70 jährliche Best-Guess-Modellwerte 1951–2020 für globale PFOA-Emissionen in die Luft. Addiert werden die vorhandenen POPE-Sektoren Produktion, Produktnutzung/Entsorgung und Flughäfen.</p>
+          <p><strong>Aussagegrenze:</strong> Die Reihe beschreibt eine einzelne PFAS-Substanz. Aus ihr werden weder die Gesamtentwicklung aller PFAS noch Umweltkonzentrationen oder Gesundheitswirkungen abgeleitet.</p>
+          ${renderSourceRegister(popeNetwork)}`
+      },
+      {
+        kind: "RECHTSWERT UND STICHPROBE",
+        title: "Trinkwasser in Deutschland",
+        text: `${measurementValue(m20)} für PFAS-20 · ${measurementValue(mSample)}`,
+        note: "Einzelwerte – keine Zeitreihe.",
+        details: `
+          <p><strong>PFAS-20:</strong> ${measurementValue(m20)} · ${m20?.period || "–"}. ${m20?.interpretation || ""}</p>
+          <p><strong>PFAS-4:</strong> ${measurementValue(m4)} · ${m4?.period || "–"}. ${m4?.interpretation || ""}</p>
+          <p><strong>Stichprobe:</strong> ${measurementValue(mSample)}. ${mSample?.interpretation || ""}</p>
+          <p><strong>Grundwasser:</strong> ${measurementValue(mGroundwater)}. ${mGroundwater?.interpretation || ""}</p>
+          ${renderSourceRegister(network, ["src_uba_drinkingwater", "src_uba_groundwater"])}`
+      },
+      {
+        kind: "GESUNDHEITLICHER REFERENZWERT",
+        title: "EFSA-TWI für PFAS-4",
+        text: measurementValue(mTwi),
+        note: "Referenzwert – keine Zeitreihe.",
+        details: `
+          <p><strong>Kritischer Effekt:</strong> ${health.efsaCriticalEffect || "–"}.</p>
+          <p>${mTwi?.interpretation || ""}</p>
+          <p>${health.note || ""}</p>
+          ${renderSourceRegister(network, ["src_efsa_2020", "src_who_2026"])}`
+      }
+    ],
+    details: [
+      {
+        label: "Wirkungszusammenhang und Gesundheitsbezug",
+        content: `
+          <p class="deepening-path-sentence"><strong>Freisetzung</strong> → Umwelt → Wasser und Nahrung → Aufnahme → mögliche endpunktspezifische Gesundheitswirkungen</p>
+          <p>Die EFSA verwendet die verminderte Immunantwort auf Impfungen als kritischen Effekt. Daraus wird im GWL kein Krankheitslastwert berechnet und ohne geprüftes Markersignal kein Organstatus aktiviert.</p>
+          <button type="button" class="path-crosslink" data-life-route-boundary="freshwater">Süßwasser ↗</button>`
+      },
+      {
+        label: "Einordnung und Aussagegrenzen",
+        content: `<ul class="deepening-limit-list">${interpretationItems}</ul>`
+      },
+      {
+        label: `Wissenslücken (${(network.knowledgeGaps || []).length})`,
+        content: `<div class="knowledge-gap-list">${gaps}</div>`
+      },
+      {
+        label: "Handlungsspielraum",
+        content: `
+          <p>${network.actionScope?.methodNote || ""}</p>
+          ${(network.actionScope?.dimensions || []).map(dimension => `<p><strong>${dimension.label}: ${dimension.level}</strong><br>${dimension.rationale}</p>`).join("")}`
+      }
+    ]
+  });
 }
 
 function renderNutrientShell() {
@@ -1537,7 +1779,7 @@ function renderNaturalGasEnergyMainView() {
       <div class="measurement-card-value">${m.display || "–"}</div>
       <div class="measurement-card-meta">${m.period || ""} · ${m.geography || ""}</div>
       <p>${m.interpretation || ""}</p>
-      ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+      ${m.uncertainty ? `<p><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${m.uncertainty}</p>` : ""}
       ${sourceLinksHtml(network, m.sourceRefs)}
     </article>`).join("");
 
@@ -1605,7 +1847,7 @@ function renderWindEnergyMainView() {
       <strong>${x.direction === "reduces_pressure_on_boundary" ? "↘" : "↗"} ${x.boundaries.slice(1).join(" / ")}</strong>
       <p>${x.mechanism}</p>
       <span>Evidenz: ${x.evidenceStatus || "–"}</span>
-      ${x.caution ? `<p><em>${x.caution}</em></p>` : ""}
+      ${x.caution ? `<p><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${x.caution}</p>` : ""}
     </div>`).join("");
 
   const gaps = (network.knowledgeGaps || []).map(g =>
@@ -1678,7 +1920,7 @@ function renderSolarEnergyMainView() {
       <strong>${x.direction === "reduces_pressure_on_boundary" ? "↘" : "↗"} ${x.boundaries.slice(1).join(" / ")}</strong>
       <p>${x.mechanism}</p>
       <span>Evidenz: ${x.evidenceStatus || "–"}</span>
-      ${x.caution ? `<p><em>${x.caution}</em></p>` : ""}
+      ${x.caution ? `<p><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${x.caution}</p>` : ""}
     </div>`).join("");
 
   const gaps = (network.knowledgeGaps || []).map(g =>
@@ -1956,6 +2198,7 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeGroupId: group.id,
         knowledgeBoundaryId: indexBoundary.id,
         menuType: item.type || "control",
+        menuHidden: item.menuHidden === true,
         parentId: item.parentId || null,
         depthOf: item.parentId || item.depthOf || null
       }));
@@ -2018,6 +2261,12 @@ function genericStudyCard(network, m) {
   const age = m.context?.ageRange
     ? `${m.context.ageRange.min}–${m.context.ageRange.max} Jahre`
     : "";
+  const contributionInterpretation = normalizedStatement(network?.presentation?.uncertainty);
+  const measurementLimit = normalizedStatement(m.uncertainty);
+  const primaryMeasurement = getPrimaryKnowledgeMeasurement(network);
+  const showMeasurementLimit = measurementLimit
+    && m.id !== primaryMeasurement?.id
+    && measurementLimit.toLocaleLowerCase("de-DE") !== contributionInterpretation.toLocaleLowerCase("de-DE");
   return {
     displayType,
     html: `
@@ -2026,7 +2275,7 @@ function genericStudyCard(network, m) {
         <div class="measurement-card-value">${m.display || "–"}</div>
         <div class="measurement-card-meta">${[m.period, m.geography, age].filter(Boolean).join(" · ")}</div>
         ${m.interpretation ? `<p>${m.interpretation}</p>` : ""}
-        ${m.uncertainty ? `<p><strong>Unsicherheit:</strong> ${m.uncertainty}</p>` : ""}
+        ${showMeasurementLimit ? `<p><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${measurementLimit}</p>` : ""}
         ${sourceLinksHtml(network, m.sourceRefs)}
       </article>`
   };
@@ -2110,6 +2359,9 @@ function genericTimeSeriesCards(network) {
     const first = points[0], latest = points[points.length - 1];
     const formatValue = point => point.display || `${Number(point.value).toLocaleString("de-DE", { maximumFractionDigits: 2 })} ${series.unit || ""}`;
     const label = series.label || series.metric || "Zeitreihe";
+    const primarySeries = getKnowledgeSeries(network);
+    const showSeriesLimit = series.id !== primarySeries?.id
+      && normalizedStatement(series.uncertainty).toLocaleLowerCase("de-DE") !== normalizedStatement(network?.presentation?.uncertainty).toLocaleLowerCase("de-DE");
     return {
       label,
       period: `${minYear}–${maxYear}`,
@@ -2123,9 +2375,10 @@ function genericTimeSeriesCards(network) {
       </svg>
       <div class="knowledge-series-values"><span>${first.year}: <b>${formatValue(first)}</b></span><span>${latest.year}: <b>${formatValue(latest)}</b></span></div>
       ${(historicalSegments.length || projections.length) ? `<div class="knowledge-series-legend"><span class="is-observed">Beobachtung</span>${historicalSegments.length ? '<span class="is-historical">Historische Rekonstruktion</span>' : ""}${projections.length ? '<span class="is-projection">Projektion</span>' : ""}</div>` : ""}
-      ${series.methodNote ? `<p><small><strong>Methodenhinweis:</strong> ${series.methodNote}</small></p>` : ""}
-      ${projections.map(projection => `<p><small><strong>${projection.scenarioLabel || "Projektion"}:</strong> ${projection.method || ""} ${projection.uncertainty || ""}</small></p>`).join("")}
-      <p><small>${series.finding || ""} ${series.uncertainty || ""}</small></p>
+      ${series.methodNote ? `<p><small><strong>${presentationTerm("dataAndMethod", "Daten und Methode")}:</strong> ${series.methodNote}</small></p>` : ""}
+      ${projections.map(projection => `<p><small><strong>${projection.scenarioLabel || "Projektion"}:</strong> ${projection.method || ""}${projection.uncertainty ? ` <b>${presentationTerm("statementLimit", "Aussagegrenze")}:</b> ${projection.uncertainty}` : ""}</small></p>`).join("")}
+      ${series.finding ? `<p><small><strong>${presentationTerm("finding", "Befund")}:</strong> ${series.finding}</small></p>` : ""}
+      ${showSeriesLimit && series.uncertainty ? `<p><small><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${series.uncertainty}</small></p>` : ""}
     </div>`
     };
   }).filter(Boolean);
@@ -2143,7 +2396,7 @@ function genericTimeSeriesCards(network) {
       <strong>PROJEKTION · ${series.scenarioLabel || "Trend"}</strong>
       <p>${series.method || ""}</p>
       <div class="knowledge-projection-values">${(series.points || []).map(point => `<span>${point.year}: <b>${point.display || point.value}</b></span>`).join("")}</div>
-      <p><small>${series.uncertainty || ""}</small></p>
+      ${series.uncertainty ? `<p><small><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${series.uncertainty}</small></p>` : ""}
     </div>`).join("");
   const projectionHtml = unmatchedProjections
     ? `<h3>NICHT ZUGEORDNETE PROJEKTION</h3><div class="knowledge-series-grid">${unmatchedProjections}</div>`
@@ -2188,7 +2441,7 @@ function renderGenericKnowledgeView(network, indexEntry, activeBoundary = null, 
       <strong>${p.label === "Expositions- und Wirkungspfad" ? "Gesundheitspfad" : (p.label || "Wirkungspfad")}</strong>
       <p class="effect-path-flow">${renderGenericPathChain(p, network)}</p>
       ${p.evidenceStatus ? `<span>Evidenz: ${p.evidenceStatus}</span>` : ""}
-      ${p.caution ? `<p><em>${p.caution}</em></p>` : ""}
+      ${p.caution ? `<p><strong>${presentationTerm("statementLimit", "Aussagegrenze")}:</strong> ${p.caution}</p>` : ""}
     </div>`).join("");
 
   const boundaryInteractions = (network.boundaryInteractions || []).map(interaction => `
@@ -2771,7 +3024,11 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
     periodValue.textContent = String(point.year);
     findingText.textContent = point.finding || series.finding || presentation.finding || "–";
     effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
-    uncertaintyValue.textContent = point.uncertainty || series.uncertainty || presentation.uncertainty || "–";
+    setInterpretationValue(
+      network,
+      activeItem,
+      point.uncertainty || series.uncertainty
+    );
     lifeNote.textContent = genericHealthReadout(network);
     if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
     else setLink("–", null);
@@ -2788,7 +3045,7 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
   periodValue.textContent = measurement?.period || "–";
   findingText.textContent = presentation.finding || measurement?.interpretation || "–";
   effectPath.textContent = presentation.effectPath || firstPathway?.label || "–";
-  uncertaintyValue.textContent = presentation.uncertainty || measurement?.uncertainty || "–";
+  setInterpretationValue(network, activeItem, measurement?.uncertainty);
   lifeNote.textContent = genericHealthReadout(network);
   if (source?.url) setLink(source.title || source.publisher || "Quelle", source.url);
   else setLink("–", null);
@@ -2984,6 +3241,7 @@ function applyKnowledgeToStandardEffect(network, activeBoundary, activeItem) {
 function renderKnowledgePanel() {
   const panel = ensureKnowledgePanel();
   const state = getActiveViewState();
+  if (contributionRoleCard) contributionRoleCard.style.display = "";
   syncCoreCurveSummaryCard();
 
   // Generischer Index-Pfad: funktioniert für Planetare Grenzen und Ergänzungen.
@@ -3004,7 +3262,7 @@ function renderKnowledgePanel() {
 
     if (state.boundaryId === "nutrients") {
       // Nährstoffkreisläufe sollen dieselbe Grundstruktur wie Landnutzung zeigen:
-      // Titelblock + vier Standardfelder + Befund/Wirkung/Unsicherheit.
+      // Titelblock + vier Standardfelder + Befund/Wirkung/Einordnung.
       // nutrient-mode wird entfernt, damit diese Felder nicht per CSS ausgeblendet werden.
       document.body.classList.remove("nutrient-mode");
       setStandardFocusCardVisible(true);
@@ -3046,6 +3304,9 @@ function renderKnowledgePanel() {
 
   if (state.boundaryId === "novel") {
     renderNovelShell();
+
+    setStandardFocusCardVisible(state.componentId !== "pfas");
+    if (contributionRoleCard) contributionRoleCard.style.display = state.componentId === "pfas" ? "none" : "";
 
     panel.innerHTML = state.componentId === "pfas"
       ? renderPfasMainView()
@@ -3230,7 +3491,7 @@ function getCurrentItem() { const boundary = getBoundary(selectedBoundaryId); re
 function getVisibleItems(boundary) {
   if (!boundary?.items) return [];
   return boundary.items.filter(item =>
-    item.archived !== true && (item.scope === "all" || item.scope === getSelectedScope())
+    item.archived !== true && item.menuHidden !== true && (item.scope === "all" || item.scope === getSelectedScope())
   );
 }
 
@@ -4460,7 +4721,7 @@ function openOrganOverlay(organId, preserveHidden = false) {
     }
     organOverlayNote.insertAdjacentHTML("beforeend", `
       <details class="organ-context-details organ-method-details">
-        <summary>Einordnung &amp; Methodik</summary>
+        <summary>Markererklärung und Methodik</summary>
         <div class="organ-prototype-warning">
           <p>${LIFE_HEALTH_DATA?.methodPolicy?.organColorRule || ""}</p>
         </div>
@@ -4507,7 +4768,7 @@ function openOrganOverlay(organId, preserveHidden = false) {
           </div>
         </details>` : ""}
       <details class="organ-context-details organ-method-details" open>
-        <summary>Einordnung &amp; Methodik</summary>
+        <summary>Markererklärung und Methodik</summary>
         <p>${impact
           ? "Die fachliche Einordnung und der Wirkungspfad stehen im Feld <strong>WIRKUNG</strong>."
           : knowledgeSignal?.note || (knowledgeSignal
@@ -4937,6 +5198,7 @@ window.addEventListener("popstate", applyDirectLink);
 
 async function initPanel() {
   try {
+    await loadPresentationRules();
     await loadBodymapConfig();
     await loadHealthContributionPrototype();
     await loadHealthStudyImport();
@@ -5510,7 +5772,7 @@ function gwlHealthIconSvg(key) {
   function hideIt() {
     const nodes = Array.from(document.querySelectorAll("summary,button,h3,h4,div,span"));
     const heading = nodes.find(el =>
-      (el.textContent || "").trim() === "Einordnung Gesundheit"
+      (el.textContent || "").trim() === "Gesundheitsbezug"
     );
     if (!heading) return false;
 

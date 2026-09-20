@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GWL-Panel – Prototyp 0.8.1</title>
-  <link rel="stylesheet" href="style.css?v=0.9.79-b68">
+  <link rel="stylesheet" href="style.css?v=0.9.79-b70">
 </head>
 <body>
   <main class="app-shell">
@@ -79,12 +79,12 @@
           <div class="panel-heading-main">
             <h2 id="wirkungTitle">WIRKUNG</h2>
             <div class="effect-path-info-wrap">
-              <button id="effectPathInfoButton" class="inline-info-button" type="button" aria-label="Bedeutung und Funktionsweise von Wirkungspfaden" aria-expanded="false" aria-controls="effectPathInfo">i</button>
+              <button id="effectPathInfoButton" class="inline-info-button" type="button" aria-label="Zentrale Regeln für die Darstellung unter WIRKUNG" aria-expanded="false" aria-controls="effectPathInfo">i</button>
               <div id="effectPathInfo" class="effect-path-info" role="note" hidden>
-                <strong>Was ist ein Wirkungspfad?</strong>
-                <p>Ein Wirkungspfad beschreibt eine fachlich belegte Kette vom Ausgangspunkt über Veränderungen und Expositionen bis zu einer möglichen Wirkung. Er erklärt Zusammenhänge, berechnet aber keine Messwerte und verändert keine Kurven.</p>
-                <p><b>Andere planetare Grenzen</b> werden nur über ausdrücklich hinterlegte Querverbindungen verknüpft. <b>Organmarker</b> erscheinen nur, wenn zusätzlich ein geprüfter Gesundheits- und Expositionsbezug gespeichert ist.</p>
-                <p>Bei Kernbeiträgen ist die wesentliche Wirkung in den kurzen Fließtext integriert. Ausführliche Pfade werden nur dort gezeigt, wo sie für Vertiefungen, Gesundheit oder grenzübergreifende Zusammenhänge benötigt werden.</p>
+                <strong id="effectRulesTitle">Regeln für WIRKUNG</strong>
+                <p id="effectRulesPurpose">Das zentrale Regelwerk wird geladen.</p>
+                <div id="effectRulesList" class="effect-rules-list"></div>
+                <p id="effectRulesMeta" class="effect-rules-meta"></p>
               </div>
             </div>
             <button id="causeButtonEffect" class="cause-chip" type="button" hidden>Ursachen</button>
@@ -160,6 +160,10 @@
           <div class="eyebrow" id="focusType">Süßwasser</div>
           <h3 id="focusTitle">–</h3>
           <p id="focusSummary">–</p>
+          <details id="coreInterpretationDetails" class="core-interpretation-details" hidden>
+            <summary data-presentation-rule-label="interpretationAndLimits">Einordnung und Aussagegrenzen</summary>
+            <p id="coreInterpretationText">–</p>
+          </details>
           <div id="coreCurveControlsSlot" class="core-curve-controls" hidden>
             <span>Daten und Quellen im BLC:</span>
           </div>
@@ -197,7 +201,7 @@
         </details>
 
         <details class="accordion uncertainty-box">
-          <summary>Unsicherheit / Einordnung</summary>
+          <summary data-presentation-rule-label="interpretationAndLimits">Einordnung und Aussagegrenzen</summary>
           <p id="uncertaintyValue">–</p>
         </details>
 
@@ -276,7 +280,7 @@
           </div>
 
           <details class="accordion life-note">
-            <summary>Einordnung Gesundheit</summary>
+            <summary>Gesundheitsbezug</summary>
             <p id="lifeNote">Gesundheitswirkungen werden erst hervorgehoben, wenn ein belastbarer Wirkungspfad von der Umweltveränderung über eine konkrete Exposition bis zum Menschen belegt ist.</p>
           </details>
 
@@ -294,7 +298,7 @@
                 <div class="organ-overlay-text">
                   <span class="eyebrow">Befund</span>
                   <p id="organOverlayFinding">–</p>
-                  <span class="eyebrow section-gap">Einordnung</span>
+                  <span class="eyebrow section-gap">Kontext und Methodik</span>
                   <p id="organOverlayNote">–</p>
                 </div>
               </div>
@@ -353,6 +357,6 @@
   <script src="data.js?v=0.9.74-b62"></script>
   <script src="threshold-crossings.js?v=0.9.76-b64"></script>
   <script src="direct-link.js?v=0.9.76-b64"></script>
-  <script src="app.js?v=0.9.79-b68"></script>
+  <script src="app.js?v=0.9.79-b70"></script>
 </body>
 </html>

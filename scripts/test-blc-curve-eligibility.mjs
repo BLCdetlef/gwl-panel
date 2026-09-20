@@ -43,6 +43,11 @@ const cases = [
     source: "data/knowledge/gwl_ocean_acidification_v0.1.json",
     seriesId: "global_surface_omega_arag_oceansoda_1982_2021",
     expected: true
+  },
+  {
+    source: "data/knowledge/gwl_pfas_pope_global_v0.1.json",
+    seriesId: "global_pfoa_air_emissions_pope_1951_2020",
+    expected: true
   }
 ];
 
