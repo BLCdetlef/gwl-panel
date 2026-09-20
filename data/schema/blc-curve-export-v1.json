@@ -30,6 +30,7 @@
           "geography": { "type": "string" },
           "dataNature": { "enum": ["observed", "assessed_model_estimate"] },
           "worseningDirection": { "enum": ["increase", "decrease"] },
+          "coverageExceptionRuleId": { "const": "blc_documented_single_year_coverage_exception" },
           "finding": { "type": "string" },
           "uncertainty": { "type": "string" },
           "methodNote": { "type": "string" },

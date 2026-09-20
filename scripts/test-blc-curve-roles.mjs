@@ -63,6 +63,7 @@ const expected = new Map([
   ["global_oil_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_plastics_production_1950_2019", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
   ["global_pfoa_air_emissions_pope_1951_2020", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
+  ["global_pesticide_use_fao_annual", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "novel_entities", domainLabel: "Neue Substanzen" }],
   ["global_solar_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_wind_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }]
 ]);

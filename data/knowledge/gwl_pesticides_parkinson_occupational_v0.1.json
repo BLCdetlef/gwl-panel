@@ -132,6 +132,8 @@
     "panelRule": "Keinen künstlichen Zeitverlauf erzeugen. Inkrafttreten, Expositionsmaß und Wirkungspfad als belegte Kontextwerte zeigen."
   },
   "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Seit dem 1. August 2026 kann ein primäres Parkinson-Syndrom in Deutschland unter der BK Nr. 1322 als Berufskrankheit anerkannt werden, wenn eine langjährige, häufige und eigene berufliche Pestizidanwendung belegt ist. Als Expositionskriterium gelten mindestens 100 gegebenenfalls trendkorrigierte Anwendungstage innerhalb einer Wirkstoff-Funktionsgruppe; Tage verschiedener Gruppen werden nicht addiert. Das ist ein Kriterium für die individuelle Anerkennung und kein allgemeiner biologischer Grenzwert oder Beleg für ein Risiko bei jedem Pestizidkontakt.",
     "primaryMeasurementId": "germany_bk1322_2026",
     "referenceLabel": "Deutschland: BK Nr. 1322",
     "finding": "Langjährige, häufige und eigene berufliche Pestizidanwendung kann unter definierten Voraussetzungen als Ursache eines primären Parkinson-Syndroms anerkannt werden.",

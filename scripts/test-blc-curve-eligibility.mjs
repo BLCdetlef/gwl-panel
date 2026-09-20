@@ -48,17 +48,25 @@ const cases = [
     source: "data/knowledge/gwl_pfas_pope_global_v0.1.json",
     seriesId: "global_pfoa_air_emissions_pope_1951_2020",
     expected: true
+  },
+  {
+    source: "data/knowledge/gwl_pesticides_global_v0.1.json",
+    seriesId: "global_pesticide_use_fao_annual",
+    coverageExceptionRuleId: "blc_documented_single_year_coverage_exception",
+    expected: true
   }
 ];
 
-function eligibility(series) {
+function eligibility(series, coverageExceptionRuleId) {
   const points = series?.points || series?.values || [];
   const years = [...new Set(points
     .filter(point => Number.isFinite(Number(point?.year)) && Number.isFinite(Number(point?.value)))
     .map(point => Number(point.year)))].sort((a, b) => a - b);
   const historicalYears = (series?.historicalSeries || series?.historicalSegments || []).flatMap(segment => (segment.points || segment.values || []).map(point => Number(point.year)).filter(Number.isFinite));
   const spanYears = years.length ? years.at(-1) - Math.min(years[0], ...historicalYears) : 0;
-  return { eligible: years.length >= 5 && spanYears >= 50, pointCount: years.length, spanYears };
+  const documentedSingleYearException = spanYears === 49
+    && coverageExceptionRuleId === "blc_documented_single_year_coverage_exception";
+  return { eligible: years.length >= 5 && (spanYears >= 50 || documentedSingleYearException), pointCount: years.length, spanYears };
 }
 
 const syntheticCases = [
@@ -81,11 +89,23 @@ const syntheticCases = [
     label: "Rekonstruktion plus fünf Beobachtungspunkte erfüllen 50 Jahre",
     series: { points: [2000, 2005, 2010, 2015, 2020].map(year => ({ year, value: 1 })), historicalSeries: [{ values: [{ year: 1970, value: 1 }] }] },
     expected: true
+  },
+  {
+    label: "Dokumentierte Ausnahme erlaubt genau 49 Jahre",
+    series: { points: [2000, 2005, 2010, 2015, 2020].map(year => ({ year, value: 1 })), historicalSeries: [{ values: [{ year: 1971, value: 1 }] }] },
+    coverageExceptionRuleId: "blc_documented_single_year_coverage_exception",
+    expected: true
+  },
+  {
+    label: "Dokumentierte Ausnahme erlaubt keine 48 Jahre",
+    series: { points: [2000, 2005, 2010, 2015, 2020].map(year => ({ year, value: 1 })), historicalSeries: [{ values: [{ year: 1972, value: 1 }] }] },
+    coverageExceptionRuleId: "blc_documented_single_year_coverage_exception",
+    expected: false
   }
 ];
 
 for (const testCase of syntheticCases) {
-  const result = eligibility(testCase.series);
+  const result = eligibility(testCase.series, testCase.coverageExceptionRuleId);
   if (result.eligible !== testCase.expected) throw new Error(`${testCase.label}: erwartet ${testCase.expected}, erhalten ${result.eligible}.`);
 }
 
@@ -93,7 +113,7 @@ for (const testCase of cases) {
   const payload = JSON.parse(await fs.readFile(path.join(projectRoot, ...testCase.source.split("/")), "utf8"));
   const series = (payload.timeSeries || []).find(candidate => candidate.id === testCase.seriesId);
   if (!series) throw new Error(`${testCase.seriesId}: Testreihe fehlt.`);
-  const result = eligibility(series);
+  const result = eligibility(series, testCase.coverageExceptionRuleId);
   if (result.eligible !== testCase.expected) {
     throw new Error(`${testCase.seriesId}: erwartet ${testCase.expected}, erhalten ${result.eligible}.`);
   }

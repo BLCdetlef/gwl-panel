@@ -184,7 +184,7 @@
   "navigationRule": {
     "group": "Neue Substanzen",
     "item": "Mikroplastik · menschliche Leber 2022",
-    "parentId": "plastics_petrochemicals_global",
+    "parentId": "plastics-microplastics",
     "classification": "study"
   },
   "timeSeries": [],
@@ -194,6 +194,8 @@
     "panelRule": "Keinen Zeitverlauf erzeugen. Studiendesign, Gewebenachweis, Partikelgröße und Unsicherheit zeigen."
   },
   "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Eine 2022 veröffentlichte Proof-of-concept-Studie untersuchte 11 menschliche Leberproben: sechs von Personen mit Leberzirrhose und fünf ohne zugrunde liegende Lebererkrankung. In den zirrhotischen Proben wurden nach Blankkorrektur 3,2 bis 9,9 Mikroplastikpartikel pro Gramm nachgewiesen, in den Vergleichsproben 0,0 bis 1,5. Der Befund belegt eine innere Exposition und einen Leberbezug, aber weder, dass Mikroplastik die Zirrhose verursacht, noch eine Häufigkeit oder Krankheitslast in der Bevölkerung.",
     "primaryMeasurementId": "horvatits_2022_liver_detection",
     "referenceLabel": "Humaner Gewebenachweis · keine Kausalität",
     "finding": "In dieser kleinen Fallserie wurden sechs Mikroplastik-Polymertypen in zirrhotischem menschlichem Lebergewebe nachgewiesen; die blank-korrigierten Konzentrationen lagen dort bei 3,2 bis 9,9 Partikeln pro Gramm Gewebe.",

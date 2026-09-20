@@ -1,0 +1,156 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Neue Substanzen · Zustand der planetaren Grenze",
+  "status": "official_assessment",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Neue Substanzen",
+    "subComponent": "Zustand und Kontrollvariable",
+    "contributionRole": "pg_core",
+    "effectFocus": "Ob synthetische Chemikalien erst nach ausreichender Sicherheitsprüfung und mit angemessener Überwachung in die Umwelt freigesetzt werden"
+  },
+  "corePrinciples": [
+    "Die derzeit verwendete planetare Kontrollvariable ist der Anteil synthetischer Chemikalien, die ohne ausreichende Sicherheitsprüfung in die Umwelt gelangen.",
+    "Die planetare Grenze liegt nach dem Vorsorgeprinzip bei 0 Prozent unzureichend geprüften Freisetzungen.",
+    "Der aktuelle Anteil ist global nicht umfassend bezifferbar; der Zustand wird deshalb als überschritten, nicht als exakter Prozentwert dargestellt.",
+    "Produktions-, Einsatz- und Emissionsreihen einzelner Stoffgruppen sind ergänzende Indikatoren und dürfen nicht als Messung der planetaren Kontrollvariable ausgegeben werden.",
+    "Gesundheitsbefunde benötigen zusätzlich einen konkreten Expositions- und Wirkungspfad und bestimmen nicht den Status der planetaren Grenze."
+  ],
+  "nodes": [
+    {
+      "id": "activity_novel_entity_production",
+      "type": "human_activity",
+      "label": "Produktion und Nutzung neuer Stoffe und Materialien"
+    },
+    {
+      "id": "pressure_inadequately_tested_release",
+      "type": "environmental_pressure",
+      "label": "Freisetzung ohne ausreichende Sicherheitsprüfung"
+    },
+    {
+      "id": "control_variable_untested_fraction",
+      "type": "control_variable",
+      "label": "Anteil unzureichend geprüfter Freisetzungen"
+    },
+    {
+      "id": "boundary_status_transgressed",
+      "type": "boundary_status",
+      "label": "Planetare Grenze überschritten"
+    }
+  ],
+  "edges": [
+    {
+      "from": "activity_novel_entity_production",
+      "to": "pressure_inadequately_tested_release",
+      "relationType": "can_contribute_to",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "pressure_inadequately_tested_release",
+      "to": "control_variable_untested_fraction",
+      "relationType": "measured_by",
+      "evidenceStatus": "official_proxy"
+    },
+    {
+      "from": "control_variable_untested_fraction",
+      "to": "boundary_status_transgressed",
+      "relationType": "indicates",
+      "evidenceStatus": "official_assessment"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "novel_entities_status_2025",
+      "node": "boundary_status_transgressed",
+      "geography": "Global",
+      "period": "2025",
+      "metric": "Anteil synthetischer Chemikalien, die ohne ausreichende Sicherheitsprüfung in die Umwelt gelangen",
+      "result": "überschritten · global nicht exakt beziffert",
+      "display": "Planetare Grenze überschritten",
+      "reference": {
+        "type": "planetary_boundary",
+        "value": 0,
+        "unit": "%",
+        "display": "0 % unzureichend geprüfte Freisetzungen"
+      },
+      "interpretation": "Die Bewertung beruht auf dem deutlichen Missverhältnis zwischen wachsender Stoffproduktion und -freisetzung sowie begrenzter globaler Prüf- und Überwachungskapazität.",
+      "uncertainty": "Es liegt kein global vollständiges Inventar vor, aus dem ein belastbarer aktueller Prozentwert berechnet werden könnte. Der Status ist eine Vorsorge- und Systembewertung, keine aggregierte Konzentrationsmessung.",
+      "sourceRefs": [
+        "src_phc_2025_novel_entities",
+        "src_richardson_2023"
+      ]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "path_novel_entities_boundary",
+      "label": "Produktion und Nutzung → unzureichend geprüfte Freisetzung → Verteilung und Akkumulation → mögliche Wirkungen auf Erdsystemprozesse",
+      "chain": [
+        "Produktion und Nutzung",
+        "Freisetzung",
+        "Umwelttransport und Akkumulation",
+        "Exposition und Wirkungen",
+        "mögliche Störung von Erdsystemprozessen"
+      ],
+      "evidenceStatus": "framework_assessment",
+      "caution": "Die Kette erklärt die Systemlogik. Sie berechnet weder einen gemeinsamen Toxizitätswert noch eine Gesundheitslast aus Produktionsmengen."
+    }
+  ],
+  "boundaryInteractions": [],
+  "healthContext": {
+    "bodymapStatus": "no_direct_marker",
+    "markerSignals": [],
+    "systemImpacts": [],
+    "bodymapRule": "Der Status der planetaren Grenze aktiviert keinen Organmarker. Gesundheitsbezüge werden ausschließlich in den Stoffgruppen über geprüfte Expositionspfade geführt."
+  },
+  "sources": [
+    {
+      "id": "src_phc_2025_novel_entities",
+      "type": "scientific_assessment",
+      "title": "Planetary Health Check 2025: A Scientific Assessment of the State of the Planet",
+      "authors": "Sakschewski et al.",
+      "year": 2025,
+      "doi": "10.48485/pik.2025.017",
+      "url": "https://publications.pik-potsdam.de/pubman/item/item_32589",
+      "locator": "Abschnitt 4.9 Introduction of Novel Entities; Kontrollvariable, Grenzwert und Status"
+    },
+    {
+      "id": "src_richardson_2023",
+      "type": "peer_reviewed_framework_update",
+      "title": "Earth beyond six of nine planetary boundaries",
+      "authors": "Richardson et al.",
+      "year": 2023,
+      "doi": "10.1126/sciadv.adh2458",
+      "url": "https://doi.org/10.1126/sciadv.adh2458",
+      "locator": "Introduction of novel entities; control variable and boundary assessment"
+    },
+    {
+      "id": "src_persson_2022",
+      "type": "peer_reviewed_policy_analysis",
+      "title": "Outside the Safe Operating Space of the Planetary Boundary for Novel Entities",
+      "authors": "Persson et al.",
+      "year": 2022,
+      "doi": "10.1021/acs.est.1c04158",
+      "url": "https://doi.org/10.1021/acs.est.1c04158",
+      "locator": "Impact pathway and complementary control-variable candidates"
+    }
+  ],
+  "presentation": {
+    "primaryMeasurementId": "novel_entities_status_2025",
+    "referenceLabel": "Planetare Grenze: 0 % unzureichend geprüfte Freisetzungen",
+    "effectSummary": "Die planetare Grenze Neue Substanzen bewertet, ob synthetische Chemikalien vor ihrer Freisetzung ausreichend auf Sicherheit geprüft und anschließend überwacht werden. Die sichere Grenze liegt bei 0 % unzureichend geprüften Freisetzungen. Da Produktion und Freisetzung die globale Prüf- und Überwachungskapazität übersteigen, gilt die Grenze als überschritten; ein belastbarer aktueller Prozentwert liegt jedoch nicht vor.",
+    "finding": "Die planetare Grenze für Neue Substanzen gilt als überschritten, weil Stoffproduktion und Freisetzung schneller wachsen als die globale Fähigkeit, Risiken ausreichend zu prüfen und zu überwachen. Ein belastbarer aktueller Prozentwert liegt nicht vor.",
+    "effectPath": "Produktion und Nutzung → Freisetzung ohne ausreichende Prüfung → Umweltverteilung und Akkumulation → mögliche Wirkungen auf Erdsystemprozesse",
+    "uncertainty": "Die Kontrollvariable ist ein globaler Vorsorge- und Governance-Proxy. Kunststoffproduktion, Pestizideinsatz und PFAS-Emissionen ergänzen die Bewertung, ersetzen sie aber nicht.",
+    "statusYear": 2025,
+    "statusLabel": "Planetare Grenze überschritten"
+  },
+  "classification": {
+    "systemBoundary": "planetary_boundaries",
+    "group": "novel_entities",
+    "item": "boundary_status",
+    "classification": "planetary_boundary_control_proxy"
+  }
+}

@@ -8,7 +8,7 @@ Daten, Darstellung und Interpretation werden getrennt. Das Panel darf keine Zwis
 
 ## Zentrales Regelregister
 
-Die übergreifenden Redaktions- und Darstellungsregeln liegen maschinenlesbar in [`data/policies/presentation-rules-v1.json`](../data/policies/presentation-rules-v1.json). **Regelregister-Version: 1.1.1.** Dieses Register ist die gemeinsame Quelle für:
+Die übergreifenden Redaktions- und Darstellungsregeln liegen maschinenlesbar in [`data/policies/presentation-rules-v1.json`](../data/policies/presentation-rules-v1.json). **Regelregister-Version: 1.2.4.** Dieses Register ist die gemeinsame Quelle für:
 
 - die verständliche Regelerklärung im GWL unter **WIRKUNG**, einschließlich Zweck, Anwendung und Auswirkung im Programm,
 - die Verknüpfung jeder Regel mit den betroffenen Datenmodellfeldern,
@@ -56,6 +56,8 @@ Beobachtungen und Projektionen werden getrennt dargestellt. Ohne belastbare prä
 Historische Vorgängerrekonstruktionen mit abweichender Methode werden nicht mit der Hauptreihe vermischt: Sie nutzen eine gestrichelte Linie. Ein `◇` auf der Zeitachse markiert den Methodenwechsel; seine Erklärung gehört in Einordnung, Methodennotiz oder zugängliche Diagrammbeschreibung. Projektionen bleiben gepunktet.
 
 Historische Rekonstruktion, Beobachtung und Projektion dürfen aus unterschiedlichen Quellen stammen und dennoch in einem Diagramm erscheinen, wenn Messgröße, Einheit, Raumbezug und methodischer Anschluss nachvollziehbar zusammenpassen. Die Zuordnung soll bevorzugt explizit über die ID der beobachteten Reihe erfolgen; eine automatische Zuordnung ist nur bei genau einer eindeutig passenden Einheit zulässig. Inkompatible Reihen werden nie auf eine gemeinsame Skala gezwungen. Eine einzelne Messreihe bleibt standardmäßig sichtbar; mehrere fachlich getrennte Reihen eines Beitrags werden jeweils in einem eigenen, zunächst geschlossenen Abschnitt gezeigt.
+
+Die BLC-Freigabe verlangt grundsätzlich mindestens 50 Jahre gemeinsame Abdeckung aus Beobachtung und optionaler historischer Rekonstruktion. Eine ausdrücklich im Freigabemanifest mit `coverageExceptionRuleId: "blc_documented_single_year_coverage_exception"` dokumentierte Ausnahme darf ausschließlich eine Abdeckung von 49 Jahren zulassen. Sie setzt voraus, dass Beobachtung und Rekonstruktion getrennte Segmente bleiben und Definitionsunterschiede, Datenlücke, fehlende Kalibrierung sowie Herkunft im Methodentext und in der segmentbezogenen Provenienz erklärt werden. Größere Unterschreitungen bleiben technisch gesperrt.
 
 ## Gesundheitsbezug
 
@@ -155,6 +157,20 @@ Vorhandene Kurven- und Gesundheitsbezüge sind Fähigkeiten eines Beitrags, kein
 - `boundaryInteractions[]` steuert ausdrücklich modellierte Querverbindungen zu anderen Systemgrenzen.
 
 Die generische Darstellung wird durch `renderDeepeningOverview` aufgebaut. Themen wie PFAS liefern nur die fachlichen Inhalte und die vorhandenen Fähigkeiten; Aufbau und Offenlegungsreihenfolge bleiben zentral geregelt.
+
+### Neue Substanzen: fachliche Hierarchie
+
+Die Navigation unter `novel_entities` bildet nicht bloß eine Liste von Stoffen und Studien. Sie trennt drei Ebenen:
+
+1. Der Kernbeitrag `novel-entities-boundary-status` beschreibt ausschließlich die offizielle Kontrollvariable, den planetaren Grenzwert und den globalen Bewertungsstatus.
+2. Einträge mit `groupOnly: true` bündeln Beiträge nach Stoff- beziehungsweise Materialfamilie. Sie besitzen selbst keine Messreihe und keine Gesundheitsbewertung.
+3. Untergeordnete Beiträge werden über `parentId` als ergänzender Produktions-, Einsatz- oder Emissionsindikator, als Fallstudie oder als Gesundheitsevidenz eingeordnet.
+
+Produktions-, Einsatz- und Emissionskurven dürfen im GWL und BLC erhalten bleiben, sind aber keine unmittelbare Messung der planetaren Kontrollvariable. Gesundheitsmarker werden unabhängig davon weiterhin ausschließlich aus `healthContext.markerSignals[]` abgeleitet. Die Reihenfolge der Stoffgruppen dient der verständlichen Navigation und stellt keine quantitative Risikorangfolge dar.
+
+Thematische Haupt- und Vertiefungsbeiträge können mit `presentation.summaryCardMode: "narrative"` dieselbe ruhige Kartenzusammenfassung wie Kernbeiträge verwenden, ohne dadurch zum Kernbeitrag zu werden. `presentation.effectSummary` verbindet dafür Messgröße, zeitlichen Bezug, fachliche Bedeutung und wesentliche Aussagegrenze in einem kurzen Fließtext. Kurvenkontrolle und BLC-Link bleiben in der Karte; Studienbelege und Gesundheitsbezüge bleiben als nachgeordnete Details erhalten.
+
+Enthält die Kartenzusammenfassung bereits die notwendige Orientierung, fasst `presentation.compactKnowledgeView: true` die ausführlichen Belege, Wirkungspfade und Querverbindungen in einem zunächst geschlossenen Detailbereich zusammen. `presentation.knowledgePanelLabel` kann dessen sachliche Beschriftung festlegen. Das ist keine Entfernung oder Zusammenrechnung von Evidenz: Die Detaildaten bleiben unverändert und werden nur nach Bedarf offengelegt.
 
 ## Bodymap-IDs und medizinische Bilder
 

@@ -1,6 +1,6 @@
 {
   "format": "gwl-presentation-rules",
-  "version": "1.1.1",
+  "version": "1.2.4",
   "title": "Regeln für WIRKUNG",
   "purpose": "Diese Regeln sorgen dafür, dass Kernbeiträge, Vertiefungen und Gesundheitsbezüge im GWL gleich aufgebaut, nachvollziehbar und nicht stärker dargestellt werden, als es die Daten erlauben.",
   "linkedDataModel": "docs/DATA-MODEL.md",
@@ -117,6 +117,24 @@
       ]
     },
     {
+      "id": "blc_documented_single_year_coverage_exception",
+      "label": "Eine knappe BLC-Zeitlücke nur ausdrücklich und transparent zulassen",
+      "reason": "Eine fachlich geeignete globale Rekonstruktion soll nicht allein wegen eines fehlenden Jahres verworfen werden; die Mindestabdeckung darf dadurch aber nicht allgemein aufgeweicht werden.",
+      "application": "Die Ausnahme gilt ausschließlich für 49 statt 50 Jahre gemeinsame Abdeckung und muss im Freigabemanifest ausdrücklich referenziert sein. Rekonstruktion und Beobachtung bleiben getrennte Segmente; Definition, Quelle, Datenlücke und fehlende Kalibrierung werden im BLC am jeweiligen Segment erklärt.",
+      "programEffects": [
+        "Größere Unterschreitungen der 50-Jahres-Regel bleiben technisch gesperrt.",
+        "Die Ausnahme ändert keine Messwerte und erzeugt keine Zwischenwerte.",
+        "Ein sichtbarer Methodenwechsel verhindert, dass Rekonstruktion und Beobachtung als homogene Messreihe erscheinen."
+      ],
+      "dataModelFields": [
+        "curve-approvals-v1.approvedCurves[].coverageExceptionRuleId",
+        "timeSeries[].historicalSeries[]",
+        "timeSeries[].methodNote",
+        "timeSeries[].methodBreaks[]"
+      ],
+      "appliedBy": []
+    },
+    {
       "id": "deepening_progressive_disclosure",
       "label": "Vertiefungen schrittweise und nach Evidenzart öffnen",
       "reason": "Vertiefungen können Messwerte, Rechtswerte, Modellierungen, Gesundheitsreferenzen und Wirkungspfade enthalten. Werden diese Angaben gleichzeitig und gleichrangig gezeigt, sind sie schwer vergleichbar und können fachlich verwechselt werden.",
@@ -143,6 +161,36 @@
       "appliedBy": [
         "renderDeepeningOverview",
         "renderDeepeningCurveActions"
+      ]
+    },
+    {
+      "id": "novel_entities_evidence_hierarchy",
+      "label": "Neue Substanzen nach Kontrollvariable, Stoffgruppe und Evidenzrolle ordnen",
+      "reason": "Die planetare Kontrollvariable, globale Stoffströme, lokale Freisetzungsstudien und Gesundheitsbefunde beantworten unterschiedliche Fragen. Eine flache Liste würde ihnen fälschlich denselben fachlichen Rang geben.",
+      "application": "Der Grenzstatus steht zuerst. Darunter folgen thematische Stoffgruppen. Kurven, Fallstudien und Gesundheitsbezüge werden ihrer Stoffgruppe untergeordnet und ausdrücklich als Kontrollvariable, ergänzender Indikator, Fallstudie oder Gesundheitsevidenz gekennzeichnet.",
+      "programEffects": [
+        "Nur der Grenzstatus verwendet die offizielle Kontrollvariable der Planetaren Grenze.",
+        "Produktions-, Einsatz- und Emissionskurven bleiben erhalten, werden aber nicht als direkte Messung der planetaren Grenze ausgegeben.",
+        "Ein thematischer Haupt- oder Vertiefungsbeitrag darf Messwert, Bezug, Quelle und Befund in einer ruhigen Fließtextkarte zusammenfassen; seine Detailbelege bleiben darunter erhalten.",
+        "Wenn die Fließtextkarte die Orientierung bereits liefert, werden Studienbelege, Wirkungspfade und Querverbindungen gemeinsam zunächst geschlossen und bei Bedarf geöffnet.",
+        "Gesundheitsbezüge bleiben bei ihrer Stoffgruppe und behalten ihre jeweilige Evidenzstufe.",
+        "Die Reihenfolge Kunststoffe und Mikroplastik, Pestizide und Biozide, PFAS ist eine didaktische Ordnung und keine Risikorangfolge."
+      ],
+      "dataModelFields": [
+        "knowledge-index.items[].parentId",
+        "knowledge-index.items[].groupOnly",
+        "knowledge-index.items[].contributionRole",
+        "entry.contributionRole",
+        "presentation.summaryCardMode",
+        "presentation.effectSummary",
+        "presentation.compactKnowledgeView",
+        "presentation.knowledgePanelLabel",
+        "timeSeries[]",
+        "healthContext.markerSignals[]"
+      ],
+      "appliedBy": [
+        "syncKnowledgeNavigationFromIndex",
+        "menuHierarchyLevel"
       ]
     }
   ]

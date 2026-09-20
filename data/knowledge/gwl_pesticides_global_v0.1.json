@@ -12,6 +12,7 @@
   },
   "corePrinciples": [
     "Die FAO-Reihe misst landwirtschaftlich eingesetzte Wirkstoffmengen; sie ist nicht mit Tonnen formulierter Handelsprodukte gleichzusetzen.",
+    "Die UNIDO-Werte 1975, 1980 und 1985 sind eine historische globale Rekonstruktion des Verbrauchs von Pestizid-Wirkstoff-Feinchemikalien durch die Formulierungsindustrie und werden nicht als direkte landwirtschaftliche Messwerte ausgegeben.",
     "Wirkstoffmasse ist ein Belastungsindikator, aber kein vollständiges Risikomaß: Toxizität, Persistenz, Exposition und räumliche Verteilung unterscheiden sich.",
     "Beobachtete Werte und rechnerische Projektionen werden im Panel getrennt dargestellt.",
     "Ohne belastbare präzisierende Faktoren wird nur der jüngere beobachtete Trend fortgeschrieben."
@@ -32,17 +33,17 @@
   ],
   "measurements": [
     {
-      "id": "global_pesticide_use_2023",
+      "id": "global_pesticide_use_2024",
       "node": "activity_pesticide_use",
       "geography": "Global",
-      "period": "2023",
+      "period": "2024",
       "metric": "Landwirtschaftlicher Pestizideinsatz als Masse aktiver Wirkstoffe",
-      "value": 3.728427,
+      "value": 3.918094,
       "unit": "Mio. t Wirkstoff/Jahr",
-      "display": "3,73 Mio. t Wirkstoff/Jahr",
+      "display": "3,92 Mio. t Wirkstoff/Jahr",
       "uncertainty": "FAOSTAT kombiniert nationale Meldungen mit ergänzten beziehungsweise imputierten Werten. Die globale Reihe ist für Größenordnung und Trend geeignet; einzelne Länderwerte können unsicherer sein.",
-      "interpretation": "Der globale Einsatz lag 2023 etwa doppelt so hoch wie 1990 und 14 % über dem Wert von 2013.",
-      "sourceRefs": ["src_fao_pesticides_2025"]
+      "interpretation": "Der globale Einsatz lag 2024 mehr als doppelt so hoch wie 1990 und rund 5 % über dem Wert von 2023.",
+      "sourceRefs": ["src_fao_pesticides_2026"]
     }
   ],
   "pathways": [
@@ -65,13 +66,13 @@
   },
   "sources": [
     {
-      "id": "src_fao_pesticides_2025",
-      "title": "Pesticides use and trade. 1990–2023",
+      "id": "src_fao_pesticides_2026",
+      "title": "Pesticides use and trade. 1990–2024",
       "authors": "Food and Agriculture Organization of the United Nations",
       "publisher": "FAO",
-      "year": 2025,
+      "year": 2026,
       "type": "official_statistical_release",
-      "url": "https://www.fao.org/statistics/highlights-archive/highlights-detail/pesticides-use-and-trade-1990-2023/en",
+      "url": "https://www.fao.org/statistics/highlights-archive/highlights-detail/pesticides-use-and-trade.-1990-2024/en",
       "access": "open_full_text"
     },
     {
@@ -79,10 +80,22 @@
       "title": "FAOSTAT Pesticides Use",
       "authors": "Food and Agriculture Organization of the United Nations",
       "publisher": "FAO",
-      "year": 2025,
+      "year": 2026,
       "type": "official_statistical_dataset",
       "url": "https://data.fao.org/catalog/dataset/cf6432f8-c3b8-404e-897f-5b2c45709ca7",
+      "downloadUrl": "https://bulks-faostat.fao.org/production/Inputs_Pesticides_Use_E_All_Data_(Normalized).zip",
+      "retrievedAt": "2026-09-20",
       "access": "open_data"
+    },
+    {
+      "id": "src_unido_pesticides_1988",
+      "title": "Global Overview of the Pesticide Industry Sub-Sector · Sectoral Working Paper",
+      "authors": "United Nations Industrial Development Organization",
+      "publisher": "UNIDO",
+      "year": 1988,
+      "type": "official_model_assessment",
+      "url": "https://downloads.unido.org/ot/49/89/4989853/15001-20000_17246.pdf",
+      "access": "open_full_text"
     },
     {
       "id": "src_who_pesticides",
@@ -121,10 +134,14 @@
     "classification": "global_pressure_timeseries"
   },
   "presentation": {
-    "primaryMeasurementId": "global_pesticide_use_2023",
+    "summaryCardMode": "narrative",
+    "effectSummary": "Eine UNIDO-Rekonstruktion schätzt den globalen Verbrauch von Pestizid-Wirkstoff-Feinchemikalien für 1975 auf 2,07 Mio. Tonnen, für 1980 auf 2,37 Mio. Tonnen und für 1985 auf 2,45 Mio. Tonnen. Die getrennte FAOSTAT-Reihe zum landwirtschaftlichen Einsatz reicht von 1,81 Mio. Tonnen im Jahr 1990 bis 3,92 Mio. Tonnen im Jahr 2024. Beide Segmente zeigen einen globalen Belastungsdruck, messen aber methodisch nicht genau dasselbe und werden deshalb weder verbunden noch gegeneinander angepasst. Die Wirkstoffmasse ist außerdem weder die Kontrollvariable der planetaren Grenze noch ein vollständiges Risikomaß.",
+    "primaryMeasurementId": "global_pesticide_use_2024",
     "primaryTimeSeriesId": "global_pesticide_use_fao_annual",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
     "referenceLabel": "Kein globaler Grenzwert in Tonnen",
-    "finding": "Der landwirtschaftliche Pestizideinsatz stieg von 1,81 Mio. t Wirkstoff im Jahr 1990 auf 3,73 Mio. t im Jahr 2023. Die reine Masse beschreibt den globalen Belastungsdruck, aber nicht die unterschiedliche Gefährlichkeit einzelner Wirkstoffe.",
+    "finding": "Der landwirtschaftliche Pestizideinsatz stieg von 1,81 Mio. t Wirkstoff im Jahr 1990 auf 3,92 Mio. t im Jahr 2024. Die reine Masse beschreibt den globalen Belastungsdruck, aber nicht die unterschiedliche Gefährlichkeit einzelner Wirkstoffe.",
     "effectPath": "Pestizideinsatz → Umweltfreisetzung und Exposition → Wirkungen auf Ziel- und Nichtzielorganismen → mögliche Folgen für Ökosysteme und menschliche Gesundheit",
     "uncertainty": "Globale Mengen beruhen teilweise auf imputierten Daten. Kilogramm unterschiedlicher Wirkstoffe sind hinsichtlich Risiko und Wirkung nicht gleichwertig."
   },
@@ -134,48 +151,99 @@
       "label": "Globaler Pestizideinsatz · FAOSTAT",
       "metric": "Landwirtschaftlicher Pestizideinsatz als Masse aktiver Wirkstoffe",
       "unit": "Mio. t Wirkstoff/Jahr",
-      "period": "1990–2023",
+      "geography": "Global",
+      "period": "1990–2024",
       "dataStartYear": 1990,
-      "dataEndYear": 2023,
+      "dataEndYear": 2024,
+      "dataNature": "observed",
+      "worseningDirection": "increase",
       "reference": { "type": "none", "display": "Kein globaler Grenzwert in Tonnen" },
-      "finding": "Die globale Wirkstoffmenge hat sich seit 1990 ungefähr verdoppelt.",
-      "uncertainty": "FAOSTAT-Werte können durch neue nationale Meldungen und Datenrevisionen nachträglich verändert werden.",
-      "sourceRefs": ["src_fao_pesticides_2025", "src_faostat_pesticides_use"],
+      "finding": "Die globale Wirkstoffmenge hat sich seit 1990 mehr als verdoppelt.",
+      "uncertainty": "Die FAOSTAT-Weltaggregation ist als Schätzwert gekennzeichnet. Nationale Meldungen, Ersatzgrößen, Imputationen und spätere Datenrevisionen können einzelne Werte verändern. Die UNIDO-Rekonstruktion erfasst den Verbrauch von Wirkstoff-Feinchemikalien durch die Formulierungsindustrie und ist deshalb nicht vollständig definitionsgleich mit dem landwirtschaftlichen FAOSTAT-Einsatz.",
+      "methodNote": "Gestrichelt: globale UNIDO-Rekonstruktion für 1975, 1980 und 1985. Durchgezogen: FAOSTAT-Weltaggregation des landwirtschaftlichen Pestizideinsatzes 1990–2024. Zwischen 1985 und 1990 bleibt eine sichtbare Lücke; die Segmente werden nicht verbunden, interpoliert oder aufeinander kalibriert. Die gemeinsame Abdeckung beträgt 49 Jahre und ist als ausdrücklich dokumentierte Ein-Jahres-Ausnahme von der sonst geltenden 50-Jahres-Regel freigegeben.",
+      "sourceRefs": ["src_fao_pesticides_2026", "src_faostat_pesticides_use"],
+      "provenance": {
+        "sourceFile": "Inputs_Pesticides_Use_E_All_Data_(Normalized).csv",
+        "sourceUrl": "https://bulks-faostat.fao.org/production/Inputs_Pesticides_Use_E_All_Data_(Normalized).zip",
+        "locator": "Area = World; Item = Pesticides (total); Element = Agricultural Use; Unit = t; Jahreszeilen 1990–2024.",
+        "fields": [
+          "Year → Jahr",
+          "Value → globale landwirtschaftliche Einsatzmenge aktiver Wirkstoffe in Tonnen",
+          "Flag → Kennzeichnung der FAOSTAT-Weltaggregation"
+        ],
+        "extraction": "Ausgelesen wurden 35 vorhandene Jahreswerte 1990–2024. Alle Weltwerte sind im Bulkdatensatz mit E = Estimated value gekennzeichnet.",
+        "transformation": "Die publizierten Tonnenwerte wurden durch 1.000.000 in Mio. t Wirkstoff/Jahr umgerechnet. Keine Interpolation oder Glättung; die Anzeige wird auf zwei Dezimalstellen gerundet."
+      },
+      "historicalSeries": [
+        {
+          "id": "unido_global_pesticide_consumption_1975_1985",
+          "label": "Historische globale UNIDO-Rekonstruktion",
+          "period": "1975, 1980 und 1985",
+          "method": "UNIDO kombinierte damalige FAO-Länderdaten mit Inter- und Extrapolationen sowie einem dokumentierten Bedarfsmodell für fehlende Länder und Jahre.",
+          "uncertainty": "Die Werte beschreiben den weltweiten Verbrauch von Pestizid-Wirkstoff-Feinchemikalien durch die verarbeitende Formulierungsindustrie. Sie sind keine direkten globalen Feldmessungen und wegen abweichender Systemgrenze nicht vollständig definitionsgleich mit der FAOSTAT-Reihe zum landwirtschaftlichen Einsatz.",
+          "sourceRefs": ["src_unido_pesticides_1988"],
+          "provenance": {
+            "sourceFile": "PPD.98 · Global Overview of the Pesticide Industry Sub-Sector.pdf",
+            "sourceUrl": "https://downloads.unido.org/ot/49/89/4989853/15001-20000_17246.pdf",
+            "locator": "Methodik S. 15–18, insbesondere Tabellen 1–4; Tabelle 8 auf S. 21–22: Zeile World für 1975, 1980 und 1985.",
+            "fields": [
+              "World / 1975 Amount → 2.073,2 Tausend Tonnen Wirkstoff",
+              "World / 1980 Amount → 2.367,8 Tausend Tonnen Wirkstoff",
+              "World / 1985 Amount → 2.446,4 Tausend Tonnen Wirkstoff",
+              "NR → separat ausgewiesener Modellanteil für nicht meldende Länder"
+            ],
+            "extraction": "Übernommen wurden ausschließlich die drei in Tabelle 8 ausgewiesenen globalen Gesamtwerte 1975, 1980 und 1985. Projektionen für 1990 und 2000 aus Tabelle 20 wurden nicht übernommen.",
+            "transformation": "Die publizierten Tausend Tonnen wurden durch 1.000 in Mio. t Wirkstoff/Jahr umgerechnet. Keine Interpolation, Glättung, Niveauverschiebung oder Verbindung mit FAOSTAT."
+          },
+          "points": [
+            { "year": 1975, "value": 2.0732, "display": "2,07 Mio. t", "sourceRefs": ["src_unido_pesticides_1988"] },
+            { "year": 1980, "value": 2.3678, "display": "2,37 Mio. t", "sourceRefs": ["src_unido_pesticides_1988"] },
+            { "year": 1985, "value": 2.4464, "display": "2,45 Mio. t", "sourceRefs": ["src_unido_pesticides_1988"] }
+          ]
+        }
+      ],
+      "methodBreaks": [
+        {
+          "year": 1990,
+          "label": "Wechsel von der UNIDO-Rekonstruktion zur FAOSTAT-Weltaggregation"
+        }
+      ],
       "points": [
-        { "year": 1990, "value": 1.806688, "display": "1,81 Mio. t" },
-        { "year": 1991, "value": 1.793631, "display": "1,79 Mio. t" },
-        { "year": 1992, "value": 1.820597, "display": "1,82 Mio. t" },
-        { "year": 1993, "value": 1.836220, "display": "1,84 Mio. t" },
-        { "year": 1994, "value": 1.893783, "display": "1,89 Mio. t" },
-        { "year": 1995, "value": 1.958634, "display": "1,96 Mio. t" },
-        { "year": 1996, "value": 2.025364, "display": "2,03 Mio. t" },
-        { "year": 1997, "value": 2.093645, "display": "2,09 Mio. t" },
-        { "year": 1998, "value": 2.126962, "display": "2,13 Mio. t" },
-        { "year": 1999, "value": 2.165260, "display": "2,17 Mio. t" },
-        { "year": 2000, "value": 2.175911, "display": "2,18 Mio. t" },
-        { "year": 2001, "value": 2.180559, "display": "2,18 Mio. t" },
-        { "year": 2002, "value": 2.205711, "display": "2,21 Mio. t" },
-        { "year": 2003, "value": 2.311794, "display": "2,31 Mio. t" },
-        { "year": 2004, "value": 2.450447, "display": "2,45 Mio. t" },
-        { "year": 2005, "value": 2.535056, "display": "2,54 Mio. t" },
-        { "year": 2006, "value": 2.513376, "display": "2,51 Mio. t" },
-        { "year": 2007, "value": 2.771712, "display": "2,77 Mio. t" },
-        { "year": 2008, "value": 2.828069, "display": "2,83 Mio. t" },
-        { "year": 2009, "value": 2.730070, "display": "2,73 Mio. t" },
-        { "year": 2010, "value": 3.033413, "display": "3,03 Mio. t" },
-        { "year": 2011, "value": 3.079005, "display": "3,08 Mio. t" },
-        { "year": 2012, "value": 3.208576, "display": "3,21 Mio. t" },
-        { "year": 2013, "value": 3.267468, "display": "3,27 Mio. t" },
-        { "year": 2014, "value": 3.281344, "display": "3,28 Mio. t" },
-        { "year": 2015, "value": 3.320624, "display": "3,32 Mio. t" },
-        { "year": 2016, "value": 3.440886, "display": "3,44 Mio. t" },
-        { "year": 2017, "value": 3.356311, "display": "3,36 Mio. t" },
-        { "year": 2018, "value": 3.413628, "display": "3,41 Mio. t" },
-        { "year": 2019, "value": 3.486251, "display": "3,49 Mio. t" },
-        { "year": 2020, "value": 3.507246, "display": "3,51 Mio. t" },
-        { "year": 2021, "value": 3.769811, "display": "3,77 Mio. t" },
-        { "year": 2022, "value": 3.802160, "display": "3,80 Mio. t" },
-        { "year": 2023, "value": 3.728427, "display": "3,73 Mio. t" }
+        { "year": 1990, "value": 1.807464, "display": "1,81 Mio. t" },
+        { "year": 1991, "value": 1.794431, "display": "1,79 Mio. t" },
+        { "year": 1992, "value": 1.821131, "display": "1,82 Mio. t" },
+        { "year": 1993, "value": 1.836758, "display": "1,84 Mio. t" },
+        { "year": 1994, "value": 1.894281, "display": "1,89 Mio. t" },
+        { "year": 1995, "value": 1.959089, "display": "1,96 Mio. t" },
+        { "year": 1996, "value": 2.025747, "display": "2,03 Mio. t" },
+        { "year": 1997, "value": 2.094012, "display": "2,09 Mio. t" },
+        { "year": 1998, "value": 2.127201, "display": "2,13 Mio. t" },
+        { "year": 1999, "value": 2.165534, "display": "2,17 Mio. t" },
+        { "year": 2000, "value": 2.176167, "display": "2,18 Mio. t" },
+        { "year": 2001, "value": 2.180870, "display": "2,18 Mio. t" },
+        { "year": 2002, "value": 2.205942, "display": "2,21 Mio. t" },
+        { "year": 2003, "value": 2.311958, "display": "2,31 Mio. t" },
+        { "year": 2004, "value": 2.450614, "display": "2,45 Mio. t" },
+        { "year": 2005, "value": 2.535237, "display": "2,54 Mio. t" },
+        { "year": 2006, "value": 2.513514, "display": "2,51 Mio. t" },
+        { "year": 2007, "value": 2.771814, "display": "2,77 Mio. t" },
+        { "year": 2008, "value": 2.827848, "display": "2,83 Mio. t" },
+        { "year": 2009, "value": 2.729819, "display": "2,73 Mio. t" },
+        { "year": 2010, "value": 3.032859, "display": "3,03 Mio. t" },
+        { "year": 2011, "value": 3.078709, "display": "3,08 Mio. t" },
+        { "year": 2012, "value": 3.208361, "display": "3,21 Mio. t" },
+        { "year": 2013, "value": 3.267624, "display": "3,27 Mio. t" },
+        { "year": 2014, "value": 3.281572, "display": "3,28 Mio. t" },
+        { "year": 2015, "value": 3.321011, "display": "3,32 Mio. t" },
+        { "year": 2016, "value": 3.441183, "display": "3,44 Mio. t" },
+        { "year": 2017, "value": 3.356535, "display": "3,36 Mio. t" },
+        { "year": 2018, "value": 3.421829, "display": "3,42 Mio. t" },
+        { "year": 2019, "value": 3.501888, "display": "3,50 Mio. t" },
+        { "year": 2020, "value": 3.533434, "display": "3,53 Mio. t" },
+        { "year": 2021, "value": 3.800607, "display": "3,80 Mio. t" },
+        { "year": 2022, "value": 3.822598, "display": "3,82 Mio. t" },
+        { "year": 2023, "value": 3.725946, "display": "3,73 Mio. t" },
+        { "year": 2024, "value": 3.918094, "display": "3,92 Mio. t" }
       ]
     }
   ],
@@ -187,20 +255,20 @@
     {
       "id": "global_pesticide_use_recent_trend",
       "scenario": "TREND",
-      "scenarioLabel": "Jüngerer Trend 2013–2023",
+      "scenarioLabel": "Jüngerer Trend 2014–2024",
       "metric": "Fortschreibung der landwirtschaftlich eingesetzten Wirkstoffmenge",
       "unit": "Mio. t Wirkstoff/Jahr",
-      "method": "Konstante durchschnittliche jährliche Änderungsrate (CAGR) der FAOSTAT-Werte 2013–2023; Basisjahr 2023.",
-      "trendWindow": "2013–2023",
-      "annualChangePercent": 1.3285,
-      "baseYear": 2023,
-      "sourceRefs": ["src_fao_pesticides_2025", "src_faostat_pesticides_use"],
+      "method": "Konstante durchschnittliche jährliche Änderungsrate (CAGR) der FAOSTAT-Werte 2014–2024; Basisjahr 2024.",
+      "trendWindow": "2014–2024",
+      "annualChangePercent": 1.7886,
+      "baseYear": 2024,
+      "sourceRefs": ["src_fao_pesticides_2026", "src_faostat_pesticides_use"],
       "uncertainty": "Rechnerische Trendfortschreibung ohne Modellierung künftiger Regulierung, Wirkstoffsubstitution, Preise, Anbauflächen, Klimaeffekte oder technischer Veränderungen. Keine FAO-Prognose.",
       "assessment": { "status": "trend_extrapolation", "label": "rechnerische Trendfortschreibung" },
       "points": [
-        { "year": 2030, "value": 4.089269, "display": "≈ 4,09 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2030 rechnerisch bei etwa 4,09 Mio. t Wirkstoff.", "uncertainty": "Trendfortschreibung aus 2013–2023; keine FAO-Prognose." },
-        { "year": 2040, "value": 4.666164, "display": "≈ 4,67 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2040 rechnerisch bei etwa 4,67 Mio. t Wirkstoff.", "uncertainty": "Mit wachsendem Zeithorizont nimmt die Unsicherheit der einfachen Trendfortschreibung zu." },
-        { "year": 2050, "value": 5.324444, "display": "≈ 5,32 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2050 rechnerisch bei etwa 5,32 Mio. t Wirkstoff.", "uncertainty": "Langfristige rechnerische Fortschreibung ohne präzisierende Einflussfaktoren; keine FAO-Prognose." }
+        { "year": 2030, "value": 4.357833, "display": "≈ 4,36 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2030 rechnerisch bei etwa 4,36 Mio. t Wirkstoff.", "uncertainty": "Trendfortschreibung aus 2014–2024; keine FAO-Prognose." },
+        { "year": 2040, "value": 5.203116, "display": "≈ 5,20 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2040 rechnerisch bei etwa 5,20 Mio. t Wirkstoff.", "uncertainty": "Mit wachsendem Zeithorizont nimmt die Unsicherheit der einfachen Trendfortschreibung zu." },
+        { "year": 2050, "value": 6.212357, "display": "≈ 6,21 Mio. t", "finding": "Bei unverändertem jüngeren Trend läge der globale Pestizideinsatz 2050 rechnerisch bei etwa 6,21 Mio. t Wirkstoff.", "uncertainty": "Langfristige rechnerische Fortschreibung ohne präzisierende Einflussfaktoren; keine FAO-Prognose." }
       ]
     }
   ],

@@ -250,7 +250,7 @@
   "navigationRule": {
     "group": "Neue Substanzen",
     "item": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
-    "parentId": "plastics_petrochemicals_global",
+    "parentId": "plastics-microplastics",
     "classification": "health_pathway"
   },
   "timeSeries": [],
@@ -260,6 +260,8 @@
     "panelRule": "Keinen historischen Zeitverlauf erzeugen. Dosis, Dauer, Ernährung, Organwirkung und Evidenzstufe zeigen."
   },
   "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "In einer achtwöchigen Tierstudie erhielten männliche C57BL/6-Mäuse täglich 2 mg Polyethylen-Mikroplastik mit 10 bis 150 µm Partikelgröße per Schlundsonde. Die Behandlung erhöhte Serum-ALT und Leberverfettung und verstärkte eine ernährungsbedingt ausgelöste Steatohepatitis; zudem wurden veränderte Ppara–Anxa2-Signale beobachtet. Das ist ein experimenteller Hochdosisbefund in kleinen Tiergruppen, kein Beleg dafür, dass Mikroplastik beim Menschen eine Fettleber verursacht, und kein Maß für menschliche Krankheitslast.",
     "primaryMeasurementId": "jung_2026_histology",
     "referenceLabel": "Tierexperiment · keine Human-Kausalität",
     "finding": "Bei männlichen C57BL/6-Mäusen führte tägliche orale Gabe von 2 mg Polyethylen-Mikroplastik (10–150 µm) über acht Wochen zu erhöhter Leberschädigung und Steatose und verschärfte eine diätinduzierte Steatohepatitis.",

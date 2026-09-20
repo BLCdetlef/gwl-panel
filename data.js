@@ -272,7 +272,7 @@ window.GWL_DATA = {
       id: "novel",
       label: "Neue Substanzen",
       enabled: true,
-      summary: "Die Planetare Grenze Neue Substanzen umfasst menschengemachte Stoffe und Materialien, deren Produktion und Freisetzung die globale Bewertungs- und Überwachungskapazität überfordert.",
+      summary: "Die Planetare Grenze Neue Substanzen beschreibt menschengemachte Stoffe und Materialien, deren Freisetzung schneller wächst als die Fähigkeit, sie ausreichend zu prüfen und zu überwachen. Einzelne Stoffgruppen und Kurven sind ergänzende Indikatoren, nicht die planetare Kontrollvariable selbst.",
       items: [
         {
           id: "pesticides-global",

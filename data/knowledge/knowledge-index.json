@@ -117,17 +117,46 @@
           "label": "Neue Substanzen",
           "items": [
             {
-              "id": "pfas-pope-global-emissions",
-              "label": "Globale Emissionen · POPE",
-              "type": "emission_inventory",
-              "menuHidden": true,
-              "parentId": "pfas",
-              "source": "data/knowledge/gwl_pfas_pope_global_v0.1.json"
+              "id": "novel-entities-boundary-status",
+              "label": "Zustand der planetaren Grenze",
+              "type": "control",
+              "contributionRole": "pg_core",
+              "source": "data/knowledge/gwl_novel_entities_boundary_status_v0.1.json"
+            },
+            {
+              "id": "plastics-microplastics",
+              "label": "Kunststoffe und Mikroplastik",
+              "type": "component",
+              "knowledgeTitle": "Kunststoffe und Mikroplastik",
+              "knowledgeEffectFocus": "Globale Kunststoffproduktion, Freisetzung von Mikro- und Nanoplastik sowie dazugehörige Expositions- und Gesundheitsbefunde werden als getrennte Evidenzebenen zusammengeführt.",
+              "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
+            },
+            {
+              "id": "microplastics-human-liver-2022",
+              "label": "Mikroplastik · menschliche Leber 2022",
+              "type": "study",
+              "parentId": "plastics-microplastics",
+              "source": "data/knowledge/gwl_microplastics_human_liver_2022_v0.1.json"
+            },
+            {
+              "id": "microplastics-pe-liver-mouse-2026",
+              "label": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
+              "type": "health_pathway",
+              "parentId": "plastics-microplastics",
+              "source": "data/knowledge/gwl_microplastics_pe_liver_mouse_2026_v0.1.json"
+            },
+            {
+              "id": "pesticides-biocides",
+              "label": "Pestizide und Biozide",
+              "type": "topic_group",
+              "groupOnly": true,
+              "summary": "Globale Einsatzmengen, konkrete Freisetzungspfade und belegte Gesundheitsbezüge bleiben als unterschiedliche Evidenzarten getrennt."
             },
             {
               "id": "pesticides-global",
               "label": "Pestizide in der Landwirtschaft",
               "type": "component",
+              "parentId": "pesticides-biocides",
               "source": "data/knowledge/gwl_pesticides_global_v0.1.json"
             },
             {
@@ -140,28 +169,23 @@
             {
               "id": "facade_biocides_burkhardt",
               "label": "Fassadenbiozide · Auswaschung",
-              "type": "component",
+              "type": "case_study",
+              "parentId": "pesticides-biocides",
               "source": "data/knowledge/gwl_novel_entities_facade_biocides_burkhardt_v0.1.json"
             },
             {
-              "id": "plastics_petrochemicals_global",
-              "label": "Kunststoffproduktion · global",
-              "type": "deep_dive",
-              "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json"
+              "id": "pfas",
+              "label": "PFAS",
+              "type": "component",
+              "source": "data/knowledge/gwl_pfas_pilot_v0.1.json"
             },
             {
-              "id": "microplastics-human-liver-2022",
-              "label": "Mikroplastik · menschliche Leber 2022",
-              "type": "study",
-              "parentId": "plastics_petrochemicals_global",
-              "source": "data/knowledge/gwl_microplastics_human_liver_2022_v0.1.json"
-            },
-            {
-              "id": "microplastics-pe-liver-mouse-2026",
-              "label": "PE-Mikroplastik · Leberveränderungen im Mausmodell 2026",
-              "type": "health_pathway",
-              "parentId": "plastics_petrochemicals_global",
-              "source": "data/knowledge/gwl_microplastics_pe_liver_mouse_2026_v0.1.json"
+              "id": "pfas-pope-global-emissions",
+              "label": "Globale Emissionen · POPE",
+              "type": "emission_inventory",
+              "menuHidden": true,
+              "parentId": "pfas",
+              "source": "data/knowledge/gwl_pfas_pope_global_v0.1.json"
             }
           ]
         }

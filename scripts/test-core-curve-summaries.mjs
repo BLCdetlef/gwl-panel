@@ -18,7 +18,7 @@ const coreContributions = [
   { source: freshwaterSource, seriesId: "green_water_rootzone_soil_moisture", id: "green-water-rootzone-soil-moisture" }
 ];
 
-if (coreContributions.length !== 12) {
+if (coreContributions.length !== 13) {
   throw new Error(`Unerwartete Zahl von PG-Kernbeiträgen: ${coreContributions.length}.`);
 }
 

@@ -10,15 +10,16 @@ const manifestPath = process.argv[2]
   : path.join(projectRoot, "data", "blc", "curve-approvals-v1.json");
 const indexPath = path.join(projectRoot, "data", "knowledge", "knowledge-index.json");
 const allowedTopFields = new Set(["format", "version", "approvedCurves"]);
-const allowedEntryFields = new Set(["curveId", "kind", "source", "seriesId", "boundaryId", "itemId", "curveRole", "status", "note"]);
+const allowedEntryFields = new Set(["curveId", "kind", "source", "seriesId", "boundaryId", "itemId", "curveRole", "status", "note", "coverageExceptionRuleId"]);
 const minimumObservationPoints = 5;
 const minimumObservationSpanYears = 50;
+const singleYearCoverageExceptionRuleId = "blc_documented_single_year_coverage_exception";
 
 const readJson = async file => JSON.parse(await fs.readFile(file, "utf8"));
 const numericPoints = series => (series?.points || series?.values || []).filter(point =>
   Number.isFinite(Number(point?.year)) && Number.isFinite(Number(point?.value))
 );
-const validateObservationCoverage = (curveId, points, historicalSegments = []) => {
+const validateObservationCoverage = (curveId, points, historicalSegments = [], coverageExceptionRuleId) => {
   const years = [...new Set(points.map(point => Number(point.year)))].sort((a, b) => a - b);
   if (years.length < minimumObservationPoints) {
     fail(`${curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
@@ -26,7 +27,14 @@ const validateObservationCoverage = (curveId, points, historicalSegments = []) =
   const historicalYears = historicalSegments.flatMap(segment => numericPoints({ points: segment.points || segment.values })).map(point => Number(point.year));
   const coverageStart = Math.min(years[0], ...historicalYears);
   const spanYears = years.at(-1) - coverageStart;
+  if (coverageExceptionRuleId && coverageExceptionRuleId !== singleYearCoverageExceptionRuleId) {
+    fail(`${curveId}: unbekannte Ausnahme von der Mindestabdeckung.`);
+  }
+  if (coverageExceptionRuleId && spanYears !== minimumObservationSpanYears - 1) {
+    fail(`${curveId}: die Ausnahme ist ausschließlich für 49 statt 50 Jahre zulässig; tatsächliche Abdeckung ${spanYears} Jahre.`);
+  }
   if (spanYears < minimumObservationSpanYears) {
+    if (spanYears === minimumObservationSpanYears - 1 && coverageExceptionRuleId === singleYearCoverageExceptionRuleId) return;
     fail(`${curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${spanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
   }
 };
@@ -56,6 +64,7 @@ for (const entry of manifest.approvedCurves) {
   if (!entry.curveId || seen.has(entry.curveId)) fail(`Fehlende oder doppelte curveId: ${entry.curveId || "–"}`);
   seen.add(entry.curveId);
   if (entry.status !== "approved") fail(`${entry.curveId}: status muss approved sein.`);
+  if (entry.coverageExceptionRuleId && (typeof entry.note !== "string" || !entry.note.trim())) fail(`${entry.curveId}: dokumentierte Ausnahme benötigt eine Begründung im Freigabevermerk.`);
   requireBlcCurveRole(entry, entry.curveId);
   if (!entry.boundaryId || !entry.itemId || !entry.seriesId) fail(`${entry.curveId}: Pflichtfelder fehlen.`);
 
@@ -67,7 +76,7 @@ for (const entry of manifest.approvedCurves) {
     const payload = await readJson(path.join(projectRoot, ...entry.source.split("/")));
     const series = (payload.timeSeries || []).find(candidate => candidate.id === entry.seriesId);
     if (!series) fail(`${entry.curveId}: Beobachtungsreihe wurde nicht gefunden.`);
-    validateObservationCoverage(entry.curveId, numericPoints(series), series.historicalSegments || series.historicalSeries || []);
+    validateObservationCoverage(entry.curveId, numericPoints(series), series.historicalSegments || series.historicalSeries || [], entry.coverageExceptionRuleId);
     continue;
   }
 

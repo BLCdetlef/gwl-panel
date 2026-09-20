@@ -242,6 +242,10 @@ function getEffectiveBlcCurveRole(curveId) {
   return getCommittedBlcApproval(curveId)?.curveRole || "";
 }
 
+function getEffectiveBlcCoverageExceptionRuleId(curveId) {
+  return getCommittedBlcApproval(curveId)?.coverageExceptionRuleId || "";
+}
+
 function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = null } = {}) {
   if (!blcReleaseControl || !blcReleaseSwitch || !blcReleaseStatus) return;
   if (!curveId) {
@@ -252,6 +256,7 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
   }
   const localEditor = isLocalBlcEditor();
   const curveRole = getEffectiveBlcCurveRole(curveId);
+  const coverageExceptionRuleId = getEffectiveBlcCoverageExceptionRuleId(curveId);
   const validRole = BLC_CURVE_ROLES.has(curveRole);
   const approved = eligible && validRole && getEffectiveBlcApproval(curveId);
   activeBlcCurveApproval = { curveId, eligible, descriptor };
@@ -274,8 +279,8 @@ function setBlcReleaseControl({ curveId = "", eligible = false, descriptor = nul
       ? "Bitte zuerst die Kurvenrolle Kernkurve oder Vertiefende Studie wählen."
     : approved
       ? localEditor
-        ? `Für den nächsten versionierten BLC-Export freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}.`
-        : `Versioniert für BLC freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}.`
+        ? `Für den nächsten versionierten BLC-Export freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}${coverageExceptionRuleId ? " · dokumentierte Ausnahme: 49 statt 50 Jahre" : ""}.`
+        : `Versioniert für BLC freigegeben · ${BLC_CURVE_ROLE_LABELS[curveRole]}${coverageExceptionRuleId ? " · dokumentierte Ausnahme: 49 statt 50 Jahre" : ""}.`
       : localEditor
         ? "Freigabefähig, aber noch nicht für BLC ausgewählt."
         : "Nicht für BLC freigegeben.";
@@ -925,9 +930,11 @@ function normalizeFreshwaterBlueGreenKnowledge(payload) {
 }
 
 function getKnowledgeNetworkForItem(network, item) {
-  if (!network || !item?.knowledgeTimeSeriesId) return network;
+  if (!network) return network;
+  if (!item?.knowledgeTimeSeriesId && !item?.knowledgeTitle && !item?.knowledgeEffectFocus) return network;
   return {
     ...network,
+    topic: item.knowledgeTitle || network.topic,
     entry: {
       ...(network.entry || {}),
       effectFocus: item.knowledgeEffectFocus || network.entry?.effectFocus
@@ -1365,18 +1372,23 @@ function setKnowledgeTimeCardMode(network = null, activeBoundary = null, activeI
 
 function syncCoreCurveSummaryCard(network = null, activeBoundary = null, activeItem = null) {
   const summary = network?.presentation?.effectSummary;
-  const active = isCoreKnowledgeContribution(network, activeBoundary, activeItem)
+  const coreContribution = isCoreKnowledgeContribution(network, activeBoundary, activeItem);
+  const narrativeSummary = network?.presentation?.summaryCardMode === "narrative";
+  const active = (coreContribution || narrativeSummary)
     && typeof summary === "string"
     && summary.trim();
   const timeCard = timeSlider?.closest(".time-card");
 
-  document.body.classList.toggle("core-curve-summary-mode", Boolean(active));
+  document.body.classList.toggle("core-curve-summary-mode", Boolean(active && coreContribution));
+  document.body.classList.toggle("unified-summary-mode", Boolean(active));
   if (!curveControlGroup || !coreCurveControlsSlot || !timeCard) return;
 
   if (active) {
-    focusType.textContent = "PLANETARE GRENZE · KERNBEITRAG";
+    if (coreContribution) focusType.textContent = "PLANETARE GRENZE · KERNBEITRAG";
     focusSummary.textContent = summary.trim();
-    const interpretation = getContributionInterpretation(network, activeItem);
+    const interpretation = coreContribution
+      ? getContributionInterpretation(network, activeItem)
+      : "";
     if (coreInterpretationDetails && coreInterpretationText) {
       coreInterpretationDetails.hidden = !interpretation;
       coreInterpretationText.textContent = interpretation || "–";
@@ -2198,6 +2210,12 @@ function syncKnowledgeNavigationFromIndex() {
         knowledgeGroupId: group.id,
         knowledgeBoundaryId: indexBoundary.id,
         menuType: item.type || "control",
+        contributionRole: item.contributionRole || null,
+        groupOnly: item.groupOnly === true,
+        menuHeading: item.menuHeading === true,
+        summary: item.summary || "",
+        knowledgeTitle: item.knowledgeTitle || null,
+        knowledgeEffectFocus: item.knowledgeEffectFocus || null,
         menuHidden: item.menuHidden === true,
         parentId: item.parentId || null,
         depthOf: item.parentId || item.depthOf || null
@@ -2225,7 +2243,8 @@ function getKnowledgeIndexEntry(boundaryId, componentId) {
     const index = getKnowledgeIndex();
     for (const indexBoundary of index?.systemBoundaries || []) {
       for (const group of indexBoundary.groups || []) {
-        const item = (group.items || []).find(candidate => candidate.source === selectedItem.knowledgeSource);
+        const item = (group.items || []).find(candidate => candidate.id === selectedItem.knowledgeItemId)
+          || (group.items || []).find(candidate => candidate.source === selectedItem.knowledgeSource);
         if (item) return { type: "item", boundary: indexBoundary, group, item };
       }
     }
@@ -2464,13 +2483,15 @@ function renderGenericKnowledgeView(network, indexEntry, activeBoundary = null, 
   ).join("");
 
   const compactKnowledgeView = presentation.compactKnowledgeView === true;
+  const compactKnowledgeLabel = presentation.knowledgePanelLabel || "ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE";
+  const compactKnowledgeHint = presentation.knowledgePanelHint || "Bei Bedarf anzeigen";
 
   return `
     ${compactKnowledgeView ? `
     <details class="knowledge-panel-collapsible">
       <summary>
-        <span>ERGÄNZENDE STUDIENWERTE UND WIRKUNGSPFADE</span>
-        <small>Bei Bedarf anzeigen</small>
+        <span>${compactKnowledgeLabel}</span>
+        <small>${compactKnowledgeHint}</small>
       </summary>
       <div class="knowledge-panel-collapsible-content">` : ""}
     <div class="oil-pilot generic-knowledge-view">
@@ -2673,7 +2694,7 @@ function getValidTimeSeriesPoints(series) {
   );
 }
 
-function hasRequiredObservationSeries(networkOrSeries) {
+function hasRequiredObservationSeries(networkOrSeries, coverageExceptionRuleId = "") {
   const series = Array.isArray(networkOrSeries?.timeSeries)
     ? getKnowledgeSeries(networkOrSeries)
     : networkOrSeries;
@@ -2682,13 +2703,18 @@ function hasRequiredObservationSeries(networkOrSeries) {
     .flatMap(segment => getValidTimeSeriesPoints({ points: segment.points || segment.values }))
     .map(point => Number(point.year));
   const coverageStart = Math.min(years[0] ?? Infinity, ...historicalYears);
-  return years.length >= 5 && Number.isFinite(coverageStart) && years.at(-1) - coverageStart >= 50;
+  const coverageYears = years.at(-1) - coverageStart;
+  const documentedSingleYearException = coverageYears === 49
+    && coverageExceptionRuleId === "blc_documented_single_year_coverage_exception";
+  return years.length >= 5
+    && Number.isFinite(coverageStart)
+    && (coverageYears >= 50 || documentedSingleYearException);
 }
 
-function getQualifiedProjectionSeries(network) {
+function getQualifiedProjectionSeries(network, coverageExceptionRuleId = "") {
   // BLC-Freigabe: Eine vollständige Kurve setzt eine Beobachtungsreihe voraus.
   // Historische Rekonstruktionen und Projektionen dürfen sie ergänzen, aber nie ersetzen.
-  if (!hasRequiredObservationSeries(network)) return [];
+  if (!hasRequiredObservationSeries(network, coverageExceptionRuleId)) return [];
   const qualifiedGrades = new Set(["robust_scenario_projection", "qualified_scenario_projection"]);
   return (network?.projectionSeries || []).filter(series => {
     const assessment = getProjectionAssessment(network, series);
@@ -3075,6 +3101,7 @@ function renderKnowledgeTime(network) {
   const curveId = observationSeries?.id
     ? `knowledge:${knowledgeSource}#${observationSeries.id}`
     : `knowledge:${knowledgeSource}#missing`;
+  const coverageExceptionRuleId = getEffectiveBlcCoverageExceptionRuleId(curveId);
   setShareControls({
     itemAvailable: Boolean(selectedBoundaryId && selectedItemId),
     curveId: !getSelectedFreshwaterRegion(network) && getValidTimeSeriesPoints(observationSeries).length >= 2
@@ -3083,7 +3110,7 @@ function renderKnowledgeTime(network) {
   });
   setBlcReleaseControl({
     curveId,
-    eligible: hasRequiredObservationSeries(network) && !getSelectedFreshwaterRegion(network),
+    eligible: hasRequiredObservationSeries(network, coverageExceptionRuleId) && !getSelectedFreshwaterRegion(network),
     descriptor: observationSeries?.id ? {
       kind: "knowledge",
       source: knowledgeSource,
@@ -3094,8 +3121,8 @@ function renderKnowledgeTime(network) {
   });
 
   dataWindowButton.classList.toggle("active", timeWindow === "data");
-  projectionWindowButton.hidden = !hasRequiredObservationSeries(network)
-    || !getQualifiedProjectionSeries(network).length;
+  projectionWindowButton.hidden = !hasRequiredObservationSeries(network, coverageExceptionRuleId)
+    || !getQualifiedProjectionSeries(network, coverageExceptionRuleId).length;
   projectionWindowButton.classList.toggle("active", timeWindow === "projection");
   blcWindowButton.classList.toggle("active", timeWindow === "blc");
   scenarioControls.hidden = timeWindow !== "projection";
@@ -3183,7 +3210,7 @@ function renderKnowledgeTime(network) {
   } else {
     timeStatus.textContent = "Nur tatsächlich hinterlegte Messjahre werden angezeigt; keine Interpolation.";
   }
-  renderTimeChart(getKnowledgeSeries(network), getQualifiedProjectionSeries(network), {
+  renderTimeChart(getKnowledgeSeries(network), getQualifiedProjectionSeries(network, coverageExceptionRuleId), {
     curveRole: getEffectiveBlcCurveRole(curveId)
   });
 }
@@ -3255,7 +3282,8 @@ function renderKnowledgePanel() {
     renderGroupOverview(activeBoundary, activeItem);
     return;
   }
-  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load" && !usesSpecializedEnergyView) {
+  const usesSpecializedPfasView = state.boundaryId === "novel" && activeItem?.id === "pfas";
+  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load" && !usesSpecializedEnergyView && !usesSpecializedPfasView) {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const rawNetwork = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
     const network = getKnowledgeNetworkForItem(rawNetwork, activeItem);
@@ -5095,7 +5123,10 @@ window.addEventListener("resize", () => {
       const source = activeItem?.knowledgeSource || "unknown";
       const series = getKnowledgeSeries(context.network);
       const curveId = series?.id ? `knowledge:${source}#${series.id}` : "";
-      renderTimeChart(series, getQualifiedProjectionSeries(context.network), {
+      renderTimeChart(series, getQualifiedProjectionSeries(
+        context.network,
+        getEffectiveBlcCoverageExceptionRuleId(curveId)
+      ), {
         curveRole: getEffectiveBlcCurveRole(curveId)
       });
       return;

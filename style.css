@@ -150,11 +150,11 @@ a { color: inherit; }
 .time-card.is-curve-controls-only { min-height: 0; padding: 7px 10px; }
 .time-card.is-curve-controls-only .curve-share-actions { margin: 0; }
 .time-card.is-curve-controls-only:not(:has(#copyCurveLinkButton:not([hidden]), #blcReleaseControl:not([hidden]))) { display: none; }
-.core-curve-summary-mode .contribution-role-card,
-.core-curve-summary-mode .metrics,
-.core-curve-summary-mode .finding-card { display: none !important; }
-.core-curve-summary-mode .effect-summary-card { padding: 16px; }
-.core-curve-summary-mode .effect-summary-card #focusSummary { margin-top: 10px; font-size: 13px; line-height: 1.55; }
+.unified-summary-mode .contribution-role-card,
+.unified-summary-mode .metrics,
+.unified-summary-mode .finding-card { display: none !important; }
+.unified-summary-mode .effect-summary-card { padding: 16px; }
+.unified-summary-mode .effect-summary-card #focusSummary { margin-top: 10px; font-size: 13px; line-height: 1.55; }
 .core-interpretation-details { margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--line); }
 .core-interpretation-details[hidden] { display: none; }
 .core-interpretation-details summary { cursor: pointer; color: var(--muted); font-size: 10px; font-weight: 700; }
@@ -165,7 +165,7 @@ a { color: inherit; }
 .core-curve-controls .curve-control-group { display: contents; }
 .core-curve-controls .curve-share-actions { justify-content: flex-start; margin: 0; }
 .core-curve-controls .blc-release-control { grid-column: 1 / -1; margin: 0; padding-top: 7px; }
-.core-curve-summary-mode .reset-button { display: block; width: fit-content; margin: 5px auto 0; padding: 3px 6px; border: 0; background: transparent; color: var(--muted); font-size: 10px; text-decoration: underline; text-underline-offset: 2px; }
+.unified-summary-mode .reset-button { display: block; width: fit-content; margin: 5px auto 0; padding: 3px 6px; border: 0; background: transparent; color: var(--muted); font-size: 10px; text-decoration: underline; text-underline-offset: 2px; }
 .blc-release-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; margin: 6px 0 4px; padding-top: 6px; border-top: 1px solid var(--line); }
 .blc-release-control[hidden] { display: none; }
 .blc-release-label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 10px; }

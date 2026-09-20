@@ -32,6 +32,8 @@ const knowledgeIndex = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const domainCatalog = buildBlcDomainCatalog(knowledgeIndex);
 const allowedDomains = new Set(BLC_DOMAIN_DEFINITIONS.map(domain => `${domain.domainType}:${domain.domainId}`));
 const allowedThresholdStatuses = new Set(["crossed", "already_crossed_at_start", "not_crossed", "series_ends_before_known_crossing", "not_assessable"]);
+const minimumObservationSpanYears = 50;
+const singleYearCoverageExceptionRuleId = "blc_documented_single_year_coverage_exception";
 
 function pointKey(point) {
   return `${Number(point?.year)}:${Number(point?.value)}`;
@@ -96,7 +98,13 @@ for (const curve of payload.curves) {
   if (years.length < 5) fail(`${curve.curveId}: mindestens fünf zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
   const historicalYears = (curve.historicalReconstruction || []).flatMap(segment => (segment.points || []).map(point => Number(point.year))).filter(Number.isFinite);
   const coverageStart = Math.min(years[0], ...historicalYears);
-  if (years.at(-1) - coverageStart < 50) fail(`${curve.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion unter 50 Jahren.`);
+  const combinedSpanYears = years.at(-1) - coverageStart;
+  if (curve.coverageExceptionRuleId && curve.coverageExceptionRuleId !== singleYearCoverageExceptionRuleId) fail(`${curve.curveId}: unbekannte Ausnahme von der Mindestabdeckung.`);
+  if (curve.coverageExceptionRuleId && combinedSpanYears !== minimumObservationSpanYears - 1) fail(`${curve.curveId}: unzulässige oder unnötige Ausnahme von der Mindestabdeckung.`);
+  if (combinedSpanYears < minimumObservationSpanYears
+    && !(combinedSpanYears === minimumObservationSpanYears - 1 && curve.coverageExceptionRuleId === singleYearCoverageExceptionRuleId)) {
+    fail(`${curve.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion unter 50 Jahren.`);
+  }
   const visibleBreakYears = new Set((curve.methodBreaks || []).filter(marker => marker.showValues === true).map(marker => Number(marker.year)));
   if (historicalYears.some(year => year > years[0] || (year === years[0] && !visibleBreakYears.has(year)))) {
     fail(`${curve.curveId}: historische Rekonstruktion überlappt die direkte Beobachtungsreihe außerhalb eines sichtbar markierten Methodenwechsels.`);

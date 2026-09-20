@@ -83,6 +83,13 @@
   "presentation": {
     "primaryMeasurementId": "global_plastics_production_2019",
     "primaryTimeSeriesId": "global_plastics_production_1950_2019",
+    "summaryCardMode": "narrative",
+    "compactKnowledgeView": true,
+    "knowledgePanelLabel": "BELEGE, WIRKUNGSPFADE UND VERBINDUNGEN",
+    "knowledgePanelHint": "Bei Bedarf anzeigen",
+    "effectSummary": "Die globale Kunststoffproduktion stieg von rund 2 Mio. Tonnen im Jahr 1950 auf rund 460 Mio. Tonnen im Jahr 2019. Diese Menge beschreibt einen vorgelagerten Stoffstrom, nicht die Kontrollvariable der planetaren Grenze. Bei Herstellung, Nutzung und Entsorgung können Polymere, Mikro- und Nanoplastik sowie Zusatzstoffe freigesetzt werden und lange in der Umwelt verbleiben. Humanstudien belegen Vorkommen in ausgewählten Geweben und einzelne gesundheitliche Assoziationen, jedoch noch keine allgemein zurechenbare Krankheitslast.",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
     "hidePrimaryMeasurementInKnowledgeView": true,
     "referenceLabel": "Kein globaler Mengengrenzwert",
     "finding": "Die globale Kunststoffproduktion stieg von rund 2 Mio. Tonnen 1950 auf rund 460 Mio. Tonnen 2019 – etwa auf das 230-Fache.",

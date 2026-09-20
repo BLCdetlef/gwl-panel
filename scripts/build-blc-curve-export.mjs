@@ -14,6 +14,7 @@ const qualifiedProjectionGrades = new Set(["robust_scenario_projection", "qualif
 const worseningDirections = new Set(["increase", "decrease"]);
 const minimumObservationPoints = 5;
 const minimumObservationSpanYears = 50;
+const singleYearCoverageExceptionRuleId = "blc_documented_single_year_coverage_exception";
 
 const readJson = async file => JSON.parse(await fs.readFile(file, "utf8"));
 const fail = message => { throw new Error(message); };
@@ -36,6 +37,7 @@ function normalizeProvenance(provenance) {
 
 function normalizeReference(reference, series, sourceIds) {
   if (!reference || typeof reference !== "object" || Array.isArray(reference)) return undefined;
+  if (reference.type === "none") return undefined;
   const sourceRefs = cleanStringArray(reference.sourceRefs);
   const isPlanetaryBoundariesModel = reference.type === "planetary_boundary" || reference.type === "planetary_boundaries_model";
   const pilotFields = normalizeBlcReference(reference, {
@@ -282,7 +284,16 @@ for (const approval of manifest.approvedCurves) {
   const historicalYears = historicalReconstruction.flatMap(segment => segment.points.map(point => point.year));
   const coverageStart = Math.min(Math.min(...observationYears), ...historicalYears);
   const combinedSpanYears = Math.max(...observationYears) - coverageStart;
-  if (combinedSpanYears < minimumObservationSpanYears) fail(`${approval.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${combinedSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+  if (approval.coverageExceptionRuleId && approval.coverageExceptionRuleId !== singleYearCoverageExceptionRuleId) {
+    fail(`${approval.curveId}: unbekannte Ausnahme von der Mindestabdeckung.`);
+  }
+  if (approval.coverageExceptionRuleId && combinedSpanYears !== minimumObservationSpanYears - 1) {
+    fail(`${approval.curveId}: die Ausnahme ist ausschließlich für 49 statt 50 Jahre zulässig; tatsächliche Abdeckung ${combinedSpanYears} Jahre.`);
+  }
+  if (combinedSpanYears < minimumObservationSpanYears
+    && !(combinedSpanYears === minimumObservationSpanYears - 1 && approval.coverageExceptionRuleId === singleYearCoverageExceptionRuleId)) {
+    fail(`${approval.curveId}: gemeinsame Zeitabdeckung aus Beobachtung und optionaler Rekonstruktion ${combinedSpanYears} Jahre; mindestens ${minimumObservationSpanYears} Jahre erforderlich.`);
+  }
   if (!worseningDirections.has(series.worseningDirection)) fail(`${approval.curveId}: worseningDirection muss increase oder decrease sein.`);
   const observationSourceRefs = cleanStringArray(series.sourceRefs)?.length ? series.sourceRefs : ["dataset-source"];
   const normalizedReference = approval.source === BLUE_WATER_REFERENCE_SOURCE && series.id === BLUE_WATER_REFERENCE_SERIES
@@ -330,6 +341,7 @@ for (const approval of manifest.approvedCurves) {
     geography: cleanText(series.geography) || "Global",
     dataNature,
     worseningDirection: series.worseningDirection,
+    ...(approval.coverageExceptionRuleId ? { coverageExceptionRuleId: approval.coverageExceptionRuleId } : {}),
     ...(cleanText(series.finding) ? { finding: series.finding } : {}),
     ...(cleanText(series.uncertainty) ? { uncertainty: series.uncertainty } : {}),
     ...(cleanText(series.methodNote) ? { methodNote: series.methodNote } : {}),

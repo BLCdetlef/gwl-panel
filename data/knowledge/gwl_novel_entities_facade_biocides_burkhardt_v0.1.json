@@ -454,6 +454,8 @@
     "panelRule": "Keinen Zeitregler anzeigen. Versuchsdauer und Fassadenalter nur als Studienkontext darstellen."
   },
   "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Eine Schweizer Markterhebung bezifferte den Einsatz von Filmschutzwirkstoffen in Außenfarben und -putzen für 2011 auf 10 bis 30 Tonnen pro Jahr. Labor- und Feldstudien zeigen, dass Schlagregen Biozide aus Fassaden auswaschen kann: Im Labor gingen je nach Wirkstoff 7 bis 29 % verloren, und an jungen Fassaden wurden zeitweise Konzentrationen über 1.000 µg/L im Abfluss gemessen. Diese Werte beschreiben historische Markt- und konkrete Versuchskontexte, nicht den heutigen Zustand eines Gewässers und keinen menschlichen Organbezug.",
     "compactKnowledgeView": true,
     "hidePrimaryMeasurementInKnowledgeView": false,
     "researchDeepDive": true,

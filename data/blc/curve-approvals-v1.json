@@ -129,7 +129,7 @@
       "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json",
       "seriesId": "global_plastics_production_1950_2019",
       "boundaryId": "novel",
-      "itemId": "plastics-petrochemicals-global",
+      "itemId": "plastics-microplastics",
       "curveId": "knowledge:data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json#global_plastics_production_1950_2019",
       "curveRole": "deep_dive",
       "status": "approved"
@@ -144,6 +144,18 @@
       "curveRole": "deep_dive",
       "status": "approved",
       "note": "POPE-Best-Guess-Modellreihe für globale jährliche PFOA-Luftemissionen; keine Messreihe, keine Gesamtreihe aller PFAS und keine Projektion."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_pesticides_global_v0.1.json",
+      "seriesId": "global_pesticide_use_fao_annual",
+      "boundaryId": "novel",
+      "itemId": "pesticides-global",
+      "curveId": "knowledge:data/knowledge/gwl_pesticides_global_v0.1.json#global_pesticide_use_fao_annual",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "coverageExceptionRuleId": "blc_documented_single_year_coverage_exception",
+      "note": "Ausdrücklich freigegebene Ausnahme: UNIDO-Rekonstruktion 1975/1980/1985 und FAOSTAT-Beobachtungsreihe 1990–2024 ergeben 49 statt 50 Jahre. Abweichende Definitionen, sichtbare Lücke und fehlende Kalibrierung werden im Segment dokumentiert."
     },
     {
       "kind": "knowledge",
