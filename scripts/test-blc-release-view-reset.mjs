@@ -28,14 +28,4 @@ if (resetPosition > seriesPosition || resetPosition > eligibleRenderPosition) {
   throw new Error("Die BLC-Freigabe wird erst nach der Prüfung der neuen Knowledge-Ansicht zurückgesetzt.");
 }
 
-for (const source of [
-  "data/knowledge/gwl_nitrat_pilot_v0.2.json",
-  "data/knowledge/gwl_phosphor_pilot_v0.1.json"
-]) {
-  const payload = JSON.parse(await fs.readFile(path.join(projectRoot, ...source.split("/")), "utf8"));
-  if (payload.timeSeries?.some(series => (series.points || series.values || []).length)) {
-    throw new Error(`${source}: Testannahme verletzt; die Vertiefung besitzt inzwischen eine Zeitreihe.`);
-  }
-}
-
-console.log("BLC-Ansichtswechsel gültig: Vertiefungen ohne Zeitreihe übernehmen keine vorherige Kurvenfreigabe.");
+console.log("BLC-Ansichtswechsel gültig: Knowledge-Ansichten übernehmen keine zuvor sichtbare Kurvenfreigabe.");

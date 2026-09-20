@@ -1065,16 +1065,6 @@ function ensureKnowledgePanel() {
   return knowledgePanel;
 }
 
-function evidenceLabel(status) {
-  const labels = {
-    strong: "stark belegt",
-    moderate: "teilweise / kontextabhängig",
-    weak: "schwach belegt",
-    open: "offen"
-  };
-  return labels[status] || status || "nicht bewertet";
-}
-
 function actionDots(score, maxScore = 3) {
   const safeScore = Math.max(0, Math.min(maxScore, Number(score) || 0));
   return Array.from({ length: maxScore }, (_, index) =>
@@ -1087,16 +1077,6 @@ function measurementValue(item) {
   if (item.result) return item.result;
   const parts = [item.start, item.end].filter(Boolean);
   return parts.length ? parts.join(" → ") : "";
-}
-
-function renderEvidenceSummary(network) {
-  const edges = network?.edges || [];
-  const strong = edges.filter(edge => edge.evidenceStatus === "strong").length;
-  const moderate = edges.filter(edge => edge.evidenceStatus === "moderate").length;
-  return `
-    <span class="evidence-chip strong">${strong} × ${evidenceLabel("strong")}</span>
-    ${moderate ? `<span class="evidence-chip moderate">${moderate} × ${evidenceLabel("moderate")}</span>` : ""}
-  `;
 }
 
 function renderActionScope(network) {
@@ -1137,137 +1117,12 @@ function renderActionScope(network) {
   `;
 }
 
-function renderKnowledgeCard(config) {
-  const {
-    key, network, eyebrow, title, intro, chain,
-    previewMeasurements = [], interactionField = "interactions"
-  } = config;
-
-  if (!network) {
-    return `
-      <article class="connection-card connection-error">
-        <div class="connection-card-head">
-          <div>
-            <div class="eyebrow">${eyebrow}</div>
-            <h3>${title}</h3>
-            <p>Datensatz konnte nicht geladen werden.</p>
-          </div>
-          <span class="knowledge-status knowledge-error">Prüfen</span>
-        </div>
-        <code>${data.knowledgeSources?.[key] || "Pfad fehlt"}</code>
-      </article>`;
-  }
-
-  const measurements = network.measurements || [];
-  const gaps = network.knowledgeGaps || [];
-  const interactions = network[interactionField] || network.boundaryInteractions || [];
-  const previews = previewMeasurements
-    .map(id => measurements.find(item => item.id === id))
-    .filter(Boolean);
-
-  return `
-    <article class="connection-card">
-      <details class="connection-details">
-        <summary class="connection-card-head">
-          <div class="connection-copy">
-            <div class="eyebrow">${eyebrow}</div>
-            <h3>${title}</h3>
-            <p>${intro}</p>
-
-            <div class="connection-preview">
-              ${previews.map(item => `
-                <span>
-                  <b>${item.node || item.metric || item.id}</b>
-                  ${measurementValue(item)}
-                  <small>${item.geography || ""}${item.period ? ` · ${item.period}` : ""}</small>
-                </span>`).join("")}
-            </div>
-          </div>
-          <span class="knowledge-open-label">Öffnen</span>
-        </summary>
-
-        <div class="connection-expanded">
-          <div class="knowledge-chain" aria-label="vereinfachter Zusammenhang">
-            ${chain.map((step, index) =>
-              `<span class="knowledge-node">${step}</span>${index < chain.length - 1 ? '<span class="knowledge-arrow">→</span>' : ''}`
-            ).join("")}
-          </div>
-
-          <details class="knowledge-details" open>
-            <summary>Konkrete Daten</summary>
-            <div class="knowledge-measurements">
-              ${measurements.map(item => `
-                <div class="knowledge-measurement">
-                  <strong>${item.node || item.metric || item.id}</strong>
-                  <span>${item.geography || ""}${item.period ? ` · ${item.period}` : ""}</span>
-                  <p>${measurementValue(item) || "–"}</p>
-                  ${item.interpretation ? `<small>${item.interpretation}</small>` : ""}
-                  ${item.historicalContext ? `<small>${item.historicalContext}</small>` : ""}
-                </div>`).join("")}
-            </div>
-          </details>
-
-          <details class="knowledge-details">
-            <summary>Evidenz & Wechselwirkungen</summary>
-            <div class="knowledge-grid">
-              <div class="knowledge-box">
-                <strong>Evidenz der Verbindungen</strong>
-                <p>${renderEvidenceSummary(network)}</p>
-                <small>Bewertet werden einzelne Verbindungen, nicht pauschal der gesamte Pfad.</small>
-              </div>
-              <div class="knowledge-box">
-                <strong>Verbindungen zu Planetaren Grenzen</strong>
-                <ul>
-                  ${interactions.slice(0, 5).map(item => `
-                    <li>${(item.boundaries || []).join(" ↔ ")}
-                      <br><span>${item.mechanism || ""}</span>
-                    </li>`).join("") || "<li>Noch keine Wechselwirkung hinterlegt.</li>"}
-                </ul>
-              </div>
-            </div>
-          </details>
-
-          <details class="knowledge-details">
-            <summary>Wissenslücken (${gaps.length})</summary>
-            <div class="knowledge-gap-list">
-              ${gaps.map(gap => `
-                <div class="knowledge-gap">
-                  <span class="gap-priority">${String(gap.priority || "open").replaceAll("_", " ")}</span>
-                  <p>${gap.question || ""}</p>
-                </div>`).join("")}
-            </div>
-          </details>
-
-          ${renderActionScope(network)}
-        </div>
-      </details>
-    </article>
-  `;
-}
-
-
-function renderSharedEutrophicationNote() {
-  return `<div class="shared-node-note">
-    <div class="eyebrow">GEMEINSAMER KNOTEN</div>
-    <strong>Eutrophierung</strong>
-    <p>Stickstoff und Phosphor können beide zur Nährstoffanreicherung und Eutrophierung beitragen. Der Knoten wird im Wissensgraphen nur einmal geführt und von beiden Pfaden erreicht.</p>
-  </div>`;
-}
-
-
 function getMeasurement(network, id) {
   return (network?.measurements || []).find(item => item.id === id) || null;
 }
 
 function humanMeasurementLabel(item) {
   const labels = {
-    de_n_surplus: "Stickstoffüberschuss Landwirtschaft",
-    de_groundwater_2024: "Nitrat im Grundwasser",
-    sh_surface_near: "Nitrat im oberflächennahen Grundwasser",
-    sh_network_2026: "EUA-/Nitratmessnetz Schleswig-Holstein",
-    de_river_p_exceedance: "Gesamtphosphor in Flüssen",
-    de_river_p_orientation_values: "Ökologischer Orientierungswert",
-    eu_freshwater_p_trend: "Phosphortrend in Europas Süßgewässern",
     de_drinkingwater_pfas20_limit: "Trinkwasser-Grenzwert · PFAS-20",
     de_drinkingwater_pfas4_limit: "Trinkwasser-Grenzwert · PFAS-4",
     de_drinkingwater_screening: "Trinkwasser-Stichprobe Deutschland",
@@ -1318,108 +1173,6 @@ function renderPathCard(title, subtitle, steps, crosslinks = []) {
     </div>`;
 }
 
-function renderNutrientMainView(componentId) {
-  const nitrate = knowledgeNetworks.nitrate;
-  const phosphorus = knowledgeNetworks.phosphorus;
-
-  const activeBoundary = getBoundary(state.boundaryId);
-  if (isEahExtension(activeBoundary)) {
-    renderExtensionView(activeBoundary);
-    return;
-  }
-
-  if (componentId === "nitrogen") {
-    const m1 = getMeasurement(nitrate, "de_n_surplus");
-    const m2 = getMeasurement(nitrate, "de_groundwater_2024");
-
-    return `
-      <div class="nutrient-main">
-        <div class="nutrient-main-head">
-          <div class="eyebrow">PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE</div>
-          <h2>Stickstoff</h2>
-          <p>
-            Menschlich erzeugte Stickstoffüberschüsse verändern den Stickstoffkreislauf.
-            Daraus entstehen mehrere Wirkungspfade in Wasser, Atmosphäre, Ökosysteme und LEBEN.
-          </p>
-        </div>
-
-        <div class="nutrient-measurement-grid">
-          ${renderMeasurementTile(m1)}
-          ${renderMeasurementTile(m2)}
-        </div>
-
-        <div class="nutrient-paths">
-          ${renderPathCard(
-            "Grundwasser & Trinkwasser",
-            "ein Pfad über Nitrat",
-            ["Stickstoffüberschuss", "Nitrat", "Auswaschung", "Grundwasser", "Trinkwasser", "LEBEN"],
-            ["Süßwasser"]
-          )}
-          ${renderPathCard(
-            "Eutrophierung",
-            "gemeinsamer Pfad mit Phosphor",
-            ["Stickstoffeintrag", "Nährstoffanreicherung", "Eutrophierung", "aquatische Ökosysteme"],
-            ["Süßwasser", "Biosphärenintegrität"]
-          )}
-          ${renderPathCard(
-            "Klimawirkung",
-            "über Lachgas",
-            ["reaktiver Stickstoff", "mikrobielle Umsetzung", "N₂O", "Klimawandel"],
-            ["Klimawandel"]
-          )}
-        </div>
-
-        ${renderActionScope(nitrate)}
-      </div>`;
-  }
-
-  if (componentId === "phosphorus") {
-    const m1 = getMeasurement(phosphorus, "de_river_p_exceedance");
-    const m2 = getMeasurement(phosphorus, "de_river_p_orientation_values");
-
-    return `
-      <div class="nutrient-main">
-        <div class="nutrient-main-head">
-          <div class="eyebrow">PLANETARE GRENZE · NÄHRSTOFFKREISLÄUFE</div>
-          <h2>Phosphor</h2>
-          <p>
-            Phosphoreinträge aus Landwirtschaft, Erosion und Abwasser verändern vor allem
-            Oberflächengewässer und können Eutrophierung verstärken.
-          </p>
-        </div>
-
-        <div class="nutrient-measurement-grid">
-          ${renderMeasurementTile(m1)}
-          ${renderMeasurementTile(m2)}
-        </div>
-
-        <div class="nutrient-paths">
-          ${renderPathCard(
-            "Oberflächenwasser & Eutrophierung",
-            "zentraler Phosphorpfad",
-            ["Phosphoreintrag", "Oberflächenwasser", "Eutrophierung", "Algen / Cyanobakterien", "Ökosysteme"],
-            ["Süßwasser", "Biosphärenintegrität"]
-          )}
-          ${renderPathCard(
-            "Gesundheitsrelevanter Folgepfad",
-            "nur bei belastbarer Cyanotoxin-Exposition",
-            ["Eutrophierung", "Cyanobakterien", "Cyanotoxine", "Trink-/Badegewässer", "Exposition", "LEBEN"],
-            ["Gesundheitsbezug"]
-          )}
-        </div>
-
-        ${renderActionScope(phosphorus)}
-      </div>`;
-  }
-
-  return `
-    <div class="nutrient-choice-note">
-      <strong>Wähle Stickstoff oder Phosphor.</strong>
-      <p>Danach zeigt WIRKUNG nur den passenden Ausschnitt des Wissensnetzes.</p>
-    </div>`;
-}
-
-
 function getActiveViewState() {
   return {
     boundaryId: selectedBoundaryId || null,
@@ -1430,10 +1183,6 @@ function getActiveViewState() {
 
 function isNutrientBoundaryActive() {
   return getActiveViewState().boundaryId === "nutrients";
-}
-
-function isFreshwaterBoundaryActive() {
-  return getActiveViewState().boundaryId === "freshwater";
 }
 
 function syncBoundaryModeClass() {
@@ -3272,19 +3021,14 @@ function renderKnowledgePanel() {
     (state.boundaryId !== "mental-load" || isWaterServiceHealthContext)
   );
 
-  const nitrate = knowledgeNetworks.nitrate;
-  const phosphorus = knowledgeNetworks.phosphorus;
-
   if (state.boundaryId === "nutrients") {
     renderNutrientShell();
 
-    panel.innerHTML = state.componentId
-      ? renderNutrientMainView(state.componentId)
-      : `
-        <div class="nutrient-choice-note">
-          <strong>Wähle links Stickstoff oder Phosphor.</strong>
-          <p>Die Unterbereiche stehen direkt unter der Planetaren Grenze Nährstoffkreisläufe.</p>
-        </div>`;
+    panel.innerHTML = `
+      <div class="nutrient-choice-note">
+        <strong>Wähle links Stickstoff oder Phosphor.</strong>
+        <p>Die beiden Kernbeiträge stehen direkt unter der Planetaren Grenze Nährstoffkreisläufe.</p>
+      </div>`;
 
     panel.hidden = false;
     return;
@@ -3396,54 +3140,6 @@ function renderKnowledgePanel() {
           <div class="extension-note">${groups}</div>
         </div>`;
     }
-
-    panel.hidden = false;
-    return;
-  }
-
-  if (state.boundaryId === "freshwater") {
-    panel.innerHTML = `
-      <div class="connections-head">
-        <div>
-          <div class="eyebrow">VERBUNDENE ZUSAMMENHÄNGE</div>
-          <h2>Was mit Süßwasser zusammenhängt</h2>
-          <p>
-            Diese Karten stammen fachlich aus <strong>Nährstoffkreisläufe</strong>.
-            Ihre Messwerte und Referenzen gehören nicht zum oben dargestellten
-            Zustandswert der Planetaren Grenze Süßwasser.
-          </p>
-        </div>
-      </div>
-
-      <div class="connections-boundary-note">
-        <span class="boundary-origin">Ursprung: Nährstoffkreisläufe</span>
-        <span>↘ Verbindung zu Süßwasser</span>
-      </div>
-
-      <div class="connection-list">
-        ${renderKnowledgeCard({
-          key: "nitrate",
-          network: nitrate,
-          eyebrow: "NÄHRSTOFFKREISLÄUFE · STICKSTOFF",
-          title: "Stickstoff → Nitrat im Grundwasser",
-          intro: "Ein Stickstoffpfad erreicht über Auswaschung das Grundwasser. Stickstoff trägt daneben auch zur Eutrophierung und über N₂O zum Klimawandel bei.",
-          chain: ["Stickstoff","Stickstoffüberschuss","Auswaschung","Nitrat im Grundwasser","Grundwasser","Trinkwasser","LEBEN"],
-          previewMeasurements: ["de_n_surplus","de_groundwater_2024"],
-          interactionField: "interactions"
-        })}
-
-        ${renderKnowledgeCard({
-          key: "phosphorus",
-          network: phosphorus,
-          eyebrow: "NÄHRSTOFFKREISLÄUFE · PHOSPHOR",
-          title: "Phosphor → Oberflächenwasser → Eutrophierung",
-          intro: "Phosphor gelangt über Abschwemmung, Erosion und Abwasser in Oberflächengewässer. Eutrophierung ist ein gemeinsamer Folgeprozess von Stickstoff und Phosphor.",
-          chain: ["Phosphor","Eintrag","Oberflächenwasser","Eutrophierung","Cyanobakterien","Exposition","LEBEN"],
-          previewMeasurements: ["de_river_p_exceedance","de_river_p_orientation_values"],
-          interactionField: "boundaryInteractions"
-        })}
-      </div>
-    `;
 
     panel.hidden = false;
     return;
