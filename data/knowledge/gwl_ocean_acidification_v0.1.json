@@ -86,6 +86,11 @@
   ],
   "presentation": {
     "effectSummary": "Der Aragonit-Sättigungszustand zeigt, wie gut im Meerwasser die Bedingungen für kalkbildende Organismen sind. Für 2025 wird ein globaler Mittelwert von 2,84 ausgewiesen. Er liegt knapp unter der planetaren Grenze von 2,86; weil niedrigere Werte stärkere Versauerung bedeuten, gilt die Grenze als überschritten.",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hidePathwaysInKnowledgeView": true,
+    "hideHealthContextInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
     "primaryMeasurementId": "ocean_global_surface_aragonite_saturation_2025",
     "primaryTimeSeriesId": "global_surface_omega_arag_oceansoda_1982_2021",
     "referenceLabel": "Vorindustriell: 3,57 · Planetare Grenze: 2,86",

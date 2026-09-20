@@ -3007,7 +3007,7 @@ function renderKnowledgePanel() {
     }
 
     panel.innerHTML = renderGenericKnowledgeView(network, indexEntry);
-    panel.hidden = state.boundaryId === "climate";
+    panel.hidden = network?.presentation?.hideKnowledgePanelInKnowledgeView === true;
     return;
   }
 

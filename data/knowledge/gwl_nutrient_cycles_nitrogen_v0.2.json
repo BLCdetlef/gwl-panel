@@ -142,6 +142,11 @@
   ],
   "presentation": {
     "effectSummary": "Die anthropogene Stickstofffixierung für die Landwirtschaft erfasst Stickstoff aus Mineraldünger und gezielter biologischer Fixierung. Für 2022 werden etwa 165 Tg Stickstoff pro Jahr ausgewiesen. Damit ist die planetare Grenze von 62 Tg pro Jahr deutlich überschritten.",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hidePathwaysInKnowledgeView": true,
+    "hideHealthContextInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
     "statusYear": 2025,
     "statusLabel": "Stand 2025",
     "primaryMeasurementId": "nutrients_nitrogen_fixation",

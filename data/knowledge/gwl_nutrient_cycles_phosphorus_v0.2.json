@@ -164,6 +164,11 @@
   ],
   "presentation": {
     "effectSummary": "Der mineralische Phosphoreinsatz auf Ackerflächen ist die regional definierte und hier global zusammengefasste Kontrollvariable. Für 2022 werden etwa 18,2 Tg Phosphor pro Jahr ausgewiesen. Damit liegt der Wert deutlich über der planetaren Grenze von 6,2 Tg pro Jahr.",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hidePathwaysInKnowledgeView": true,
+    "hideHealthContextInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
     "statusYear": 2025,
     "statusLabel": "Stand 2025",
     "primaryMeasurementId": "nutrients_phosphorus_cropland",
