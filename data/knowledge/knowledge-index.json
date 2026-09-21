@@ -20,6 +20,13 @@
               "label": "Strahlungsantrieb",
               "type": "control",
               "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json"
+            },
+            {
+              "id": "global-temperature",
+              "label": "Globale Temperaturentwicklung",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/gwl_climate_temperature_global_v0.2.json"
             }
           ]
         },

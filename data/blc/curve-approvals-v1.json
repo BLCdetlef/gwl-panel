@@ -35,6 +35,17 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_temperature_global_v0.2.json",
+      "seriesId": "global_temperature_hadcrut5_1850_2025",
+      "boundaryId": "climate",
+      "itemId": "global-temperature",
+      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_global_v0.2.json#global_temperature_hadcrut5_1850_2025",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Vertiefung zur globalen Temperaturänderung gegenüber 1850–1900; Rekonstruktion, Beobachtung und IPCC-Projektionen bleiben getrennte Segmente."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
       "seriesId": "global_coal_tes_1965_2025",
       "boundaryId": "materials-energy",
