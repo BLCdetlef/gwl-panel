@@ -41,6 +41,13 @@
               "type": "component",
               "contributionRole": "deepening_without_organ",
               "source": "data/knowledge/gwl_climate_methane_global_v0.1.json"
+            },
+            {
+              "id": "arctic-september-sea-ice-area",
+              "label": "Arktische Meereisfläche im September",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json"
             }
           ]
         },

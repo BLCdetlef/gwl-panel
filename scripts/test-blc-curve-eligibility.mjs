@@ -25,6 +25,11 @@ const cases = [
     expected: true
   },
   {
+    source: "data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json",
+    seriesId: "arctic_september_sea_ice_area_1979_2024",
+    expected: true
+  },
+  {
     source: "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
     seriesId: "green_water_rootzone_soil_moisture",
     expected: true

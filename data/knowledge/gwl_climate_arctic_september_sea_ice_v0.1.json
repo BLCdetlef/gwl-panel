@@ -1,0 +1,2152 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "topic": "Klimawandel / arktische September-Meereisfläche",
+  "status": "reviewed",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "entry": {
+    "systemBoundary": "Planetare Grenzen",
+    "domainComponent": "Klimawandel",
+    "subComponent": "Arktische Meereisfläche im September",
+    "contributionRole": "deepening_without_organ",
+    "effectFocus": "Monatlich gemittelte arktische September-Meereisfläche mit historischer Rekonstruktion, Satellitenbeobachtung und CMIP6-Projektionen"
+  },
+  "corePrinciples": [
+    "Die September-Meereisfläche ist eine Klimafolge und keine Kontrollvariable der planetaren Grenze Klimawandel.",
+    "Dargestellt wird Fläche, nicht Ausdehnung und nicht die Reflexionsfähigkeit der Erde.",
+    "Walsh-Rekonstruktion, satellitengestützte NOAA/NSIDC-CDR-Beobachtung und CMIP6-Projektionen bleiben methodisch getrennte Segmente.",
+    "Die Projektionspunkte stehen für 20-Jahres-Mittel; ihre Position in der Periodenmitte ist nur eine Darstellungsregel und keine zeitliche Interpolation."
+  ],
+  "nodes": [
+    {
+      "id": "pb_climate_change",
+      "type": "domain_component",
+      "label": "Klimawandel"
+    },
+    {
+      "id": "state_arctic_september_sea_ice_area",
+      "type": "ecological_state",
+      "label": "Arktische September-Meereisfläche"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pb_climate_change",
+      "to": "state_arctic_september_sea_ice_area",
+      "relationType": "contains_deepening",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "arctic_september_sea_ice_reconstruction_observation_projection",
+      "sourceRefs": [
+        "src_uhh_sia_2024",
+        "src_uhh_sia_2025",
+        "src_ipcc_ar6_ch4"
+      ],
+      "design": "Zusammenstellung monatlicher Septembermittel aus der UHH-Walsh-Rekonstruktion, dem NOAA/NSIDC Climate Data Record und IPCC-bewerteten CMIP6-Szenarien.",
+      "finding": "Das satellitengestützte Septembermittel sank von 6,61 Mio. km² im Jahr 1979 auf 3,90 Mio. km² im Jahr 2024.",
+      "relationType": "assessed_arctic_sea_ice_change",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "arctic_september_sea_ice_area_latest",
+      "node": "state_arctic_september_sea_ice_area",
+      "geography": "Arktis / Nordhalbkugel nördlich etwa 35° N",
+      "period": "2024",
+      "metric": "Monatlich gemittelte arktische Meereisfläche im September",
+      "value": 3.89594,
+      "unit": "Mio. km²",
+      "display": "2024: 3,90 Mio. km²",
+      "uncertainty": "Das UHH-Produkt veröffentlicht für diese Reihe keine eigene numerische Unsicherheit. Unterschiede zwischen Satellitenalgorithmen werden deshalb nicht in ein scheinbar exaktes Fehlerband umgerechnet.",
+      "interpretation": "Der Wert beschreibt die mit der Eiskonzentration gewichtete Fläche. Er ist weder Meereisausdehnung noch planetare Albedo und kein Grenzwert der planetaren Grenzen.",
+      "sourceRefs": [
+        "src_uhh_sia_2025"
+      ],
+      "displayType": "observed_value"
+    }
+  ],
+  "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Die arktische Meereisfläche erreicht im September gewöhnlich ihr jahreszeitliches Minimum. Das satellitengestützte Monatsmittel sank von 6,61 Mio. km² im Jahr 1979 auf 3,90 Mio. km² im Jahr 2024. Die Reihe zeigt eine wichtige Wirkung der Erwärmung und eine Rückkopplung über die geringere Reflexion heller Eisflächen, ist aber keine eigene Kontrollvariable der planetaren Grenze. Rekonstruktion, Beobachtung und mögliche Zukunftspfade werden ausschließlich im BLC getrennt dargestellt.",
+    "primaryMeasurementId": "arctic_september_sea_ice_area_latest",
+    "primaryTimeSeriesId": "arctic_september_sea_ice_area_1979_2024",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "hideKnowledgePanelInKnowledgeView": true,
+    "uncertainty": "Historische Werte beruhen auf heterogenen und teils lückenhaften Beobachtungsquellen; die Satellitenreihe beginnt 1979. Die CMIP6-Werte sind Szenario- und Modellmittel für 20-jährige Zeiträume, keine Vorhersagen einzelner Jahre."
+  },
+  "pathways": [
+    {
+      "id": "warming_to_arctic_sea_ice_feedback",
+      "label": "Erwärmung → weniger arktisches Meereis → geringere Rückstrahlung → zusätzliche Erwärmung",
+      "mechanism": "Steigende Luft- und Wassertemperaturen verkürzen und schwächen die sommerliche Meereisbedeckung. Offenes dunkles Wasser nimmt mehr Sonnenenergie auf als helles Eis und verstärkt dadurch die regionale Erwärmung.",
+      "evidenceStatus": "strong",
+      "caution": "Die Septemberfläche misst die Rückkopplung nicht direkt; Wolken, Schnee, Eisdicke und jahreszeitliche Strahlungsverhältnisse beeinflussen die tatsächliche Albedo zusätzlich."
+    }
+  ],
+  "sources": [
+    {
+      "id": "src_uhh_sia_2024",
+      "title": "UHH Sea Ice Area Product, Version 2024_fv0.01",
+      "authors": "Rauschenbach, Doerr, Notz und Kern",
+      "publisher": "Universität Hamburg, ICDC",
+      "year": 2024,
+      "type": "official_research_dataset",
+      "url": "https://www.fdr.uni-hamburg.de/record/11346",
+      "doi": "10.25592/uhhfdm.11346",
+      "accessed": "2026-09-21",
+      "access": "open_data"
+    },
+    {
+      "id": "src_uhh_sia_2025",
+      "title": "UHH Sea Ice Area Product, Version 2025_fv0.01",
+      "authors": "Thomae, Rauschenbach, Doerr, Notz und Kern",
+      "publisher": "Universität Hamburg, ICDC",
+      "year": 2025,
+      "type": "official_research_dataset",
+      "url": "https://www.fdr.uni-hamburg.de/record/18163",
+      "doi": "10.25592/uhhfdm.18163",
+      "accessed": "2026-09-21",
+      "access": "open_data"
+    },
+    {
+      "id": "src_ipcc_ar6_ch4",
+      "title": "IPCC AR6 WGI Chapter 4: Future Global Climate",
+      "authors": "Lee et al.",
+      "publisher": "Intergovernmental Panel on Climate Change",
+      "year": 2021,
+      "type": "assessment_report",
+      "url": "https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-4/",
+      "accessed": "2026-09-21",
+      "access": "open_full_text"
+    }
+  ],
+  "navigationRule": {
+    "group": "Klimawandel",
+    "item": "Arktische Meereisfläche im September",
+    "type": "component"
+  },
+  "timeSeries": [
+    {
+      "id": "arctic_september_sea_ice_area_1979_2024",
+      "label": "Arktische September-Meereisfläche · Satellitenbeobachtung",
+      "metric": "Monatlich gemittelte arktische Meereisfläche im September",
+      "unit": "Mio. km²",
+      "geography": "Nordhalbkugel nördlich etwa 35° N",
+      "dataNature": "observed",
+      "worseningDirection": "decrease",
+      "dataStartYear": 1979,
+      "dataEndYear": 2024,
+      "reference": {
+        "type": "none",
+        "display": "Kein Grenzwert der planetaren Grenzen; unter 1 Mio. km² gilt als praktisch eisfreier September"
+      },
+      "sourceRefs": [
+        "src_uhh_sia_2025"
+      ],
+      "finding": "Das Septembermittel des NOAA/NSIDC-CDR sank von 6,61 Mio. km² (1979) auf 3,90 Mio. km² (2024).",
+      "methodNote": "UHH berechnet die monatliche Meereisfläche als Summe aus Gitterzellfläche mal Eiskonzentration. Für das Beobachtungssegment wird ausschließlich die Variable nsidc_cdr verwendet.",
+      "uncertainty": "Keine numerische Produktunsicherheit veröffentlicht; algorithmische Unterschiede und verbleibende räumliche beziehungsweise zeitliche Datenlücken sind zu berücksichtigen.",
+      "provenance": {
+        "sourceFile": "SeaIceArea__NorthernHemisphere__monthly__UHH__v2025_fv0.01.nc",
+        "sourceUrl": "https://www.fdr.uni-hamburg.de/record/18163",
+        "locator": "NetCDF-Variable nsidc_cdr; Zeitdimension mit Monat 09; Jahre 1979–2024.",
+        "fields": [
+          "time → Jahr und Monat",
+          "nsidc_cdr → monatliche Meereisfläche der Nordhalbkugel in 10^6 km²"
+        ],
+        "extraction": "Ausgelesen wurden alle 46 Septemberwerte 1979–2024 aus nsidc_cdr. Quelldatei geprüft mit MD5 2e51a0e75d689ad84889beb656e6901d.",
+        "transformation": "Keine Glättung, Mittelung oder Interpolation im GWL-Import; 10^6 km² wird nur als Mio. km² beschriftet."
+      },
+      "historicalSegments": [
+        {
+          "id": "arctic_september_sea_ice_area_walsh_1850_1978",
+          "label": "Historische Walsh-Rekonstruktion",
+          "period": "1850–1978",
+          "method": "UHH-Meereisfläche aus monatlichen Walsh-v2-Konzentrationsfeldern, die historische Schiffs-, Boden-, Luft- und Eisservice-Beobachtungen zusammenführen und Lücken füllen.",
+          "uncertainty": "Quellendichte und räumliche Abdeckung ändern sich stark über die Zeit; UHH veröffentlicht für diese Reihe kein numerisches Unsicherheitsband.",
+          "sourceRefs": [
+            "src_uhh_sia_2024"
+          ],
+          "provenance": {
+            "sourceFile": "SeaIceArea__NorthernHemisphere__monthly__UHH__v2024_fv0.01.nc",
+            "sourceUrl": "https://www.fdr.uni-hamburg.de/record/11346",
+            "locator": "NetCDF-Variable walsh; Zeitdimension mit Monat 09; Jahre 1850–1978.",
+            "fields": [
+              "time → Jahr und Monat",
+              "walsh → monatliche Meereisfläche der Nordhalbkugel in 10^6 km²"
+            ],
+            "extraction": "Ausgelesen wurden alle 129 Septemberwerte 1850–1978 aus walsh. Quelldatei geprüft mit MD5 d959e75624e061f76a1f909e0b4bb64a.",
+            "transformation": "Keine Glättung oder Interpolation; das Segment endet vor Beginn des satellitengestützten Beobachtungssegments."
+          },
+          "points": [
+            {
+              "year": 1850,
+              "value": 6.937448,
+              "display": "1850 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1850: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1851,
+              "value": 7.091296,
+              "display": "1851 · 7,09 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1851: rekonstruiertes Septembermittel 7,09 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1852,
+              "value": 7.372265,
+              "display": "1852 · 7,37 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1852: rekonstruiertes Septembermittel 7,37 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1853,
+              "value": 6.962368,
+              "display": "1853 · 6,96 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1853: rekonstruiertes Septembermittel 6,96 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1854,
+              "value": 5.954253,
+              "display": "1854 · 5,95 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1854: rekonstruiertes Septembermittel 5,95 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1855,
+              "value": 7.27373,
+              "display": "1855 · 7,27 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1855: rekonstruiertes Septembermittel 7,27 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1856,
+              "value": 7.088126,
+              "display": "1856 · 7,09 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1856: rekonstruiertes Septembermittel 7,09 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1857,
+              "value": 6.619237,
+              "display": "1857 · 6,62 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1857: rekonstruiertes Septembermittel 6,62 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1858,
+              "value": 6.651466,
+              "display": "1858 · 6,65 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1858: rekonstruiertes Septembermittel 6,65 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1859,
+              "value": 6.938847,
+              "display": "1859 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1859: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1860,
+              "value": 6.637902,
+              "display": "1860 · 6,64 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1860: rekonstruiertes Septembermittel 6,64 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1861,
+              "value": 6.905279,
+              "display": "1861 · 6,91 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1861: rekonstruiertes Septembermittel 6,91 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1862,
+              "value": 6.939741,
+              "display": "1862 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1862: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1863,
+              "value": 6.733167,
+              "display": "1863 · 6,73 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1863: rekonstruiertes Septembermittel 6,73 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1864,
+              "value": 7.209791,
+              "display": "1864 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1864: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1865,
+              "value": 6.802237,
+              "display": "1865 · 6,80 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1865: rekonstruiertes Septembermittel 6,80 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1866,
+              "value": 6.986041,
+              "display": "1866 · 6,99 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1866: rekonstruiertes Septembermittel 6,99 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1867,
+              "value": 6.972791,
+              "display": "1867 · 6,97 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1867: rekonstruiertes Septembermittel 6,97 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1868,
+              "value": 7.661385,
+              "display": "1868 · 7,66 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1868: rekonstruiertes Septembermittel 7,66 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1869,
+              "value": 7.232626,
+              "display": "1869 · 7,23 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1869: rekonstruiertes Septembermittel 7,23 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1870,
+              "value": 6.733281,
+              "display": "1870 · 6,73 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1870: rekonstruiertes Septembermittel 6,73 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1871,
+              "value": 6.944733,
+              "display": "1871 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1871: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1872,
+              "value": 7.014557,
+              "display": "1872 · 7,01 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1872: rekonstruiertes Septembermittel 7,01 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1873,
+              "value": 7.076022,
+              "display": "1873 · 7,08 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1873: rekonstruiertes Septembermittel 7,08 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1874,
+              "value": 6.985013,
+              "display": "1874 · 6,99 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1874: rekonstruiertes Septembermittel 6,99 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1875,
+              "value": 7.093856,
+              "display": "1875 · 7,09 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1875: rekonstruiertes Septembermittel 7,09 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1876,
+              "value": 6.908729,
+              "display": "1876 · 6,91 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1876: rekonstruiertes Septembermittel 6,91 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1877,
+              "value": 6.900338,
+              "display": "1877 · 6,90 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1877: rekonstruiertes Septembermittel 6,90 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1878,
+              "value": 6.725902,
+              "display": "1878 · 6,73 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1878: rekonstruiertes Septembermittel 6,73 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1879,
+              "value": 7.003499,
+              "display": "1879 · 7,00 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1879: rekonstruiertes Septembermittel 7,00 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1880,
+              "value": 6.779938,
+              "display": "1880 · 6,78 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1880: rekonstruiertes Septembermittel 6,78 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1881,
+              "value": 6.702284,
+              "display": "1881 · 6,70 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1881: rekonstruiertes Septembermittel 6,70 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1882,
+              "value": 7.297424,
+              "display": "1882 · 7,30 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1882: rekonstruiertes Septembermittel 7,30 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1883,
+              "value": 6.645472,
+              "display": "1883 · 6,65 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1883: rekonstruiertes Septembermittel 6,65 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1884,
+              "value": 6.620799,
+              "display": "1884 · 6,62 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1884: rekonstruiertes Septembermittel 6,62 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1885,
+              "value": 6.723223,
+              "display": "1885 · 6,72 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1885: rekonstruiertes Septembermittel 6,72 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1886,
+              "value": 7.120011,
+              "display": "1886 · 7,12 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1886: rekonstruiertes Septembermittel 7,12 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1887,
+              "value": 7.124816,
+              "display": "1887 · 7,12 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1887: rekonstruiertes Septembermittel 7,12 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1888,
+              "value": 7.148962,
+              "display": "1888 · 7,15 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1888: rekonstruiertes Septembermittel 7,15 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1889,
+              "value": 6.957317,
+              "display": "1889 · 6,96 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1889: rekonstruiertes Septembermittel 6,96 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1890,
+              "value": 6.993237,
+              "display": "1890 · 6,99 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1890: rekonstruiertes Septembermittel 6,99 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1891,
+              "value": 6.963606,
+              "display": "1891 · 6,96 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1891: rekonstruiertes Septembermittel 6,96 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1892,
+              "value": 6.971614,
+              "display": "1892 · 6,97 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1892: rekonstruiertes Septembermittel 6,97 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1893,
+              "value": 7.132581,
+              "display": "1893 · 7,13 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1893: rekonstruiertes Septembermittel 7,13 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1894,
+              "value": 6.866391,
+              "display": "1894 · 6,87 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1894: rekonstruiertes Septembermittel 6,87 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1895,
+              "value": 7.017221,
+              "display": "1895 · 7,02 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1895: rekonstruiertes Septembermittel 7,02 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1896,
+              "value": 6.95475,
+              "display": "1896 · 6,95 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1896: rekonstruiertes Septembermittel 6,95 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1897,
+              "value": 6.794268,
+              "display": "1897 · 6,79 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1897: rekonstruiertes Septembermittel 6,79 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1898,
+              "value": 7.231614,
+              "display": "1898 · 7,23 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1898: rekonstruiertes Septembermittel 7,23 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1899,
+              "value": 6.698191,
+              "display": "1899 · 6,70 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1899: rekonstruiertes Septembermittel 6,70 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1900,
+              "value": 6.618501,
+              "display": "1900 · 6,62 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1900: rekonstruiertes Septembermittel 6,62 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1901,
+              "value": 6.88708,
+              "display": "1901 · 6,89 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1901: rekonstruiertes Septembermittel 6,89 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1902,
+              "value": 6.755697,
+              "display": "1902 · 6,76 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1902: rekonstruiertes Septembermittel 6,76 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1903,
+              "value": 6.968579,
+              "display": "1903 · 6,97 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1903: rekonstruiertes Septembermittel 6,97 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1904,
+              "value": 6.403144,
+              "display": "1904 · 6,40 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1904: rekonstruiertes Septembermittel 6,40 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1905,
+              "value": 6.857943,
+              "display": "1905 · 6,86 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1905: rekonstruiertes Septembermittel 6,86 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1906,
+              "value": 6.784803,
+              "display": "1906 · 6,78 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1906: rekonstruiertes Septembermittel 6,78 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1907,
+              "value": 6.999119,
+              "display": "1907 · 7,00 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1907: rekonstruiertes Septembermittel 7,00 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1908,
+              "value": 7.096754,
+              "display": "1908 · 7,10 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1908: rekonstruiertes Septembermittel 7,10 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1909,
+              "value": 6.679428,
+              "display": "1909 · 6,68 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1909: rekonstruiertes Septembermittel 6,68 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1910,
+              "value": 7.045686,
+              "display": "1910 · 7,05 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1910: rekonstruiertes Septembermittel 7,05 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1911,
+              "value": 7.312946,
+              "display": "1911 · 7,31 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1911: rekonstruiertes Septembermittel 7,31 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1912,
+              "value": 7.352044,
+              "display": "1912 · 7,35 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1912: rekonstruiertes Septembermittel 7,35 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1913,
+              "value": 6.50049,
+              "display": "1913 · 6,50 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1913: rekonstruiertes Septembermittel 6,50 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1914,
+              "value": 7.323347,
+              "display": "1914 · 7,32 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1914: rekonstruiertes Septembermittel 7,32 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1915,
+              "value": 6.515518,
+              "display": "1915 · 6,52 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1915: rekonstruiertes Septembermittel 6,52 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1916,
+              "value": 7.3823,
+              "display": "1916 · 7,38 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1916: rekonstruiertes Septembermittel 7,38 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1917,
+              "value": 6.852439,
+              "display": "1917 · 6,85 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1917: rekonstruiertes Septembermittel 6,85 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1918,
+              "value": 6.819104,
+              "display": "1918 · 6,82 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1918: rekonstruiertes Septembermittel 6,82 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1919,
+              "value": 6.778855,
+              "display": "1919 · 6,78 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1919: rekonstruiertes Septembermittel 6,78 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1920,
+              "value": 6.092945,
+              "display": "1920 · 6,09 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1920: rekonstruiertes Septembermittel 6,09 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1921,
+              "value": 7.212191,
+              "display": "1921 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1921: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1922,
+              "value": 7.093281,
+              "display": "1922 · 7,09 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1922: rekonstruiertes Septembermittel 7,09 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1923,
+              "value": 6.916941,
+              "display": "1923 · 6,92 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1923: rekonstruiertes Septembermittel 6,92 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1924,
+              "value": 6.892466,
+              "display": "1924 · 6,89 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1924: rekonstruiertes Septembermittel 6,89 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1925,
+              "value": 7.212191,
+              "display": "1925 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1925: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1926,
+              "value": 7.212191,
+              "display": "1926 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1926: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1927,
+              "value": 7.212191,
+              "display": "1927 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1927: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1928,
+              "value": 7.0721,
+              "display": "1928 · 7,07 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1928: rekonstruiertes Septembermittel 7,07 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1929,
+              "value": 7.031874,
+              "display": "1929 · 7,03 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1929: rekonstruiertes Septembermittel 7,03 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1930,
+              "value": 6.941288,
+              "display": "1930 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1930: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1931,
+              "value": 7.212191,
+              "display": "1931 · 7,21 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1931: rekonstruiertes Septembermittel 7,21 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1932,
+              "value": 6.934961,
+              "display": "1932 · 6,93 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1932: rekonstruiertes Septembermittel 6,93 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1933,
+              "value": 6.602304,
+              "display": "1933 · 6,60 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1933: rekonstruiertes Septembermittel 6,60 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1934,
+              "value": 6.132984,
+              "display": "1934 · 6,13 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1934: rekonstruiertes Septembermittel 6,13 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1935,
+              "value": 5.785536,
+              "display": "1935 · 5,79 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1935: rekonstruiertes Septembermittel 5,79 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1936,
+              "value": 7.102834,
+              "display": "1936 · 7,10 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1936: rekonstruiertes Septembermittel 7,10 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1937,
+              "value": 6.070695,
+              "display": "1937 · 6,07 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1937: rekonstruiertes Septembermittel 6,07 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1938,
+              "value": 6.708268,
+              "display": "1938 · 6,71 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1938: rekonstruiertes Septembermittel 6,71 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1939,
+              "value": 6.928624,
+              "display": "1939 · 6,93 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1939: rekonstruiertes Septembermittel 6,93 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1940,
+              "value": 6.514159,
+              "display": "1940 · 6,51 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1940: rekonstruiertes Septembermittel 6,51 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1941,
+              "value": 6.31345,
+              "display": "1941 · 6,31 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1941: rekonstruiertes Septembermittel 6,31 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1942,
+              "value": 6.784041,
+              "display": "1942 · 6,78 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1942: rekonstruiertes Septembermittel 6,78 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1943,
+              "value": 6.00389,
+              "display": "1943 · 6,00 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1943: rekonstruiertes Septembermittel 6,00 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1944,
+              "value": 6.463967,
+              "display": "1944 · 6,46 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1944: rekonstruiertes Septembermittel 6,46 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1945,
+              "value": 6.442587,
+              "display": "1945 · 6,44 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1945: rekonstruiertes Septembermittel 6,44 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1946,
+              "value": 6.163537,
+              "display": "1946 · 6,16 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1946: rekonstruiertes Septembermittel 6,16 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1947,
+              "value": 6.815235,
+              "display": "1947 · 6,82 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1947: rekonstruiertes Septembermittel 6,82 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1948,
+              "value": 6.976916,
+              "display": "1948 · 6,98 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1948: rekonstruiertes Septembermittel 6,98 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1949,
+              "value": 6.514781,
+              "display": "1949 · 6,51 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1949: rekonstruiertes Septembermittel 6,51 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1950,
+              "value": 6.351754,
+              "display": "1950 · 6,35 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1950: rekonstruiertes Septembermittel 6,35 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1951,
+              "value": 6.29105,
+              "display": "1951 · 6,29 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1951: rekonstruiertes Septembermittel 6,29 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1952,
+              "value": 5.968121,
+              "display": "1952 · 5,97 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1952: rekonstruiertes Septembermittel 5,97 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1953,
+              "value": 6.511192,
+              "display": "1953 · 6,51 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1953: rekonstruiertes Septembermittel 6,51 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1954,
+              "value": 6.942221,
+              "display": "1954 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1954: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1955,
+              "value": 6.75688,
+              "display": "1955 · 6,76 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1955: rekonstruiertes Septembermittel 6,76 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1956,
+              "value": 7.163299,
+              "display": "1956 · 7,16 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1956: rekonstruiertes Septembermittel 7,16 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1957,
+              "value": 7.179328,
+              "display": "1957 · 7,18 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1957: rekonstruiertes Septembermittel 7,18 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1958,
+              "value": 6.941944,
+              "display": "1958 · 6,94 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1958: rekonstruiertes Septembermittel 6,94 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1959,
+              "value": 6.310411,
+              "display": "1959 · 6,31 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1959: rekonstruiertes Septembermittel 6,31 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1960,
+              "value": 6.394365,
+              "display": "1960 · 6,39 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1960: rekonstruiertes Septembermittel 6,39 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1961,
+              "value": 6.255726,
+              "display": "1961 · 6,26 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1961: rekonstruiertes Septembermittel 6,26 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1962,
+              "value": 7.618507,
+              "display": "1962 · 7,62 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1962: rekonstruiertes Septembermittel 7,62 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1963,
+              "value": 7.858218,
+              "display": "1963 · 7,86 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1963: rekonstruiertes Septembermittel 7,86 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1964,
+              "value": 7.388805,
+              "display": "1964 · 7,39 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1964: rekonstruiertes Septembermittel 7,39 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1965,
+              "value": 7.470191,
+              "display": "1965 · 7,47 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1965: rekonstruiertes Septembermittel 7,47 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1966,
+              "value": 7.249628,
+              "display": "1966 · 7,25 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1966: rekonstruiertes Septembermittel 7,25 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1967,
+              "value": 7.475221,
+              "display": "1967 · 7,48 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1967: rekonstruiertes Septembermittel 7,48 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1968,
+              "value": 6.59439,
+              "display": "1968 · 6,59 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1968: rekonstruiertes Septembermittel 6,59 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1969,
+              "value": 7.579748,
+              "display": "1969 · 7,58 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1969: rekonstruiertes Septembermittel 7,58 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1970,
+              "value": 7.420423,
+              "display": "1970 · 7,42 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1970: rekonstruiertes Septembermittel 7,42 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1971,
+              "value": 6.550889,
+              "display": "1971 · 6,55 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1971: rekonstruiertes Septembermittel 6,55 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1972,
+              "value": 6.883382,
+              "display": "1972 · 6,88 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1972: rekonstruiertes Septembermittel 6,88 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1973,
+              "value": 6.970366,
+              "display": "1973 · 6,97 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1973: rekonstruiertes Septembermittel 6,97 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1974,
+              "value": 6.750642,
+              "display": "1974 · 6,75 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1974: rekonstruiertes Septembermittel 6,75 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1975,
+              "value": 7.05053,
+              "display": "1975 · 7,05 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1975: rekonstruiertes Septembermittel 7,05 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1976,
+              "value": 6.649753,
+              "display": "1976 · 6,65 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1976: rekonstruiertes Septembermittel 6,65 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1977,
+              "value": 6.482363,
+              "display": "1977 · 6,48 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1977: rekonstruiertes Septembermittel 6,48 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            },
+            {
+              "year": 1978,
+              "value": 7.072116,
+              "display": "1978 · 7,07 Mio. km² · UHH/Walsh · rekonstruiert",
+              "finding": "1978: rekonstruiertes Septembermittel 7,07 Mio. km².",
+              "uncertainty": "Historische Rekonstruktion mit zeitlich wechselnder Quellenabdeckung; keine direkte Satellitenmessung.",
+              "sourceRefs": [
+                "src_uhh_sia_2024"
+              ]
+            }
+          ]
+        }
+      ],
+      "methodBreaks": [
+        {
+          "year": 1979,
+          "label": "Beginn des satellitengestützten NOAA/NSIDC-CDR-Segments"
+        }
+      ],
+      "points": [
+        {
+          "year": 1979,
+          "value": 6.605533,
+          "display": "1979 · 6,61 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1979: satellitengestütztes Septembermittel 6,61 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1980,
+          "value": 7.21995,
+          "display": "1980 · 7,22 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1980: satellitengestütztes Septembermittel 7,22 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1981,
+          "value": 6.709891,
+          "display": "1981 · 6,71 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1981: satellitengestütztes Septembermittel 6,71 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1982,
+          "value": 6.849255,
+          "display": "1982 · 6,85 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1982: satellitengestütztes Septembermittel 6,85 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1983,
+          "value": 6.958425,
+          "display": "1983 · 6,96 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1983: satellitengestütztes Septembermittel 6,96 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1984,
+          "value": 6.516269,
+          "display": "1984 · 6,52 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1984: satellitengestütztes Septembermittel 6,52 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1985,
+          "value": 6.459449,
+          "display": "1985 · 6,46 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1985: satellitengestütztes Septembermittel 6,46 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1986,
+          "value": 7.012281,
+          "display": "1986 · 7,01 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1986: satellitengestütztes Septembermittel 7,01 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1987,
+          "value": 6.92436,
+          "display": "1987 · 6,92 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1987: satellitengestütztes Septembermittel 6,92 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1988,
+          "value": 6.932963,
+          "display": "1988 · 6,93 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1988: satellitengestütztes Septembermittel 6,93 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1989,
+          "value": 6.452644,
+          "display": "1989 · 6,45 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1989: satellitengestütztes Septembermittel 6,45 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1990,
+          "value": 5.760085,
+          "display": "1990 · 5,76 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1990: satellitengestütztes Septembermittel 5,76 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1991,
+          "value": 6.035515,
+          "display": "1991 · 6,04 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1991: satellitengestütztes Septembermittel 6,04 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1992,
+          "value": 7.016528,
+          "display": "1992 · 7,02 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1992: satellitengestütztes Septembermittel 7,02 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1993,
+          "value": 5.928469,
+          "display": "1993 · 5,93 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1993: satellitengestütztes Septembermittel 5,93 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1994,
+          "value": 6.651188,
+          "display": "1994 · 6,65 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1994: satellitengestütztes Septembermittel 6,65 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1995,
+          "value": 5.687191,
+          "display": "1995 · 5,69 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1995: satellitengestütztes Septembermittel 5,69 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1996,
+          "value": 7.12476,
+          "display": "1996 · 7,12 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1996: satellitengestütztes Septembermittel 7,12 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1997,
+          "value": 6.198224,
+          "display": "1997 · 6,20 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1997: satellitengestütztes Septembermittel 6,20 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1998,
+          "value": 5.900806,
+          "display": "1998 · 5,90 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1998: satellitengestütztes Septembermittel 5,90 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 1999,
+          "value": 5.507864,
+          "display": "1999 · 5,51 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "1999: satellitengestütztes Septembermittel 5,51 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2000,
+          "value": 5.70428,
+          "display": "2000 · 5,70 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2000: satellitengestütztes Septembermittel 5,70 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2001,
+          "value": 6.076285,
+          "display": "2001 · 6,08 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2001: satellitengestütztes Septembermittel 6,08 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2002,
+          "value": 5.361971,
+          "display": "2002 · 5,36 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2002: satellitengestütztes Septembermittel 5,36 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2003,
+          "value": 5.562851,
+          "display": "2003 · 5,56 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2003: satellitengestütztes Septembermittel 5,56 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2004,
+          "value": 5.575222,
+          "display": "2004 · 5,58 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2004: satellitengestütztes Septembermittel 5,58 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2005,
+          "value": 5.057753,
+          "display": "2005 · 5,06 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2005: satellitengestütztes Septembermittel 5,06 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2006,
+          "value": 5.300524,
+          "display": "2006 · 5,30 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2006: satellitengestütztes Septembermittel 5,30 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2007,
+          "value": 3.81505,
+          "display": "2007 · 3,82 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2007: satellitengestütztes Septembermittel 3,82 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2008,
+          "value": 4.20845,
+          "display": "2008 · 4,21 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2008: satellitengestütztes Septembermittel 4,21 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2009,
+          "value": 4.788727,
+          "display": "2009 · 4,79 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2009: satellitengestütztes Septembermittel 4,79 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2010,
+          "value": 4.324258,
+          "display": "2010 · 4,32 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2010: satellitengestütztes Septembermittel 4,32 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2011,
+          "value": 4.074991,
+          "display": "2011 · 4,07 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2011: satellitengestütztes Septembermittel 4,07 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2012,
+          "value": 3.098967,
+          "display": "2012 · 3,10 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2012: satellitengestütztes Septembermittel 3,10 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2013,
+          "value": 4.75081,
+          "display": "2013 · 4,75 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2013: satellitengestütztes Septembermittel 4,75 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 4.686462,
+          "display": "2014 · 4,69 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2014: satellitengestütztes Septembermittel 4,69 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2015,
+          "value": 4.162618,
+          "display": "2015 · 4,16 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2015: satellitengestütztes Septembermittel 4,16 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2016,
+          "value": 3.934255,
+          "display": "2016 · 3,93 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2016: satellitengestütztes Septembermittel 3,93 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2017,
+          "value": 4.364444,
+          "display": "2017 · 4,36 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2017: satellitengestütztes Septembermittel 4,36 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2018,
+          "value": 4.273009,
+          "display": "2018 · 4,27 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2018: satellitengestütztes Septembermittel 4,27 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 3.92193,
+          "display": "2019 · 3,92 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2019: satellitengestütztes Septembermittel 3,92 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2020,
+          "value": 3.556619,
+          "display": "2020 · 3,56 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2020: satellitengestütztes Septembermittel 3,56 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2021,
+          "value": 4.383532,
+          "display": "2021 · 4,38 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2021: satellitengestütztes Septembermittel 4,38 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2022,
+          "value": 4.388343,
+          "display": "2022 · 4,39 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2022: satellitengestütztes Septembermittel 4,39 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2023,
+          "value": 3.812721,
+          "display": "2023 · 3,81 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2023: satellitengestütztes Septembermittel 3,81 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        },
+        {
+          "year": 2024,
+          "value": 3.89594,
+          "display": "2024 · 3,90 Mio. km² · NOAA/NSIDC CDR · beobachtet",
+          "finding": "2024: satellitengestütztes Septembermittel 3,90 Mio. km².",
+          "uncertainty": "UHH veröffentlicht keine eigene numerische Unsicherheit für diesen Reihenwert.",
+          "sourceRefs": [
+            "src_uhh_sia_2025"
+          ]
+        }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "grade": "robust_scenario_projection",
+    "method": "IPCC-bewertete CMIP6-Multi-Modell-Mittel der arktischen September-Meereisfläche; 5–95-%-Modellbereiche sind punktbezogen dokumentiert.",
+    "scope": "Drei ausgewählte SSPs und drei 20-Jahres-Zeiträume. Die Diagrammpositionen 2030, 2050 und 2090 markieren nur die Periodenmitte."
+  },
+  "projectionSeries": [
+    {
+      "id": "arctic_september_sea_ice_area_ssp119",
+      "observedSeriesId": "arctic_september_sea_ice_area_1979_2024",
+      "scenario": "SSP1-1.9",
+      "scenarioLabel": "SSP1-1.9 · sehr niedrige Emissionen",
+      "period": "2021–2100",
+      "unit": "Mio. km²",
+      "method": "CMIP6-Multi-Modell-Mittel der arktischen September-Meereisfläche für 20-jährige Zeiträume aus IPCC AR6 WGI Tabelle 4.4.",
+      "uncertainty": "Die angegebenen Spannen sind 5–95-%-Bereiche über die verwendeten Modelle; interne Variabilität und Modellunterschiede bleiben enthalten.",
+      "sourceRefs": [
+        "src_ipcc_ar6_ch4"
+      ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_Chapter04.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_Chapter04.pdf",
+        "locator": "Tabelle 4.4; Zeilen September; Spalte SSP1-1.9; Zeiträume 2021–2040, 2041–2060 und 2081–2100.",
+        "fields": [
+          "Zeitraum → 20-Jahres-Fenster",
+          "SSP1-1.9 → Multi-Modell-Mittel und 5–95-%-Bereich in 10^6 km²"
+        ],
+        "extraction": "Übernommen wurden Mittelwert sowie untere und obere Modellspanne für die drei veröffentlichten September-Zeiträume.",
+        "transformation": "Mio. km² unverändert; nur die Darstellungsposition wird auf die Periodenmitte 2030, 2050 beziehungsweise 2090 gesetzt. Keine Interpolation zwischen den Punkten."
+      },
+      "points": [
+        {
+          "year": 2030,
+          "value": 2.6,
+          "period": "2021–2040",
+          "low": 1.1,
+          "high": 6.5,
+          "display": "2021–2040 · 2,6 Mio. km² · SSP1-1.9 · modelliert",
+          "finding": "2021–2040: Multi-Modell-Mittel 2,6 Mio. km²; 5–95-%-Bereich 1,1–6,5 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 1,1–6,5 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 2.2,
+          "period": "2041–2060",
+          "low": 0.3,
+          "high": 6.5,
+          "display": "2041–2060 · 2,2 Mio. km² · SSP1-1.9 · modelliert",
+          "finding": "2041–2060: Multi-Modell-Mittel 2,2 Mio. km²; 5–95-%-Bereich 0,3–6,5 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,3–6,5 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2090,
+          "value": 2.4,
+          "period": "2081–2100",
+          "low": 0.2,
+          "high": 6.2,
+          "display": "2081–2100 · 2,4 Mio. km² · SSP1-1.9 · modelliert",
+          "finding": "2081–2100: Multi-Modell-Mittel 2,4 Mio. km²; 5–95-%-Bereich 0,2–6,2 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,2–6,2 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arctic_september_sea_ice_area_ssp245",
+      "observedSeriesId": "arctic_september_sea_ice_area_1979_2024",
+      "scenario": "SSP2-4.5",
+      "scenarioLabel": "SSP2-4.5 · mittlere Emissionen",
+      "period": "2021–2100",
+      "unit": "Mio. km²",
+      "method": "CMIP6-Multi-Modell-Mittel der arktischen September-Meereisfläche für 20-jährige Zeiträume aus IPCC AR6 WGI Tabelle 4.4.",
+      "uncertainty": "Die angegebenen Spannen sind 5–95-%-Bereiche über die verwendeten Modelle; interne Variabilität und Modellunterschiede bleiben enthalten.",
+      "sourceRefs": [
+        "src_ipcc_ar6_ch4"
+      ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_Chapter04.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_Chapter04.pdf",
+        "locator": "Tabelle 4.4; Zeilen September; Spalte SSP2-4.5; Zeiträume 2021–2040, 2041–2060 und 2081–2100.",
+        "fields": [
+          "Zeitraum → 20-Jahres-Fenster",
+          "SSP2-4.5 → Multi-Modell-Mittel und 5–95-%-Bereich in 10^6 km²"
+        ],
+        "extraction": "Übernommen wurden Mittelwert sowie untere und obere Modellspanne für die drei veröffentlichten September-Zeiträume.",
+        "transformation": "Mio. km² unverändert; nur die Darstellungsposition wird auf die Periodenmitte 2030, 2050 beziehungsweise 2090 gesetzt. Keine Interpolation zwischen den Punkten."
+      },
+      "points": [
+        {
+          "year": 2030,
+          "value": 2.8,
+          "period": "2021–2040",
+          "low": 0.7,
+          "high": 6.4,
+          "display": "2021–2040 · 2,8 Mio. km² · SSP2-4.5 · modelliert",
+          "finding": "2021–2040: Multi-Modell-Mittel 2,8 Mio. km²; 5–95-%-Bereich 0,7–6,4 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,7–6,4 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 1.7,
+          "period": "2041–2060",
+          "low": 0.1,
+          "high": 5.6,
+          "display": "2041–2060 · 1,7 Mio. km² · SSP2-4.5 · modelliert",
+          "finding": "2041–2060: Multi-Modell-Mittel 1,7 Mio. km²; 5–95-%-Bereich 0,1–5,6 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,1–5,6 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2090,
+          "value": 0.8,
+          "period": "2081–2100",
+          "low": 0,
+          "high": 4.6,
+          "display": "2081–2100 · 0,8 Mio. km² · SSP2-4.5 · modelliert",
+          "finding": "2081–2100: Multi-Modell-Mittel 0,8 Mio. km²; 5–95-%-Bereich 0,0–4,6 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,0–4,6 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arctic_september_sea_ice_area_ssp370",
+      "observedSeriesId": "arctic_september_sea_ice_area_1979_2024",
+      "scenario": "SSP3-7.0",
+      "scenarioLabel": "SSP3-7.0 · hohe Emissionen",
+      "period": "2021–2100",
+      "unit": "Mio. km²",
+      "method": "CMIP6-Multi-Modell-Mittel der arktischen September-Meereisfläche für 20-jährige Zeiträume aus IPCC AR6 WGI Tabelle 4.4.",
+      "uncertainty": "Die angegebenen Spannen sind 5–95-%-Bereiche über die verwendeten Modelle; interne Variabilität und Modellunterschiede bleiben enthalten.",
+      "sourceRefs": [
+        "src_ipcc_ar6_ch4"
+      ],
+      "provenance": {
+        "sourceFile": "IPCC_AR6_WGI_Chapter04.pdf",
+        "sourceUrl": "https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_Chapter04.pdf",
+        "locator": "Tabelle 4.4; Zeilen September; Spalte SSP3-7.0; Zeiträume 2021–2040, 2041–2060 und 2081–2100.",
+        "fields": [
+          "Zeitraum → 20-Jahres-Fenster",
+          "SSP3-7.0 → Multi-Modell-Mittel und 5–95-%-Bereich in 10^6 km²"
+        ],
+        "extraction": "Übernommen wurden Mittelwert sowie untere und obere Modellspanne für die drei veröffentlichten September-Zeiträume.",
+        "transformation": "Mio. km² unverändert; nur die Darstellungsposition wird auf die Periodenmitte 2030, 2050 beziehungsweise 2090 gesetzt. Keine Interpolation zwischen den Punkten."
+      },
+      "points": [
+        {
+          "year": 2030,
+          "value": 3.1,
+          "period": "2021–2040",
+          "low": 1.1,
+          "high": 6.4,
+          "display": "2021–2040 · 3,1 Mio. km² · SSP3-7.0 · modelliert",
+          "finding": "2021–2040: Multi-Modell-Mittel 3,1 Mio. km²; 5–95-%-Bereich 1,1–6,4 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 1,1–6,4 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 1.7,
+          "period": "2041–2060",
+          "low": 0.1,
+          "high": 5.7,
+          "display": "2041–2060 · 1,7 Mio. km² · SSP3-7.0 · modelliert",
+          "finding": "2041–2060: Multi-Modell-Mittel 1,7 Mio. km²; 5–95-%-Bereich 0,1–5,7 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,1–5,7 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        },
+        {
+          "year": 2090,
+          "value": 0.5,
+          "period": "2081–2100",
+          "low": 0,
+          "high": 3.3,
+          "display": "2081–2100 · 0,5 Mio. km² · SSP3-7.0 · modelliert",
+          "finding": "2081–2100: Multi-Modell-Mittel 0,5 Mio. km²; 5–95-%-Bereich 0,0–3,3 Mio. km².",
+          "uncertainty": "5–95-%-Modellbereich 0,0–3,3 Mio. km²; Szenario, keine Einzeljahresprognose.",
+          "sourceRefs": [
+            "src_ipcc_ar6_ch4"
+          ]
+        }
+      ]
+    }
+  ]
+}
