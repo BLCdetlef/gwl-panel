@@ -14,6 +14,27 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_cement_clinker_global_v0.1.json",
+      "seriesId": "global_cement_production_1926_2024_owid_usgs",
+      "boundaryId": "materials-energy",
+      "itemId": "cement-clinker-global",
+      "curveId": "knowledge:data/knowledge/gwl_cement_clinker_global_v0.1.json#global_cement_production_1926_2024_owid_usgs",
+      "curveRole": "deep_dive",
+      "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json",
+      "seriesId": "arctic_september_sea_ice_area_1979_2024",
+      "boundaryId": "climate",
+      "itemId": "arctic-september-sea-ice-area",
+      "curveId": "knowledge:data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json#arctic_september_sea_ice_area_1979_2024",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Vertiefung zur arktischen September-Meereisfläche; UHH/Walsh-Rekonstruktion, NOAA/NSIDC-CDR-Beobachtung und IPCC-CMIP6-Projektionen bleiben getrennte Segmente."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_climate_change_pilot_v0.1.json",
       "seriesId": "global_co2_noaa_annual",
       "boundaryId": "climate",
@@ -21,39 +42,6 @@
       "curveId": "knowledge:data/knowledge/gwl_climate_change_pilot_v0.1.json#global_co2_noaa_annual",
       "curveRole": "core",
       "status": "approved"
-    },
-    {
-      "kind": "knowledge",
-      "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json",
-      "seriesId": "global_anthropogenic_erf_1750_2025",
-      "boundaryId": "climate",
-      "itemId": "radiative-forcing",
-      "curveId": "knowledge:data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json#global_anthropogenic_erf_1750_2025",
-      "curveRole": "core",
-      "status": "approved",
-      "note": "IGCC-2025-Schätzreihe des gesamten anthropogenen effektiven Strahlungsantriebs; keine direkte Messreihe."
-    },
-    {
-      "kind": "knowledge",
-      "source": "data/knowledge/gwl_climate_temperature_global_v0.2.json",
-      "seriesId": "global_temperature_hadcrut5_1850_2025",
-      "boundaryId": "climate",
-      "itemId": "global-temperature",
-      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_global_v0.2.json#global_temperature_hadcrut5_1850_2025",
-      "curveRole": "deep_dive",
-      "status": "approved",
-      "note": "Vertiefung zur globalen Temperaturänderung gegenüber 1850–1900; Rekonstruktion, Beobachtung und IPCC-Projektionen bleiben getrennte Segmente."
-    },
-    {
-      "kind": "knowledge",
-      "source": "data/knowledge/gwl_climate_sea_level_global_v0.1.json",
-      "seriesId": "global_mean_sea_level_satellite_1993_2024",
-      "boundaryId": "climate",
-      "itemId": "global-sea-level-rise",
-      "curveId": "knowledge:data/knowledge/gwl_climate_sea_level_global_v0.1.json#global_mean_sea_level_satellite_1993_2024",
-      "curveRole": "deep_dive",
-      "status": "approved",
-      "note": "Vertiefung zum globalen mittleren Meeresspiegel; Pegelrekonstruktion, Satellitenbeobachtung und drei IPCC-Projektionen bleiben getrennte Segmente und verwenden 2005 als gemeinsamen Bezug."
     },
     {
       "kind": "knowledge",
@@ -68,14 +56,36 @@
     },
     {
       "kind": "knowledge",
-      "source": "data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json",
-      "seriesId": "arctic_september_sea_ice_area_1979_2024",
+      "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json",
+      "seriesId": "global_anthropogenic_erf_1750_2025",
       "boundaryId": "climate",
-      "itemId": "arctic-september-sea-ice-area",
-      "curveId": "knowledge:data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json#arctic_september_sea_ice_area_1979_2024",
+      "itemId": "radiative-forcing",
+      "curveId": "knowledge:data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json#global_anthropogenic_erf_1750_2025",
+      "curveRole": "core",
+      "status": "approved",
+      "note": "IGCC-2025-Schätzreihe des gesamten anthropogenen effektiven Strahlungsantriebs; keine direkte Messreihe."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_sea_level_global_v0.1.json",
+      "seriesId": "global_mean_sea_level_satellite_1993_2024",
+      "boundaryId": "climate",
+      "itemId": "global-sea-level-rise",
+      "curveId": "knowledge:data/knowledge/gwl_climate_sea_level_global_v0.1.json#global_mean_sea_level_satellite_1993_2024",
       "curveRole": "deep_dive",
       "status": "approved",
-      "note": "Vertiefung zur arktischen September-Meereisfläche; UHH/Walsh-Rekonstruktion, NOAA/NSIDC-CDR-Beobachtung und IPCC-CMIP6-Projektionen bleiben getrennte Segmente."
+      "note": "Vertiefung zum globalen mittleren Meeresspiegel; Pegelrekonstruktion, Satellitenbeobachtung und drei IPCC-Projektionen bleiben getrennte Segmente und verwenden 2005 als gemeinsamen Bezug."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_temperature_global_v0.2.json",
+      "seriesId": "global_temperature_hadcrut5_1850_2025",
+      "boundaryId": "climate",
+      "itemId": "global-temperature",
+      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_global_v0.2.json#global_temperature_hadcrut5_1850_2025",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Vertiefung zur globalen Temperaturänderung gegenüber 1850–1900; Rekonstruktion, Beobachtung und IPCC-Projektionen bleiben getrennte Segmente."
     },
     {
       "kind": "knowledge",
@@ -170,13 +180,15 @@
     },
     {
       "kind": "knowledge",
-      "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json",
-      "seriesId": "global_plastics_production_1950_2019",
+      "source": "data/knowledge/gwl_pesticides_global_v0.1.json",
+      "seriesId": "global_pesticide_use_fao_annual",
       "boundaryId": "novel",
-      "itemId": "plastics-microplastics",
-      "curveId": "knowledge:data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json#global_plastics_production_1950_2019",
+      "itemId": "pesticides-global",
+      "curveId": "knowledge:data/knowledge/gwl_pesticides_global_v0.1.json#global_pesticide_use_fao_annual",
       "curveRole": "deep_dive",
-      "status": "approved"
+      "status": "approved",
+      "coverageExceptionRuleId": "blc_documented_single_year_coverage_exception",
+      "note": "Ausdrücklich freigegebene Ausnahme: UNIDO-Rekonstruktion 1975/1980/1985 und FAOSTAT-Beobachtungsreihe 1990–2024 ergeben 49 statt 50 Jahre. Abweichende Definitionen, sichtbare Lücke und fehlende Kalibrierung werden im Segment dokumentiert."
     },
     {
       "kind": "knowledge",
@@ -191,15 +203,13 @@
     },
     {
       "kind": "knowledge",
-      "source": "data/knowledge/gwl_pesticides_global_v0.1.json",
-      "seriesId": "global_pesticide_use_fao_annual",
+      "source": "data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json",
+      "seriesId": "global_plastics_production_1950_2019",
       "boundaryId": "novel",
-      "itemId": "pesticides-global",
-      "curveId": "knowledge:data/knowledge/gwl_pesticides_global_v0.1.json#global_pesticide_use_fao_annual",
+      "itemId": "plastics-microplastics",
+      "curveId": "knowledge:data/knowledge/gwl_plastics_petrochemicals_global_v0.1.json#global_plastics_production_1950_2019",
       "curveRole": "deep_dive",
-      "status": "approved",
-      "coverageExceptionRuleId": "blc_documented_single_year_coverage_exception",
-      "note": "Ausdrücklich freigegebene Ausnahme: UNIDO-Rekonstruktion 1975/1980/1985 und FAOSTAT-Beobachtungsreihe 1990–2024 ergeben 49 statt 50 Jahre. Abweichende Definitionen, sichtbare Lücke und fehlende Kalibrierung werden im Segment dokumentiert."
+      "status": "approved"
     },
     {
       "kind": "knowledge",
