@@ -1,5 +1,5 @@
 const data = window.GWL_DATA;
-const GWL_BUILD_VERSION = "0.9.79 · B70";
+const GWL_BUILD_VERSION = "0.9.80 · B71";
 const thresholdCrossings = window.GWL_THRESHOLD_CROSSINGS;
 const directLinks = window.GWL_DIRECT_LINKS;
 const PRESENTATION_RULES_SOURCE = "data/policies/presentation-rules-v1.json";
@@ -1243,7 +1243,7 @@ function applyPresentationTermLabels() {
 
 function renderPresentationRules() {
   if (!presentationRules || !effectRulesList) return;
-  if (effectRulesTitle) effectRulesTitle.textContent = presentationRules.title || "Regeln für WIRKUNG";
+  if (effectRulesTitle) effectRulesTitle.textContent = presentationRules.title || "Regeln für Darstellung und Navigation";
   if (effectRulesPurpose) effectRulesPurpose.textContent = presentationRules.purpose || "";
   effectRulesList.replaceChildren();
 
@@ -3523,7 +3523,13 @@ function getVisibleItems(boundary) {
   );
 }
 
-function menuHierarchyLevel(item, items) {
+function isDeepeningCurveMenuItem(boundary, item) {
+  const role = contributionRoleFor(boundary, item);
+  if (role !== "deepening_with_organ" && role !== "deepening_without_organ") return false;
+  return Boolean(getExpectedCurveId(boundary, item));
+}
+
+function menuHierarchyLevel(boundary, item, items) {
   if (!item || item.menuHeading || item.groupOnly) return 0;
   const itemById = new Map();
   items.forEach(candidate => {
@@ -3543,7 +3549,11 @@ function menuHierarchyLevel(item, items) {
 
   // Ältere bzw. gruppierte Einträge tragen keine Parent-ID, markieren ihre
   // untergeordnete Rolle aber mit dem vorhandenen Pfeil oder Typ.
-  if (!level && (item.menuType === "study" || /^\s*↳/.test(String(item.label || "")))) level = 1;
+  if (!level && (
+    item.menuType === "study"
+    || /^\s*↳/.test(String(item.label || ""))
+    || isDeepeningCurveMenuItem(boundary, item)
+  )) level = 1;
   return level;
 }
 function getTimePoints(item) { return item?.timePoints ? [...item.timePoints].sort((a,b)=>a.year-b.year) : []; }
@@ -3673,7 +3683,7 @@ function renderBoundaries() {
         items.forEach(item => {
           const itemButton = document.createElement("button");
           itemButton.type = "button";
-          const hierarchyLevel = menuHierarchyLevel(item, items);
+          const hierarchyLevel = menuHierarchyLevel(boundary, item, items);
           const isSubmenuItem = hierarchyLevel > 0;
           itemButton.textContent = isSubmenuItem
             ? String(item.label || "").replace(/^↳\s*/, "")

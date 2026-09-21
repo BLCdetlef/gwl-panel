@@ -1,8 +1,8 @@
 {
   "format": "gwl-presentation-rules",
-  "version": "1.2.4",
-  "title": "Regeln für WIRKUNG",
-  "purpose": "Diese Regeln sorgen dafür, dass Kernbeiträge, Vertiefungen und Gesundheitsbezüge im GWL gleich aufgebaut, nachvollziehbar und nicht stärker dargestellt werden, als es die Daten erlauben.",
+  "version": "1.2.5",
+  "title": "Regeln für Darstellung und Navigation",
+  "purpose": "Diese Regeln sorgen dafür, dass Navigation, Kernbeiträge, Vertiefungen und Gesundheitsbezüge im GWL übergreifend gleich aufgebaut, nachvollziehbar und nicht stärker dargestellt werden, als es die Daten erlauben.",
   "linkedDataModel": "docs/DATA-MODEL.md",
   "terms": {
     "finding": "Befund",
@@ -161,6 +161,28 @@
       "appliedBy": [
         "renderDeepeningOverview",
         "renderDeepeningCurveActions"
+      ]
+    },
+    {
+      "id": "deepening_curve_navigation_hierarchy",
+      "label": "Vertiefungskurven in der Navigation unterordnen",
+      "reason": "Kernbeiträge und vertiefende Kurven beantworten unterschiedliche Fragen. Die Navigation soll diesen fachlichen Rang auf den ersten Blick zeigen, ohne Vertiefungskurven zu verstecken.",
+      "application": "Jeder Beitrag mit der Rolle Vertiefung und einer tatsächlich vorhandenen Zeitreihe wird in der Spalte GRUNDLAGE automatisch leicht eingerückt und mit einem nach rechts gerichteten Pfeil gekennzeichnet. Eine bereits über parentId modellierte stärkere Unterordnung bleibt erhalten.",
+      "programEffects": [
+        "Die Regel gilt übergreifend für alle Systemgrenzen und ergänzenden Bereiche.",
+        "Kernbeiträge bleiben auf der ersten Menüebene.",
+        "Der Pfeil verändert weder Beitragsrolle noch Kurvenfreigabe, Daten oder BLC-Export.",
+        "Beiträge ohne tatsächlich vorhandene Zeitreihe werden durch diese Regel nicht allein wegen ihrer Vertiefungsrolle eingerückt."
+      ],
+      "dataModelFields": [
+        "entry.contributionRole",
+        "knowledge-index.items[].contributionRole",
+        "knowledge-index.items[].parentId",
+        "timeSeries[]"
+      ],
+      "appliedBy": [
+        "isDeepeningCurveMenuItem",
+        "menuHierarchyLevel"
       ]
     },
     {

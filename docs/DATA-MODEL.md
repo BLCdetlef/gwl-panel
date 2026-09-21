@@ -8,9 +8,9 @@ Daten, Darstellung und Interpretation werden getrennt. Das Panel darf keine Zwis
 
 ## Zentrales Regelregister
 
-Die übergreifenden Redaktions- und Darstellungsregeln liegen maschinenlesbar in [`data/policies/presentation-rules-v1.json`](../data/policies/presentation-rules-v1.json). **Regelregister-Version: 1.2.4.** Dieses Register ist die gemeinsame Quelle für:
+Die übergreifenden Redaktions- und Darstellungsregeln liegen maschinenlesbar in [`data/policies/presentation-rules-v1.json`](../data/policies/presentation-rules-v1.json). **Regelregister-Version: 1.2.5.** Dieses Register ist die gemeinsame Quelle für:
 
-- die verständliche Regelerklärung im GWL unter **WIRKUNG**, einschließlich Zweck, Anwendung und Auswirkung im Programm,
+- die verständliche, unter **WIRKUNG** erreichbare Regelerklärung für Darstellung und Navigation, einschließlich Zweck, Anwendung und Auswirkung im Programm,
 - die Verknüpfung jeder Regel mit den betroffenen Datenmodellfeldern,
 - sowie automatisierte Prüfungen, die Regel-IDs, Anwendungsfunktionen und Dokumentationsversion abgleichen.
 
@@ -155,6 +155,8 @@ Vorhandene Kurven- und Gesundheitsbezüge sind Fähigkeiten eines Beitrags, kein
 - Ein untergeordneter Kurvenbeitrag bleibt aus der Übersicht direkt erreichbar. Ein BLC-Link wird nur erzeugt, wenn `timeSeries[]` tatsächlich eine stabile Kurven-ID liefert. Ist der Unterbeitrag nur der technische Träger der Kurve, kann `knowledge-index.items[].menuHidden: true` seinen zusätzlichen Menüeintrag unterdrücken; Direktlink, Datenregistrierung und BLC-Export bleiben erhalten.
 - Ein Eintrag in `healthContext` kann einen Gesundheitsbezug beschreiben. Erst `healthContext.markerSignals[]` erlaubt nach der Regel `explicit_links_only` einen Organstatus.
 - `boundaryInteractions[]` steuert ausdrücklich modellierte Querverbindungen zu anderen Systemgrenzen.
+
+Vertiefungskurven werden in der Spalte **GRUNDLAGE** regelbasiert von Kernbeiträgen unterschieden: Besitzt ein Beitrag die Rolle `deepening_with_organ` oder `deepening_without_organ` und liefert `timeSeries[]` eine stabile Kurven-ID, wird sein Menüpunkt leicht eingerückt und mit einem nach rechts gerichteten Pfeil versehen. Die Regel gilt für alle Bereiche. Eine über `parentId` bereits modellierte tiefere Hierarchie bleibt vorrangig; reine Vertiefungsbeiträge ohne Kurve werden durch diese Kurvenregel nicht zusätzlich eingerückt.
 
 Die generische Darstellung wird durch `renderDeepeningOverview` aufgebaut. Themen wie PFAS liefern nur die fachlichen Inhalte und die vorhandenen Fähigkeiten; Aufbau und Offenlegungsreihenfolge bleiben zentral geregelt.
 

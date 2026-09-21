@@ -72,5 +72,12 @@ if (!deepeningRule
   || !deepeningRule.programEffects?.some(text => text.includes("tatsächlich eine Zeitreihe"))) {
   throw new Error("Die regelbasierte, schrittweise Darstellung von Vertiefungen ist nicht vollständig verknüpft.");
 }
+const deepeningNavigationRule = rules.rules.find(rule => rule.id === "deepening_curve_navigation_hierarchy");
+if (!deepeningNavigationRule
+  || !appSource.includes("function isDeepeningCurveMenuItem")
+  || !appSource.includes("menuHierarchyLevel(boundary, item, items)")
+  || !deepeningNavigationRule.programEffects?.some(text => text.includes("Kernbeiträge bleiben auf der ersten Menüebene"))) {
+  throw new Error("Die übergreifende Navigationsregel für Vertiefungskurven ist nicht vollständig verknüpft.");
+}
 
 console.log(`Einordnungsregel gültig: ${indexedContributions.length} indexierte Beiträge und ${rules.rules.length} zentrale Regeln geprüft.`);
