@@ -20,6 +20,11 @@ const cases = [
     expected: true
   },
   {
+    source: "data/knowledge/gwl_climate_methane_global_v0.1.json",
+    seriesId: "global_methane_noaa_annual_1984_2025",
+    expected: true
+  },
+  {
     source: "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
     seriesId: "green_water_rootzone_soil_moisture",
     expected: true

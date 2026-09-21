@@ -34,6 +34,13 @@
               "type": "component",
               "contributionRole": "deepening_without_organ",
               "source": "data/knowledge/gwl_climate_sea_level_global_v0.1.json"
+            },
+            {
+              "id": "atmospheric-methane",
+              "label": "Atmosphärisches Methan",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/gwl_climate_methane_global_v0.1.json"
             }
           ]
         },

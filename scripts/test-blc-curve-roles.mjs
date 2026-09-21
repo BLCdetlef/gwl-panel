@@ -54,6 +54,7 @@ const expected = new Map([
   ["global_anthropogenic_erf_1750_2025", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
   ["global_temperature_hadcrut5_1850_2025", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
   ["global_mean_sea_level_satellite_1993_2024", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
+  ["global_methane_noaa_annual_1984_2025", { curveRole: "deep_dive", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
   ["global_coal_tes_1965_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["green_water_rootzone_soil_moisture", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],
   ["blue_water_streamflow", { curveRole: "core", domainType: "planetary_boundary", domainId: "freshwater_change", domainLabel: "Süßwasser" }],

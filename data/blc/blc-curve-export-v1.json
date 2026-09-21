@@ -2868,6 +2868,2410 @@
       ]
     },
     {
+      "curveId": "knowledge:data/knowledge/gwl_climate_methane_global_v0.1.json#global_methane_noaa_annual_1984_2025",
+      "boundaryId": "climate",
+      "itemId": "atmospheric-methane",
+      "seriesId": "global_methane_noaa_annual_1984_2025",
+      "source": "data/knowledge/gwl_climate_methane_global_v0.1.json",
+      "domainType": "planetary_boundary",
+      "domainId": "climate_change",
+      "domainLabel": "Klimawandel",
+      "curveRole": "deep_dive",
+      "label": "Atmosphärisches Methan · globale NOAA-Beobachtung",
+      "metric": "Global gemittelte atmosphärische Methankonzentration",
+      "unit": "ppb",
+      "geography": "Global",
+      "dataNature": "observed",
+      "worseningDirection": "increase",
+      "finding": "Das globale Jahresmittel stieg von 1.644,84 ppb im Jahr 1984 auf 1.935,94 ppb im Jahr 2025.",
+      "uncertainty": "Die Stationsabdeckung und analytische Unsicherheit werden per Bootstrap und Monte Carlo bewertet; die jüngsten Werte können revidiert werden.",
+      "methodNote": "NOAA glättet die Stationsreihen, bildet zu 48 Zeitpunkten pro Jahr einen Breitenquerschnitt und berechnet daraus flächengewichtete globale Mittelwerte.",
+      "observationCoverage": {
+        "startYear": 1984,
+        "endYear": 2025,
+        "spanYears": 41,
+        "pointCount": 42
+      },
+      "observationSourceRefs": [
+        "src_noaa_global_ch4"
+      ],
+      "observationProvenance": {
+        "sourceFile": "ch4_annmean_gl.csv",
+        "sourceUrl": "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_annmean_gl.csv",
+        "locator": "Datenzeilen 1984–2025; Spalten year, mean und uncertainty.",
+        "fields": [
+          "year → Jahr",
+          "mean → globales Jahresmittel in ppb",
+          "uncertainty → 1-Sigma-Unsicherheit in ppb"
+        ],
+        "extraction": "Übernommen wurden alle 42 veröffentlichten Jahresmittel von 1984 bis 2025.",
+        "transformation": "Keine Werttransformation und keine Interpolation; Dezimalpunkte werden nur für die deutsche Anzeige formatiert."
+      },
+      "thresholdAssessments": {
+        "boundary": {
+          "thresholdValue": null,
+          "thresholdUnit": null,
+          "exceedanceOperator": null,
+          "status": "not_assessable",
+          "reason": "threshold_definition_incomplete_or_unit_mismatch"
+        },
+        "highRisk": {
+          "thresholdValue": null,
+          "thresholdUnit": null,
+          "exceedanceOperator": null,
+          "status": "not_assessable",
+          "reason": "threshold_definition_incomplete_or_unit_mismatch"
+        }
+      },
+      "observations": [
+        {
+          "year": 1984,
+          "value": 1644.84,
+          "display": "1984 · 1.644,84 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1984: globales NOAA-Jahresmittel 1.644,84 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,60 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1985,
+          "value": 1657.3,
+          "display": "1985 · 1.657,30 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1985: globales NOAA-Jahresmittel 1.657,30 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,55 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1986,
+          "value": 1670.09,
+          "display": "1986 · 1.670,09 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1986: globales NOAA-Jahresmittel 1.670,09 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,77 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1987,
+          "value": 1682.71,
+          "display": "1987 · 1.682,71 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1987: globales NOAA-Jahresmittel 1.682,71 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,51 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1988,
+          "value": 1693.19,
+          "display": "1988 · 1.693,19 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1988: globales NOAA-Jahresmittel 1.693,19 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,62 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1989,
+          "value": 1704.55,
+          "display": "1989 · 1.704,55 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1989: globales NOAA-Jahresmittel 1.704,55 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,53 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1990,
+          "value": 1714.43,
+          "display": "1990 · 1.714,43 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1990: globales NOAA-Jahresmittel 1.714,43 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,69 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1991,
+          "value": 1724.79,
+          "display": "1991 · 1.724,79 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1991: globales NOAA-Jahresmittel 1.724,79 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,68 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1992,
+          "value": 1735.47,
+          "display": "1992 · 1.735,47 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1992: globales NOAA-Jahresmittel 1.735,47 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,58 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1993,
+          "value": 1736.48,
+          "display": "1993 · 1.736,48 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1993: globales NOAA-Jahresmittel 1.736,48 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,47 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1994,
+          "value": 1742.08,
+          "display": "1994 · 1.742,08 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1994: globales NOAA-Jahresmittel 1.742,08 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,57 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1995,
+          "value": 1748.88,
+          "display": "1995 · 1.748,88 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1995: globales NOAA-Jahresmittel 1.748,88 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,52 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1996,
+          "value": 1751.3,
+          "display": "1996 · 1.751,30 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1996: globales NOAA-Jahresmittel 1.751,30 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,63 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1997,
+          "value": 1754.51,
+          "display": "1997 · 1.754,51 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1997: globales NOAA-Jahresmittel 1.754,51 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,38 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1998,
+          "value": 1765.57,
+          "display": "1998 · 1.765,57 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1998: globales NOAA-Jahresmittel 1.765,57 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,61 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1999,
+          "value": 1772.3,
+          "display": "1999 · 1.772,30 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1999: globales NOAA-Jahresmittel 1.772,30 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2000,
+          "value": 1773.22,
+          "display": "2000 · 1.773,22 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2000: globales NOAA-Jahresmittel 1.773,22 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,70 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2001,
+          "value": 1771.29,
+          "display": "2001 · 1.771,29 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2001: globales NOAA-Jahresmittel 1.771,29 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,52 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2002,
+          "value": 1772.68,
+          "display": "2002 · 1.772,68 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2002: globales NOAA-Jahresmittel 1.772,68 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,46 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2003,
+          "value": 1777.33,
+          "display": "2003 · 1.777,33 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2003: globales NOAA-Jahresmittel 1.777,33 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,51 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2004,
+          "value": 1777.13,
+          "display": "2004 · 1.777,13 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2004: globales NOAA-Jahresmittel 1.777,13 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,49 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2005,
+          "value": 1774.23,
+          "display": "2005 · 1.774,23 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2005: globales NOAA-Jahresmittel 1.774,23 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,59 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2006,
+          "value": 1774.93,
+          "display": "2006 · 1.774,93 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2006: globales NOAA-Jahresmittel 1.774,93 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,50 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2007,
+          "value": 1781.31,
+          "display": "2007 · 1.781,31 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2007: globales NOAA-Jahresmittel 1.781,31 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2008,
+          "value": 1787.01,
+          "display": "2008 · 1.787,01 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2008: globales NOAA-Jahresmittel 1.787,01 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2009,
+          "value": 1793.51,
+          "display": "2009 · 1.793,51 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2009: globales NOAA-Jahresmittel 1.793,51 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,59 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2010,
+          "value": 1798.93,
+          "display": "2010 · 1.798,93 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2010: globales NOAA-Jahresmittel 1.798,93 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,71 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2011,
+          "value": 1803.03,
+          "display": "2011 · 1.803,03 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2011: globales NOAA-Jahresmittel 1.803,03 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2012,
+          "value": 1808.07,
+          "display": "2012 · 1.808,07 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2012: globales NOAA-Jahresmittel 1.808,07 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,58 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2013,
+          "value": 1813.42,
+          "display": "2013 · 1.813,42 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2013: globales NOAA-Jahresmittel 1.813,42 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,57 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 1822.58,
+          "display": "2014 · 1.822,58 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2014: globales NOAA-Jahresmittel 1.822,58 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2015,
+          "value": 1834.19,
+          "display": "2015 · 1.834,19 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2015: globales NOAA-Jahresmittel 1.834,19 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,49 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2016,
+          "value": 1843.18,
+          "display": "2016 · 1.843,18 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2016: globales NOAA-Jahresmittel 1.843,18 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,58 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2017,
+          "value": 1849.62,
+          "display": "2017 · 1.849,62 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2017: globales NOAA-Jahresmittel 1.849,62 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,69 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2018,
+          "value": 1857.33,
+          "display": "2018 · 1.857,33 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2018: globales NOAA-Jahresmittel 1.857,33 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,77 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 1866.59,
+          "display": "2019 · 1.866,59 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2019: globales NOAA-Jahresmittel 1.866,59 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,57 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2020,
+          "value": 1878.72,
+          "display": "2020 · 1.878,72 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2020: globales NOAA-Jahresmittel 1.878,72 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,66 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2021,
+          "value": 1894.79,
+          "display": "2021 · 1.894,79 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2021: globales NOAA-Jahresmittel 1.894,79 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,63 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2022,
+          "value": 1910.95,
+          "display": "2022 · 1.910,95 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2022: globales NOAA-Jahresmittel 1.910,95 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,89 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2023,
+          "value": 1921.4,
+          "display": "2023 · 1.921,40 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2023: globales NOAA-Jahresmittel 1.921,40 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,70 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2024,
+          "value": 1929.41,
+          "display": "2024 · 1.929,41 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2024: globales NOAA-Jahresmittel 1.929,41 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,59 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2025,
+          "value": 1935.94,
+          "display": "2025 · 1.935,94 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2025: globales NOAA-Jahresmittel 1.935,94 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,48 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        }
+      ],
+      "displayObservations": [
+        {
+          "year": 1984,
+          "value": 1644.84,
+          "display": "1984 · 1.644,84 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1984: globales NOAA-Jahresmittel 1.644,84 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,60 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1989,
+          "value": 1704.55,
+          "display": "1989 · 1.704,55 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1989: globales NOAA-Jahresmittel 1.704,55 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,53 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1994,
+          "value": 1742.08,
+          "display": "1994 · 1.742,08 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1994: globales NOAA-Jahresmittel 1.742,08 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,57 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 1999,
+          "value": 1772.3,
+          "display": "1999 · 1.772,30 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "1999: globales NOAA-Jahresmittel 1.772,30 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2004,
+          "value": 1777.13,
+          "display": "2004 · 1.777,13 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2004: globales NOAA-Jahresmittel 1.777,13 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,49 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2009,
+          "value": 1793.51,
+          "display": "2009 · 1.793,51 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2009: globales NOAA-Jahresmittel 1.793,51 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,59 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 1822.58,
+          "display": "2014 · 1.822,58 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2014: globales NOAA-Jahresmittel 1.822,58 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,56 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 1866.59,
+          "display": "2019 · 1.866,59 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2019: globales NOAA-Jahresmittel 1.866,59 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,57 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        },
+        {
+          "year": 2025,
+          "value": 1935.94,
+          "display": "2025 · 1.935,94 ppb · NOAA-Messreihe · beobachtet",
+          "finding": "2025: globales NOAA-Jahresmittel 1.935,94 ppb CH4.",
+          "uncertainty": "NOAA-Unsicherheit ±0,48 ppb.",
+          "sourceRefs": [
+            "src_noaa_global_ch4"
+          ]
+        }
+      ],
+      "historicalReconstruction": [
+        {
+          "id": "law_dome_methane_samples_1700_1982",
+          "label": "Law-Dome-Rekonstruktion · Eis- und Firnluftproben",
+          "period": "1724–1980",
+          "method": "Direkte Analyse eingeschlossener Luft aus Law-Dome-Eisbohrkernen und Firn; Verwendung der auf NOAA04 skalierten CH4-Spalte.",
+          "uncertainty": "Messpräzision 4,1 ppb für Eisproben und 2 ppb für Firnluft; die Luftalter sind je nach Kern über mehrere Jahre verteilt und datierungsunsicher.",
+          "sourceRefs": [
+            "src_law_dome_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "law2006-ch4-noaa.txt",
+            "sourceUrl": "https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/law/law2006-ch4-noaa.txt",
+            "locator": "Nicht kommentierte Datenzeilen; sample ungleich CAPE GRIM; age_CE 1700 bis kleiner 1983; Spalte CH4_NOAA04.",
+            "fields": [
+              "sample → Probenort oder Kern",
+              "age_CE → Gasalter in Jahren CE",
+              "CH4_NOAA04 → Methankonzentration in ppb auf NOAA04-Skala"
+            ],
+            "extraction": "Übernommen wurden 121 veröffentlichte Eis- und Firnluftwerte; Cape-Grim-Instrumentenwerte wurden ausgeschlossen. Bei identischem Gasalter bleibt die zuerst gelistete Probe erhalten.",
+            "transformation": "Keine Mittelung, keine Kalibrierung zwischen Segmenten und keine Interpolation; die ausgewählten veröffentlichten Dezimaljahre und NOAA04-Werte bleiben erhalten."
+          },
+          "points": [
+            {
+              "year": 1723.8,
+              "value": 683.8,
+              "display": "1.723,8 · 683,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.723,8: 683,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1723.9,
+              "value": 680.1,
+              "display": "1.723,9 · 680,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.723,9: 680,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1735.1,
+              "value": 711.8,
+              "display": "1.735,1 · 711,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.735,1: 711,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1743.7,
+              "value": 715,
+              "display": "1.743,7 · 715,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.743,7: 715,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1750.2,
+              "value": 701.3,
+              "display": "1.750,2 · 701,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.750,2: 701,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1753,
+              "value": 706.3,
+              "display": "1.753,0 · 706,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.753,0: 706,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1753.2,
+              "value": 705.4,
+              "display": "1.753,2 · 705,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.753,2: 705,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1763.8,
+              "value": 711.7,
+              "display": "1.763,8 · 711,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.763,8: 711,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1764.5,
+              "value": 714.7,
+              "display": "1.764,5 · 714,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.764,5: 714,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1774.7,
+              "value": 729.6,
+              "display": "1.774,7 · 729,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.774,7: 729,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1780.6,
+              "value": 723.1,
+              "display": "1.780,6 · 723,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.780,6: 723,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1781.6,
+              "value": 727.4,
+              "display": "1.781,6 · 727,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.781,6: 727,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1784.9,
+              "value": 731.8,
+              "display": "1.784,9 · 731,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.784,9: 731,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1795.4,
+              "value": 726.6,
+              "display": "1.795,4 · 726,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.795,4: 726,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1797.1,
+              "value": 725.6,
+              "display": "1.797,1 · 725,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.797,1: 725,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1800.3,
+              "value": 737.4,
+              "display": "1.800,3 · 737,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.800,3: 737,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1800.6,
+              "value": 739.2,
+              "display": "1.800,6 · 739,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.800,6: 739,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1815.2,
+              "value": 745.4,
+              "display": "1.815,2 · 745,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.815,2: 745,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1821,
+              "value": 747.8,
+              "display": "1.821,0 · 747,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.821,0: 747,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1827.2,
+              "value": 760.7,
+              "display": "1.827,2 · 760,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.827,2: 760,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1827.9,
+              "value": 765.1,
+              "display": "1.827,9 · 765,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.827,9: 765,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1834,
+              "value": 765.5,
+              "display": "1.834,0 · 765,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.834,0: 765,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1835,
+              "value": 759.7,
+              "display": "1.835,0 · 759,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.835,0: 759,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1835.5,
+              "value": 776.7,
+              "display": "1.835,5 · 776,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.835,5: 776,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1839,
+              "value": 774.3,
+              "display": "1.839,0 · 774,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.839,0: 774,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1842,
+              "value": 776.3,
+              "display": "1.842,0 · 776,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.842,0: 776,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1845,
+              "value": 787.5,
+              "display": "1.845,0 · 787,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.845,0: 787,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1847,
+              "value": 778.4,
+              "display": "1.847,0 · 778,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.847,0: 778,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1848.5,
+              "value": 773,
+              "display": "1.848,5 · 773,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.848,5: 773,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1850,
+              "value": 816.4,
+              "display": "1.850,0 · 816,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.850,0: 816,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1852,
+              "value": 795.1,
+              "display": "1.852,0 · 795,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.852,0: 795,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1853.3,
+              "value": 784.8,
+              "display": "1.853,3 · 784,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.853,3: 784,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1855,
+              "value": 796,
+              "display": "1.855,0 · 796,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.855,0: 796,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1856,
+              "value": 785.4,
+              "display": "1.856,0 · 785,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.856,0: 785,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1860,
+              "value": 795.8,
+              "display": "1.860,0 · 795,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.860,0: 795,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1863,
+              "value": 799.5,
+              "display": "1.863,0 · 799,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.863,0: 799,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1865,
+              "value": 813.9,
+              "display": "1.865,0 · 813,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.865,0: 813,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1868,
+              "value": 825.8,
+              "display": "1.868,0 · 825,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.868,0: 825,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1870.1,
+              "value": 811.9,
+              "display": "1.870,1 · 811,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.870,1: 811,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1871,
+              "value": 821.8,
+              "display": "1.871,0 · 821,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.871,0: 821,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1874,
+              "value": 826.9,
+              "display": "1.874,0 · 826,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.874,0: 826,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1875,
+              "value": 832.1,
+              "display": "1.875,0 · 832,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.875,0: 832,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1879,
+              "value": 832.3,
+              "display": "1.879,0 · 832,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.879,0: 832,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1884,
+              "value": 838.6,
+              "display": "1.884,0 · 838,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.884,0: 838,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1885,
+              "value": 847.5,
+              "display": "1.885,0 · 847,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.885,0: 847,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1885.4,
+              "value": 856,
+              "display": "1.885,4 · 856,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.885,4: 856,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1887,
+              "value": 851.8,
+              "display": "1.887,0 · 851,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.887,0: 851,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1888,
+              "value": 843.8,
+              "display": "1.888,0 · 843,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.888,0: 843,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1890,
+              "value": 853.8,
+              "display": "1.890,0 · 853,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.890,0: 853,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1893.1,
+              "value": 847,
+              "display": "1.893,1 · 847,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.893,1: 847,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1894,
+              "value": 862.7,
+              "display": "1.894,0 · 862,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.894,0: 862,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1895,
+              "value": 867.9,
+              "display": "1.895,0 · 867,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.895,0: 867,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1897,
+              "value": 861.1,
+              "display": "1.897,0 · 861,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.897,0: 861,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1900,
+              "value": 878.8,
+              "display": "1.900,0 · 878,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.900,0: 878,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1901.8,
+              "value": 879,
+              "display": "1.901,8 · 879,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.901,8: 879,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1903,
+              "value": 877.6,
+              "display": "1.903,0 · 877,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.903,0: 877,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1905,
+              "value": 895.3,
+              "display": "1.905,0 · 895,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.905,0: 895,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1905.8,
+              "value": 901.8,
+              "display": "1.905,8 · 901,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.905,8: 901,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1907,
+              "value": 896.1,
+              "display": "1.907,0 · 896,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.907,0: 896,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1910,
+              "value": 945.9,
+              "display": "1.910,0 · 945,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.910,0: 945,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1912.5,
+              "value": 927.4,
+              "display": "1.912,5 · 927,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.912,5: 927,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1914,
+              "value": 932.8,
+              "display": "1.914,0 · 932,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.914,0: 932,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1915,
+              "value": 927.9,
+              "display": "1.915,0 · 927,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.915,0: 927,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1917,
+              "value": 941.2,
+              "display": "1.917,0 · 941,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.917,0: 941,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1919.6,
+              "value": 971,
+              "display": "1.919,6 · 971,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.919,6: 971,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1920,
+              "value": 972.5,
+              "display": "1.920,0 · 972,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.920,0: 972,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1924,
+              "value": 992.1,
+              "display": "1.924,0 · 992,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.924,0: 992,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1924.6,
+              "value": 1005.2,
+              "display": "1.924,6 · 1.005,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.924,6: 1.005,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1926,
+              "value": 1001,
+              "display": "1.926,0 · 1.001,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.926,0: 1.001,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1928.2,
+              "value": 1009.2,
+              "display": "1.928,2 · 1.009,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.928,2: 1.009,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1928.8,
+              "value": 1018.7,
+              "display": "1.928,8 · 1.018,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.928,8: 1.018,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1929.8,
+              "value": 1027.1,
+              "display": "1.929,8 · 1.027,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.929,8: 1.027,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1930,
+              "value": 1023.9,
+              "display": "1.930,0 · 1.023,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.930,0: 1.023,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1934,
+              "value": 1035.7,
+              "display": "1.934,0 · 1.035,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.934,0: 1.035,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1935.5,
+              "value": 1053.6,
+              "display": "1.935,5 · 1.053,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.935,5: 1.053,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1936,
+              "value": 1058,
+              "display": "1.936,0 · 1.058,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.936,0: 1.058,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1937.5,
+              "value": 1065.3,
+              "display": "1.937,5 · 1.065,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.937,5: 1.065,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1938.2,
+              "value": 1065.9,
+              "display": "1.938,2 · 1.065,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.938,2: 1.065,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1939,
+              "value": 1071.2,
+              "display": "1.939,0 · 1.071,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.939,0: 1.071,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1940,
+              "value": 1072.9,
+              "display": "1.940,0 · 1.072,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.940,0: 1.072,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1941,
+              "value": 1068.6,
+              "display": "1.941,0 · 1.068,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.941,0: 1.068,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1942,
+              "value": 1082.1,
+              "display": "1.942,0 · 1.082,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.942,0: 1.082,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1942.5,
+              "value": 1098.7,
+              "display": "1.942,5 · 1.098,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.942,5: 1.098,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1943,
+              "value": 1082.5,
+              "display": "1.943,0 · 1.082,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.943,0: 1.082,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1944,
+              "value": 1095.7,
+              "display": "1.944,0 · 1.095,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.944,0: 1.095,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1944.2,
+              "value": 1085.4,
+              "display": "1.944,2 · 1.085,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DSSW20K firn, Gasalter 1.944,2: 1.085,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1945,
+              "value": 1086,
+              "display": "1.945,0 · 1.086,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.945,0: 1.086,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1946,
+              "value": 1095,
+              "display": "1.946,0 · 1.095,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.946,0: 1.095,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1947,
+              "value": 1093.7,
+              "display": "1.947,0 · 1.093,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.947,0: 1.093,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1948,
+              "value": 1107.7,
+              "display": "1.948,0 · 1.107,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.948,0: 1.107,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1949,
+              "value": 1110.9,
+              "display": "1.949,0 · 1.110,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.949,0: 1.110,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1950,
+              "value": 1116.3,
+              "display": "1.950,0 · 1.116,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.950,0: 1.116,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1950.3,
+              "value": 1117.1,
+              "display": "1.950,3 · 1.117,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.950,3: 1.117,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1951,
+              "value": 1120,
+              "display": "1.951,0 · 1.120,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.951,0: 1.120,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1953,
+              "value": 1144,
+              "display": "1.953,0 · 1.144,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.953,0: 1.144,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1954,
+              "value": 1151.5,
+              "display": "1.954,0 · 1.151,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.954,0: 1.151,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1955,
+              "value": 1153.9,
+              "display": "1.955,0 · 1.153,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.955,0: 1.153,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1956,
+              "value": 1165.2,
+              "display": "1.956,0 · 1.165,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.956,0: 1.165,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1956.2,
+              "value": 1178.5,
+              "display": "1.956,2 · 1.178,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.956,2: 1.178,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1957,
+              "value": 1193.9,
+              "display": "1.957,0 · 1.193,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.957,0: 1.193,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1958,
+              "value": 1188.3,
+              "display": "1.958,0 · 1.188,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.958,0: 1.188,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1958.3,
+              "value": 1191.5,
+              "display": "1.958,3 · 1.191,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DSSW20K firn, Gasalter 1.958,3: 1.191,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1959,
+              "value": 1206.2,
+              "display": "1.959,0 · 1.206,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.959,0: 1.206,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1960,
+              "value": 1220.6,
+              "display": "1.960,0 · 1.220,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.960,0: 1.220,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1961.7,
+              "value": 1233.3,
+              "display": "1.961,7 · 1.233,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.961,7: 1.233,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1964,
+              "value": 1263.8,
+              "display": "1.964,0 · 1.263,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.964,0: 1.263,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1965,
+              "value": 1276.7,
+              "display": "1.965,0 · 1.276,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.965,0: 1.276,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1967,
+              "value": 1304.2,
+              "display": "1.967,0 · 1.304,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.967,0: 1.304,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1968,
+              "value": 1322.5,
+              "display": "1.968,0 · 1.322,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.968,0: 1.322,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1970,
+              "value": 1368.2,
+              "display": "1.970,0 · 1.368,2 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.970,0: 1.368,2 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1971,
+              "value": 1373.8,
+              "display": "1.971,0 · 1.373,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.971,0: 1.373,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1971.7,
+              "value": 1397.1,
+              "display": "1.971,7 · 1.397,1 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.971,7: 1.397,1 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1972.1,
+              "value": 1368.8,
+              "display": "1.972,1 · 1.368,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSSW20K firn, Gasalter 1.972,1: 1.368,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1972.2,
+              "value": 1396.7,
+              "display": "1.972,2 · 1.396,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.972,2: 1.396,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1973,
+              "value": 1402.7,
+              "display": "1.973,0 · 1.402,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.973,0: 1.402,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1973.2,
+              "value": 1438.8,
+              "display": "1.973,2 · 1.438,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.973,2: 1.438,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1973.5,
+              "value": 1421.7,
+              "display": "1.973,5 · 1.421,7 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.973,5: 1.421,7 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1974,
+              "value": 1416.6,
+              "display": "1.974,0 · 1.416,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.974,0: 1.416,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1975,
+              "value": 1437.8,
+              "display": "1.975,0 · 1.437,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.975,0: 1.437,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1977,
+              "value": 1475.9,
+              "display": "1.977,0 · 1.475,9 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.977,0: 1.475,9 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1980,
+              "value": 1497.4,
+              "display": "1.980,0 · 1.497,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.980,0: 1.497,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            }
+          ]
+        }
+      ],
+      "displayHistoricalReconstruction": [
+        {
+          "id": "law_dome_methane_samples_1700_1982",
+          "label": "Law-Dome-Rekonstruktion · Eis- und Firnluftproben",
+          "period": "1724–1980",
+          "method": "Direkte Analyse eingeschlossener Luft aus Law-Dome-Eisbohrkernen und Firn; Verwendung der auf NOAA04 skalierten CH4-Spalte.",
+          "uncertainty": "Messpräzision 4,1 ppb für Eisproben und 2 ppb für Firnluft; die Luftalter sind je nach Kern über mehrere Jahre verteilt und datierungsunsicher.",
+          "sourceRefs": [
+            "src_law_dome_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "law2006-ch4-noaa.txt",
+            "sourceUrl": "https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/law/law2006-ch4-noaa.txt",
+            "locator": "Nicht kommentierte Datenzeilen; sample ungleich CAPE GRIM; age_CE 1700 bis kleiner 1983; Spalte CH4_NOAA04.",
+            "fields": [
+              "sample → Probenort oder Kern",
+              "age_CE → Gasalter in Jahren CE",
+              "CH4_NOAA04 → Methankonzentration in ppb auf NOAA04-Skala"
+            ],
+            "extraction": "Übernommen wurden 121 veröffentlichte Eis- und Firnluftwerte; Cape-Grim-Instrumentenwerte wurden ausgeschlossen. Bei identischem Gasalter bleibt die zuerst gelistete Probe erhalten.",
+            "transformation": "Keine Mittelung, keine Kalibrierung zwischen Segmenten und keine Interpolation; die ausgewählten veröffentlichten Dezimaljahre und NOAA04-Werte bleiben erhalten."
+          },
+          "points": [
+            {
+              "year": 1723.8,
+              "value": 683.8,
+              "display": "1.723,8 · 683,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.723,8: 683,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1750.2,
+              "value": 701.3,
+              "display": "1.750,2 · 701,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.750,2: 701,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1774.7,
+              "value": 729.6,
+              "display": "1.774,7 · 729,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.774,7: 729,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1795.4,
+              "value": 726.6,
+              "display": "1.795,4 · 726,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.795,4: 726,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1821,
+              "value": 747.8,
+              "display": "1.821,0 · 747,8 ppb · Law Dome · rekonstruiert",
+              "finding": "DSS, Gasalter 1.821,0: 747,8 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1842,
+              "value": 776.3,
+              "display": "1.842,0 · 776,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.842,0: 776,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1863,
+              "value": 799.5,
+              "display": "1.863,0 · 799,5 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.863,0: 799,5 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1884,
+              "value": 838.6,
+              "display": "1.884,0 · 838,6 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.884,0: 838,6 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1905,
+              "value": 895.3,
+              "display": "1.905,0 · 895,3 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.905,0: 895,3 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1926,
+              "value": 1001,
+              "display": "1.926,0 · 1.001,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.926,0: 1.001,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1946,
+              "value": 1095,
+              "display": "1.946,0 · 1.095,0 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08, Gasalter 1.946,0: 1.095,0 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            },
+            {
+              "year": 1980,
+              "value": 1497.4,
+              "display": "1.980,0 · 1.497,4 ppb · Law Dome · rekonstruiert",
+              "finding": "DE08-2, Gasalter 1.980,0: 1.497,4 ppb CH4 auf NOAA04-Skala.",
+              "uncertainty": "Eis- und Firnluftwerte besitzen eine vom Kern abhängige Altersverteilung; kein globales Jahresmittel.",
+              "sourceRefs": [
+                "src_law_dome_ch4"
+              ]
+            }
+          ]
+        }
+      ],
+      "projections": [
+        {
+          "id": "global_methane_ssp119",
+          "scenario": "SSP1-1.9",
+          "scenarioLabel": "SSP1-1.9 · starke Methanminderung",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP1-1.9; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 1875.2,
+              "display": "2025 · 1.875,2 ppb · SSP1-1.9 · modelliert",
+              "finding": "2025: 1.875,2 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 1427.9,
+              "display": "2050 · 1.427,9 ppb · SSP1-1.9 · modelliert",
+              "finding": "2050: 1.427,9 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 1184.3,
+              "display": "2075 · 1.184,3 ppb · SSP1-1.9 · modelliert",
+              "finding": "2075: 1.184,3 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 1036.4,
+              "display": "2100 · 1.036,4 ppb · SSP1-1.9 · modelliert",
+              "finding": "2100: 1.036,4 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "global_methane_ssp245",
+          "scenario": "SSP2-4.5",
+          "scenarioLabel": "SSP2-4.5 · mittlerer Methanpfad",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP2-4.5; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 1960.7,
+              "display": "2025 · 1.960,7 ppb · SSP2-4.5 · modelliert",
+              "finding": "2025: 1.960,7 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 2020.2,
+              "display": "2050 · 2.020,2 ppb · SSP2-4.5 · modelliert",
+              "finding": "2050: 2.020,2 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 1815.7,
+              "display": "2075 · 1.815,7 ppb · SSP2-4.5 · modelliert",
+              "finding": "2075: 1.815,7 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 1683.2,
+              "display": "2100 · 1.683,2 ppb · SSP2-4.5 · modelliert",
+              "finding": "2100: 1.683,2 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "global_methane_ssp370",
+          "scenario": "SSP3-7.0",
+          "scenarioLabel": "SSP3-7.0 · hoher Methanpfad",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP3-7.0; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 2006.5,
+              "display": "2025 · 2.006,5 ppb · SSP3-7.0 · modelliert",
+              "finding": "2025: 2.006,5 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 2472,
+              "display": "2050 · 2.472,0 ppb · SSP3-7.0 · modelliert",
+              "finding": "2050: 2.472,0 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 2934.1,
+              "display": "2075 · 2.934,1 ppb · SSP3-7.0 · modelliert",
+              "finding": "2075: 2.934,1 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 3372.2,
+              "display": "2100 · 3.372,2 ppb · SSP3-7.0 · modelliert",
+              "finding": "2100: 3.372,2 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        }
+      ],
+      "displayProjections": [
+        {
+          "id": "global_methane_ssp119",
+          "scenario": "SSP1-1.9",
+          "scenarioLabel": "SSP1-1.9 · starke Methanminderung",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP1-1.9; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 1875.2,
+              "display": "2025 · 1.875,2 ppb · SSP1-1.9 · modelliert",
+              "finding": "2025: 1.875,2 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 1427.9,
+              "display": "2050 · 1.427,9 ppb · SSP1-1.9 · modelliert",
+              "finding": "2050: 1.427,9 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 1184.3,
+              "display": "2075 · 1.184,3 ppb · SSP1-1.9 · modelliert",
+              "finding": "2075: 1.184,3 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 1036.4,
+              "display": "2100 · 1.036,4 ppb · SSP1-1.9 · modelliert",
+              "finding": "2100: 1.036,4 ppb CH4 im globalen SSP1-1.9-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "global_methane_ssp245",
+          "scenario": "SSP2-4.5",
+          "scenarioLabel": "SSP2-4.5 · mittlerer Methanpfad",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP2-4.5; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 1960.7,
+              "display": "2025 · 1.960,7 ppb · SSP2-4.5 · modelliert",
+              "finding": "2025: 1.960,7 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 2020.2,
+              "display": "2050 · 2.020,2 ppb · SSP2-4.5 · modelliert",
+              "finding": "2050: 2.020,2 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 1815.7,
+              "display": "2075 · 1.815,7 ppb · SSP2-4.5 · modelliert",
+              "finding": "2075: 1.815,7 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 1683.2,
+              "display": "2100 · 1.683,2 ppb · SSP2-4.5 · modelliert",
+              "finding": "2100: 1.683,2 ppb CH4 im globalen SSP2-4.5-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "global_methane_ssp370",
+          "scenario": "SSP3-7.0",
+          "scenarioLabel": "SSP3-7.0 · hoher Methanpfad",
+          "period": "2025–2100",
+          "method": "MAGICC7-Projektion der global gemittelten CH4-Oberflächenmolenfraktion aus dem jeweiligen SSP-Emissionspfad.",
+          "uncertainty": "Bedingter Konzentrationspfad ohne Wahrscheinlichkeitsaussage; die Szenarien beginnen 2015 und können vom später beobachteten NOAA-Wert abweichen.",
+          "sourceRefs": [
+            "src_meinshausen_ssp_ch4"
+          ],
+          "provenance": {
+            "sourceFile": "gmd-13-3571-2020-t05.xlsx",
+            "sourceUrl": "https://gmd.copernicus.org/articles/13/3571/2020/gmd-13-3571-2020-t05.xlsx",
+            "locator": "Worksheet 1; Block SSP3-7.0; Zeile CH4 / ppb / GL; Spalten 2025, 2050, 2075 und 2100.",
+            "fields": [
+              "Spaltenkopf → Jahr",
+              "CH4 / ppb / GL → globale mittlere Methankonzentration"
+            ],
+            "extraction": "Übernommen wurden die vier in Tabelle 5 veröffentlichten Werte von 2025 bis 2100.",
+            "transformation": "Keine Werttransformation und keine Interpolation; Auswahl der globalen GL-Zeile."
+          },
+          "grade": "robust_scenario_projection",
+          "points": [
+            {
+              "year": 2025,
+              "value": 2006.5,
+              "display": "2025 · 2.006,5 ppb · SSP3-7.0 · modelliert",
+              "finding": "2025: 2.006,5 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2050,
+              "value": 2472,
+              "display": "2050 · 2.472,0 ppb · SSP3-7.0 · modelliert",
+              "finding": "2050: 2.472,0 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2075,
+              "value": 2934.1,
+              "display": "2075 · 2.934,1 ppb · SSP3-7.0 · modelliert",
+              "finding": "2075: 2.934,1 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            },
+            {
+              "year": 2100,
+              "value": 3372.2,
+              "display": "2100 · 3.372,2 ppb · SSP3-7.0 · modelliert",
+              "finding": "2100: 3.372,2 ppb CH4 im globalen SSP3-7.0-Konzentrationspfad.",
+              "uncertainty": "Bedingtes SSP-Szenario; keine Prognose und kein Konfidenzintervall.",
+              "sourceRefs": [
+                "src_meinshausen_ssp_ch4"
+              ]
+            }
+          ]
+        }
+      ],
+      "displayDerivation": {
+        "interpolation": false,
+        "transformations": [],
+        "observations": {
+          "inputPointCount": 42,
+          "outputPointCount": 9,
+          "intervalYears": 5,
+          "rule": "Nur vorhandene Originalmesswerte; mindestens fünf Jahre Abstand. Erster und letzter Messpunkt sowie belegte Grenzübertritte bleiben erhalten."
+        },
+        "historicalReconstruction": {
+          "inputPointCount": 121,
+          "outputPointCount": 12,
+          "intervalYears": 20,
+          "rule": "Nur vorhandene Rekonstruktionswerte; mindestens 20 Jahre Abstand je Segment. Erster und letzter Wert jedes Segments bleiben erhalten."
+        },
+        "projections": {
+          "inputPointCount": 12,
+          "outputPointCount": 12,
+          "intervalYears": 20,
+          "rule": "Nur vorhandene Modellwerte qualifizierter Szenarien; mindestens 20 Jahre Abstand je Szenario. Erster und letzter Wert jedes Szenarios bleiben erhalten."
+        }
+      },
+      "methodBreaks": [
+        {
+          "year": 1984,
+          "label": "Beginn des globalen NOAA-Jahresmittels"
+        }
+      ],
+      "sources": [
+        {
+          "id": "src_noaa_global_ch4",
+          "title": "Trends in globally-averaged CH4",
+          "publisher": "NOAA Global Monitoring Laboratory",
+          "year": 2026,
+          "url": "https://gml.noaa.gov/ccgg/trends_ch4/",
+          "doi": "10.15138/P8XG-AA10",
+          "access": "open_data"
+        },
+        {
+          "id": "src_law_dome_ch4",
+          "title": "Law Dome Ice Core 2000-Year CO2, CH4, and N2O Data",
+          "publisher": "NOAA/NCEI World Data Service for Paleoclimatology",
+          "year": 2006,
+          "url": "https://www.ncei.noaa.gov/pub/data/paleo/icecore/antarctica/law/law2006-ch4-noaa.txt",
+          "doi": "10.25921/g6kd-k189",
+          "access": "open_data"
+        },
+        {
+          "id": "src_meinshausen_ssp_ch4",
+          "title": "The shared socio-economic pathway (SSP) greenhouse gas concentrations and their extensions to 2500",
+          "publisher": "Geoscientific Model Development",
+          "year": 2020,
+          "url": "https://doi.org/10.5194/gmd-13-3571-2020",
+          "doi": "10.5194/gmd-13-3571-2020",
+          "access": "open_full_text"
+        }
+      ]
+    },
+    {
       "curveId": "knowledge:data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json#global_anthropogenic_erf_1750_2025",
       "boundaryId": "climate",
       "itemId": "radiative-forcing",
@@ -20181,6 +22585,6 @@
   "integrity": {
     "algorithm": "SHA-256",
     "scope": "UTF-8 JSON.stringify({format,version,manifestVersion,curves})",
-    "hash": "284a9120766a552e18ead2ade9bbc5580a2fa97e525aeda689943b2e4c875d4c"
+    "hash": "35506cfe23b27c0a82a5cf273803555a9b48c6d022e6b65228130179b3daea1e"
   }
 }
