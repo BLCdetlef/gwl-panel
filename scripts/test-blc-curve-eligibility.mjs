@@ -15,6 +15,21 @@ const cases = [
     expected: true
   },
   {
+    source: "data/knowledge/gwl_climate_temperature_global_v0.1.json",
+    seriesId: "global_surface_temperature_hadcrut5_annual",
+    expected: true
+  },
+  {
+    source: "data/knowledge/gwl_climate_temperature_ocean_v0.1.json",
+    seriesId: "global_sea_surface_temperature_hadsst4_annual",
+    expected: true
+  },
+  {
+    source: "data/knowledge/gwl_climate_temperature_land_v0.1.json",
+    seriesId: "global_land_air_temperature_crutem5_annual",
+    expected: true
+  },
+  {
     source: "data/knowledge/gwl_freshwater_blue_green_timeseries_v0.2.json",
     seriesId: "green_water_rootzone_soil_moisture",
     expected: true

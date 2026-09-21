@@ -20,6 +20,37 @@
               "label": "Strahlungsantrieb",
               "type": "control",
               "source": "data/knowledge/gwl_climate_radiative_forcing_global_v0.1.json"
+            },
+            {
+              "id": "temperature-development",
+              "label": "Temperaturentwicklung",
+              "type": "topic_group",
+              "groupOnly": true,
+              "summary": "Beobachtungsbasierte Temperaturreihen für die globale Oberfläche, die Meeresoberfläche und die Luft über Land bleiben als getrennte Vertiefungen vergleichbar dokumentiert."
+            },
+            {
+              "id": "temperature-global",
+              "label": "Global",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "parentId": "temperature-development",
+              "source": "data/knowledge/gwl_climate_temperature_global_v0.1.json"
+            },
+            {
+              "id": "temperature-ocean",
+              "label": "Ozeane",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "parentId": "temperature-development",
+              "source": "data/knowledge/gwl_climate_temperature_ocean_v0.1.json"
+            },
+            {
+              "id": "temperature-land",
+              "label": "Land",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "parentId": "temperature-development",
+              "source": "data/knowledge/gwl_climate_temperature_land_v0.1.json"
             }
           ]
         },

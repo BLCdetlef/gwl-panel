@@ -35,6 +35,39 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_temperature_global_v0.1.json",
+      "seriesId": "global_surface_temperature_hadcrut5_annual",
+      "boundaryId": "climate",
+      "itemId": "temperature-global",
+      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_global_v0.1.json#global_surface_temperature_hadcrut5_annual",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Beobachtungsbasierte HadCRUT5-Vertiefung; Temperatur-Anomalie relativ zu 1961–1990, keine Kontrollvariable und kein planetarer Grenzwert."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_temperature_ocean_v0.1.json",
+      "seriesId": "global_sea_surface_temperature_hadsst4_annual",
+      "boundaryId": "climate",
+      "itemId": "temperature-ocean",
+      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_ocean_v0.1.json#global_sea_surface_temperature_hadsst4_annual",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Beobachtungsbasierte HadSST4-Vertiefung der Meeresoberfläche; nicht mit dem Wärmeinhalt des gesamten Ozeans gleichzusetzen."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_temperature_land_v0.1.json",
+      "seriesId": "global_land_air_temperature_crutem5_annual",
+      "boundaryId": "climate",
+      "itemId": "temperature-land",
+      "curveId": "knowledge:data/knowledge/gwl_climate_temperature_land_v0.1.json#global_land_air_temperature_crutem5_annual",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Beobachtungsbasierte CRUTEM5-Vertiefung der bodennahen Lufttemperatur über Land; Ozeane und Bodentemperaturen sind nicht enthalten."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
       "seriesId": "global_coal_tes_1965_2025",
       "boundaryId": "materials-energy",
