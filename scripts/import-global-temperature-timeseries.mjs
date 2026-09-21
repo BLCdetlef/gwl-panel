@@ -137,7 +137,7 @@ const payload = {
       metric: "Globale Temperatur und Erwärmung",
       value: round(currentThreeYear, 2),
       unit: "°C above 1850–1900",
-      display: `Absolute Orientierung: rund 15 °C; Erwärmung 2023–2025: +${de(currentThreeYear)} °C gegenüber 1850–1900`,
+      display: `Absolute Orientierung: ungefähr 14 bis 15 °C; Erwärmung 2023–2025: +${de(currentThreeYear)} °C gegenüber 1850–1900`,
       uncertainty: "Die absolute globale Mitteltemperatur ist nur grob bestimmbar (ungefähr ±0,5 °C); die Temperaturänderung ist wesentlich genauer bestimmbar.",
       interpretation: `Das Dreijahresmittel beschreibt die aktuelle Größenordnung. Der einzelne HadCRUT5-Jahreswert 2025 beträgt +${de(latest.value)} °C und ist nicht mit dem langfristigen Paris-Erwärmungsniveau gleichzusetzen.`,
       sourceRefs: ["src_metoffice_2025_temperature", "src_nasa_absolute_temperature", "src_hadcrut5_5100"],
@@ -146,7 +146,7 @@ const payload = {
   ],
   presentation: {
     summaryCardMode: "narrative",
-    effectSummary: `Die globale mittlere Oberflächentemperatur liegt als grobe absolute Orientierung bei rund 15 °C. Für Zeitvergleiche ist die Änderung aussagekräftiger: HadCRUT5 ergibt für 2023–2025 im Mittel +${de(currentThreeYear)} °C gegenüber 1850–1900; 2025 allein lag bei +${de(latest.value)} °C. Rekonstruktion, Beobachtung und mögliche Zukunftspfade werden ausschließlich im BLC als getrennte Segmente gezeigt.`,
+    effectSummary: `Die absolute globale Mitteltemperatur lässt sich nur grob mit etwa 14 bis 15 °C angeben. Belastbarer ist ihre Veränderung: HadCRUT5 ergibt für 2023–2025 im Mittel +${de(currentThreeYear)} °C gegenüber 1850–1900; 2025 allein lag bei +${de(latest.value)} °C. Rekonstruktion, Beobachtung und mögliche Zukunftspfade werden ausschließlich im BLC als getrennte Segmente gezeigt.`,
     primaryMeasurementId: "global_temperature_current_orientation",
     primaryTimeSeriesId: "global_temperature_hadcrut5_1850_2025",
     gwlTimeSeriesDisplay: "link_only",
@@ -236,7 +236,7 @@ const payload = {
         {
           id: "absolute_orientation",
           label: "Absolute Orientierung",
-          value: "rund 15 °C heute",
+          value: "ungefähr 14 bis 15 °C",
           detail: "Die absolute globale Mitteltemperatur liegt grob im Bereich 14–15 °C. NASA weist dafür eine Unsicherheit von ungefähr 0,5 °C aus; deshalb zeigt die Kurve die genauer bestimmbare Änderung.",
           sourceRefs: ["src_nasa_absolute_temperature"]
         },

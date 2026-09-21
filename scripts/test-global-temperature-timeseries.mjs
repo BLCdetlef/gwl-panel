@@ -14,7 +14,9 @@ if (payload.presentation?.gwlTimeSeriesDisplay !== "link_only"
   || payload.presentation?.hideKnowledgePanelInKnowledgeView !== true) {
   throw new Error("Die Temperaturkurve darf im GWL nicht dargestellt werden.");
 }
-if (!payload.presentation?.effectSummary?.includes("rund 15 °C") || !payload.presentation.effectSummary.includes("+1,47 °C")) {
+if (!payload.presentation?.effectSummary?.includes("14 bis 15 °C")
+  || !payload.presentation.effectSummary.includes("Belastbarer ist ihre Veränderung")
+  || !payload.presentation.effectSummary.includes("+1,47 °C")) {
   throw new Error("Absolute Orientierung und aktuelle Erwärmung fehlen in der GWL-Aufbereitung.");
 }
 if (series.dataNature !== "observed" || series.points.length !== 176 || series.points[0].year !== 1850 || series.points.at(-1).year !== 2025) {
