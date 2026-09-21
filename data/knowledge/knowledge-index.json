@@ -27,6 +27,13 @@
               "type": "component",
               "contributionRole": "deepening_without_organ",
               "source": "data/knowledge/gwl_climate_temperature_global_v0.2.json"
+            },
+            {
+              "id": "global-sea-level-rise",
+              "label": "Globaler Meeresspiegelanstieg",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/gwl_climate_sea_level_global_v0.1.json"
             }
           ]
         },

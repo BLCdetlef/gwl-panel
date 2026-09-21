@@ -46,6 +46,17 @@
     },
     {
       "kind": "knowledge",
+      "source": "data/knowledge/gwl_climate_sea_level_global_v0.1.json",
+      "seriesId": "global_mean_sea_level_satellite_1993_2024",
+      "boundaryId": "climate",
+      "itemId": "global-sea-level-rise",
+      "curveId": "knowledge:data/knowledge/gwl_climate_sea_level_global_v0.1.json#global_mean_sea_level_satellite_1993_2024",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Vertiefung zum globalen mittleren Meeresspiegel; Pegelrekonstruktion, Satellitenbeobachtung und drei IPCC-Projektionen bleiben getrennte Segmente und verwenden 2005 als gemeinsamen Bezug."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_coal_energy_pilot_v0.1.json",
       "seriesId": "global_coal_tes_1965_2025",
       "boundaryId": "materials-energy",
