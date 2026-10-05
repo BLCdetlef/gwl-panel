@@ -60,3 +60,7 @@ Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindest
 - IEA, *World Energy Outlook 2025 Free Dataset*, Annex A.
 - IPCC AR6 WGI, Annex III, Tabelle AIII.2.
 - OECD, *Global Plastics Outlook: Policy Scenarios to 2060*.
+
+## Darstellung von Projektionen
+
+Jede Projektion wird grundsätzlich mit einer gestrichelten Verbindung vom letzten historischen Hauptreihenwert zum ersten späteren Szenariowert angeschlossen. Diese Verbindung ist eine Darstellungshilfe, kein zusätzlicher Datenpunkt und keine neue Modellrechnung. Sie wird nur gezeigt, wenn Hauptreihe und Projektion sichtbar sind. Bei überlappenden Zeiträumen entsteht keine rückwärts gerichtete Verbindung. Direktlinks aus dem GWL öffnen zunächst nur das Diagramm; Kurvendetails erscheinen nach einer ausdrücklichen Auswahl.

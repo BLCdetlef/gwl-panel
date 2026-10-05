@@ -5,7 +5,7 @@
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Energie",
     "subComponent": "Wind",
     "effectFocus": "Wie sich die globale Energieversorgung aus Wind seit 1965 entwickelt hat und wie Klimanutzen, Infrastruktur-, Flächen- und Biodiversitätspfade getrennt eingeordnet werden"
@@ -22,7 +22,7 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
@@ -284,7 +284,7 @@
     {
       "id": "wind_to_climate",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Klimawandel"
       ],
       "direction": "reduces_pressure_on_boundary",
@@ -295,7 +295,7 @@
     {
       "id": "wind_to_land",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Landnutzungsänderung"
       ],
       "direction": "driver_to_boundary",
@@ -305,7 +305,7 @@
     {
       "id": "wind_to_biosphere",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Biosphärenintegrität"
       ],
       "direction": "driver_to_boundary",

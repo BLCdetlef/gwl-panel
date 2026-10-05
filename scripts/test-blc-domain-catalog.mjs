@@ -18,7 +18,7 @@ const expectedDomains = [
   ["planetary_boundary", "atmospheric_aerosol_loading", "Aerosole"],
   ["planetary_boundary", "stratospheric_ozone_depletion", "Stratosphärisches Ozon"],
   ["planetary_boundary", "novel_entities", "Neue Substanzen"],
-  ["influence_area", "eah_material_energy_flows", "Stoff- und Energieströme"],
+  ["influence_area", "eah_material_energy_flows", "Rohstoffe"],
   ["influence_area", "eah_tech_social_environment", "Technologische & soziale Umwelt"]
 ];
 
@@ -30,7 +30,7 @@ for (const [domainType, domainId, domainLabel] of expectedDomains) {
 
 const cases = [
   ["data/knowledge/gwl_biosphere_functional_integrity_v0.1.json", "planetary_boundary", "biosphere_integrity", "Biosphärenintegrität"],
-  ["data/knowledge/gwl_oil_energy_pilot_v0.1b.json", "influence_area", "eah_material_energy_flows", "Stoff- und Energieströme"],
+  ["data/knowledge/gwl_oil_energy_pilot_v0.1b.json", "influence_area", "eah_material_energy_flows", "Rohstoffe"],
   ["data/knowledge/gwl_no2_sources_exposure_global_v0.1.json", "influence_area", "eah_tech_social_environment", "Technologische & soziale Umwelt"]
 ];
 for (const [source, domainType, domainId, domainLabel] of cases) {

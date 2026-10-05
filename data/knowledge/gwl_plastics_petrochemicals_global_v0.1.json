@@ -20,7 +20,7 @@
     "Aus der globalen Produktionsmenge allein werden keine Organmarker abgeleitet."
   ],
   "nodes": [
-    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Stoff- und Energieströme", "framework": "eah_extension" },
+    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Rohstoffe", "framework": "eah_extension" },
     { "id": "component_chemical_feedstocks", "type": "domain_component", "label": "Chemische Grundstoffe" },
     { "id": "component_plastics_petrochemicals", "type": "domain_component", "label": "Kunststoffe & Petrochemie" },
     { "id": "flow_global_plastics_production", "type": "system_flow", "label": "Globale Kunststoffproduktion" },
@@ -124,13 +124,13 @@
   "boundaryInteractions": [
     {
       "id": "plastics_to_novel_entities",
-      "boundaries": ["Stoff- und Energieströme", "Neue Substanzen"],
+      "boundaries": ["Rohstoffe", "Neue Substanzen"],
       "mechanism": "Wachsende Produktion vergrößert die potenzielle Menge und Vielfalt persistenter Polymere, Mikroplastikpartikel und Zusatzstoffe, die während Herstellung, Nutzung und Entsorgung freigesetzt werden können.",
       "evidenceStatus": "strong"
     },
     {
       "id": "plastics_to_climate",
-      "boundaries": ["Stoff- und Energieströme", "Klimawandel"],
+      "boundaries": ["Rohstoffe", "Klimawandel"],
       "mechanism": "Fossile Rohstoffe, Prozessenergie und Behandlung am Lebensende verursachen Treibhausgasemissionen.",
       "evidenceStatus": "strong"
     }

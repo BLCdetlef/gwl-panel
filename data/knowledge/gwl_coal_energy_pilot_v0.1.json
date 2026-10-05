@@ -5,7 +5,7 @@
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Energie",
     "subComponent": "Kohle",
     "effectFocus": "Wie sich die globale Energieversorgung aus Kohle seit 1965 entwickelt hat und über welche getrennten Pfade sie Klima, Aerosole, Wasser und Land beeinflusst"
@@ -21,7 +21,7 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
@@ -273,7 +273,7 @@
     {
       "id": "coal_to_climate",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Klimawandel"
       ],
       "mechanism": "Die Verbrennung von Kohle setzt große Mengen CO₂ frei und trägt dadurch stark zum anthropogenen Klimawandel bei.",
@@ -282,7 +282,7 @@
     {
       "id": "coal_to_aerosols",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Atmosphärische Aerosole"
       ],
       "mechanism": "Kohleverbrennung emittiert Schwefelverbindungen, Partikel und weitere Luftschadstoffe. Die planetare Aerosolwirkung ist jedoch regional und atmosphärisch komplex.",
@@ -291,7 +291,7 @@
     {
       "id": "coal_to_freshwater",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Süßwasser"
       ],
       "mechanism": "Bergbau, Aufbereitung und Kraftwerksbetrieb können lokal Wasser entnehmen und Gewässer belasten; ein einheitlicher globaler Wirkungswert wird nicht behauptet.",
@@ -300,7 +300,7 @@
     {
       "id": "coal_to_land",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Landnutzungsänderung"
       ],
       "mechanism": "Tagebau, Mineninfrastruktur und Abraum beanspruchen und verändern Flächen; Stärke und Dauer unterscheiden sich regional erheblich.",

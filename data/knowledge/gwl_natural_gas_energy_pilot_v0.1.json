@@ -5,7 +5,7 @@
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Energie",
     "subComponent": "Erdgas",
     "effectFocus": "Wie sich die globale Energieversorgung aus Erdgas seit 1965 entwickelt hat und über welche getrennten Pfade Förderung, Transport und Verbrennung Klima, Luft, Wasser und Land beeinflussen"
@@ -20,7 +20,7 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
@@ -220,7 +220,7 @@
     {
       "id": "gas_to_climate",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Klimawandel"
       ],
       "mechanism": "CO₂ aus Verbrennung und Methanemissionen entlang der Lieferkette tragen zum Klimawandel bei.",
@@ -229,7 +229,7 @@
     {
       "id": "gas_to_freshwater",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Süßwasser"
       ],
       "mechanism": "Förderung und Aufbereitung können Wasser beanspruchen oder belasten; Stärke und Art sind regional und technologiespezifisch.",
@@ -238,7 +238,7 @@
     {
       "id": "gas_to_land",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Landnutzungsänderung"
       ],
       "mechanism": "Bohrplätze, Leitungen und Infrastruktur beanspruchen Flächen; die globale Energiereihe quantifiziert diesen Pfad nicht.",

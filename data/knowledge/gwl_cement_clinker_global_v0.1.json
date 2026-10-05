@@ -5,7 +5,7 @@
   "status": "pilot",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Baustoffe",
     "subComponent": "Zement und Klinker",
     "effectFocus": "Wie globale Zementmenge, Klinkeranteil und Prozessemissionen als zusammengehörige quantitative Größen den Materialdurchsatz und den Beitrag zum Klimawandel beschreiben"
@@ -18,7 +18,7 @@
     "Aus der Produktionsmenge folgt keine direkte Organwirkung; Gesundheitsbezüge benötigen konkrete Emissions-, Expositions- und Krankheitslastdaten."
   ],
   "nodes": [
-    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Stoff- und Energieströme", "framework": "eah_extension" },
+    { "id": "eah_material_energy_flows", "type": "eah_system_boundary", "label": "Rohstoffe", "framework": "eah_extension" },
     { "id": "component_construction_materials", "type": "domain_component", "label": "Baustoffe" },
     { "id": "component_cement_clinker", "type": "domain_component", "label": "Zement und Klinker" },
     { "id": "flow_global_cement_production", "type": "system_flow", "label": "Globale Zementproduktion" },
@@ -138,7 +138,7 @@
   "boundaryInteractions": [
     {
       "id": "cement_to_climate",
-      "boundaries": ["Stoff- und Energieströme", "Klimawandel"],
+      "boundaries": ["Rohstoffe", "Klimawandel"],
       "mechanism": "Kalzinierung karbonathaltiger Rohstoffe und die Bereitstellung hoher Prozesstemperaturen setzen CO₂ frei.",
       "evidenceStatus": "strong"
     }

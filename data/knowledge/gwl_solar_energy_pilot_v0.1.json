@@ -5,7 +5,7 @@
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Energie",
     "subComponent": "Solar",
     "effectFocus": "Wie sich die globale Energieversorgung aus Solarenergie seit 1965 entwickelt hat und wie Klimanutzen, Infrastruktur-, Flächen- und Materialpfade getrennt eingeordnet werden"
@@ -21,7 +21,7 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "solar_to_climate",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Klimawandel"
       ],
       "direction": "reduces_pressure_on_boundary",
@@ -271,7 +271,7 @@
     {
       "id": "solar_to_land",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Landnutzungsänderung"
       ],
       "direction": "driver_to_boundary",
@@ -281,7 +281,7 @@
     {
       "id": "solar_to_novel",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Neue Substanzen"
       ],
       "direction": "driver_to_boundary",

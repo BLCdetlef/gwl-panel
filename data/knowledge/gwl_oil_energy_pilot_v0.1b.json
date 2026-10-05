@@ -5,7 +5,7 @@
   "status": "draft",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
+    "systemBoundary": "Rohstoffe",
     "domainComponent": "Energie",
     "subComponent": "Erdöl",
     "effectFocus": "Wie sich die globale Energieversorgung aus Erdöl seit 1965 entwickelt hat und über welche getrennten Pfade sie Klima, Stoffströme, Wasser und Land beeinflusst"
@@ -21,7 +21,7 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
@@ -279,7 +279,7 @@
     {
       "id": "oil_to_climate",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Klimawandel"
       ],
       "mechanism": "Öl wird in großen Mengen energetisch genutzt; Verbrennung erzeugt CO₂ und trägt dadurch zum anthropogenen Klimawandel bei.",
@@ -288,7 +288,7 @@
     {
       "id": "oil_to_novel",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Neue Substanzen"
       ],
       "mechanism": "Ein Teil des Erdöls wird petrochemisch zu Kunststoffen und Chemikalien weiterverarbeitet; deren Freisetzung und Persistenz kann zur Belastung durch Neue Substanzen beitragen.",
@@ -297,7 +297,7 @@
     {
       "id": "oil_to_freshwater",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Süßwasser"
       ],
       "mechanism": "Förderung und Verarbeitung können lokal Wasserressourcen beanspruchen oder belasten; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",
@@ -306,7 +306,7 @@
     {
       "id": "oil_to_land",
       "boundaries": [
-        "Stoff- und Energieströme",
+        "Rohstoffe",
         "Landnutzungsänderung"
       ],
       "mechanism": "Förderung, Infrastruktur und Verarbeitung können lokal Flächen beanspruchen und Landnutzung verändern; ein einheitlicher globaler Wirkungswert wird im Pilot nicht behauptet.",

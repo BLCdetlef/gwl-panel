@@ -1675,7 +1675,7 @@ function renderOilEnergyMainView() {
       </p>
 
       <div class="oil-path">
-        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Erdöl</span>
+        <span>Rohstoffe</span><b>→</b><span>Energie</span><b>→</b><span>Erdöl</span>
       </div>
 
       <h3>MESSWERTE</h3>
@@ -1757,7 +1757,7 @@ function renderCoalEnergyMainView() {
       </p>
 
       <div class="oil-path">
-        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Kohle</span>
+        <span>Rohstoffe</span><b>→</b><span>Energie</span><b>→</b><span>Kohle</span>
       </div>
 
       <h3>MESSWERTE</h3>
@@ -1820,7 +1820,7 @@ function renderNaturalGasEnergyMainView() {
         entlang der Lieferkette bleiben getrennte Größen.
       </p>
       <div class="oil-path">
-        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Erdgas</span>
+        <span>Rohstoffe</span><b>→</b><span>Energie</span><b>→</b><span>Erdgas</span>
       </div>
       <h3>MESSWERTE</h3>
       <div class="measurement-grid">${cards}</div>
@@ -1881,7 +1881,7 @@ function renderWindEnergyMainView() {
       </p>
 
       <div class="oil-path">
-        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Wind</span>
+        <span>Rohstoffe</span><b>→</b><span>Energie</span><b>→</b><span>Wind</span>
       </div>
 
       <h3>MESSWERTE</h3>
@@ -1954,7 +1954,7 @@ function renderSolarEnergyMainView() {
       </p>
 
       <div class="oil-path">
-        <span>Stoff- und Energieströme</span><b>→</b><span>Energie</span><b>→</b><span>Solar</span>
+        <span>Rohstoffe</span><b>→</b><span>Energie</span><b>→</b><span>Solar</span>
       </div>
 
       <h3>MESSWERTE</h3>
@@ -2834,7 +2834,14 @@ function renderTimeChart(observedSeries = null, projectionSeries = [], options =
   const extrema = [...observed, ...historicalSegments.flatMap(segment => segment.points), ...projections.flatMap(series => series.points)];
   const minPoint = extrema.reduce((lowest, point) => point.value < lowest.value ? point : lowest, extrema[0]);
   const maxPoint = extrema.reduce((highest, point) => point.value > highest.value ? point : highest, extrema[0]);
-  const projectionMarkup = projections.map((series, index) => `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`).join("");
+  const projectionMarkup = projections.map((series, index) => {
+    const first = series.points[0];
+    const last = observed[observed.length - 1];
+    const transition = last && last.year < first.year
+      ? `<path class="time-chart-projection time-chart-transition" style="--projection-color:${colors[index % colors.length]};stroke-dasharray:6 5" d="${makePath([last, first])}"><title>Übergang vom letzten historischen Wert zum ersten Szenariowert; keine zusätzlichen Datenpunkte</title></path>`
+      : "";
+    return transition + `<path class="time-chart-projection" style="--projection-color:${colors[index % colors.length]}" d="${makePath(series.points)}"/>`;
+  }).join("");
   const historicalMarkup = historicalSegments.map(segment => `<path class="time-chart-historical" d="${makePath(segment.points)}"/>`).join("");
   const thresholdAssessments = thresholdCrossings?.getThresholdAssessments(observedSeries);
   const thresholdMarkers = thresholdCrossings?.getThresholdCrossings(observedSeries, options.curveRole) || [];
@@ -3616,7 +3623,7 @@ function renderBoundaries() {
           <p><strong>Ergänzende Einflussbereiche</strong> erweitern den Blick um menschengemachte Stoffströme, Technologien und soziale Lebensbedingungen.</p>
           <p>Sie sind keine wissenschaftlich festgelegten Grenzen. Relevant werden sie durch belegte Wirkungen auf Lebensgrundlagen, Planetare Grenzen oder die menschliche Gesundheit.</p>
           <p>Ein Stoffstrom wird nur einmal erfasst und über Wirkungspfade mit den betroffenen Planetaren Grenzen verbunden.</p>
-          <p class="boundary-info-example">Beispiel: Kunststoffproduktion → Stoff- und Energieströme · Mikroplastik/Freisetzung → Neue Substanzen</p>
+          <p class="boundary-info-example">Beispiel: Kunststoffproduktion → Rohstoffe · Mikroplastik/Freisetzung → Neue Substanzen</p>
         </div>`;
       const dividerInfoButton = divider.querySelector(".boundary-context-info-button");
       const dividerInfo = divider.querySelector(".boundary-context-info");

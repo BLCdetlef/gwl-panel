@@ -3,10 +3,10 @@
   "version": "0.1",
   "status": "reviewed",
   "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
-  "topic": "Stoff- und Energieströme / globaler Kupferverbrauch (1960–2050)",
+  "topic": "Rohstoffe / globaler Kupferverbrauch (1960–2050)",
   "entry": {
-    "systemBoundary": "Stoff- und Energieströme",
-    "domainComponent": "Metalle",
+    "systemBoundary": "Rohstoffe",
+    "domainComponent": "Rohstoffe",
     "subComponent": "Globaler Kupferverbrauch",
     "contributionRole": "deepening_without_organ",
     "effectFocus": "Verwendung und Nachfrage von raffiniertem Kupfer als globaler Materialdurchsatz"
@@ -21,13 +21,13 @@
     {
       "id": "eah_material_energy_flows",
       "type": "eah_system_boundary",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "framework": "eah_extension"
     },
     {
       "id": "component_metals",
       "type": "domain_component",
-      "label": "Metalle"
+      "label": "Rohstoffe"
     },
     {
       "id": "flow_global_copper_usage",
@@ -153,7 +153,7 @@
     }
   ],
   "navigationRule": {
-    "group": "Metalle",
+    "group": "Rohstoffe",
     "item": "Globaler Kupferverbrauch",
     "classification": "global_material_throughput_timeseries"
   },

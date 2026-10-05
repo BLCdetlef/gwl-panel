@@ -221,7 +221,7 @@
     },
     {
       "id": "eah_material_energy_flows",
-      "label": "Stoff- und Energieströme",
+      "label": "Rohstoffe",
       "groups": [
         {
           "id": "energy",
@@ -273,7 +273,7 @@
         },
         {
           "id": "metals",
-          "label": "Metalle",
+          "label": "Rohstoffe",
           "items": [{
             "id": "global-copper-usage",
             "label": "Globaler Kupferverbrauch",
