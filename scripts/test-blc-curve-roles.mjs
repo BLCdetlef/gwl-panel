@@ -49,6 +49,8 @@ if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== 
 if (curveExport.manifestVersion !== manifest.version) throw new Error("Manifestversion ging im Export verloren.");
 
 const expected = new Map([
+  ["global_refined_copper_usage_1960_2024", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
+  ["global_cement_production_1926_2024_owid_usgs", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["biosphere_hanpp_1910_2020", { curveRole: "core", domainType: "planetary_boundary", domainId: "biosphere_integrity", domainLabel: "Biosphärenintegrität" }],
   ["global_co2_noaa_annual", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],
   ["global_anthropogenic_erf_1750_2025", { curveRole: "core", domainType: "planetary_boundary", domainId: "climate_change", domainLabel: "Klimawandel" }],

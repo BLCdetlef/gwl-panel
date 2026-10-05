@@ -4,6 +4,17 @@
   "approvedCurves": [
     {
       "kind": "knowledge",
+      "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json",
+      "seriesId": "global_refined_copper_usage_1960_2024",
+      "boundaryId": "materials-energy",
+      "itemId": "global-copper-usage",
+      "curveId": "knowledge:data/knowledge/02_stoff_energiestroeme_kupfer_global.json#global_refined_copper_usage_1960_2024",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Aufnahme vom Benutzer am 05.10.2026 beauftragt. ICSG 1960–2023, historischer IEA-Basiswert 2024, separate STEPS-Stützwerte 2030/2040/2050; Quellenwechsel ohne Kalibrierung dokumentiert."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/gwl_biosphere_functional_integrity_v0.1.json",
       "seriesId": "biosphere_hanpp_1910_2020",
       "boundaryId": "biosphere",

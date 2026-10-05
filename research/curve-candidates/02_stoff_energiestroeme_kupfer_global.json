@@ -1,0 +1,737 @@
+{
+  "format": "gwl-curve-research-candidate-v1",
+  "candidateId": "global-refined-copper-usage",
+  "researchedAt": "2026-10-05",
+  "decision": "AUFNEHMEN",
+  "status": "integrated_local",
+  "title": "Globaler Verbrauch von raffiniertem Kupfer (1960–2050)",
+  "systemBoundary": "Stoff- und Energieströme",
+  "domainId": "eah_material_energy_flows",
+  "role": "Treiber",
+  "unit": "Mio. t Cu/Jahr",
+  "geography": "Global",
+  "definition": "Verwendung bzw. Nachfrage nach raffiniertem Kupfer einschließlich sekundär raffiniertem Kupfer; direkt eingesetzter Kupferschrott ist ausgeschlossen. Kein Erzabbau, keine Raffinerieproduktion und keine individuelle Exposition.",
+  "observations": {
+    "source": "ICSG",
+    "edition": 2024,
+    "period": "1960–2023",
+    "dataNature": "statistical_estimate",
+    "points": [
+      {
+        "year": 1960,
+        "value": 4.738,
+        "sourceValue": 4738,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1961,
+        "value": 5.05,
+        "sourceValue": 5050,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1962,
+        "value": 5.048,
+        "sourceValue": 5048,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1963,
+        "value": 5.5,
+        "sourceValue": 5500,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1964,
+        "value": 5.995,
+        "sourceValue": 5995,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1965,
+        "value": 6.193,
+        "sourceValue": 6193,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1966,
+        "value": 6.445,
+        "sourceValue": 6445,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1967,
+        "value": 6.195,
+        "sourceValue": 6195,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1968,
+        "value": 6.523,
+        "sourceValue": 6523,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1969,
+        "value": 7.137,
+        "sourceValue": 7137,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1970,
+        "value": 7.291,
+        "sourceValue": 7291,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1971,
+        "value": 7.296,
+        "sourceValue": 7296,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1972,
+        "value": 7.942,
+        "sourceValue": 7942,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1973,
+        "value": 8.74,
+        "sourceValue": 8740,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1974,
+        "value": 8.31,
+        "sourceValue": 8310,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1975,
+        "value": 7.445,
+        "sourceValue": 7445,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1976,
+        "value": 8.539,
+        "sourceValue": 8539,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1977,
+        "value": 9.057,
+        "sourceValue": 9057,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1978,
+        "value": 9.527,
+        "sourceValue": 9527,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1979,
+        "value": 9.848,
+        "sourceValue": 9848,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1980,
+        "value": 9.396,
+        "sourceValue": 9396,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1981,
+        "value": 9.522,
+        "sourceValue": 9522,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1982,
+        "value": 9.09,
+        "sourceValue": 9090,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1983,
+        "value": 9.51,
+        "sourceValue": 9510,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1984,
+        "value": 9.93,
+        "sourceValue": 9930,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1985,
+        "value": 9.798,
+        "sourceValue": 9798,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1986,
+        "value": 10.112,
+        "sourceValue": 10112,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1987,
+        "value": 10.293,
+        "sourceValue": 10293,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1988,
+        "value": 10.668,
+        "sourceValue": 10668,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1989,
+        "value": 11.081,
+        "sourceValue": 11081,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1990,
+        "value": 10.886,
+        "sourceValue": 10886,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1991,
+        "value": 10.563,
+        "sourceValue": 10563,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1992,
+        "value": 10.866,
+        "sourceValue": 10866,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1993,
+        "value": 10.992,
+        "sourceValue": 10992,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1994,
+        "value": 11.56,
+        "sourceValue": 11560,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1995,
+        "value": 12.043,
+        "sourceValue": 12043,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1996,
+        "value": 12.489,
+        "sourceValue": 12489,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1997,
+        "value": 13.082,
+        "sourceValue": 13082,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1998,
+        "value": 13.44,
+        "sourceValue": 13440,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 1999,
+        "value": 14.223,
+        "sourceValue": 14223,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2000,
+        "value": 15.122,
+        "sourceValue": 15122,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2001,
+        "value": 14.938,
+        "sourceValue": 14938,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2002,
+        "value": 15.133,
+        "sourceValue": 15133,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2003,
+        "value": 15.641,
+        "sourceValue": 15641,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2004,
+        "value": 16.743,
+        "sourceValue": 16743,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2005,
+        "value": 16.552,
+        "sourceValue": 16552,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2006,
+        "value": 16.917,
+        "sourceValue": 16917,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2007,
+        "value": 18.026,
+        "sourceValue": 18026,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2008,
+        "value": 17.877,
+        "sourceValue": 17877,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2009,
+        "value": 17.87,
+        "sourceValue": 17870,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2010,
+        "value": 19.136,
+        "sourceValue": 19136,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2011,
+        "value": 19.709,
+        "sourceValue": 19709,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2012,
+        "value": 20.479,
+        "sourceValue": 20479,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2013,
+        "value": 21.408,
+        "sourceValue": 21408,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2014,
+        "value": 22.906,
+        "sourceValue": 22906,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2015,
+        "value": 23.046,
+        "sourceValue": 23046,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2016,
+        "value": 23.481,
+        "sourceValue": 23481,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2017,
+        "value": 23.686,
+        "sourceValue": 23686,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2018,
+        "value": 24.466,
+        "sourceValue": 24466,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2019,
+        "value": 24.316,
+        "sourceValue": 24316,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2020,
+        "value": 24.948,
+        "sourceValue": 24948,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2021,
+        "value": 25.211,
+        "sourceValue": 25211,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2022,
+        "value": 25.83,
+        "sourceValue": 25830,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ]
+      },
+      {
+        "year": 2023,
+        "value": 26.549,
+        "sourceValue": 26549,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "icsg_factbook_2024"
+        ],
+        "status": "preliminary"
+      }
+    ],
+    "provenance": {
+      "sourceFile": "Factbook2024.pdf",
+      "sourceUrl": "https://icsg.org/download/2024-09-23-the-world-copper-factbook-2024/",
+      "printedPage": 60,
+      "pdfPage": 65,
+      "table": "World Copper Production and Refined Copper Usage, 1960–2023",
+      "field": "Refined Usage, jeweils vierte Spalte der drei Jahrblöcke",
+      "sourceUnit": "Thousand Metric Tonnes Copper",
+      "transformation": "Quellenwert / 1000 ergibt Mio. t Cu/Jahr. Keine Glättung oder Interpolation.",
+      "sha256": "14e81d94afb6a4a0b6a22a74bb1f6b0676646c1f3874ff9dee6053a211a9ca9b"
+    }
+  },
+  "sourceBaseline": {
+    "year": 2024,
+    "value": 26.717,
+    "sourceValue": 26717,
+    "sourceUnit": "kt Cu/year",
+    "kind": "historical_baseline",
+    "sourceRefs": [
+      "iea_gcm_outlook_2025"
+    ],
+    "note": "In der IEA-Tabelle ausdrücklich Historical; nicht als STEPS-Projektion ausweisen."
+  },
+  "projection": {
+    "scenario": "STEPS",
+    "scenarioLabel": "Stated Policies Scenario",
+    "edition": 2025,
+    "period": "2030–2050 · publizierte Stützjahre",
+    "points": [
+      {
+        "year": 2030,
+        "value": 31.348,
+        "sourceValue": 31348,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "iea_gcm_outlook_2025"
+        ]
+      },
+      {
+        "year": 2040,
+        "value": 34.137,
+        "sourceValue": 34137,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "iea_gcm_outlook_2025"
+        ]
+      },
+      {
+        "year": 2050,
+        "value": 37.451,
+        "sourceValue": 37451,
+        "sourceUnit": "kt Cu/year",
+        "sourceRefs": [
+          "iea_gcm_outlook_2025"
+        ]
+      }
+    ],
+    "provenance": {
+      "sourceFile": "GlobalCriticalMineralsOutlook2025.pdf",
+      "sourceUrl": "https://iea.blob.core.windows.net/assets/a33abe2e-f799-4787-b09b-2484a6f5a8e4/GlobalCriticalMineralsOutlook2025.pdf",
+      "printedPage": 293,
+      "pdfPage": 293,
+      "table": "Annex, Copper demand",
+      "field": "Total demand; ausschließlich die drei Spalten Stated Policies",
+      "transformation": "kt Cu / 1000 ergibt Mio. t Cu/Jahr. Keine Zwischenjahre erzeugt.",
+      "sha256": "80e0615af8837d7a0c932332b5815a001460ef9e65ca0caba9b7cad9db224a92"
+    }
+  },
+  "methodBreaks": [
+    {
+      "year": 2024,
+      "label": "ICSG-Verbrauchsstatistik → IEA-Basiswert und STEPS-Nachfrageszenario",
+      "note": "2024 ist ein historischer IEA-Basiswert. Ab 2030 folgen die tabellierten STEPS-Stützwerte. Definitionen passen grundsätzlich zusammen; die Quellen sind jedoch nicht zahlenidentisch und wurden nicht kalibriert."
+    }
+  ],
+  "overlapCheck": {
+    "year": 2021,
+    "icsgValue": 25.211,
+    "ieaValue": 24.946,
+    "differenceIEAMinusICSG": -0.265,
+    "unit": "Mio. t Cu/Jahr",
+    "interpretation": "Gleiches Vergleichsjahr belegt einen Quellenunterschied; der Niveauanschluss ist nicht automatisch validiert."
+  },
+  "notes": [
+    "1960–2023: 64 lückenlose ICSG-Jahreswerte aus frei zugänglichem Anhang. 2023 ist vorläufig.",
+    "2024: historischer IEA-Basiswert 26,717 Mio. t; kein Szenariowert.",
+    "2030/2040/2050: exakt veröffentlichte STEPS-Werte; keine jährliche Reihe 2025–2050 behaupten.",
+    "IEA-Ausgabe 2025 wurde bewusst fixiert, da sie den gewünschten Basisjahranschluss 2024 enthält. Der aktuelle Data Explorer verwendet Ausgabe 2026; beide Ausgaben nicht vermischen.",
+    "Durchsatzindikator, kein planetarer Grenzwert und kein Organmarker.",
+    "Bei einer später beauftragten Aufnahme gelten die bestehenden BLC-Darstellungsregeln unverändert; keine neue Y-Skala oder Gruppendarstellung einführen."
+  ],
+  "exclusions": [
+    "Mine Production und Refined Production aus der ICSG-Tabelle nicht als Verbrauch übernehmen.",
+    "Total copper usage including direct melt scrap nicht mit refined copper usage mischen.",
+    "Clean energy demand nicht anstelle von Total demand übernehmen.",
+    "APS/NZE und primärer Kupferbedarf nach Recyclingabzug sind nicht die angefragte STEPS-Gesamtnachfrage."
+  ],
+  "sources": [
+    {
+      "id": "icsg_factbook_2024",
+      "institution": "International Copper Study Group",
+      "title": "The World Copper Factbook 2024",
+      "year": 2024,
+      "url": "https://icsg.org/download/2024-09-23-the-world-copper-factbook-2024/",
+      "type": "institutional_statistical_publication",
+      "primary": true,
+      "openAccess": true,
+      "pages": [
+        35,
+        36,
+        38,
+        60
+      ]
+    },
+    {
+      "id": "iea_gcm_outlook_2025",
+      "institution": "International Energy Agency",
+      "title": "Global Critical Minerals Outlook 2025",
+      "year": 2025,
+      "url": "https://iea.blob.core.windows.net/assets/a33abe2e-f799-4787-b09b-2484a6f5a8e4/GlobalCriticalMineralsOutlook2025.pdf",
+      "landingUrl": "https://www.iea.org/reports/global-critical-minerals-outlook-2025",
+      "type": "institutional_scenario_assessment",
+      "primary": true,
+      "openAccess": true,
+      "licence": "CC BY 4.0",
+      "pages": [
+        105,
+        108,
+        293
+      ]
+    }
+  ],
+  "nextStep": "Bei ausdrücklich beauftragter Übernahme den recherchierten Kandidaten in das bestehende GWL-Kurvenformat übertragen und den Quellenwechsel 2024 sichtbar dokumentieren.",
+  "integration": {
+    "date": "2026-10-05",
+    "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json",
+    "seriesId": "global_refined_copper_usage_1960_2024",
+    "note": "Eine Kurve; 2024 als historischer Basiswert in der Hauptreihe, Projektion ab 2030. Bestehender Renderer unverändert."
+  }
+}

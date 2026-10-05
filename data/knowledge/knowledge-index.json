@@ -270,6 +270,17 @@
               "source": "data/knowledge/gwl_cement_clinker_global_v0.1.json"
             }
           ]
+        },
+        {
+          "id": "metals",
+          "label": "Metalle",
+          "items": [{
+            "id": "global-copper-usage",
+            "label": "Globaler Kupferverbrauch",
+            "type": "component",
+            "contributionRole": "deepening_without_organ",
+            "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json"
+          }]
         }
       ]
     },

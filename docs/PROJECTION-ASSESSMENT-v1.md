@@ -17,6 +17,7 @@ Liegen veröffentlichte Fachszenarien oder belastbare Einflussfaktoren vor, die 
 
 | Messreihe | Bewertung | Entscheidung |
 |---|---|---|
+| Globaler Verbrauch von raffiniertem Kupfer | tragfähig mit dokumentiertem Quellenwechsel | ICSG 1960–2023 und historischer IEA-Basiswert 2024; ausschließlich IEA STEPS (Ausgabe 2025) für 2030, 2040 und 2050, keine erfundenen Zwischenwerte oder Kalibrierung |
 | Globale Energieversorgung aus Öl, Kohle, Erdgas, Wind und Solar | tragfähig, quellenübergreifend | WEO 2025 CPS, STEPS und NZE für 2035, 2040 und 2050; getrennt von der historischen Energiereihe |
 | Globales atmosphärisches CO₂ | tragfähig, szenarioabhängig | IPCC-AR6-Pfade SSP1-1.9 bis SSP5-8.5 für publizierte Dekaden 2030–2090 |
 | Globale Kunststoffproduktion | bedingt tragfähig, nur separat | Jährliche OECD-Kunststoffnutzung 2019–2060 für Baseline und Global Ambition; Produktion und Nutzung werden nicht gleichgesetzt |
