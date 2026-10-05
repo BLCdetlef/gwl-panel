@@ -1,0 +1,1038 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "status": "reviewed",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "topic": "Stoff- und Energieströme / globaler Gebäudesandverbrauch (1970–2060)",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Baustoffe",
+    "subComponent": "Globaler Sandverbrauch für Gebäude",
+    "contributionRole": "deepening_without_organ",
+    "effectFocus": "Globaler Sandbedarf im Gebäudebau als menschlicher Materialdurchsatz"
+  },
+  "corePrinciples": [
+    "Historische Modellschätzung und Zukunftsszenario bleiben getrennt.",
+    "Gebäudesandbedarf ist kein Gesamtverbrauch des Bauwesens.",
+    "Eine Materialmenge ist kein Grenzwert und keine individuelle Dosis."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_building_materials",
+      "type": "domain_component",
+      "label": "Baustoffe"
+    },
+    {
+      "id": "flow_building_sand",
+      "type": "system_flow",
+      "label": "Globaler Sandverbrauch für Gebäude"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_building_materials",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_building_materials",
+      "to": "flow_building_sand",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "globus_building_sand",
+      "sourceRefs": [
+        "globus_v1",
+        "zhong_2022"
+      ],
+      "design": "Dynamisches Gebäudebestands- und Materialflussmodell; offene Modelloutputs und Sandfaktoren",
+      "finding": "50 historische Jahreswerte und 41 Baseline-Szenariowerte; alle 1066 regionalen Zukunftswerte gegen den veröffentlichten Output geprüft.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "building_sand_2019",
+      "node": "flow_building_sand",
+      "label": "Historischer Gebäudesandbedarf (Modell)",
+      "metric": "Globaler Sandverbrauch für Gebäude",
+      "value": 3117.87926250022,
+      "unit": "Mio. t/Jahr",
+      "year": 2019,
+      "period": "2019 · Modellschätzung",
+      "geography": "Global",
+      "display": "3.117,88 Mio. t/Jahr · Modellschätzung",
+      "sourceRefs": [
+        "globus_v1",
+        "zhong_2022"
+      ]
+    }
+  ],
+  "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Der modellierte globale Sandbedarf für Beton und Glas in Gebäuden steigt von 835,04 Mio. t/Jahr (1970) auf 3.117,88 Mio. t/Jahr (2019). Das getrennte GloBUS-Baseline-Szenario beginnt 2020 bei 3.169,96 und erreicht 2060 rund 4.607,28 Mio. t/Jahr. Der Anschluss beträgt +1,67 %.",
+    "primaryMeasurementId": "building_sand_2019",
+    "primaryTimeSeriesId": "global_building_sand_usage_globus_1970_2019",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "referenceLabel": "Kein Grenzwert · globaler Materialdurchsatz",
+    "finding": "Eine Gebäudesandkurve mit historischer Modellschätzung und getrenntem Zukunftsszenario.",
+    "uncertainty": "Modellierte Jahresflüsse, keine direkte Messreihe. Historische Sandintensitäten werden im Originalcode auf dem Stand 2020 gehalten; ältere Gebäudebestände beruhen auf Rückrechnungen. Erfasst sind Wohn- und Nichtwohngebäude, Beton und Glas; Straßen, Bahn und weitere Infrastruktur sowie Kies sind ausgeschlossen. Das Baseline-Szenario ist bedingt. Die breiter abgegrenzte Bauwesenstudie von Zhuang et al. wird nicht eingefügt."
+  },
+  "pathways": [],
+  "boundaryInteractions": [],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_material_flow",
+    "systemImpacts": [],
+    "bodymapRule": "Keine Organmarker aus globalem Sandbedarf ableiten."
+  },
+  "knowledgeGaps": [],
+  "navigationRule": {
+    "group": "Baustoffe",
+    "item": "Globaler Sandverbrauch für Gebäude",
+    "classification": "global_material_throughput_timeseries"
+  },
+  "sources": [
+    {
+      "id": "globus_v1",
+      "title": "GloBUS v1.0",
+      "authors": "Xiaoyang Zhong et al.",
+      "publisher": "Zenodo",
+      "year": 2022,
+      "url": "https://zenodo.org/records/5897264",
+      "access": "open_full_text"
+    },
+    {
+      "id": "zhong_2022",
+      "title": "Increasing material efficiencies of buildings to address the global sand crisis",
+      "authors": "Xiaoyang Zhong, Sebastiaan Deetman, Arnold Tukker, Paul Behrens",
+      "publisher": "Nature Sustainability",
+      "year": 2022,
+      "url": "https://www.nature.com/articles/s41893-022-00857-0",
+      "access": "abstract_and_open_data"
+    }
+  ],
+  "timeSeries": [
+    {
+      "id": "global_building_sand_usage_globus_1970_2019",
+      "label": "Globaler Sandverbrauch für Gebäude",
+      "metric": "Sandbedarf für Beton und Glas in Wohn- und Nichtwohngebäuden",
+      "unit": "Mio. t/Jahr",
+      "geography": "Global",
+      "period": "1970–2019",
+      "dataNature": "assessed_model_estimate",
+      "worseningDirection": "increase",
+      "reference": {
+        "type": "none"
+      },
+      "sourceRefs": [
+        "globus_v1",
+        "zhong_2022"
+      ],
+      "methodNote": "1970–2019: historische GloBUS-Modellschätzung, aus veröffentlichten Beton- und Glaszuflüssen mit dem Sandrechenweg der Autoren abgeleitet. Ab 2020: veröffentlichter GloBUS-Baseline-Szenariopfad bis 2060. Gleiche Quelle, gleiche Gebäudeabgrenzung; Übergang von historischer Schätzung zu Zukunftsszenario, kein Quellenwechsel. Anschluss 2019 → 2020: +1,67 %; keine Niveauanpassung. Vom Benutzer am 2026-10-05 ausdrücklich freigegebene Einjahresausnahme: 1970–2019 umfasst 50 jährliche Modellwerte, aber 49 Jahre Zeitabstand. Zukunftswerte zählen nicht zur Mindestabdeckung. Keine Ergänzung früher Initialisierungswerte und keine erfundene historische Rekonstruktion.",
+      "uncertainty": "Modellierte Jahresflüsse, keine direkte Messreihe. Historische Sandintensitäten werden im Originalcode auf dem Stand 2020 gehalten; ältere Gebäudebestände beruhen auf Rückrechnungen. Erfasst sind Wohn- und Nichtwohngebäude, Beton und Glas; Straßen, Bahn und weitere Infrastruktur sowie Kies sind ausgeschlossen. Das Baseline-Szenario ist bedingt. Die breiter abgegrenzte Bauwesenstudie von Zhuang et al. wird nicht eingefügt.",
+      "finding": "Materialdurchsatz; steigende Werte beschreiben größere Sandmengen, keinen quantifizierten Umweltschaden.",
+      "provenance": {
+        "sourceFile": "Zh-xy/GloBUS-v1.0.zip",
+        "sourceUrl": "https://zenodo.org/records/5897264",
+        "locator": "output_material/concrete_glass_output.csv; files_recovery_rate/recovery_rate.csv; files_sand_factor/sand_primary_per_kg.csv; output_sand/Sand_total.csv; GloBUS.py, Sandberechnung",
+        "fields": [
+          "Region",
+          "flow",
+          "type",
+          "area",
+          "material",
+          "Jahresspalten 1970–2019"
+        ],
+        "extraction": "50 historische Sandwerte aus 624 Beton-/Glas-Materialzuflüssen für 26 Regionen abgeleitet; Zuordnung nach Region, Gebäudetyp, Gebiet und Material geprüft.",
+        "transformation": "Pro Region und Gebäudetyp: (Materialzufluss − min(Materialzufluss, Materialabfluss × Rückgewinnungsrate)) × Sandfaktor. Summe über alle Gebäudetypen, Beton/Glas und 26 Regionen. kt / 1000 → Mio. t. Historische Faktoren 2020 wie im Originalcode. Keine Interpolation oder zusätzliche Extrapolation."
+      },
+      "contextNotes": [
+        {
+          "id": "building_sand_projection_transition",
+          "label": "Übergang zum Zukunftsszenario",
+          "value": "2020 · GloBUS Baseline",
+          "detail": "1970–2019: historische GloBUS-Modellschätzung, aus veröffentlichten Beton- und Glaszuflüssen mit dem Sandrechenweg der Autoren abgeleitet. Ab 2020: veröffentlichter GloBUS-Baseline-Szenariopfad bis 2060. Gleiche Quelle, gleiche Gebäudeabgrenzung; Übergang von historischer Schätzung zu Zukunftsszenario, kein Quellenwechsel. Anschluss 2019 → 2020: +1,67 %; keine Niveauanpassung. Modellierte Jahresflüsse, keine direkte Messreihe. Historische Sandintensitäten werden im Originalcode auf dem Stand 2020 gehalten; ältere Gebäudebestände beruhen auf Rückrechnungen. Erfasst sind Wohn- und Nichtwohngebäude, Beton und Glas; Straßen, Bahn und weitere Infrastruktur sowie Kies sind ausgeschlossen. Das Baseline-Szenario ist bedingt. Die breiter abgegrenzte Bauwesenstudie von Zhuang et al. wird nicht eingefügt.",
+          "sourceRefs": [
+            "globus_v1",
+            "zhong_2022"
+          ]
+        },
+        {
+          "id": "building_sand_coverage_exception",
+          "label": "Freigegebene Zeitraum-Ausnahme",
+          "value": "49 Jahre · 50 Jahreswerte",
+          "detail": "Vom Benutzer am 2026-10-05 ausdrücklich freigegebene Einjahresausnahme: 1970–2019 umfasst 50 jährliche Modellwerte, aber 49 Jahre Zeitabstand. Zukunftswerte zählen nicht zur Mindestabdeckung. Keine Ergänzung früher Initialisierungswerte und keine erfundene historische Rekonstruktion.",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        }
+      ],
+      "points": [
+        {
+          "year": 1970,
+          "value": 835.0397729539171,
+          "sourceValue": 835039.7729539172,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1971,
+          "value": 842.9018168312076,
+          "sourceValue": 842901.8168312076,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1972,
+          "value": 1065.8742315403522,
+          "sourceValue": 1065874.231540352,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1973,
+          "value": 1123.3797092792395,
+          "sourceValue": 1123379.7092792394,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1974,
+          "value": 843.3570264851936,
+          "sourceValue": 843357.0264851936,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1975,
+          "value": 912.0440465475735,
+          "sourceValue": 912044.0465475735,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1976,
+          "value": 1152.703869384011,
+          "sourceValue": 1152703.869384011,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1977,
+          "value": 1166.2710248050469,
+          "sourceValue": 1166271.0248050469,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1978,
+          "value": 1249.2284348053938,
+          "sourceValue": 1249228.434805394,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1979,
+          "value": 1299.820235972212,
+          "sourceValue": 1299820.235972212,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1980,
+          "value": 1286.9686217032415,
+          "sourceValue": 1286968.6217032415,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1981,
+          "value": 1098.2337420999386,
+          "sourceValue": 1098233.7420999387,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1982,
+          "value": 1019.6198696831948,
+          "sourceValue": 1019619.8696831948,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1983,
+          "value": 1433.45688998485,
+          "sourceValue": 1433456.88998485,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1984,
+          "value": 1519.755528056448,
+          "sourceValue": 1519755.5280564479,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1985,
+          "value": 1706.0820032090398,
+          "sourceValue": 1706082.0032090398,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1986,
+          "value": 1543.3514916889885,
+          "sourceValue": 1543351.4916889884,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1987,
+          "value": 1734.4182383290868,
+          "sourceValue": 1734418.2383290867,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1988,
+          "value": 1896.3471556554935,
+          "sourceValue": 1896347.1556554935,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1989,
+          "value": 1333.7906187746153,
+          "sourceValue": 1333790.6187746152,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1990,
+          "value": 1481.2491542415007,
+          "sourceValue": 1481249.1542415007,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1991,
+          "value": 1634.4573339653791,
+          "sourceValue": 1634457.333965379,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1992,
+          "value": 2252.228490198638,
+          "sourceValue": 2252228.4901986383,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1993,
+          "value": 2302.1886937072472,
+          "sourceValue": 2302188.6937072473,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1994,
+          "value": 1881.0008385213473,
+          "sourceValue": 1881000.8385213474,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1995,
+          "value": 2415.306851073486,
+          "sourceValue": 2415306.8510734863,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1996,
+          "value": 2552.1754306693133,
+          "sourceValue": 2552175.4306693133,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1997,
+          "value": 1956.752255767688,
+          "sourceValue": 1956752.255767688,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1998,
+          "value": 1958.9401514045371,
+          "sourceValue": 1958940.151404537,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 1999,
+          "value": 2424.174005384225,
+          "sourceValue": 2424174.005384225,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2000,
+          "value": 2341.916810389965,
+          "sourceValue": 2341916.8103899653,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2001,
+          "value": 1905.2296103523613,
+          "sourceValue": 1905229.6103523613,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2002,
+          "value": 2230.353788078973,
+          "sourceValue": 2230353.788078973,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2003,
+          "value": 2163.53050325008,
+          "sourceValue": 2163530.50325008,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2004,
+          "value": 2717.25822467892,
+          "sourceValue": 2717258.22467892,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2005,
+          "value": 2923.1685084435035,
+          "sourceValue": 2923168.5084435036,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2006,
+          "value": 3338.165347271918,
+          "sourceValue": 3338165.3472719183,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2007,
+          "value": 3493.0393292614986,
+          "sourceValue": 3493039.3292614985,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2008,
+          "value": 4703.308569325302,
+          "sourceValue": 4703308.569325303,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2009,
+          "value": 2762.677738238082,
+          "sourceValue": 2762677.738238082,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2010,
+          "value": 3204.9976435559934,
+          "sourceValue": 3204997.643555993,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2011,
+          "value": 5081.843750508962,
+          "sourceValue": 5081843.750508962,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2012,
+          "value": 2724.154552348115,
+          "sourceValue": 2724154.552348115,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2013,
+          "value": 2844.5431680812308,
+          "sourceValue": 2844543.168081231,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 2814.066984562255,
+          "sourceValue": 2814066.984562255,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2015,
+          "value": 3190.3066758485625,
+          "sourceValue": 3190306.6758485623,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2016,
+          "value": 3106.932750022668,
+          "sourceValue": 3106932.7500226684,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2017,
+          "value": 3086.673606575941,
+          "sourceValue": 3086673.606575941,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2018,
+          "value": 3090.6069948931777,
+          "sourceValue": 3090606.994893178,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 3117.87926250022,
+          "sourceValue": 3117879.26250022,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "grade": "qualified_scenario_projection",
+    "method": "Veröffentlichter GloBUS-v1.0-Baseline-Output; keine eigene Trendfortschreibung.",
+    "scope": "Global; Gebäude, Beton und Glas; 2020–2060"
+  },
+  "projectionSeries": [
+    {
+      "id": "global_building_sand_globus_baseline_2020_2060",
+      "observedSeriesId": "global_building_sand_usage_globus_1970_2019",
+      "scenario": "GloBUS_baseline",
+      "scenarioLabel": "GloBUS · Baseline",
+      "period": "2020–2060",
+      "unit": "Mio. t/Jahr",
+      "method": "1970–2019: historische GloBUS-Modellschätzung, aus veröffentlichten Beton- und Glaszuflüssen mit dem Sandrechenweg der Autoren abgeleitet. Ab 2020: veröffentlichter GloBUS-Baseline-Szenariopfad bis 2060. Gleiche Quelle, gleiche Gebäudeabgrenzung; Übergang von historischer Schätzung zu Zukunftsszenario, kein Quellenwechsel. Anschluss 2019 → 2020: +1,67 %; keine Niveauanpassung.",
+      "uncertainty": "Modellierte Jahresflüsse, keine direkte Messreihe. Historische Sandintensitäten werden im Originalcode auf dem Stand 2020 gehalten; ältere Gebäudebestände beruhen auf Rückrechnungen. Erfasst sind Wohn- und Nichtwohngebäude, Beton und Glas; Straßen, Bahn und weitere Infrastruktur sowie Kies sind ausgeschlossen. Das Baseline-Szenario ist bedingt. Die breiter abgegrenzte Bauwesenstudie von Zhuang et al. wird nicht eingefügt.",
+      "sourceRefs": [
+        "globus_v1",
+        "zhong_2022"
+      ],
+      "provenance": {
+        "sourceFile": "Zh-xy/GloBUS-v1.0.zip",
+        "sourceUrl": "https://zenodo.org/records/5897264",
+        "locator": "output_sand/Sand_total.csv; 26 Regionenzeilen, Jahresspalten 2020–2060",
+        "fields": [
+          "Region",
+          "2020–2060"
+        ],
+        "extraction": "41 Jahressummen über 26 Regionen; alle 1066 regionalen Werte mit Originalrechenweg gegengeprüft.",
+        "transformation": "Summe der regionalen kt-Werte / 1000 → Mio. t/Jahr; keine Interpolation, Kalibrierung oder Glättung."
+      },
+      "points": [
+        {
+          "year": 2020,
+          "value": 3169.9572457838867,
+          "sourceValue": 3169957.245783887,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2021,
+          "value": 3062.890393306845,
+          "sourceValue": 3062890.393306845,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2022,
+          "value": 3127.254287492748,
+          "sourceValue": 3127254.287492748,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2023,
+          "value": 3203.875174919172,
+          "sourceValue": 3203875.174919172,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2024,
+          "value": 3288.259743137043,
+          "sourceValue": 3288259.743137043,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2025,
+          "value": 3378.8617953470775,
+          "sourceValue": 3378861.7953470773,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2026,
+          "value": 3211.1848918556016,
+          "sourceValue": 3211184.8918556017,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2027,
+          "value": 3290.9669852681177,
+          "sourceValue": 3290966.985268118,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2028,
+          "value": 3372.592840083156,
+          "sourceValue": 3372592.840083156,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2029,
+          "value": 3455.0936173543028,
+          "sourceValue": 3455093.6173543027,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2030,
+          "value": 3537.76163197597,
+          "sourceValue": 3537761.6319759698,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2031,
+          "value": 3397.5784560986363,
+          "sourceValue": 3397578.456098636,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2032,
+          "value": 3470.4944904190065,
+          "sourceValue": 3470494.4904190064,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2033,
+          "value": 3544.4328623311753,
+          "sourceValue": 3544432.8623311752,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2034,
+          "value": 3617.981480882008,
+          "sourceValue": 3617981.480882008,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2035,
+          "value": 3677.93339838407,
+          "sourceValue": 3677933.39838407,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2036,
+          "value": 3555.336785503695,
+          "sourceValue": 3555336.785503695,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2037,
+          "value": 3623.1470940819545,
+          "sourceValue": 3623147.0940819546,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2038,
+          "value": 3692.1961879794194,
+          "sourceValue": 3692196.1879794193,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2039,
+          "value": 3762.2824638835414,
+          "sourceValue": 3762282.4638835415,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2040,
+          "value": 3833.1382097897554,
+          "sourceValue": 3833138.2097897553,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2041,
+          "value": 3726.0786571545923,
+          "sourceValue": 3726078.657154592,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2042,
+          "value": 3793.63248674967,
+          "sourceValue": 3793632.48674967,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2043,
+          "value": 3862.275148440588,
+          "sourceValue": 3862275.1484405883,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2044,
+          "value": 3930.890659011323,
+          "sourceValue": 3930890.659011323,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2045,
+          "value": 3999.9953494799647,
+          "sourceValue": 3999995.349479965,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2046,
+          "value": 3861.9217733573178,
+          "sourceValue": 3861921.773357318,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2047,
+          "value": 3927.4483043762016,
+          "sourceValue": 3927448.3043762017,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2048,
+          "value": 3994.170852848366,
+          "sourceValue": 3994170.852848366,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2049,
+          "value": 4062.342621108381,
+          "sourceValue": 4062342.621108381,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 4132.796406193314,
+          "sourceValue": 4132796.406193314,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2051,
+          "value": 4120.416375736875,
+          "sourceValue": 4120416.3757368755,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2052,
+          "value": 4188.98236636936,
+          "sourceValue": 4188982.3663693597,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2053,
+          "value": 4258.462414046682,
+          "sourceValue": 4258462.414046682,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2054,
+          "value": 4329.360634628352,
+          "sourceValue": 4329360.634628353,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2055,
+          "value": 4401.167224580659,
+          "sourceValue": 4401167.2245806595,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2056,
+          "value": 4327.76684341098,
+          "sourceValue": 4327766.84341098,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2057,
+          "value": 4396.284504973821,
+          "sourceValue": 4396284.50497382,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2058,
+          "value": 4465.841140483807,
+          "sourceValue": 4465841.140483807,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2059,
+          "value": 4536.1172421002175,
+          "sourceValue": 4536117.242100217,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        },
+        {
+          "year": 2060,
+          "value": 4607.282148599731,
+          "sourceValue": 4607282.148599731,
+          "sourceUnit": "kt/Jahr",
+          "sourceRefs": [
+            "globus_v1"
+          ]
+        }
+      ]
+    }
+  ]
+}

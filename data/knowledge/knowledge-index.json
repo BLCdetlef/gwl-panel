@@ -221,7 +221,7 @@
     },
     {
       "id": "eah_material_energy_flows",
-      "label": "Rohstoffe",
+      "label": "Stoff- und Energieströme",
       "groups": [
         {
           "id": "energy",
@@ -268,19 +268,42 @@
               "label": "Zement und Klinker",
               "type": "component",
               "source": "data/knowledge/gwl_cement_clinker_global_v0.1.json"
+            },
+            {
+              "id": "global-building-sand-usage",
+              "label": "Globaler Sandverbrauch für Gebäude",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/02_stoff_energiestroeme_sand_gebaeude_global.json"
             }
           ]
         },
         {
           "id": "metals",
           "label": "Rohstoffe",
-          "items": [{
-            "id": "global-copper-usage",
-            "label": "Globaler Kupferverbrauch",
-            "type": "component",
-            "contributionRole": "deepening_without_organ",
-            "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json"
-          }]
+          "items": [
+            {
+              "id": "global-copper-usage",
+              "label": "Globaler Kupferverbrauch",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json"
+            },
+            {
+              "id": "global-primary-aluminium-production",
+              "label": "Globale Primäraluminiumproduktion",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/02_stoff_energiestroeme_aluminium_primaerproduktion_global.json"
+            },
+            {
+              "id": "global-crude-steel-production",
+              "label": "Globale Rohstahlproduktion",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/02_stoff_energiestroeme_stahlproduktion_global.json"
+            }
+          ]
         }
       ]
     },

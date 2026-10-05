@@ -1,0 +1,134 @@
+{
+  "format": "gwl-curve-research-candidate-v1",
+  "candidateId": "global-aluminium-usage",
+  "researchedAt": "2026-10-05",
+  "decision": "ZURÜCKSTELLEN",
+  "status": "anchor_values_verified_not_integrated",
+  "title": "Globaler Aluminiumverbrauch (1950–2050)",
+  "systemBoundary": "Stoff- und Energieströme",
+  "domainId": "eah_material_energy_flows",
+  "group": "Rohstoffe",
+  "role": "Treiber",
+  "geography": "Global",
+  "unit": "Mio. t/Jahr",
+  "unitStatus": "Jahresfluss als Arbeitsdefinition; genaue Systemgrenze und Massendefinition im Material Flow Model noch zu bestätigen",
+  "definition": "IAI-Begriff global usage of aluminium. Nicht mit primärer Elektrolyseproduktion, Fertigproduktnachfrage oder Bestand in Nutzung gleichsetzen. Abgrenzung zu Recycling- und Legierungsanteilen noch offen.",
+  "observations": {
+    "dataNature": "historical_anchor_estimate",
+    "period": "1950–2022",
+    "points": [
+      {
+        "year": 1950,
+        "value": 1.7,
+        "sourceValue": 1.7,
+        "sourceUnit": "Mt",
+        "sourceRefs": [
+          "iai_ambition_to_action"
+        ],
+        "kind": "historical_anchor"
+      },
+      {
+        "year": 2022,
+        "value": 108,
+        "sourceValue": 108,
+        "sourceUnit": "Mt",
+        "sourceRefs": [
+          "iai_ambition_to_action"
+        ],
+        "kind": "historical_anchor"
+      }
+    ]
+  },
+  "projection": {
+    "scenario": null,
+    "scenarioStatus": "Im Ankerwert-Artikel nicht eindeutig benannt; keine Übernahme eines Szenarionamens aus einer anderen Publikation",
+    "points": [
+      {
+        "year": 2050,
+        "value": 176,
+        "sourceValue": 176,
+        "sourceUnit": "Mt",
+        "kind": "projection_anchor",
+        "sourceRefs": [
+          "iai_ambition_to_action"
+        ]
+      }
+    ]
+  },
+  "eligibility": {
+    "requestedPeriod": "1950–2050",
+    "temporalCoverage": true,
+    "temporalCoverageNote": "Ankerwerte decken den gewünschten Zeitraum ab; dies belegt weder eine vollständige Reihe noch eine Kurvenfreigabe.",
+    "sufficientPointDensity": false,
+    "metricDefinitionVerified": false,
+    "scenarioVerified": false,
+    "approvedForBlc": false,
+    "interpolation": false,
+    "healthMarkers": false,
+    "reference": null,
+    "threshold": null
+  },
+  "sourceRegister": [
+    {
+      "id": "iai_ambition_to_action",
+      "title": "Ambition To Action – The Aluminium Sector’s Commitment To Decarbonisation",
+      "institution": "International Aluminium Institute",
+      "author": "Pernelle Nunez",
+      "publicationYear": null,
+      "publicationYearNote": "Seite zeigt kein eindeutiges Publikationsdatum; Text wurde im Vorfeld COP28 verfasst.",
+      "type": "Institutioneller Fachbeitrag des Dateninhabers; keine eigenständige Datentabelle",
+      "primarySource": true,
+      "openAccess": true,
+      "url": "https://international-aluminium.org/ambition-to-action-the-aluminium-sectors-commitment-to-decarbonisation/",
+      "locator": "Erster Absatz des Haupttextes",
+      "supports": "Alle drei gerundeten Ankerwerte; historische Werte und Erwartung 2050 getrennt",
+      "limitation": "Kein vollständig ausgewiesener Rechenweg, Modelljahrgang oder Szenarioname für die Ankerwerte"
+    },
+    {
+      "id": "iai_model_description",
+      "title": "75% of all aluminium ever produced is still in use today",
+      "institution": "International Aluminium Institute",
+      "publicationYear": null,
+      "type": "Institutionelle Modellbeschreibung",
+      "primarySource": true,
+      "openAccess": true,
+      "url": "https://international-aluminium.org/landing/75-of-all-aluminium-ever-produced-is-still-in-use-today/",
+      "locator": "Data & Modeling; Data sources, links and publications",
+      "supports": "Jährliche Materialströme und Bestände seit 1888, Projektionen bis 2050; Modell auf Produktions-, Halbzeug-, Recycling- und Lebensdauerdaten",
+      "limitation": "Keine numerische Verbrauchsreihe auf dieser Seite"
+    },
+    {
+      "id": "iai_alucycle_public",
+      "title": "Public Access – Global Aluminium Cycle",
+      "institution": "International Aluminium Institute",
+      "publicationYear": null,
+      "type": "Öffentliche Visualisierung des Material Flow Model",
+      "primarySource": true,
+      "openAccess": true,
+      "url": "https://alucycle.international-aluminium.org/public-access/",
+      "supports": "Datenzugang für spätere Verdichtung",
+      "limitation": "Eine vollständige numerische Reihe wurde in dieser Ankerwertprüfung noch nicht extrahiert; direkter Global-Cycle-Link lieferte beim Textabruf Timeout"
+    },
+    {
+      "id": "iai_mfa_2023",
+      "title": "Material Flow Analysis – A Look At The Numbers Globally And In Asia",
+      "institution": "International Aluminium Institute",
+      "publicationYear": 2023,
+      "type": "Institutionelles Daten-Factsheet",
+      "primarySource": true,
+      "openAccess": true,
+      "url": "https://international-aluminium.org/wp-content/uploads/2024/04/Material-Flow-Analysis_Mar2023.pdf",
+      "locator": "PDF-Seite 1: Primary Electrolytic Production",
+      "supports": "Gegenprüfung: Primärproduktion ist eine andere Messgröße; 1,5 Mio. t 1950 und 68,5 Mio. t 2022",
+      "limitation": "Keine Ersatzreihe für global usage; das dort genannte 2022 IAI Reference Scenario wird nicht ohne Nachweis dem 176-Mt-Anker zugeordnet"
+    }
+  ],
+  "notes": [
+    "Nur belegte Ankerwerte gespeichert. Keine erfundenen Jahreswerte und keine lineare Verdichtung.",
+    "Keine Zusammenrechnung von Primärproduktion und Schrottdurchsatz als Ersatz für Verbrauch; Risiko mehrfacher Kreislaufzählung.",
+    "Historische Anker sind keine als direkte Messwerte verifizierte Jahresreihe.",
+    "Bei späterer Freigabe bestehende BLC-Skalierung verwenden; historischen Endwert gestrichelt an ersten späteren Szenariowert anschließen.",
+    "Eine Durchsatzreihe erlaubt keine direkte Organ- oder Gesundheitsfreigabe."
+  ],
+  "nextStep": "Für denselben globalen IAI-Materialfluss die jährliche Reihe 1950–2022 und den eindeutig benannten Szenariojahrgang bis 2050 aus Alucycle extrahieren und gegen die drei Ankerwerte prüfen."
+}

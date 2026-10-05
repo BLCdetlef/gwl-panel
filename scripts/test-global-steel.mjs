@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const read=async p=>JSON.parse(await fs.readFile(new URL('../'+p,import.meta.url),'utf8'));
+const source='data/knowledge/02_stoff_energiestroeme_stahlproduktion_global.json';
+const [c,n,e,i]=await Promise.all([read('research/curve-candidates/02_stoff_energiestroeme_stahlproduktion_global.json'),read(source),read('data/blc/blc-curve-export-v1.json'),read('data/knowledge/knowledge-index.json')]);
+assert.equal(n.timeSeries.length,1);assert.equal(n.projectionSeries.length,1);
+assert.deepEqual(n.timeSeries[0].points,c.observations.points);
+assert.deepEqual(n.timeSeries[0].points.map(p=>[p.year,p.value]),[[1950,189],[1955,270],[1960,347],[1965,456],[1970,595],[1975,644],[1980,717],[1985,719],[1990,770],[1995,753],[2000,850],[2005,1148],[2010,1435],[2011,1540],[2012,1563],[2013,1654],[2014,1676],[2015,1626],[2016,1634],[2017,1738],[2018,1831],[2019,1879],[2020,1883],[2021,1963],[2022,1889],[2023,1904],[2024,1887],[2025,1849]]);
+assert.deepEqual(n.projectionSeries[0].points.map(p=>[p.year,p.value]),[[2030,2101],[2050,2535]]);
+assert.equal(n.projectionSeries[0].observedSeriesId,n.timeSeries[0].id);assert.equal(n.projectionSeries[0].scenario,'STEPS');assert.match(n.projectionSeries[0].method,/Ausgabe 2020/);
+assert.equal(n.timeSeries[0].reference.type,'none');assert.deepEqual(n.healthContext.systemImpacts,[]);
+const curves=e.curves.filter(c=>c.source===source);assert.equal(curves.length,1);assert.equal(curves[0].observationCoverage.spanYears,75);assert.equal(curves[0].observations.length,28);assert.equal(curves[0].projections.length,1);assert.equal(curves[0].displayDerivation.interpolation,false);assert.equal(curves[0].coverageExceptionRuleId,undefined);
+const group=i.systemBoundaries.find(b=>b.id==='eah_material_energy_flows').groups.find(g=>g.id==='metals');assert.equal(group.items.filter(a=>a.source===source).length,1);
+console.log('PASS: eine Rohstahlkurve, 28 unveränderte worldsteel-Werte, 2 STEPS-Werte, keine Interpolation oder Organmarker.');

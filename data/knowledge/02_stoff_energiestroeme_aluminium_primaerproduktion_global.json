@@ -1,0 +1,896 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "status": "reviewed",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "topic": "Stoff- und Energieströme / globale Primäraluminiumproduktion (1950–2050)",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Rohstoffe",
+    "subComponent": "Globale Primäraluminiumproduktion",
+    "contributionRole": "deepening_without_organ",
+    "effectFocus": "Globale Gewinnung neuen Aluminiummetalls als menschlicher Materialdurchsatz"
+  },
+  "corePrinciples": [
+    "Produktion und Verbrauch sind getrennte Größen.",
+    "Recyclingproduktion und Legierungszusätze sind ausgeschlossen.",
+    "Eine Materialmenge ist kein Grenzwert und keine individuelle Dosis."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_raw_materials",
+      "type": "domain_component",
+      "label": "Rohstoffe"
+    },
+    {
+      "id": "flow_primary_aluminium",
+      "type": "system_flow",
+      "label": "Globale Primäraluminiumproduktion"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_raw_materials",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_raw_materials",
+      "to": "flow_primary_aluminium",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "usgs_primary_aluminium",
+      "sourceRefs": [
+        "usgs_ds140_aluminum_2021"
+      ],
+      "design": "Amtliche jährliche Produktionsstatistik einschließlich Schätzungen",
+      "finding": "72 Jahreswerte 1950–2021; 1,49 auf 67,5 Mio. t Al/Jahr.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "aluminium_production_2021",
+      "node": "flow_primary_aluminium",
+      "metric": "Globale Primäraluminiumproduktion",
+      "label": "Primäraluminiumproduktion",
+      "value": 67.5,
+      "unit": "Mio. t Al/Jahr",
+      "year": 2021,
+      "period": "2021",
+      "geography": "Global",
+      "display": "67,5 Mio. t Al/Jahr",
+      "sourceRefs": [
+        "usgs_ds140_aluminum_2021"
+      ]
+    }
+  ],
+  "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Die globale Primäraluminiumproduktion stieg von 1,49 Mio. t im Jahr 1950 auf 67,5 Mio. t im Jahr 2021 (USGS). Das getrennte IAI-B2DS-Szenario aus 2021 erreicht rund 81,46 Mio. t im Jahr 2050. Erfasst wird neues Metall aus Elektrolyse; Recyclingaluminium ist ausgeschlossen.",
+    "primaryMeasurementId": "aluminium_production_2021",
+    "primaryTimeSeriesId": "global_primary_aluminium_production_1950_2021",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "referenceLabel": "Kein Grenzwert · globaler Materialdurchsatz",
+    "finding": "Eine historische Produktionskurve mit einem getrennten, bedingten B2DS-Szenario.",
+    "uncertainty": "Die USGS-Reihe umfasst gemeldete, berechnete und geschätzte Werte. Das IAI-Szenario ist bedingt und stammt aus 2021; es ist keine aktuelle bedingungslose Prognose. Quellenwerte sind nicht identisch: 2021 USGS 67,5 und IAI-Factsheet 2024 67,1 Mio. t. Keine Kalibrierung; keine Vermischung mit späteren BAU- oder 1,5-Grad-Ausgaben."
+  },
+  "pathways": [],
+  "boundaryInteractions": [],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_material_flow",
+    "systemImpacts": [],
+    "bodymapRule": "Keine Organmarker aus globaler Produktionsmenge ableiten."
+  },
+  "knowledgeGaps": [],
+  "navigationRule": {
+    "group": "Rohstoffe",
+    "item": "Globale Primäraluminiumproduktion",
+    "classification": "global_material_throughput_timeseries"
+  },
+  "sources": [
+    {
+      "id": "usgs_ds140_aluminum_2021",
+      "title": "Aluminum – Historical Statistics (Data Series 140), 2021 update",
+      "authors": "U.S. Geological Survey",
+      "publisher": "U.S. Geological Survey",
+      "year": 2023,
+      "url": "https://www.usgs.gov/media/files/aluminum-historical-statistics-data-series-140",
+      "access": "open_full_text"
+    },
+    {
+      "id": "iai_b2ds_production_2021",
+      "title": "B2DS-aligned GHG Emissions by Unit Process – Data and Methodology",
+      "authors": "International Aluminium Institute",
+      "publisher": "International Aluminium Institute",
+      "year": 2021,
+      "url": "https://international-aluminium.org/wp-content/uploads/2021/09/B2DS-aligned-GHG-Emissions-by-Unit-Process-Data-and-Methodology.zip",
+      "access": "open_full_text"
+    }
+  ],
+  "timeSeries": [
+    {
+      "id": "global_primary_aluminium_production_1950_2021",
+      "label": "Globale Primäraluminiumproduktion",
+      "metric": "Globale Primäraluminiumproduktion aus Elektrolyse",
+      "unit": "Mio. t Al/Jahr",
+      "geography": "Global",
+      "period": "1950–2021",
+      "dataNature": "assessed_model_estimate",
+      "worseningDirection": "increase",
+      "reference": {
+        "type": "none"
+      },
+      "sourceRefs": [
+        "usgs_ds140_aluminum_2021"
+      ],
+      "methodNote": "1950–2021: USGS Data Series 140, World production, globale Primärproduktion. Projektion: IAI B2DS, Ausgabe 2021, fünf Stützwerte 2030/2035/2040/2045/2050. Primärmetall aus Elektrolyse; kein Recycling und keine Legierungszusätze. Quellen- und Methodenwechsel zum Szenario, ohne Niveauanpassung.",
+      "uncertainty": "Die USGS-Reihe umfasst gemeldete, berechnete und geschätzte Werte. Das IAI-Szenario ist bedingt und stammt aus 2021; es ist keine aktuelle bedingungslose Prognose. Quellenwerte sind nicht identisch: 2021 USGS 67,5 und IAI-Factsheet 2024 67,1 Mio. t. Keine Kalibrierung; keine Vermischung mit späteren BAU- oder 1,5-Grad-Ausgaben.",
+      "finding": "Produktionsdurchsatz; steigende Werte bedeuten eine größere Menge neu gewonnenen Metalls, keinen quantifizierten Umweltschaden.",
+      "provenance": {
+        "sourceFile": "ds140-aluminum-2021.xlsx",
+        "sourceUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/files/ds140-aluminum-2021.xlsx",
+        "locator": "Zeilen 56–127: 1950–2021; Einheit im Tabellenkopf; eingebettetes Word-Dokument, Abschnitt World Production",
+        "fields": [
+          "Year (Spalte A)",
+          "World production (Spalte P)"
+        ],
+        "extraction": "72 lückenlose Jahreswerte 1950–2021, Blatt Aluminum, Spalte P. Globale Primärproduktion in eingebetteter Methodennotiz bestätigt.",
+        "transformation": "Spalte P / 1 000 000; keine Interpolation oder Glättung"
+      },
+      "contextNotes": [
+        {
+          "id": "aluminium_projection_method",
+          "label": "Quellen- und Methodenwechsel",
+          "value": "USGS → IAI B2DS (2021)",
+          "detail": "1950–2021: USGS Data Series 140, World production, globale Primärproduktion. Projektion: IAI B2DS, Ausgabe 2021, fünf Stützwerte 2030/2035/2040/2045/2050. Primärmetall aus Elektrolyse; kein Recycling und keine Legierungszusätze. Quellen- und Methodenwechsel zum Szenario, ohne Niveauanpassung. Die USGS-Reihe umfasst gemeldete, berechnete und geschätzte Werte. Das IAI-Szenario ist bedingt und stammt aus 2021; es ist keine aktuelle bedingungslose Prognose. Quellenwerte sind nicht identisch: 2021 USGS 67,5 und IAI-Factsheet 2024 67,1 Mio. t. Keine Kalibrierung; keine Vermischung mit späteren BAU- oder 1,5-Grad-Ausgaben.",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021",
+            "iai_b2ds_production_2021"
+          ]
+        }
+      ],
+      "points": [
+        {
+          "year": 1950,
+          "value": 1.49,
+          "sourceValue": 1490000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1951,
+          "value": 1.8,
+          "sourceValue": 1800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1952,
+          "value": 2.06,
+          "sourceValue": 2060000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1953,
+          "value": 2.47,
+          "sourceValue": 2470000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1954,
+          "value": 2.81,
+          "sourceValue": 2810000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1955,
+          "value": 3.14,
+          "sourceValue": 3140000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1956,
+          "value": 3.37,
+          "sourceValue": 3370000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1957,
+          "value": 3.37,
+          "sourceValue": 3370000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1958,
+          "value": 3.51,
+          "sourceValue": 3510000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1959,
+          "value": 4.06,
+          "sourceValue": 4060000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1960,
+          "value": 4.49,
+          "sourceValue": 4490000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1961,
+          "value": 4.7,
+          "sourceValue": 4700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1962,
+          "value": 5.06,
+          "sourceValue": 5060000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1963,
+          "value": 5.32,
+          "sourceValue": 5320000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1964,
+          "value": 5.94,
+          "sourceValue": 5940000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1965,
+          "value": 6.31,
+          "sourceValue": 6310000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1966,
+          "value": 6.88,
+          "sourceValue": 6880000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1967,
+          "value": 7.57,
+          "sourceValue": 7570000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1968,
+          "value": 8.02,
+          "sourceValue": 8020000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1969,
+          "value": 8.97,
+          "sourceValue": 8970000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1970,
+          "value": 9.65,
+          "sourceValue": 9650000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1971,
+          "value": 10.3,
+          "sourceValue": 10300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1972,
+          "value": 11,
+          "sourceValue": 11000000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1973,
+          "value": 12.1,
+          "sourceValue": 12100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1974,
+          "value": 13.2,
+          "sourceValue": 13200000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1975,
+          "value": 12.1,
+          "sourceValue": 12100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1976,
+          "value": 12.6,
+          "sourceValue": 12600000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1977,
+          "value": 13.8,
+          "sourceValue": 13800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1978,
+          "value": 14.1,
+          "sourceValue": 14100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1979,
+          "value": 14.6,
+          "sourceValue": 14600000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1980,
+          "value": 15.4,
+          "sourceValue": 15400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1981,
+          "value": 15.1,
+          "sourceValue": 15100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1982,
+          "value": 13.4,
+          "sourceValue": 13400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1983,
+          "value": 13.9,
+          "sourceValue": 13900000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1984,
+          "value": 15.7,
+          "sourceValue": 15700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1985,
+          "value": 15.4,
+          "sourceValue": 15400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1986,
+          "value": 15.4,
+          "sourceValue": 15400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1987,
+          "value": 16.5,
+          "sourceValue": 16500000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1988,
+          "value": 18.5,
+          "sourceValue": 18500000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1989,
+          "value": 19,
+          "sourceValue": 19000000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1990,
+          "value": 19.3,
+          "sourceValue": 19300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1991,
+          "value": 19.7,
+          "sourceValue": 19700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1992,
+          "value": 19.5,
+          "sourceValue": 19500000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1993,
+          "value": 19.8,
+          "sourceValue": 19800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1994,
+          "value": 19.2,
+          "sourceValue": 19200000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1995,
+          "value": 19.7,
+          "sourceValue": 19700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1996,
+          "value": 20.8,
+          "sourceValue": 20800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1997,
+          "value": 21.7,
+          "sourceValue": 21700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1998,
+          "value": 22.6,
+          "sourceValue": 22600000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 1999,
+          "value": 23.6,
+          "sourceValue": 23600000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2000,
+          "value": 24.3,
+          "sourceValue": 24300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2001,
+          "value": 24.3,
+          "sourceValue": 24300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2002,
+          "value": 26.1,
+          "sourceValue": 26100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2003,
+          "value": 28,
+          "sourceValue": 28000000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2004,
+          "value": 29.9,
+          "sourceValue": 29900000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2005,
+          "value": 31.9,
+          "sourceValue": 31900000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2006,
+          "value": 33.9,
+          "sourceValue": 33900000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2007,
+          "value": 37.9,
+          "sourceValue": 37900000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2008,
+          "value": 39.7,
+          "sourceValue": 39700000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2009,
+          "value": 37.2,
+          "sourceValue": 37200000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2010,
+          "value": 41.8,
+          "sourceValue": 41800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2011,
+          "value": 46.8,
+          "sourceValue": 46800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2012,
+          "value": 49.3,
+          "sourceValue": 49300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2013,
+          "value": 52.2,
+          "sourceValue": 52200000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 54.1,
+          "sourceValue": 54100000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2015,
+          "value": 57.8,
+          "sourceValue": 57800000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2016,
+          "value": 59.4,
+          "sourceValue": 59400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2017,
+          "value": 59.4,
+          "sourceValue": 59400000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2018,
+          "value": 63.3,
+          "sourceValue": 63300000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 62.6,
+          "sourceValue": 62600000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2020,
+          "value": 65,
+          "sourceValue": 65000000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        },
+        {
+          "year": 2021,
+          "value": 67.5,
+          "sourceValue": 67500000,
+          "sourceUnit": "metric tonnes aluminium content",
+          "sourceRefs": [
+            "usgs_ds140_aluminum_2021"
+          ]
+        }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "grade": "qualified_scenario_projection",
+    "method": "Veröffentlichter IAI-B2DS-Produktionspfad, Ausgabe 2021; in der Methodik Primärmetall aus Elektrolyse. Kein eigener Trendfit.",
+    "scope": "Global; fünf Quellenstützwerte 2030–2050."
+  },
+  "projectionSeries": [
+    {
+      "id": "global_primary_aluminium_iai_b2ds_2030_2050",
+      "observedSeriesId": "global_primary_aluminium_production_1950_2021",
+      "scenario": "B2DS",
+      "scenarioLabel": "IAI B2DS · Ausgabe 2021",
+      "period": "2030–2050",
+      "unit": "Mio. t Al/Jahr",
+      "method": "IAI Production (Mt), Primary, B2DS-Spalte Q; Szenarionotiz: Average of BLS and BOS, used in the pathways documents. Methodik Abschnitt 2.0 definiert Primäraluminium als flüssiges Metall aus Elektrolyse.",
+      "uncertainty": "Die USGS-Reihe umfasst gemeldete, berechnete und geschätzte Werte. Das IAI-Szenario ist bedingt und stammt aus 2021; es ist keine aktuelle bedingungslose Prognose. Quellenwerte sind nicht identisch: 2021 USGS 67,5 und IAI-Factsheet 2024 67,1 Mio. t. Keine Kalibrierung; keine Vermischung mit späteren BAU- oder 1,5-Grad-Ausgaben.",
+      "sourceRefs": [
+        "iai_b2ds_production_2021"
+      ],
+      "provenance": {
+        "sourceFile": "B2DS-aligned GHG Emissions by Unit Process - Data.xlsx",
+        "sourceUrl": "https://international-aluminium.org/wp-content/uploads/2021/09/B2DS-aligned-GHG-Emissions-by-Unit-Process-Data-and-Methodology.zip",
+        "locator": "Sheet1!Q22,Q34,Q46,Q58,Q70; Spalte Q B2DS; Zeile Primary in den Jahrblöcken 2030/2035/2040/2045/2050. Szenarionotizen A80:A83.",
+        "fields": [
+          "Primary (Spalte M)",
+          "B2DS (Spalte Q)",
+          "IAI Production (Mt)"
+        ],
+        "extraction": "Fünf numerische Quellenwerte aus den zwischengespeicherten XLSX-Zellen; BLS/BOS/BRS nicht beigemischt.",
+        "transformation": "Mt = Mio. t; keine numerische Umrechnung, Glättung, Interpolation oder Kalibrierung."
+      },
+      "points": [
+        {
+          "year": 2030,
+          "value": 65.83549656925233,
+          "sourceValue": 65.83549656925233,
+          "sourceUnit": "Mt",
+          "sourceRefs": [
+            "iai_b2ds_production_2021"
+          ]
+        },
+        {
+          "year": 2035,
+          "value": 70.62168292171813,
+          "sourceValue": 70.62168292171813,
+          "sourceUnit": "Mt",
+          "sourceRefs": [
+            "iai_b2ds_production_2021"
+          ]
+        },
+        {
+          "year": 2040,
+          "value": 77.26412240615268,
+          "sourceValue": 77.26412240615268,
+          "sourceUnit": "Mt",
+          "sourceRefs": [
+            "iai_b2ds_production_2021"
+          ]
+        },
+        {
+          "year": 2045,
+          "value": 80.59892450562849,
+          "sourceValue": 80.59892450562849,
+          "sourceUnit": "Mt",
+          "sourceRefs": [
+            "iai_b2ds_production_2021"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 81.45976102686238,
+          "sourceValue": 81.45976102686238,
+          "sourceUnit": "Mt",
+          "sourceRefs": [
+            "iai_b2ds_production_2021"
+          ]
+        }
+      ]
+    }
+  ]
+}

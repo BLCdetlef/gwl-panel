@@ -293,7 +293,7 @@ window.GWL_DATA = {
     },
     {
       id: "materials-energy",
-      label: "Rohstoffe",
+      label: "Stoff- und Energieströme",
       enabled: true,
       framework: "eah_extension",
       frameworkLabel: "Ergänzender Einflussbereich",

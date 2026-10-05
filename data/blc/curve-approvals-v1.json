@@ -4,6 +4,17 @@
   "approvedCurves": [
     {
       "kind": "knowledge",
+      "source": "data/knowledge/02_stoff_energiestroeme_aluminium_primaerproduktion_global.json",
+      "seriesId": "global_primary_aluminium_production_1950_2021",
+      "boundaryId": "materials-energy",
+      "itemId": "global-primary-aluminium-production",
+      "curveId": "knowledge:data/knowledge/02_stoff_energiestroeme_aluminium_primaerproduktion_global.json#global_primary_aluminium_production_1950_2021",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Aufnahme vom Benutzer am 05.10.2026 beauftragt. USGS 1950–2021, separate IAI-B2DS-Projektion aus 2021 mit fünf Quellenstützwerten 2030–2050; kein Recycling und keine Kalibrierung."
+    },
+    {
+      "kind": "knowledge",
       "source": "data/knowledge/02_stoff_energiestroeme_kupfer_global.json",
       "seriesId": "global_refined_copper_usage_1960_2024",
       "boundaryId": "materials-energy",
@@ -241,6 +252,29 @@
       "curveId": "knowledge:data/knowledge/gwl_wind_energy_pilot_v0.1.json#global_wind_tes_1965_2025",
       "curveRole": "deep_dive",
       "status": "approved"
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/02_stoff_energiestroeme_sand_gebaeude_global.json",
+      "seriesId": "global_building_sand_usage_globus_1970_2019",
+      "boundaryId": "materials-energy",
+      "itemId": "global-building-sand-usage",
+      "curveId": "knowledge:data/knowledge/02_stoff_energiestroeme_sand_gebaeude_global.json#global_building_sand_usage_globus_1970_2019",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "coverageExceptionRuleId": "blc_documented_single_year_coverage_exception",
+      "note": "Vom Benutzer am 2026-10-05 ausdrücklich freigegebene Einjahresausnahme: 1970–2019 umfasst 50 jährliche Modellwerte, aber 49 Jahre Zeitabstand. Zukunftswerte zählen nicht zur Mindestabdeckung. Keine Ergänzung früher Initialisierungswerte und keine erfundene historische Rekonstruktion."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/02_stoff_energiestroeme_stahlproduktion_global.json",
+      "seriesId": "global_crude_steel_production_worldsteel_1950_2025",
+      "boundaryId": "materials-energy",
+      "itemId": "global-crude-steel-production",
+      "curveId": "knowledge:data/knowledge/02_stoff_energiestroeme_stahlproduktion_global.json#global_crude_steel_production_worldsteel_1950_2025",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Worldsteel-Ausgabe 2026; 75 Jahre, 28 publizierte Stützwerte. Genau ein getrenntes IEA-STEPS-Szenario, Ausgabe 2020, Rohstahlproduktion 2030/2050. Keine Interpolation oder Kalibrierung."
     }
   ]
 }

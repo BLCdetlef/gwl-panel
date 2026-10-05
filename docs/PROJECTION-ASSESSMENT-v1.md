@@ -17,6 +17,8 @@ Liegen veröffentlichte Fachszenarien oder belastbare Einflussfaktoren vor, die 
 
 | Messreihe | Bewertung | Entscheidung |
 |---|---|---|
+| Globale Rohstahlproduktion | tragfähig mit Quellenwechsel; älteres Szenario | Worldsteel-Ausgabe 2026 für 1950–2025; IEA STEPS, Ausgabe 2020, absolute Rohstahlproduktion 2030/2050. Gleiche Größe einschließlich schrottbasierter Routen, keine Kalibrierung; Szenarioalter und revidierter Basiswert erläutert. |
+| Globaler Sandverbrauch für Gebäude | tragfähig innerhalb desselben Modells | GloBUS v1.0: historische Modellschätzung 1970–2019 und Baseline-Szenario 2020–2060; gleiche Gebäudeabgrenzung, Anschluss +1,67 %, keine Kalibrierung. Aufnahme mit ausdrücklich freigegebener Ausnahme für 49 Jahre historische Abdeckung. Kein Gesamtverbrauch des Bauwesens. |
 | Globaler Verbrauch von raffiniertem Kupfer | tragfähig mit dokumentiertem Quellenwechsel | ICSG 1960–2023 und historischer IEA-Basiswert 2024; ausschließlich IEA STEPS (Ausgabe 2025) für 2030, 2040 und 2050, keine erfundenen Zwischenwerte oder Kalibrierung |
 | Globale Energieversorgung aus Öl, Kohle, Erdgas, Wind und Solar | tragfähig, quellenübergreifend | WEO 2025 CPS, STEPS und NZE für 2035, 2040 und 2050; getrennt von der historischen Energiereihe |
 | Globales atmosphärisches CO₂ | tragfähig, szenarioabhängig | IPCC-AR6-Pfade SSP1-1.9 bis SSP5-8.5 für publizierte Dekaden 2030–2090 |
@@ -64,3 +66,5 @@ Fachliche Mindestvoraussetzung ist eine numerische Beobachtungsreihe mit mindest
 ## Darstellung von Projektionen
 
 Jede Projektion wird grundsätzlich mit einer gestrichelten Verbindung vom letzten historischen Hauptreihenwert zum ersten späteren Szenariowert angeschlossen. Diese Verbindung ist eine Darstellungshilfe, kein zusätzlicher Datenpunkt und keine neue Modellrechnung. Sie wird nur gezeigt, wenn Hauptreihe und Projektion sichtbar sind. Bei überlappenden Zeiträumen entsteht keine rückwärts gerichtete Verbindung. Direktlinks aus dem GWL öffnen zunächst nur das Diagramm; Kurvendetails erscheinen nach einer ausdrücklichen Auswahl.
+
+Aluminium: USGS-Primärproduktion 1950–2021; IAI B2DS, Ausgabe 2021, Sheet1-Spalte Q, fünf Stützwerte 2030–2050. `qualified_scenario_projection`; Primärmetall aus Elektrolyse, kein Recycling. Älterer Modelljahrgang und Quellenunterschiede offen benannt; keine Kalibrierung oder jährliche Interpolation.

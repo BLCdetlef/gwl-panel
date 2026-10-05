@@ -1,0 +1,414 @@
+{
+  "format": "gwl-knowledge-network-v1.3",
+  "version": "0.1",
+  "status": "reviewed",
+  "schemaRef": "data/schema/node-level-types-v1.3-draft.json",
+  "topic": "Stoff- und Energieströme / globale Rohstahlproduktion (1950–2050)",
+  "entry": {
+    "systemBoundary": "Stoff- und Energieströme",
+    "domainComponent": "Rohstoffe",
+    "subComponent": "Globale Rohstahlproduktion",
+    "contributionRole": "deepening_without_organ",
+    "effectFocus": "Globale Rohstahlproduktion als menschlicher Materialdurchsatz"
+  },
+  "corePrinciples": [
+    "Rohstahlproduktion, Fertigstahl und Stahlverbrauch sind getrennte Größen.",
+    "Primäre und schrottbasierte Routen sind enthalten.",
+    "Globale Materialmenge ist kein Grenzwert und keine individuelle Dosis."
+  ],
+  "nodes": [
+    {
+      "id": "eah_material_energy_flows",
+      "type": "eah_system_boundary",
+      "label": "Stoff- und Energieströme",
+      "framework": "eah_extension"
+    },
+    {
+      "id": "component_raw_materials",
+      "type": "domain_component",
+      "label": "Rohstoffe"
+    },
+    {
+      "id": "flow_crude_steel",
+      "type": "system_flow",
+      "label": "Globale Rohstahlproduktion"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eah_material_energy_flows",
+      "to": "component_raw_materials",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    },
+    {
+      "from": "component_raw_materials",
+      "to": "flow_crude_steel",
+      "relationType": "contains",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "studyEvidence": [
+    {
+      "id": "worldsteel_crude_steel",
+      "sourceRefs": [
+        "worldsteel_2026"
+      ],
+      "design": "Globale Produktionsstatistik des Branchenverbands einschließlich Revisionen",
+      "finding": "28 Stützwerte 1950–2025; 189 auf 1.849 Mio. t/Jahr.",
+      "evidenceStatus": "strong"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "crude_steel_2025",
+      "node": "flow_crude_steel",
+      "label": "Globale Rohstahlproduktion",
+      "metric": "Globale Rohstahlproduktion",
+      "value": 1849,
+      "unit": "Mio. t Rohstahl/Jahr",
+      "year": 2025,
+      "period": "2025",
+      "geography": "Global",
+      "display": "1.849 Mio. t Rohstahl/Jahr",
+      "sourceRefs": [
+        "worldsteel_2026"
+      ]
+    }
+  ],
+  "presentation": {
+    "summaryCardMode": "narrative",
+    "effectSummary": "Die globale Rohstahlproduktion steigt von 189 Mio. t/Jahr (1950) auf 1.849 Mio. t/Jahr (2025). Das getrennte IEA-STEPS-Szenario aus 2020 enthält 2.101 Mio. t für 2030 und 2.535 Mio. t für 2050. Erfasst sind primäre und schrottbasierte Rohstahlrouten.",
+    "primaryMeasurementId": "crude_steel_2025",
+    "primaryTimeSeriesId": "global_crude_steel_production_worldsteel_1950_2025",
+    "gwlTimeSeriesDisplay": "link_only",
+    "hideTimeSeriesInKnowledgeView": true,
+    "referenceLabel": "Kein Grenzwert · globaler Materialdurchsatz",
+    "finding": "Eine Rohstahlkurve mit getrenntem STEPS-Szenario und dokumentiertem Quellenwechsel.",
+    "uncertainty": "Historische Werte sind gerundete Verbandsstatistiken mit Meldungen, Schätzungen und Revisionen. Vor 2011 sind überwiegend Fünfjahresstützwerte publiziert; fehlende Jahreswerte werden nicht ergänzt. Das IEA-Szenario stammt aus 2020 und ist keine aktuelle Prognose. IEA-Basiswert 2019: 1.869 Mio. t, revidierter worldsteel-Wert 2019: 1.879 Mio. t. Primäre und schrottbasierte Rohstahlrouten sind enthalten; Fertigstahl, Endverbrauch und Primärproduktion allein sind andere Größen."
+  },
+  "pathways": [],
+  "boundaryInteractions": [],
+  "healthContext": {
+    "bodymapStatus": "not_applicable_from_global_material_flow",
+    "systemImpacts": [],
+    "bodymapRule": "Keine Organmarker aus globaler Produktionsmenge ableiten."
+  },
+  "knowledgeGaps": [],
+  "navigationRule": {
+    "group": "Rohstoffe",
+    "item": "Globale Rohstahlproduktion",
+    "classification": "global_material_throughput_timeseries"
+  },
+  "sources": [
+    {
+      "id": "worldsteel_2026",
+      "title": "World Steel in Figures 2026",
+      "authors": "World Steel Association",
+      "publisher": "worldsteel",
+      "year": 2026,
+      "url": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+      "access": "open_full_text"
+    },
+    {
+      "id": "iea_steel_roadmap_2020",
+      "title": "Contribution of material efficiency strategies to reductions in global steel demand, 2019–2050; Iron and Steel Technology Roadmap",
+      "authors": "International Energy Agency",
+      "publisher": "IEA",
+      "year": 2020,
+      "url": "https://www.iea.org/data-and-statistics/charts/contribution-of-material-efficiency-strategies-to-reductions-in-global-steel-demand-2019-2050",
+      "access": "open_full_text"
+    }
+  ],
+  "timeSeries": [
+    {
+      "id": "global_crude_steel_production_worldsteel_1950_2025",
+      "label": "Globale Rohstahlproduktion",
+      "metric": "Globale Rohstahlproduktion, alle Prozessrouten",
+      "unit": "Mio. t Rohstahl/Jahr",
+      "geography": "Global",
+      "period": "1950–2025",
+      "dataNature": "observed",
+      "worseningDirection": "increase",
+      "reference": {
+        "type": "none"
+      },
+      "sourceRefs": [
+        "worldsteel_2026"
+      ],
+      "methodNote": "1950–2025: World Steel in Figures 2026, globale Rohstahlproduktion; 28 publizierte Stützwerte. 2030/2050: IEA STEPS, Iron and Steel Technology Roadmap, Ausgabe 2020. Die IEA definiert demand in diesem Diagramm ausdrücklich als globale Rohstahlproduktion. Quellen- und Methodenwechsel von Produktionsstatistik zu bedingtem Szenario. Keine Kalibrierung; Anschluss 2025 → 2030: +13,63 % über fünf Jahre, kein unmittelbarer Niveausprung im selben Jahr.",
+      "uncertainty": "Historische Werte sind gerundete Verbandsstatistiken mit Meldungen, Schätzungen und Revisionen. Vor 2011 sind überwiegend Fünfjahresstützwerte publiziert; fehlende Jahreswerte werden nicht ergänzt. Das IEA-Szenario stammt aus 2020 und ist keine aktuelle Prognose. IEA-Basiswert 2019: 1.869 Mio. t, revidierter worldsteel-Wert 2019: 1.879 Mio. t. Primäre und schrottbasierte Rohstahlrouten sind enthalten; Fertigstahl, Endverbrauch und Primärproduktion allein sind andere Größen.",
+      "finding": "Materialdurchsatz; keine quantifizierte Umwelt- oder Gesundheitswirkung.",
+      "provenance": {
+        "sourceFile": "World Steel in Figures 2026 (HTML)",
+        "sourceUrl": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+        "locator": "World crude steel production 1950 to 2025; Tabelle Years / World",
+        "fields": [
+          "Years",
+          "World (million tonnes)"
+        ],
+        "extraction": "28 publizierte Stützwerte; 1950–2010 überwiegend Fünfjahresschritte, 2011–2025 jährlich. Einheitlich Ausgabe 2026 einschließlich Revisionen.",
+        "transformation": "Keine Umrechnung, Glättung oder Interpolation; nur Rohstahl-Welttabelle."
+      },
+      "contextNotes": [
+        {
+          "id": "steel_projection_method",
+          "label": "Quellen- und Methodenwechsel",
+          "value": "worldsteel → IEA STEPS (2020)",
+          "detail": "1950–2025: World Steel in Figures 2026, globale Rohstahlproduktion; 28 publizierte Stützwerte. 2030/2050: IEA STEPS, Iron and Steel Technology Roadmap, Ausgabe 2020. Die IEA definiert demand in diesem Diagramm ausdrücklich als globale Rohstahlproduktion. Quellen- und Methodenwechsel von Produktionsstatistik zu bedingtem Szenario. Keine Kalibrierung; Anschluss 2025 → 2030: +13,63 % über fünf Jahre, kein unmittelbarer Niveausprung im selben Jahr. Historische Werte sind gerundete Verbandsstatistiken mit Meldungen, Schätzungen und Revisionen. Vor 2011 sind überwiegend Fünfjahresstützwerte publiziert; fehlende Jahreswerte werden nicht ergänzt. Das IEA-Szenario stammt aus 2020 und ist keine aktuelle Prognose. IEA-Basiswert 2019: 1.869 Mio. t, revidierter worldsteel-Wert 2019: 1.879 Mio. t. Primäre und schrottbasierte Rohstahlrouten sind enthalten; Fertigstahl, Endverbrauch und Primärproduktion allein sind andere Größen.",
+          "sourceRefs": [
+            "worldsteel_2026",
+            "iea_steel_roadmap_2020"
+          ]
+        }
+      ],
+      "points": [
+        {
+          "year": 1950,
+          "value": 189,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1955,
+          "value": 270,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1960,
+          "value": 347,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1965,
+          "value": 456,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1970,
+          "value": 595,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1975,
+          "value": 644,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1980,
+          "value": 717,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1985,
+          "value": 719,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1990,
+          "value": 770,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 1995,
+          "value": 753,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2000,
+          "value": 850,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2005,
+          "value": 1148,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2010,
+          "value": 1435,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2011,
+          "value": 1540,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2012,
+          "value": 1563,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2013,
+          "value": 1654,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2014,
+          "value": 1676,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2015,
+          "value": 1626,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2016,
+          "value": 1634,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2017,
+          "value": 1738,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2018,
+          "value": 1831,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2019,
+          "value": 1879,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2020,
+          "value": 1883,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2021,
+          "value": 1963,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2022,
+          "value": 1889,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2023,
+          "value": 1904,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2024,
+          "value": 1887,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        },
+        {
+          "year": 2025,
+          "value": 1849,
+          "sourceRefs": [
+            "worldsteel_2026"
+          ]
+        }
+      ]
+    }
+  ],
+  "projectionAssessment": {
+    "grade": "qualified_scenario_projection",
+    "method": "Veröffentlichte absolute IEA-STEPS-Produktionswerte aus 2020; keine Trendfortschreibung.",
+    "scope": "Global; Rohstahl, zwei Stützwerte 2030/2050"
+  },
+  "projectionSeries": [
+    {
+      "id": "global_crude_steel_iea_steps_2030_2050",
+      "observedSeriesId": "global_crude_steel_production_worldsteel_1950_2025",
+      "scenario": "STEPS",
+      "scenarioLabel": "IEA STEPS · Ausgabe 2020",
+      "period": "2030–2050",
+      "unit": "Mio. t Rohstahl/Jahr",
+      "method": "1950–2025: World Steel in Figures 2026, globale Rohstahlproduktion; 28 publizierte Stützwerte. 2030/2050: IEA STEPS, Iron and Steel Technology Roadmap, Ausgabe 2020. Die IEA definiert demand in diesem Diagramm ausdrücklich als globale Rohstahlproduktion. Quellen- und Methodenwechsel von Produktionsstatistik zu bedingtem Szenario. Keine Kalibrierung; Anschluss 2025 → 2030: +13,63 % über fünf Jahre, kein unmittelbarer Niveausprung im selben Jahr.",
+      "uncertainty": "Historische Werte sind gerundete Verbandsstatistiken mit Meldungen, Schätzungen und Revisionen. Vor 2011 sind überwiegend Fünfjahresstützwerte publiziert; fehlende Jahreswerte werden nicht ergänzt. Das IEA-Szenario stammt aus 2020 und ist keine aktuelle Prognose. IEA-Basiswert 2019: 1.869 Mio. t, revidierter worldsteel-Wert 2019: 1.879 Mio. t. Primäre und schrottbasierte Rohstahlrouten sind enthalten; Fertigstahl, Endverbrauch und Primärproduktion allein sind andere Größen.",
+      "sourceRefs": [
+        "iea_steel_roadmap_2020"
+      ],
+      "provenance": {
+        "sourceFile": "IEA-Diagramm, data-chart-chartoptions",
+        "sourceUrl": "https://www.iea.org/data-and-statistics/charts/contribution-of-material-efficiency-strategies-to-reductions-in-global-steel-demand-2019-2050",
+        "locator": "Erstes data-chart-chartoptions: series[name=STEPS].data[1] = 2030 und data[5] = 2050; Jahresgruppen über xAxis.plotLines.label.text",
+        "fields": [
+          "STEPS",
+          "Mt/year",
+          "2030",
+          "2050"
+        ],
+        "extraction": "Zwei absolute Rohstahl-Produktionswerte aus eingebetteter Diagrammkonfiguration; keine Wasserfall-Differenzen oder SDS-Werte übernommen.",
+        "transformation": "Mt/year = Mio. t/Jahr; keine Digitalisierung, Interpolation, Kalibrierung oder eigene Fortschreibung."
+      },
+      "points": [
+        {
+          "year": 2030,
+          "value": 2101,
+          "sourceRefs": [
+            "iea_steel_roadmap_2020"
+          ]
+        },
+        {
+          "year": 2050,
+          "value": 2535,
+          "sourceRefs": [
+            "iea_steel_roadmap_2020"
+          ]
+        }
+      ]
+    }
+  ]
+}
