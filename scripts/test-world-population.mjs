@@ -33,4 +33,13 @@ assert.deepEqual(curve.historicalReconstruction.map(h => h.points.map(p => [p.ye
 assert.deepEqual(curve.projections[0].points.map(p => [p.year, p.value]), projection.points.map(p => [p.year, p.value]));
 assert.equal(curve.reference, undefined);
 assert.equal(curve.displayDerivation.interpolation, false);
+const csvLines = (await fs.readFile(new URL('../research/curve-candidates/world-population/population-with-projections.csv', import.meta.url), 'utf8')).split(/\r?\n/);
+for (const segment of [{points: curve.observations, provenance: curve.observationProvenance}, ...curve.historicalReconstruction, ...curve.projections]) {
+  const example = segment.provenance.valueExample;
+  assert.ok(example);
+  assert.equal(csvLines[example.sourceLine - 1], example.sourceRow);
+  assert.equal(csvLines[0], example.sourceHeader);
+  assert.equal(Number(example.sourceRow.split(',')[example.sourceColumnNumber - 1]), example.sourceValue);
+  assert.equal(segment.points.find(p => p.year === example.year).value, example.sourceValue / example.divisor);
+}
 console.log('Weltbevölkerung geprüft: Originalwerte, Einheiten, Zeittrennung, Quellenwechsel, Index und Export ohne Grenzbewertung oder Organmarker.');

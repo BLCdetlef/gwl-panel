@@ -152,7 +152,19 @@
           "Population"
         ],
         "extraction": "Nur publizierte World-Zeilen und der angegebene Zeitraum; keine eigene Länderaggregation.",
-        "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung."
+        "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung.",
+        "valueExample": {
+          "year": 1990,
+          "sourceValue": 5327803106,
+          "sourceUnit": "Menschen",
+          "divisor": 1000000000,
+          "sourceLine": 77290,
+          "sourceColumn": "Population",
+          "sourceColumnNumber": 5,
+          "sourceHeader": "Entity,Code,Year,Population (projections) (Projected),Population",
+          "sourceRow": "World,OWID_WRL,1990,,5327803106",
+          "retrievedAt": "2026-10-07"
+        }
       },
       "methodNote": "1700–1799: publizierte HYDE-3.3-Stützwerte; 1800–1949: Gapminder v7, Weltaggregation durch OWID; 1950–2023: UN WPP 2024, Bevölkerung zur Jahresmitte; 2024–2100: UN WPP 2024, mittlere Projektion. Bezug der World-Reihen über OWID, keine eigene Länderaggregation. Alle Abschnitte ohne zeitliche Überlappung; nur Originalstützwerte, Umrechnung in Milliarden Menschen.",
       "uncertainty": "Demografische Schätzungen, keine jährliche Vollzählung. Quellenwechsel 1800 und 1950 ohne Kalibrierung. Bevölkerungszahl allein beschreibt weder Umweltbelastung noch eine ökologische Tragfähigkeitsgrenze oder individuelle Gesundheitswirkung.",
@@ -194,7 +206,19 @@
               "Population"
             ],
             "extraction": "Nur publizierte World-Zeilen und der angegebene Zeitraum; keine eigene Länderaggregation.",
-            "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung."
+            "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung.",
+            "valueExample": {
+              "year": 1700,
+              "sourceValue": 595456896,
+              "sourceUnit": "Menschen",
+              "divisor": 1000000000,
+              "sourceLine": 77090,
+              "sourceColumn": "Population",
+              "sourceColumnNumber": 5,
+              "sourceHeader": "Entity,Code,Year,Population (projections) (Projected),Population",
+              "sourceRow": "World,OWID_WRL,1700,,595456896",
+              "retrievedAt": "2026-10-07"
+            }
           },
           "points": [
             {
@@ -299,7 +323,19 @@
               "Population"
             ],
             "extraction": "Nur publizierte World-Zeilen und der angegebene Zeitraum; keine eigene Länderaggregation.",
-            "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung."
+            "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung.",
+            "valueExample": {
+              "year": 1900,
+              "sourceValue": 1627273655,
+              "sourceUnit": "Menschen",
+              "divisor": 1000000000,
+              "sourceLine": 77200,
+              "sourceColumn": "Population",
+              "sourceColumnNumber": 5,
+              "sourceHeader": "Entity,Code,Year,Population (projections) (Projected),Population",
+              "sourceRow": "World,OWID_WRL,1900,,1627273655",
+              "retrievedAt": "2026-10-07"
+            }
           },
           "points": [
             {
@@ -2131,7 +2167,19 @@
           "Population (projections) (Projected)"
         ],
         "extraction": "Nur publizierte World-Zeilen und der angegebene Zeitraum; keine eigene Länderaggregation.",
-        "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung."
+        "transformation": "Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung.",
+        "valueExample": {
+          "year": 2100,
+          "sourceValue": 10180160744,
+          "sourceUnit": "Menschen",
+          "divisor": 1000000000,
+          "sourceLine": 77400,
+          "sourceColumn": "Population (projections) (Projected)",
+          "sourceColumnNumber": 4,
+          "sourceHeader": "Entity,Code,Year,Population (projections) (Projected),Population",
+          "sourceRow": "World,OWID_WRL,2100,10180160744,",
+          "retrievedAt": "2026-10-07"
+        }
       },
       "points": [
         {

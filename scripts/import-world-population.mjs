@@ -17,6 +17,14 @@ const sourceUrl = 'https://ourworldindata.org/grapher/population-with-projection
 const display = value => `${value.toLocaleString('de-DE', { maximumFractionDigits: 3 })} ${unit}`;
 const points = (start, end, field, ref) => rows.filter(row => row.year >= start && row.year <= end && row[field] !== null).map(row => ({year: row.year, value: row[field] / 1e9, display: display(row[field] / 1e9), sourceRefs: [ref]}));
 const provenance = (start, end, column) => ({sourceFile: 'research/curve-candidates/world-population/population-with-projections.csv', sourceUrl, locator: `Entity=World, Code=OWID_WRL, Year=${start}–${end}; ${column}. Metadaten: population-with-projections.metadata.json, Download 07.10.2026.`, fields: ['Entity', 'Code', 'Year', column], extraction: 'Nur publizierte World-Zeilen und der angegebene Zeitraum; keine eigene Länderaggregation.', transformation: 'Personenzahl / 1.000.000.000 = Milliarden Menschen. Keine Interpolation, Glättung oder Kalibrierung.'});
+const exampleFor = (year, column) => {
+  const lines = csv.split(/\r?\n/);
+  const index = lines.findIndex(line => line.startsWith(`World,OWID_WRL,${year},`));
+  assert.ok(index >= 1);
+  const values = lines[index].split(',');
+  const columnNumber = column === 'Population' ? 5 : 4;
+  return {year, sourceValue: Number(values[columnNumber - 1]), sourceUnit: 'Menschen', divisor: 1e9, sourceLine: index + 1, sourceColumn: column, sourceColumnNumber: columnNumber, sourceHeader: lines[0], sourceRow: lines[index], retrievedAt: '2026-10-07'};
+};
 const observed = points(1950, 2023, 'past', 'un_wpp_2024');
 const projected = points(2024, 2100, 'future', 'un_wpp_2024');
 assert.equal(observed.length, 74);
@@ -49,6 +57,10 @@ const network = {
   projectionAssessment: {grade: 'qualified_scenario_projection', method: 'Publizierte mittlere UN-Projektion, WPP 2024.', scope: 'Global; 2024–2100'},
   projectionSeries: [{id: 'world_population_un_medium_2024_2100', observedSeriesId: seriesId, scenario: 'UN_MEDIUM', scenarioLabel: 'UN WPP 2024 · mittlere Projektion', period: '2024–2100', unit, sourceRefs: ['un_wpp_2024'], method: 'Publizierte UN-Medium-Variante via OWID. Keine eigene Trendfortschreibung.', uncertainty: 'Bedingte demografische Projektion. Der verwendete OWID-Download enthält ausschließlich den mittleren Pfad und keine numerischen probabilistischen Intervallgrenzen; daher wird kein Unsicherheitsband erzeugt.', provenance: provenance(2024, 2100, 'Population (projections) (Projected)'), points: projected}]
 };
+network.timeSeries[0].provenance.valueExample = exampleFor(1990, 'Population');
+history[0].provenance.valueExample = exampleFor(1700, 'Population');
+history[1].provenance.valueExample = exampleFor(1900, 'Population');
+network.projectionSeries[0].provenance.valueExample = exampleFor(2100, 'Population (projections) (Projected)');
 await write(source, network);
 const index = await read('data/knowledge/knowledge-index.json');
 const boundary = index.systemBoundaries.find(b => b.id === 'eah_tech_social_environment');

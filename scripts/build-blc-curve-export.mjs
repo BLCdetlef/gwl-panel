@@ -30,7 +30,12 @@ function normalizeProvenance(provenance) {
     ...(cleanText(provenance.locator) ? { locator: provenance.locator } : {}),
     ...(cleanStringArray(provenance.fields)?.length ? { fields: provenance.fields } : {}),
     ...(cleanText(provenance.extraction) ? { extraction: provenance.extraction } : {}),
-    ...(cleanText(provenance.transformation) ? { transformation: provenance.transformation } : {})
+    ...(cleanText(provenance.transformation) ? { transformation: provenance.transformation } : {}),
+    ...(provenance.valueExample && Number.isFinite(provenance.valueExample.year)
+      && Number.isFinite(provenance.valueExample.sourceValue) && provenance.valueExample.divisor > 0
+      && Number.isInteger(provenance.valueExample.sourceLine) && provenance.valueExample.sourceLine > 1
+      && cleanText(provenance.valueExample.sourceRow)
+      ? { valueExample: provenance.valueExample } : {})
   };
   return Object.keys(normalized).length ? normalized : undefined;
 }
