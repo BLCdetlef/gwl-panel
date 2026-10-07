@@ -33,8 +33,8 @@ function normalizeProvenance(provenance) {
     ...(cleanText(provenance.transformation) ? { transformation: provenance.transformation } : {}),
     ...(provenance.valueExample && Number.isFinite(provenance.valueExample.year)
       && Number.isFinite(provenance.valueExample.sourceValue) && provenance.valueExample.divisor > 0
-      && Number.isInteger(provenance.valueExample.sourceLine) && provenance.valueExample.sourceLine > 1
-      && cleanText(provenance.valueExample.sourceRow)
+      && ((Number.isInteger(provenance.valueExample.sourceLine) && provenance.valueExample.sourceLine > 1
+        && cleanText(provenance.valueExample.sourceRow)) || cleanText(provenance.valueExample.sourceLocator))
       ? { valueExample: provenance.valueExample } : {})
   };
   return Object.keys(normalized).length ? normalized : undefined;

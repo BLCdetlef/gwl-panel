@@ -280,6 +280,7 @@
       "label": "Globaler Waldanteil relativ zur potenziellen natürlichen Waldfläche",
       "unit": "%",
       "dataStartYear": 1992,
+      "dataNature": "assessed_model_estimate",
       "dataEndYear": 2022,
       "temporalResolution": "annual",
       "observationMethod": "Remote Sensing / Datenintegration",
@@ -333,7 +334,17 @@
           "2022 assessment value → gerundeter aktueller Wert"
         ],
         "extraction": "Näherungsweise abgelesen wurden die acht Stützjahre 1992, 1995, 2000, 2005, 2010, 2015, 2020 und 2022.",
-        "transformation": "1992–2020 sind grafisch abgelesene Näherungswerte; 2022 ist der berichtete Wert von rund 59 %. Keine Interpolation oder rechnerische Harmonisierung mit der historischen Rekonstruktion."
+        "transformation": "1992–2020 sind grafisch abgelesene Näherungswerte; 2022 ist der berichtete Wert von rund 59 %. Keine Interpolation oder rechnerische Harmonisierung mit der historischen Rekonstruktion.",
+        "valueExample": {
+          "year": 1992,
+          "sourceValue": 60.2,
+          "sourceUnit": "%",
+          "divisor": 1,
+          "sourceLocator": "Planetary Health Check 2025, Seite 95 (auch PDF-Seite 95), Figure 28 „Global recent forest decline“: Teilgrafik oben links „Global Forest Extent (%)“, linker Beginn der grünen globalen Kurve bei 1992, knapp oberhalb der 60-%-Linie. Daraus wurde für das GWL-Panel näherungsweise 60,2 % abgelesen. Dieser Wert steht nicht als Zahl in einer Tabellen- oder CSV-Zeile der Quelle. Die Skalenmarken 58 %, 60 % und 62 % beziehen sich auf den Anteil an der potenziellen natürlichen Waldfläche; 75 % ist der getrennte Grenzwert. Gegenprüfung der Abbildung am 07.10.2026.",
+          "sourceUrl": "https://publications.pik-potsdam.de/pubman/item/item_32589_1/component/file_32845/PlanetaryHealthCheck2025.pdf#page=95",
+          "axisNote": "BLC zeigt für diese Waldkurve einen festen Bezugsrahmen von 0–100 % der potenziellen natürlichen Waldfläche. Der Diagrammwert 60,2 % ist eine grafisch abgelesene Näherung; das Zeichen ≈ im Tooltip kennzeichnet diese begrenzte Genauigkeit.",
+          "calculationText": "Grafisches Ablesen: Jahr 1992 am linken Beginn der globalen Kurve → Lage knapp oberhalb der 60-%-Skalenlinie → näherungsweise 60,2 %. Der Quellenmaßstab ist bereits Prozent, daher keine Einheitenumrechnung: ≈ 60,2 % → gespeicherter JSON-Wert 60.2 → Tooltip „≈ 60,2 %“. Die zugrunde liegende Definition lautet Waldfläche ÷ potenzielle natürliche Waldfläche × 100; die dafür benötigten Flächensummen werden hier nicht aus der Abbildung rekonstruiert. Keine Interpolation, Glättung oder Anpassung an die historische Waldrekonstruktion."
+        }
       },
       "historicalSeries": [
         {
