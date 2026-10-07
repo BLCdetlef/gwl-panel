@@ -63,6 +63,16 @@ assert.equal(curve.displayObservations.find(point => point.year === example.year
 assert.match(example.sourceLocator, /nsidc_cdr\[2096\]/);
 assert.equal(new Date(Date.UTC(1850, 0, 1) + evidence.timeValue * 86400000).toISOString().slice(0, 10), evidence.date);
 assert.equal(example.sourceUrl, evidence.sourceUrl);
+const historicalEvidence = JSON.parse(await fs.readFile(path.join(evidenceDir, "example-1850.json"), "utf8"));
+const historicalBytes = await fs.readFile(path.join(evidenceDir, historicalEvidence.sourceFile));
+assert.equal(crypto.createHash("md5").update(historicalBytes).digest("hex"), historicalEvidence.md5);
+const historicalExample = curve.historicalReconstruction[0].provenance.valueExample;
+assert.equal(historicalExample.sourceValue, historicalEvidence.rawValue);
+assert.equal(Number((historicalExample.sourceValue / historicalExample.divisor).toFixed(historicalExample.roundingDigits)), historicalEvidence.storedValue);
+assert.equal(curve.displayHistoricalReconstruction[0].points.find(point => point.year === historicalExample.year).value, historicalEvidence.storedValue);
+assert.match(historicalExample.sourceLocator, /walsh\[8\]/);
+assert.equal(new Date(Date.UTC(1850, 0, 1) + historicalEvidence.timeValue * 86400000).toISOString().slice(0, 10), historicalEvidence.date);
+assert.equal(historicalExample.sourceUrl, historicalEvidence.sourceUrl);
 if (!curve || curve.curveRole !== "deep_dive") throw new Error("Meereiskurve fehlt im BLC-Export.");
 if (curve.displayHistoricalReconstruction?.length !== 1 || curve.displayProjections?.length !== 3) {
   throw new Error("BLC-Segmente fehlen.");
