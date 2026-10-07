@@ -83,6 +83,28 @@ function normalizeThreshold(threshold, fallbackOperator) {
   return Object.keys(normalized).length ? normalized : undefined;
 }
 
+// Statistical sections remain observations, even when their territory or census
+// basis changes. Never relabel published historical statistics as reconstruction.
+export function normalizeObservationSegments(series, observations, sourceIds) {
+  if (series.observationSegments === undefined) return [];
+  if (!Array.isArray(series.observationSegments) || !series.observationSegments.length) fail(`${series.id}: leere Statistiksegmente.`);
+  const seen = new Set();
+  const segments = series.observationSegments.map(segment => {
+    if (!cleanText(segment.id) || seen.has(segment.id)) fail(`${series.id}: fehlende oder doppelte Statistiksegment-ID.`);
+    seen.add(segment.id);
+    const points = normalizePoints(segment.points);
+    const sourceRefs = cleanStringArray(segment.sourceRefs) || [];
+    const provenance = normalizeProvenance(segment.provenance);
+    if (!points.length || points.length !== segment.points?.length || !sourceRefs.length || sourceRefs.some(ref => !sourceIds.has(ref)) || !provenance?.locator || !provenance.sourceUrl) fail(`${series.id}: unvollständiges Statistiksegment ${segment.id}.`);
+    for (const point of points) if (!point.sourceRefs?.length || point.sourceRefs.some(ref => !sourceRefs.includes(ref))) fail(`${series.id}: Punktquelle außerhalb des Statistiksegments ${segment.id}.`);
+    return { id: segment.id, label: cleanText(segment.label), period: cleanText(segment.period), geography: cleanText(segment.geography), method: cleanText(segment.method), sourceRefs, provenance, points };
+  });
+  const joined = segments.flatMap(segment => segment.points);
+  if (joined.some((point, index) => index && point.year <= joined[index - 1].year) || JSON.stringify(joined) !== JSON.stringify(observations)) fail(`${series.id}: Statistiksegmente müssen die Originalreihe genau einmal und chronologisch abdecken.`);
+  for (const segment of segments.slice(1)) if (!(series.methodBreaks || []).some(marker => Number(marker.year) === segment.points[0].year)) fail(`${series.id}: Statistiksegment ${segment.id} ohne dokumentierten Methodenwechsel.`);
+  return segments;
+}
+
 function normalizeKnownCrossing(point) {
   if (!point || typeof point !== "object" || Array.isArray(point)
     || !Number.isFinite(Number(point.year)) || !Number.isFinite(Number(point.value)) || !cleanText(point.unit)) return undefined;
@@ -277,6 +299,7 @@ for (const approval of manifest.approvedCurves) {
   const normalizedSources = normalizeSources(payload);
   const sourceIds = new Set(normalizedSources.map(source => source?.id).filter(id => typeof id === "string"));
   const observations = normalizePoints(series.points || series.values);
+  const observationSegments = normalizeObservationSegments(series, observations, sourceIds);
   const observationYears = [...new Set(observations.map(point => point.year))];
   if (observationYears.length < minimumObservationPoints) fail(`${approval.curveId}: mindestens ${minimumObservationPoints} zeitlich unterschiedliche Beobachtungspunkte erforderlich.`);
   const observationSpanYears = Math.max(...observationYears) - Math.min(...observationYears);
@@ -360,6 +383,7 @@ for (const approval of manifest.approvedCurves) {
     thresholdAssessments,
     observations,
     displayObservations,
+    ...(observationSegments.length ? { observationSegments } : {}),
     historicalReconstruction,
     displayHistoricalReconstruction,
     projections,
@@ -368,6 +392,7 @@ for (const approval of manifest.approvedCurves) {
     methodBreaks: Array.isArray(series.methodBreaks) ? series.methodBreaks.filter(marker => Number.isFinite(Number(marker?.year))).map(marker => ({
       year: Number(marker.year),
       ...(cleanText(marker.label) ? { label: marker.label } : {}),
+      ...(cleanText(marker.detail) ? { detail: marker.detail } : {}),
       ...(marker.showValues === true ? { showValues: true } : {})
     })) : [],
     sources: normalizedSources

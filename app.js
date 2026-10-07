@@ -2848,7 +2848,10 @@ function renderTimeChart(observedSeries = null, projectionSeries = [], options =
   const methodBreaks = (observedSeries?.methodBreaks || [])
     .filter(marker => Number.isFinite(Number(marker.year)) && Number(marker.year) >= xMin && Number(marker.year) <= xMax)
   const methodBreakMarkup = methodBreaks
-    .map(marker => `<text class="time-chart-method-break" x="${x(Number(marker.year))}" y="${height - plot.bottom}" aria-hidden="true">◇</text>`)
+    .map(marker => {
+      const title = `${marker.label || "Methodenwechsel"}${marker.detail ? ": " + marker.detail : ""}`.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      return `<text class="time-chart-method-break" x="${x(Number(marker.year))}" y="${height - plot.bottom}">◇<title>${title}</title></text>`;
+    })
     .join("");
   const methodBreakValueMarkup = methodBreaks.filter(marker => marker.showValues).map(marker => {
     const breakYear = Number(marker.year);
@@ -2898,7 +2901,7 @@ function renderTimeChart(observedSeries = null, projectionSeries = [], options =
     <text class="time-chart-value-label time-chart-value-label-maximum" x="${Math.min(width - plot.right, x(maxPoint.year) + 8)}" y="${Math.min(height - plot.bottom - 4, y(maxPoint.value) + 11)}">${maxPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>
     ${showMinimumLabel ? `<text class="time-chart-value-label" data-extrema-label="minimum" x="${x(minPoint.year)}" y="${y(minPoint.value)}">${minPoint.value.toLocaleString("de-DE", { maximumFractionDigits: 2 })}${unit}</text>` : ""}
     ${historicalMarkup}
-    <path class="time-chart-observed" d="${makePath(observed)}"/>
+    ${(observedSeries?.observationSegments?.length ? observedSeries.observationSegments.map(segment => segment.points.filter(point => point.year >= xMin && point.year <= xMax)) : [observed]).map(points => `<path class="time-chart-observed" d="${makePath(points)}"/>`).join("")}
     ${thresholdMarkerMarkup}
     ${projectionMarkup}
     ${observationMarkup}
@@ -3290,7 +3293,10 @@ function renderKnowledgePanel() {
     return;
   }
   const usesSpecializedPfasView = state.boundaryId === "novel" && activeItem?.id === "pfas";
-  if (activeItem?.knowledgeSource && state.boundaryId !== "mental-load" && !usesSpecializedEnergyView && !usesSpecializedPfasView) {
+  const usesStandardSocialTimeSeriesView = state.boundaryId === "mental-load"
+    && activeItem?.knowledgeSource
+    && getKnowledgeNetworkBySource(activeItem.knowledgeSource)?.presentation?.gwlTimeSeriesDisplay === "link_only";
+  if (activeItem?.knowledgeSource && (state.boundaryId !== "mental-load" || usesStandardSocialTimeSeriesView) && !usesSpecializedEnergyView && !usesSpecializedPfasView) {
     const indexEntry = getKnowledgeIndexEntry(state.boundaryId, state.itemId);
     const rawNetwork = getKnowledgeNetworkBySource(activeItem.knowledgeSource);
     const network = getKnowledgeNetworkForItem(rawNetwork, activeItem);

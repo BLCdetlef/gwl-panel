@@ -49,6 +49,7 @@ if (curveExport.format !== "gwl-blc-curve-export-v1" || curveExport.version !== 
 if (curveExport.manifestVersion !== manifest.version) throw new Error("Manifestversion ging im Export verloren.");
 
 const expected = new Map([
+  ["germany_living_space_per_capita_1950_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_tech_social_environment", domainLabel: "Technologische & soziale Umwelt" }],
   ["global_crude_steel_production_worldsteel_1950_2025", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_building_sand_usage_globus_1970_2019", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],
   ["global_primary_aluminium_production_1950_2021", { curveRole: "deep_dive", domainType: "influence_area", domainId: "eah_material_energy_flows", domainLabel: "Stoff- und Energieströme" }],

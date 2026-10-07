@@ -368,6 +368,19 @@
               "type": "component"
             }
           ]
+        },
+        {
+          "id": "housing_environment",
+          "label": "Wohnumwelt",
+          "items": [
+            {
+              "id": "germany-living-space-per-capita",
+              "label": "Wohnfläche je Einwohner · Deutschland",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/germany_living_space_per_capita.json"
+            }
+          ]
         }
       ]
     }

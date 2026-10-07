@@ -275,6 +275,17 @@
       "curveRole": "deep_dive",
       "status": "approved",
       "note": "Worldsteel-Ausgabe 2026; 75 Jahre, 28 publizierte Stützwerte. Genau ein getrenntes IEA-STEPS-Szenario, Ausgabe 2020, Rohstahlproduktion 2030/2050. Keine Interpolation oder Kalibrierung."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/germany_living_space_per_capita.json",
+      "seriesId": "germany_living_space_per_capita_1950_2025",
+      "boundaryId": "mental-load",
+      "itemId": "germany-living-space-per-capita",
+      "curveId": "knowledge:data/knowledge/germany_living_space_per_capita.json#germany_living_space_per_capita_1950_2025",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "45 Originalwerte, 75 Jahre; bis 1989 früheres Bundesgebiet, ab 1990 Deutschland. Sechs Statistiksegmente mit Quellen und Methodenwechseln. Keine Kalibrierung, Rekonstruktion, Projektion oder Organmarker."
     }
   ]
 }

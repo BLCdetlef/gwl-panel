@@ -1,0 +1,48 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import { normalizeObservationSegments } from './build-blc-curve-export.mjs';
+const read = async p => JSON.parse(await fs.readFile(new URL('../' + p, import.meta.url), 'utf8'));
+const source = 'data/knowledge/germany_living_space_per_capita.json';
+const [candidate, network, exported, index] = await Promise.all([read('research/curve-candidates/germany_living_space_per_capita.json'), read(source), read('data/blc/blc-curve-export-v1.json'), read('data/knowledge/knowledge-index.json')]);
+const series = network.timeSeries[0];
+const curve = exported.curves.find(c => c.source === source);
+assert.deepEqual(series.points, candidate.observations.points);
+assert.deepEqual(curve.observations, series.points);
+assert.deepEqual(curve.observationSegments, series.observationSegments);
+assert.deepEqual(series.points.slice(0, 9).map(p => [p.year, p.value]), [[1950,15],[1960,19.4],[1968,23.8],[1972,26.4],[1978,31.1],[1982,33.6],[1987,35.5],[1988,36.9],[1989,36.7]]);
+assert.deepEqual(series.points.slice(9).map(p => p.value), [34.8,34.9,35.1,35.4,36.2,36.7,37.2,37.9,38.4,39,39.5,39.8,40.1,40.5,40.8,41.2,41.6,41.9,42.2,42.5,45,46.1,46.2,46.3,46.5,46.2,46.3,46.5,46.7,47,47.4,47.7,48.9,49,49.2,49.5]);
+assert.deepEqual(series.observationSegments.map(s => s.points.length), [9,4,16,1,11,4]);
+assert.equal(series.observationSegments[0].geography, 'Früheres Bundesgebiet');
+assert.ok(series.observationSegments.slice(1).every(s => s.geography === 'Deutschland'));
+assert.deepEqual(curve.methodBreaks.map(m => m.year), [1990,1994,2010,2011,2022]);
+assert.ok(curve.methodBreaks.every(m => m.detail && !m.showValues && !m.showMarker));
+assert.equal(curve.domainId, 'eah_tech_social_environment');
+assert.equal(curve.boundaryId, 'mental-load');
+assert.equal(curve.observationCoverage.spanYears, 75);
+assert.equal(curve.observationCoverage.pointCount, 45);
+assert.equal(curve.projections.length, 0);
+assert.equal(curve.historicalReconstruction.length, 0);
+assert.equal(curve.reference, undefined);
+assert.deepEqual(network.healthContext.systemImpacts, []);
+assert.ok(network.sources.every(s => s.access === 'open_full_text' && s.url));
+assert.equal(candidate.excludedSourceValues.find(s => s.sourceRefs.includes('destatis_2016')).points[0].value, 46.5);
+assert.equal(index.systemBoundaries.find(b => b.id === curve.domainId).groups.find(g => g.id === 'housing_environment').items.filter(i => i.source === source && i.id === curve.itemId).length, 1);
+const sources = new Set(network.sources.map(s => s.id));
+for (const mutate of [s => { s.observationSegments[0].points.pop(); }, s => { s.observationSegments[1].sourceRefs = ['unknown']; }, s => { s.methodBreaks = []; }, s => { s.observationSegments[1].id = s.observationSegments[0].id; }]) {
+  const bad = structuredClone(series); mutate(bad);
+  assert.throws(() => normalizeObservationSegments(bad, series.points, sources));
+}
+// Run the actual chart renderer to catch runtime errors and cross-break lines.
+const app = await fs.readFile(new URL('../app.js', import.meta.url), 'utf8');
+const render = app.slice(app.indexOf('function renderTimeChart('), app.indexOf('function syncProjectionScenarioOptions('));
+const chart = { clientWidth: 500, dataset: {}, closest: () => ({ classList: { add() {}, remove() {} } }), setAttribute() {}, querySelector: () => null, querySelectorAll: () => [], innerHTML: '' };
+const sandbox = { timeChart: chart, selectedYear: 2025, unit: ' m²/Person', positionTimeChartLabelNearPoint() {}, thresholdCrossings: null, series };
+vm.runInNewContext(render + '\nrenderTimeChart(series);', sandbox);
+const paths = [...chart.innerHTML.matchAll(/<path class="time-chart-observed" d="([^"]*)"/g)];
+assert.equal(paths.length, 6);
+assert.deepEqual(paths.map(p => (p[1].match(/L/g) || []).length), [8,3,15,0,10,3]);
+assert.equal((chart.innerHTML.match(/class="time-chart-method-break"/g) || []).length, 5);
+assert.match(chart.innerHTML, /<title>Gebietswechsel/);
+assert.doesNotMatch(chart.innerHTML, /time-chart-break-value|showMarker|>1990<|>1994<|>2011<|>2022</);
+console.log('PASS: 45 Originalwerte, sechs Statistiksegmente, reguläre GWL-Navigation und Export; Renderer trennt Linien und nutzt Diamanten mit Tooltips ohne permanente Jahreszahlen. Ungültige Segmente gesperrt.');

@@ -156,6 +156,21 @@ for (const curve of payload.curves) {
     fail(`${curve.curveId}: Modellreferenz ist unvollständig.`);
   }
   const sourceIds = new Set((curve.sources || []).map(source => source?.id).filter(Boolean));
+  const originalPayload = JSON.parse(await fs.readFile(path.join(projectRoot, ...curve.source.split("/")), "utf8"));
+  const originalSeries = originalPayload.timeSeries?.find(series => series.id === curve.seriesId);
+  if (originalSeries?.observationSegments || curve.observationSegments) {
+    if (!Array.isArray(curve.observationSegments) || !curve.observationSegments.length) fail(`${curve.curveId}: Statistiksegmente fehlen.`);
+    const joined = curve.observationSegments.flatMap(segment => segment.points || []);
+    if (JSON.stringify(joined) !== JSON.stringify(curve.observations) || joined.some((p, i) => i && p.year <= joined[i - 1].year)) fail(`${curve.curveId}: Statistiksegmente decken die Originalwerte nicht genau einmal ab.`);
+    if (new Set(curve.observationSegments.map(s => s.id)).size !== curve.observationSegments.length) fail(`${curve.curveId}: doppelte Statistiksegment-ID.`);
+    if (curve.observationSegments.length !== originalSeries?.observationSegments?.length) fail(`${curve.curveId}: Statistiksegmentanzahl stimmt nicht mit der Quelle überein.`);
+    for (const [index, segment] of curve.observationSegments.entries()) {
+      const original = originalSeries.observationSegments[index];
+      for (const field of ['id', 'label', 'period', 'geography', 'method', 'sourceRefs', 'provenance', 'points']) if (JSON.stringify(segment[field]) !== JSON.stringify(original[field])) fail(`${curve.curveId}: Statistiksegment ${segment.id}, ${field} verändert.`);
+      if (!segment.provenance?.locator || !/^https:\/\//.test(segment.provenance?.sourceUrl || '') || !segment.sourceRefs?.length || segment.sourceRefs.some(ref => !sourceIds.has(ref))) fail(`${curve.curveId}: Herkunft des Statistiksegments fehlt.`);
+      if (index && !curve.methodBreaks.some(marker => marker.year === segment.points[0].year && marker.label && marker.detail)) fail(`${curve.curveId}: dokumentierter Statistikwechsel fehlt.`);
+    }
+  }
   if (!Array.isArray(curve.observationSourceRefs) || !curve.observationSourceRefs.length) fail(`${curve.curveId}: Quellenbezug der Beobachtungsreihe fehlt.`);
   for (const sourceRef of curve.observationSourceRefs) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Beobachtungsquelle ${sourceRef}.`);
   for (const sourceRef of curve.reference?.sourceRefs || []) if (!sourceIds.has(sourceRef)) fail(`${curve.curveId}: unbekannte Modellreferenzquelle ${sourceRef}.`);
