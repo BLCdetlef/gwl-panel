@@ -1,5 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
 
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
 const source = "data/knowledge/gwl_climate_arctic_september_sea_ice_v0.1.json";
@@ -49,6 +51,18 @@ for (const item of [historical, series, ...payload.projectionSeries]) {
 const approval = approvals.approvedCurves.find(item => item.seriesId === seriesId);
 if (!approval || approval.curveRole !== "deep_dive") throw new Error("BLC-Freigabe als Vertiefung fehlt.");
 const curve = exported.curves.find(item => item.seriesId === seriesId);
+const evidenceDir = path.join(projectRoot, "research", "curve-candidates", "arctic-sea-ice");
+const evidence = JSON.parse(await fs.readFile(path.join(evidenceDir, "example-2024.json"), "utf8"));
+const originalBytes = await fs.readFile(path.join(evidenceDir, evidence.sourceFile));
+assert.equal(crypto.createHash("md5").update(originalBytes).digest("hex"), evidence.md5);
+const example = curve.observationProvenance.valueExample;
+assert.equal(example.sourceValue, evidence.rawValue);
+assert.equal(example.roundingDigits, evidence.roundingDigits);
+assert.equal(Number((example.sourceValue / example.divisor).toFixed(example.roundingDigits)), evidence.storedValue);
+assert.equal(curve.displayObservations.find(point => point.year === example.year).value, evidence.storedValue);
+assert.match(example.sourceLocator, /nsidc_cdr\[2096\]/);
+assert.equal(new Date(Date.UTC(1850, 0, 1) + evidence.timeValue * 86400000).toISOString().slice(0, 10), evidence.date);
+assert.equal(example.sourceUrl, evidence.sourceUrl);
 if (!curve || curve.curveRole !== "deep_dive") throw new Error("Meereiskurve fehlt im BLC-Export.");
 if (curve.displayHistoricalReconstruction?.length !== 1 || curve.displayProjections?.length !== 3) {
   throw new Error("BLC-Segmente fehlen.");

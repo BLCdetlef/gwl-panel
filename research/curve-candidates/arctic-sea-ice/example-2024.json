@@ -1,0 +1,17 @@
+{
+  "sourceFile": "SeaIceArea__NorthernHemisphere__monthly__UHH__v2025_fv0.01.nc",
+  "sourceUrl": "https://www.fdr.uni-hamburg.de/record/18163/files/SeaIceArea__NorthernHemisphere__monthly__UHH__v2025_fv0.01.nc?download=1",
+  "md5": "2e51a0e75d689ad84889beb656e6901d",
+  "verifiedAt": "2026-10-07",
+  "variable": "nsidc_cdr",
+  "indexZeroBased": 2096,
+  "timeValue": 63811,
+  "timeUnits": "days since 1850-01-01 00:00:00",
+  "calendar": "gregorian",
+  "date": "2024-09-16",
+  "sourceUnits": "1e6 km2",
+  "rawValue": 3.895940124988556,
+  "roundingDigits": 6,
+  "storedValue": 3.89594,
+  "tooltipValue": "3,90 Mio. km²"
+}
