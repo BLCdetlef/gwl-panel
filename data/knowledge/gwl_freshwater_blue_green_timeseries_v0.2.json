@@ -202,7 +202,23 @@
           "period": "1861–1900",
           "sourceId": "src_freshwater_porkka_2024",
           "provenance": {
-            "sourceFile": "Porkka_et_al_NatWater_2024_data.zip → Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/streamflow/regionid_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+            "sourceFile": "Porkka_et_al_NatWater_2024_data.zip → Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/streamflow/global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv",
+            "valueExample": {
+              "year": 1861,
+              "sourceValue": 0.12266573261015,
+              "sourceUnit": "Anteil zwischen 0 und 1",
+              "divisor": 0.01,
+              "roundingDigits": 2,
+              "sourceLine": 172,
+              "sourceColumn": "ensemble_median",
+              "sourceColumnNumber": 4,
+              "retrievedAt": "07.10.2026",
+              "sourceHeader": "\"area\",\"year\",\"class\",\"ensemble_median\",\"IQR_min\",\"IQR_max\"",
+              "sourceRow": "\"global\",1861,\"summed_deviations\",0.12266573261015,0.0932591503723295,0.222636211120527",
+              "sourceUrl": "https://zenodo.org/records/10531807/files/Porkka_et_al_NatWater_2024_data.zip?download=1",
+              "sourceLocator": "Porkka et al. (2024), Zenodo-Datensatz 10531807, Version v1.0.0, Archiv Porkka_et_al_NatWater_2024_data.zip, darin Fig2_Fig4_Fig5_EDFig1_EDFig2ab/global/streamflow/global_land_area_with_local_deviations_annual_mean_ensemble_median_IQR.csv. CSV-Zeile 172 (Kopfzeile zählt als Zeile 1), Spalte 4 „ensemble_median“: 0.12266573261015. Zeilenauswahl: area=global; year=1861; class=summed_deviations. Die Variable Abfluss wird durch den Ordner streamflow identifiziert; die CSV verwendet Kommas als Feldtrenner. Download geprüft am 07.10.2026; Archiv-MD5 bcf571ba3cfbdb3d3743c2146177c3e4, CSV-MD5 2b038a107dc3290ac12014a7b052c829.",
+              "calculationText": "Der Quellenwert ist der Modellensemble-Median des jährlichen Anteils der globalen Landfläche mit trockenen oder nassen lokalen Abflussabweichungen (summed_deviations). Es handelt sich um eine historische Modellrekonstruktion, nicht um eine direkte globale Messung oder eine Wassermenge. Der Datenanbieter liefert den Flächenanteil und Ensemble-Median bereits; GWL berechnet sie nicht erneut. Umrechnung: 0,12266573261015 × 100 = 12,266573261015 %. Gleichwertig: Anteil ÷ 0,01. Speicherung und Anzeige auf zwei Nachkommastellen: round(12,266573261015; 2) = 12,27 %. Die X-Koordinate 1861 wird aus Spalte 2 „year“ unverändert übernommen. Der Quellenwert ist ein Jahreswert. Die Unsicherheitsgrenzen werden ebenso umgerechnet: IQR_min 0,0932591503723295 × 100 → 9,33 %; IQR_max 0,222636211120527 × 100 → 22,26 %. Die Grenze 12,94 % gehört zur getrennten Hauptreihe ab 1901 und ist kein Divisor dieser Umrechnung. Keine zusätzliche Mittelung, Interpolation oder Schätzung aus einer Abbildung im GWL-Import."
+            },
             "sourceUrl": "https://zenodo.org/records/10531807",
             "locator": "Globaler streamflow-Ordner; summed deviations; Jahreswerte 1861–1900.",
             "fields": [
