@@ -286,6 +286,17 @@
       "curveRole": "deep_dive",
       "status": "approved",
       "note": "45 Originalwerte, 75 Jahre; bis 1989 früheres Bundesgebiet, ab 1990 Deutschland. Sechs Statistiksegmente mit Quellen und Methodenwechseln. Keine Kalibrierung, Rekonstruktion, Projektion oder Organmarker."
+    },
+    {
+      "kind": "knowledge",
+      "source": "data/knowledge/world_population_global.json",
+      "seriesId": "world_population_un_1950_2023",
+      "boundaryId": "mental-load",
+      "itemId": "world-population",
+      "curveId": "knowledge:data/knowledge/world_population_global.json#world_population_un_1950_2023",
+      "curveRole": "deep_dive",
+      "status": "approved",
+      "note": "Übernahme vom Benutzer am 07.10.2026 beauftragt. Demografische Kontextgröße: Rekonstruktion 1700–1949, UN-Schätzungen 1950–2023, mittlere UN-Projektion 2024–2100; keine Überlappung, kein Grenzwert und keine Gesundheitsmarker."
     }
   ]
 }

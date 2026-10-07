@@ -381,6 +381,19 @@
               "source": "data/knowledge/germany_living_space_per_capita.json"
             }
           ]
+        },
+        {
+          "id": "population",
+          "label": "Bevölkerung",
+          "items": [
+            {
+              "id": "world-population",
+              "label": "Weltbevölkerung – UN",
+              "type": "component",
+              "contributionRole": "deepening_without_organ",
+              "source": "data/knowledge/world_population_global.json"
+            }
+          ]
         }
       ]
     }
