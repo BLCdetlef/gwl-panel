@@ -3008,7 +3008,9 @@ function setKnowledgePointDetails(network, activeBoundary, activeItem, point = n
     : "PLANETARE GRENZE";
   if (focusType) focusType.textContent = `${frameworkLabel} · ${activeBoundary?.label || ""}`;
   const itemLabel = String(activeItem?.label || "").replace(/^↳\s*/, "");
-  if (focusTitle) focusTitle.textContent = `${activeBoundary?.label || ""} · ${itemLabel}`;
+  if (focusTitle) focusTitle.textContent = activeBoundary?.framework === "eah_extension"
+    ? itemLabel
+    : `${activeBoundary?.label || ""} · ${itemLabel}`;
   if (focusSummary) focusSummary.textContent =
     network?.entry?.effectFocus || network?.corePrinciples?.[0] || network?.topic || "Knowledge-Datensatz aus dem zentralen Index.";
 
